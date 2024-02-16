@@ -2,7 +2,7 @@
   "name": "rollup-chefsmenu",
   "version": "0.0.1",
   "scripts": {
-    "build": "rollup -c -w -g"
+    "dev": "rollup -c -w -g"
   },
   "type": "module",
   "devDependencies": {
