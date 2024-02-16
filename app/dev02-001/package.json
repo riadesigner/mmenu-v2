@@ -1,0 +1,12 @@
+{
+  "name": "rollup-chefsmenu",
+  "version": "0.0.1",
+  "scripts": {
+    "build": "rollup -c -w -g"
+  },
+  "type": "module",
+  "devDependencies": {
+    "@rollup/plugin-json": "^6.0.0",
+    "@rollup/plugin-terser": "^0.2.1"
+  }
+}
