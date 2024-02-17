@@ -25,7 +25,7 @@
 <meta property="og:title" content="<?=SITE::get_title();?>" />
 <meta property="og:description" content="<?=SITE::get_description();?>" />
 <meta property="og:locale" content="<?=SITE::get_locale();?>" />
-<meta property="og:image" content="<?=SITE::get_link("home");?>/logo/chefsmenu-logo-02.png<?=$ver;?>" />
+<meta property="og:image" content="<?=SITE::get_link("home");?>/identity/chefsmenu-logo-02.png<?=$ver;?>" />
 <meta property="og:image:width" content="450">
 <meta property="og:image:height" content="450">
 <meta property="og:url" content="<?=SITE::get_current_url();?>">
