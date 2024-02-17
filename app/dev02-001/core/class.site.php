@@ -25,8 +25,7 @@ class Site{
 
 	static public function init(): void{
 		
-		global $CFG;
-		
+		global $CFG;		
 		
 		self::$LANG = Lng_prefer::get();
 		LNG::set(self::$LANG);
@@ -39,7 +38,8 @@ class Site{
 		if(self::$User){ User::auth_update(self::$User->email); }
 
 		//if subdomail
-		if(self::has_subdomain()){
+		if(self::has_subdomain()){						
+
 			if(self::$SUB_DOMAIN===$CFG->admin_sub){
 				
 				if(!RDSAdmin::authorised()){
@@ -48,8 +48,8 @@ class Site{
 
 					self::$SITE_PAGE = "RDSAdminEnter";
 					self::add_body_classes("page-rds-admin__enter");
-				}else{
-					$R = new Router();
+				}else{					
+					$R = new Router();					
 					switch ($R->get(0)) {
 						case 'deluser':						
 							if(!$R->get(1) || !$R->get(2)){
@@ -266,27 +266,27 @@ class Site{
 	}
 	
 	static public function get_title(){
-		$index = match (self::$LANG) {
-      'ru' => 1,
-      default => 0,
-  };
-		return self::$ARR_PAGES[self::$SITE_PAGE]['title'][$index];
+		$lang = match (self::$LANG) {
+      		'ru' => 1,
+      		default => 0,
+  		};
+		return self::$ARR_PAGES[self::$SITE_PAGE]['title'][$lang];
 	}
 
 	static public function get_description(){
-		$index = match (self::$LANG) {
-      'ru' => 1,
-      default => 0,
-  };
-		return self::$ARR_PAGES[self::$SITE_PAGE]['descr'][$index];
+		$lang = match (self::$LANG) {
+      		'ru' => 1,
+      		default => 0,
+  		};
+		return self::$ARR_PAGES[self::$SITE_PAGE]['descr'][$lang];
 	}	
 
 	static public function get_template(){
-		$index = match (self::$LANG) {
-      'ru' => 1,
-      default => 0,
-  };
-		return self::$ARR_PAGES[self::$SITE_PAGE]['template'][$index];
+		$lang = match (self::$LANG) {
+      		'ru' => 1,
+      		default => 0,
+  		};
+		return self::$ARR_PAGES[self::$SITE_PAGE]['template'][$lang];
 	}
 
 	/* PRIVATE */
@@ -319,10 +319,11 @@ class Site{
 	}
 		
 	static private function has_subdomain(){
-		global $CFG;
-		$msk = str_replace(".", "\.", (string) $CFG->wwwroot);
-		preg_match('/([^.]+)\.'.$msk.'/', (string) $_SERVER['SERVER_NAME'], $matches);
-		self::$SUB_DOMAIN = $matches[1] ?? "";
+		global $CFG;		 
+		$url =  explode(":",$CFG->wwwroot)[0];		
+		$msk = str_replace(".", "\.", $url);
+		preg_match('/([^.]+)\.'.$msk.'/', $_SERVER['SERVER_NAME'], $matches);
+		self::$SUB_DOMAIN = isset($matches[1])?$matches[1]:"";
 		return self::$SUB_DOMAIN;
 	}
 

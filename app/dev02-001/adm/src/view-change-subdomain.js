@@ -77,8 +77,8 @@ export var VIEW_CHANGE_SUBDOMAIN = {
 			var bestAddress = this.CAFE.subdomain + '.' + CFG.www_url;
 		};
 		
-		var bestAddressUrl = '<a href="'+http+bestAddress+'" target="_blank">'+bestAddress+'</a>';
-		var allwaysAddressUrl = '<a href="'+http+allways_address+'" target="_blank">'+allways_address+'</a>';
+		var bestAddressUrl = '<a href="'+http+bestAddress+'" >'+bestAddress+'</a>';
+		var allwaysAddressUrl = '<a href="'+http+allways_address+'" >'+allways_address+'</a>';
 
 		this.$bestAddressText.html(bestAddressUrl);
 		this.$allwaysAddressText.html(allwaysAddressUrl);

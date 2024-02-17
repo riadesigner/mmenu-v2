@@ -47,7 +47,7 @@ export var VIEW_CUSTOMIZING_CART = {
 		
 		this.NEW_CART_MODE = parseInt(cafe.cart_mode,10);
 		this.NEW_DELIVERY_MODE = parseInt(cafe.has_delivery,10);		
-		this.NEW_ORDER_WAY = parseInt(cafe.order_way,10);		
+		this.NEW_ORDER_WAY = parseInt(cafe.order_way,10);				
 	
 		this.reset();		
 		this.rebuild();
