@@ -2,6 +2,11 @@
 
 if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
+require_once 'vendor/autoload.php';
+
+$dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
+$dotenv->load();
+
 define("J_ENV_LOCAL",true); 
 define("J_ENV_TEST",true); // write logs to file;
 define("J_ENV_BETA",false); // show string 'beta version' on top site;

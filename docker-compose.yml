@@ -35,6 +35,9 @@ services:
       - 8080:80
     volumes:
       - ./app:/app    
+    environment:
+     - LOG_STDOUT=/app/logs/app-log.log
+     - LOG_STDERR=/app/logs/app-log-errors.log
     links:
       - db
 

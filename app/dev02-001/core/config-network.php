@@ -7,6 +7,7 @@ if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 //
 //
 
+
 if(J_ENV_LOCAL){
 
 	$CFG->dblocation    = $_ENV['LOCAL_DBLOCATION'];
@@ -92,6 +93,8 @@ if(J_ENV_LOCAL){
 	// }else{
 	// 	$CFG->smtp_ssl_options = array();
 	// }	
+
+
 
 
 ?>

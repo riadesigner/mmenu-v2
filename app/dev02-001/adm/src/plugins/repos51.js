@@ -242,7 +242,7 @@ $.extend({
 		                	_this.CURR_Y = et.pageY;		                	
 		                	$(_this.ROWS_LINKS[_this.CURRENT_DRAG])
 		                	.addClass(_this.CLASS_NAME+'__row-now-dragging');							
-		                	event.originalEvent.cancelable && event.preventDefault();
+		                	// event.originalEvent.cancelable && event.preventDefault();
 						},400);
 					},
 					touchMove:function(event) {
@@ -263,7 +263,7 @@ $.extend({
 	     				_this.drag_row();
 	     				_this.quick_repos();
 
-	     				event.originalEvent.cancelable && event.preventDefault();
+	     				// event.originalEvent.cancelable && event.preventDefault();
 					},
 					touchEnd:function() {
 						_this.TMR_LONG_PRESS && clearTimeout(_this.TMR_LONG_PRESS);	
