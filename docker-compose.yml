@@ -38,7 +38,8 @@ services:
 
   db:
     image: mariadb
-    restart: always
+    container_name: docker.mariadb    
+    restart: always    
     ports:
       - 3308:3306    
     environment:
@@ -71,6 +72,7 @@ services:
 
   adminer:
     image: adminer
+    container_name: docker.adminer    
     restart: always
     ports:
       - 8282:8080
