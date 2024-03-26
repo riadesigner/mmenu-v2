@@ -27,7 +27,6 @@ require_once APP_DIR.'/core/class.email.php';
 require_once APP_DIR.'/core/class.lng.php';
 require_once APP_DIR.'/core/class.lng_prefer.php';
 
-
 session_set_cookie_params(0, '/', '.'.$CFG->wwwroot, $CFG->session_secure, false);
 session_start();
 SQL::connect();
