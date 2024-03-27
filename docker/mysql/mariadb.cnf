@@ -1,4 +1,7 @@
-[mysqld]
+[mariadb]
 skip-networking=0
 skip-bind-address
 skip-name-resolve
+lower_case_table_names=2
+innodb_buffer_pool_size = 1G
+innodb_log_file_size = 256M

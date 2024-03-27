@@ -1,9 +1,5 @@
 version: "3.7"
 
-# networks:
-  # docker.network:
-  #   driver: bridge
-
 services:
   php:
     build: ./docker/php
@@ -12,12 +8,8 @@ services:
     tty: true
     expose:
       - 9000
-    # depends_on:
-    #   - mariadb
-      # - postgres
-      # - redis
-    # networks: 
-    #   - docker.network
+    depends_on:
+      - db
     volumes:
       - .:/var/www
 
@@ -29,10 +21,8 @@ services:
     depends_on:
       - php
     ports:
-      - "8080:80"
-      - "443:443"
-    # networks:
-    #   - docker.network
+      - 8080:80
+      - 443:443
     volumes:
       - ./app:/var/www/app
 
@@ -42,33 +32,14 @@ services:
     restart: always    
     ports:
       - 3308:3306    
-    environment:
+    environment:      
+      # - MARIADB_USER=www-root
+      # - MARIADB_PASSWORD=pass
       - MARIADB_ROOT_PASSWORD=pass
       - HOSTNAME=localhost
     volumes:
       - ./db:/var/lib/mysql 
-
-  # mariadb:
-  #   image: mariadb
-  #   restart: unless-stopped
-  #   container_name: docker.mariadb
-  #   tty: true
-  #   ports:
-  #     - '3306:3306'
-  #   # networks:
-  #   #   - docker.network
-  #   volumes:        
-  #     - './dbdata:/var/lib/mysql'  
-  #     - './docker/mysql/mariadb.cnf:/etc/mysql/conf.d/custom.cnf:ro'
-  #   environment:
-  #     MYSQL_ROOT_PASSWORD: 'root'
-  #     MYSQL_PASSWORD: 'pass'
-  #     MYSQL_USER: 'www-user'      
-  #   # environment:
-  #     # MYSQL_DATABASE: ${MYSQL_DATABASE:-development}
-  #     # MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-root}
-  #     # MYSQL_PASSWORD: ${MYSQL_PASSWORD:-mysql}
-  #     # MYSQL_USER: ${MYSQL_USER:-mysql}
+      - ./docker/mysql/mariadb.cnf:/etc/mysql/conf.d/custom.cnf:ro
 
   adminer:
     image: adminer
@@ -77,47 +48,14 @@ services:
     ports:
       - 8282:8080
 
-  # phpmyadmin:
-  #   image: phpmyadmin
-  #   container_name: docker.phpmyadmin
-  #   tty: true
-  #   depends_on:
-  #     - mariadb
-  #   ports:
-  #     - "8080:80"
-  #   networks:
-  #     - docker.network
-  #   environment:
-  #     PMA_HOST: mysql
-  #     PMA_ARBITRARY: 1
-  #     PMA_PORT: 3306
-
-
-  # pgadmin:
-  #   image: dpage/pgadmin4
-  #   container_name: docker.pgadmin
-  #   tty: true
-  #   depends_on:
-  #     - postgres
-  #   ports:
-  #     - "8081:80"
-  #   networks:
-  #     - docker.network
-  #   environment:
-  #     PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL:-admin@localhost.com}
-  #     PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD:-admin}
-
-  # redis:
-  #   image: bitnami/redis:latest
-  #   restart: unless-stopped
-  #   container_name: docker.redis
-  #   tty: true
-  #   ports:
-  #     - "6379:6379"
-  #   networks:
-  #     - docker.network
-  #   volumes:
-  #     - ./docker/redis:/bitnami/redis/data
-  #   environment:
-  #     ALLOW_EMPTY_PASSWORD: ${REDIS_ALLOW_EMPTY_PASSWORD:-no}
-  #     REDIS_PASSWORD: ${REDIS_PASSWORD:-redis}
+  phpmyadmin:
+    image: phpmyadmin
+    container_name: docker.phpmyadmin
+    tty: true
+    depends_on:
+      - db
+    ports:
+      - 8181:80
+    environment:
+      PMA_ARBITRARY: 1
+      PMA_PORT: 3308
