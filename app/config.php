@@ -18,8 +18,8 @@ class glb_object{};
 $CFG = new glb_object();
 
 // MULTI-LANGS VERSION
-$CFG->version = "02-001.01"; // updated to php 8.x
-define("APP_DIR","dev02-001"); // path to dev version
+$CFG->version = $_ENV['CURRENT_APP_VERSION']; // updated to php 8.x
+define("APP_DIR", $_ENV['CURRENT_APP_DIR']); // path to dev version
 
 require_once APP_DIR.'/core/config-network.php';
 require_once APP_DIR.'/core/config-site-links.php';
