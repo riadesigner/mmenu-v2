@@ -8,7 +8,7 @@ services:
     container_name: docker.php    
     tty: true
     expose:
-      - ${LOCAL_PHP_EXPOSE}
+      - ${PROD_PHP_EXPOSE}
     depends_on:
       - db
     volumes:
@@ -22,8 +22,8 @@ services:
     depends_on:
       - php
     ports:
-      - ${LOCAL_APACHE_HTTP}:80
-      - ${LOCAL_APACHE_HTTPS}:443
+      - ${PROD_APACHE_HTTP}:80
+      - ${PROD_APACHE_HTTPS}:443
     volumes:
       - ./app:/var/www/app
 
@@ -32,9 +32,9 @@ services:
     container_name: docker.mariadb    
     restart: always    
     ports:
-      - ${LOCAL_DB_EXPOSE}:3306    
+      - ${PROD_DB_EXPOSE}:3306    
     environment:
-      - MARIADB_ROOT_PASSWORD=${LOCAL_DBPASS}
+      - MARIADB_ROOT_PASSWORD=${PROD_DBPASS}
       - HOSTNAME=localhost
     volumes:
       - ./db:/var/lib/mysql 
@@ -45,7 +45,7 @@ services:
     container_name: docker.adminer    
     restart: always
     ports:
-      - ${LOCAL_ADMINER_EXPOSE}:8080
+      - ${PROD_ADMINER_EXPOSE}:8080
 
   # phpmyadmin:
   #   image: phpmyadmin
