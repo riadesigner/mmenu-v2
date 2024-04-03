@@ -14,10 +14,6 @@ define("J_ENV_BETA", $_ENV['CURRENT_ENV_BETA']==='true'? true : false); // show 
 define("J_ENV_MAINTENANCE", $_ENV['CURRENT_ENV_MAINTENANCE']==='true'? true : false); 
 
 
-
-echo "test!";
-exit();
-
 #[AllowDynamicProperties]
 class glb_object{};
 $CFG = new glb_object();
@@ -26,7 +22,11 @@ $CFG = new glb_object();
 $CFG->version = $_ENV['CURRENT_APP_VERSION']; // updated to php 8.x
 define("APP_DIR", $_ENV['CURRENT_APP_DIR']); // path to dev version
 
-require_once APP_DIR.'/core/config-network.php';
+require_once $_ENV['WORKDIR'].'/'.APP_DIR.'/core/config-network.php';
+
+echo "test!";
+exit();
+
 require_once APP_DIR.'/core/config-site-links.php';
 require_once APP_DIR.'/core/config-limits.php';
 require_once APP_DIR.'/core/config-public-skins.php';
