@@ -13,6 +13,11 @@ define("J_ENV_TEST", $_ENV['CURRENT_ENV_TEST']==='true'? true : false); // maxim
 define("J_ENV_BETA", $_ENV['CURRENT_ENV_BETA']==='true'? true : false); // show string 'beta version' on top site;
 define("J_ENV_MAINTENANCE", $_ENV['CURRENT_ENV_MAINTENANCE']==='true'? true : false); 
 
+
+
+echo "test!";
+exit();
+
 #[AllowDynamicProperties]
 class glb_object{};
 $CFG = new glb_object();
