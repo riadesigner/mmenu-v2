@@ -1,0 +1,48 @@
+<?php
+
+/*
+	PUBLIC SITE: get all menu of cafe
+*/
+
+	header('content-type: application/json; charset=utf-8');
+	$callback = $_REQUEST['callback'] ?? 'alert';
+	if (!preg_match('/^[a-z0-9_-]+$/i', (string) $callback)) {  $callback = 'alert'; }
+
+	
+	define("BASEPATH",__file__);
+	
+	require_once '../../../config.php';
+	require_once '../../../vendor/autoload.php';
+	
+	require_once '../../core/common.php';
+	
+	require_once '../../core/class.sql.php';
+	 
+	require_once '../../core/class.smart_object.php';
+	require_once '../../core/class.smart_collect.php';
+	require_once '../../core/class.user.php';
+
+	SQL::connect();
+
+
+	if(!isset($_REQUEST['cafe']) || empty(trim((string) $_REQUEST['cafe'])))__errorjsonp("0. unknown cafe");
+
+	$cafe_uniq_name = post_clean($_REQUEST['cafe']);
+
+	$q = "SELECT * FROM cafe WHERE uniq_name='$cafe_uniq_name'";
+	$res = SQL::first($q);
+	
+	if(!$res) __errorjsonp("1. unknown cafe");
+
+	$id_cafe = (int) $res['id'];
+	$cafe = new Smart_object("cafe",$id_cafe);
+	if(!$cafe || !$cafe->valid()) __errorjsonp("unknown cafe with #{$id_cafe}");	
+
+	$all_menu = new Smart_collect("menu","WHERE id_cafe={$id_cafe}","ORDER BY pos");
+
+	__answerjsonp(["cafe"=>$cafe->export(), "menu"=>$all_menu->export()]);
+
+
+
+
+?>
