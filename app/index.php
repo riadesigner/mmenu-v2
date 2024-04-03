@@ -38,7 +38,7 @@ Site::init();
 J_ENV_MAINTENANCE && Site::add_body_classes('maintenance-mode');
 J_ENV_BETA && Site::add_body_classes('beta-mode');
 
-include (APP_DIR.Site::get_template());
+include ($_ENV['WORKDIR'].'/'.APP_DIR.Site::get_template());
 
 
 ?>
