@@ -112,7 +112,7 @@
 
 
 <?php
-!J_ENV_LOCAL && require_once('tpl.yandex_metrica.php');
+// !J_ENV_LOCAL && require_once('tpl.yandex_metrica.php');
 ?>
 
 </body>
