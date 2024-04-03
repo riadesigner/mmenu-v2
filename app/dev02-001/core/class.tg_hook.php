@@ -1,11 +1,11 @@
 <?php
 if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-require_once APP_DIR.'/core/class.sql.php';
-require_once APP_DIR.'/core/common.php';	 
-require_once APP_DIR.'/core/class.smart_object.php';
-require_once APP_DIR.'/core/class.smart_collect.php';
-require_once APP_DIR.'/core/class.order_sender.php';
+require_once $_ENV['WORKDIR'].'/'.APP_DIR.'/core/class.sql.php';
+require_once $_ENV['WORKDIR'].'/'.APP_DIR.'/core/common.php';	 
+require_once $_ENV['WORKDIR'].'/'.APP_DIR.'/core/class.smart_object.php';
+require_once $_ENV['WORKDIR'].'/'.APP_DIR.'/core/class.smart_collect.php';
+require_once $_ENV['WORKDIR'].'/'.APP_DIR.'/core/class.order_sender.php';
 
 class Tg_hook {
 

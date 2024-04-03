@@ -1,6 +1,6 @@
 <?php
 	
-	require_once APP_DIR.'/core/class.rdsdeluser.php';
+	require_once $_ENV['WORKDIR'].'/'.APP_DIR.'/core/class.rdsdeluser.php';
 
 ?><!DOCTYPE html>
 <html>
