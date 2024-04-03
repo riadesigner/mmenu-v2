@@ -33,6 +33,7 @@ class Email{
 	protected $file = false;
 	protected $dirlib = "";
 	protected $embeddedImages = [];
+	protected $recipient_name="";
 
     public function __construct(protected $lang='ru'){
     	global $CFG; 		
