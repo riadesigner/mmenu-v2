@@ -37,10 +37,11 @@ function __errorjson($msg): never{
 }
 
 function glog($msg,$fileName="",$pre="gLog:"){	
-	global $CFG;	
+	global $CFG;		
 	if(J_ENV_TEST){	
 		$name = !empty($fileName)?$fileName:$CFG->log_file_name;	
 		$path = $CFG->dirroot.$CFG->log_file_path.$name.'_'.date('Y_m_d').'.log';
+		if (!file_exists($path)) { touch($path); }
 		$log = date('Y-m-d H:i:s') . " $pre $msg";		
 		file_put_contents($path, $log . PHP_EOL, FILE_APPEND);
 	}

@@ -26,4 +26,3 @@ require_once APP_DIR.'/core/config-site-links.php';
 require_once APP_DIR.'/core/config-limits.php';
 require_once APP_DIR.'/core/config-public-skins.php';
 require_once APP_DIR.'/core/config-inputs-length.php';
-

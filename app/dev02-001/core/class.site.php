@@ -244,12 +244,13 @@ class Site{
 	
 	static public function get_current_url(){
 		global $CFG;
-		return $CFG->http.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
+		
+		return $CFG->http.getenv('HTTP_HOST').getenv('REQUEST_URI');
 	}
 
 	static public function get_app_url(){
 		global $CFG;
-		return $CFG->http.$_SERVER['HTTP_HOST']."/".APP_DIR."/";
+		return $CFG->http.getenv('HTTP_HOST')."/".APP_DIR."/";
 	}	
 
 
