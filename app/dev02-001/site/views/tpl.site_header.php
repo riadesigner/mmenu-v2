@@ -27,8 +27,8 @@
 <meta property="og:url" content="<?=SITE::get_current_url();?>">
 <meta property="og:type" content="website" />
 
-<script type="text/javascript" src="../jquery/jquery.min.js"></script>
-<script type="text/javascript" src="../loader.js<?=$ver;?>"></script>
+<script type="text/javascript" src="/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="/loader.js<?=$ver;?>"></script>
 
 
 <script type="text/javascript" src="./site/dist/app.js<?=$ver;?>"></script>
