@@ -19,11 +19,13 @@ class glb_object{};
 $CFG = new glb_object();
 
 // MULTI-LANGS VERSION
-$CFG->version = $_ENV['CURRENT_APP_VERSION']; // updated to php 8.x
-define("APP_DIR", $_ENV['CURRENT_APP_DIR']); // path to dev version
+$CFG->version = $_ENV['CURRENT_APP_VERSION'];
 
-require_once $_ENV['WORKDIR'].'/'.APP_DIR.'/core/config-network.php';
-require_once $_ENV['WORKDIR'].'/'.APP_DIR.'/core/config-site-links.php';
-require_once $_ENV['WORKDIR'].'/'.APP_DIR.'/core/config-limits.php';
-require_once $_ENV['WORKDIR'].'/'.APP_DIR.'/core/config-public-skins.php';
-require_once $_ENV['WORKDIR'].'/'.APP_DIR.'/core/config-inputs-length.php';
+define("APP_DIR", $_ENV['CURRENT_APP_DIR'].'/');
+define("WORK_DIR", $_ENV['WORKDIR'].'/');
+
+require_once WORK_DIR.APP_DIR.'core/config-network.php';
+require_once WORK_DIR.APP_DIR.'core/config-site-links.php';
+require_once WORK_DIR.APP_DIR.'core/config-limits.php';
+require_once WORK_DIR.APP_DIR.'core/config-public-skins.php';
+require_once WORK_DIR.APP_DIR.'core/config-inputs-length.php';

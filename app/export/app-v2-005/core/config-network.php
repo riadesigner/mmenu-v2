@@ -58,8 +58,8 @@ if(J_ENV_LOCAL){
 
 	$CFG->tg_cart_token =  $_ENV['TG_CART_TOKEN'];
 
-	$CFG->base_rds_url = $CFG->http.$CFG->admin_sub.'.'.$CFG->wwwroot.'/'.APP_DIR.'/';
-	$CFG->base_url = $CFG->http.$CFG->wwwroot.'/'.APP_DIR.'/';
+	$CFG->base_rds_url = $CFG->http.$CFG->admin_sub.'.'.$CFG->wwwroot.'/'.APP_DIR.'';
+	$CFG->base_url = $CFG->http.$CFG->wwwroot.'/'.APP_DIR.'';
 
 	$CFG->log_file_path = "logs/";
 	$CFG->log_file_name	= 'menu_log';		
