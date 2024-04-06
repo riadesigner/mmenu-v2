@@ -5,8 +5,8 @@ require_once 'config.php';
 
 header('Content-Type: text/javascript');
 
-$app_server = $CFG->http.$CFG->wwwroot;
-$app_base = $CFG->base_url;
+$app_server = $CFG->base_url;
+$app_base = $CFG->base_app_url;
 $app_version = $CFG->version;
 
 $filename = "loader-tpl.js";

@@ -16,7 +16,7 @@ export var MENU_TABLE_MODE = {
         this.parent._update_lng();        
     },
     update:function(){        
-        let menu_link = `${CHEFS_URL.server}/cafe/${GLB.CAFE.get().uniq_name}/`;
+        let menu_link = `${CHEFS_URL.server}cafe/${GLB.CAFE.get().uniq_name}/`;
 
         if(this.ORDER_TO_TABLE_MODE){
             if(this.check_table_number()){

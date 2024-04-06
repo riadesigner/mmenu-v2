@@ -515,7 +515,7 @@ export var CHEFSMENU = {
 
     },
     goto404:function(){        
-        location.href = this.CHEFS_URL.server+'/cafe/';
+        location.href = this.CHEFS_URL.server+'cafe/';
     },
     gotoArchive:function(){
         this.$body.addClass(this.CLASS_CAFE_IS_IN_ARCHIVE);        
