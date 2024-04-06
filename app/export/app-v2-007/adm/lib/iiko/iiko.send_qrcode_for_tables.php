@@ -10,21 +10,21 @@
 
 	define("BASEPATH",__file__);
 	
-	require_once '../../../../config.php';
-	require_once '../../../../vendor/autoload.php';
-
-	require_once '../../../core/common.php';	
-	
-	require_once '../../../core/class.sql.php';
+	require_once getenv('WORKDIR').'/config.php';
 	 
-	require_once '../../../core/class.smart_object.php';
-	require_once '../../../core/class.smart_collect.php';
-	require_once '../../../core/class.user.php';
+
+	require_once WORK_DIR.APP_DIR.'core/common.php';	
 	
-	require_once '../../../core/class.account.php';
-	require_once '../../../core/class.tg_keys.php';	
-	require_once '../../../core/class.email.php';	
-	require_once '../../../ext/qrcode/qrcode.php';
+	require_once WORK_DIR.APP_DIR.'core/class.sql.php';
+	 
+	require_once WORK_DIR.APP_DIR.'core/class.smart_object.php';
+	require_once WORK_DIR.APP_DIR.'core/class.smart_collect.php';
+	require_once WORK_DIR.APP_DIR.'core/class.user.php';
+	
+	require_once WORK_DIR.APP_DIR.'core/class.account.php';
+	require_once WORK_DIR.APP_DIR.'core/class.tg_keys.php';	
+	require_once WORK_DIR.APP_DIR.'core/class.email.php';	
+	require_once WORK_DIR.APP_DIR.'ext/qrcode/qrcode.php';
 	
 
 	session_start();

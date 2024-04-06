@@ -21,7 +21,7 @@
 	require_once WORK_DIR.APP_DIR.'core/class.tg_keys.php';	
 	require_once WORK_DIR.APP_DIR.'core/class.email.php';
 	
-	require_once '../../ext/qrcode/qrcode.php';
+	require_once WORK_DIR.APP_DIR.'ext/qrcode/qrcode.php';
 
 
 	session_start();
