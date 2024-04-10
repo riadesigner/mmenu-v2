@@ -20,3 +20,4 @@ RUN chown -R ${APACHE_RUN_USER}:${APACHE_RUN_USER} ${DOCUMENT_ROOT}
 RUN ln -s ${APP_ROOT}/index.php ${DOCUMENT_ROOT}
 
 COPY ./httpd.conf /usr/local/apache2/conf/httpd.conf
+COPY ./localhost.conf /usr/local/apache2/conf/extra/localhost.conf
