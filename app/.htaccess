@@ -1,11 +1,7 @@
 
 RewriteEngine On
-
 Options -Indexes
-
-# # # # # # # # # # # # # # # # # 
-# http to https
-# # # # # # # # # # # # # # # # # 
+DirectoryIndex index.html
 
 #RewriteCond %{HTTPS} !on
 #RewriteCond %{HTTP_HOST} !^mmenu8\.localhost [NC]
@@ -16,7 +12,7 @@ RewriteBase /
 ErrorDocument 404 /404
 ErrorDocument 403 /404
 
-RewriteRule ^loader.js$  /loader.php   [R=301,L]
+RewriteRule ^loader.js$  loader.php   [R=301,L]
 
 <files *.json>
 SetOutputFilter DEFLATE
