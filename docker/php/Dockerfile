@@ -97,7 +97,7 @@ RUN set -eux \
   opcache
 
 # Install composer
-COPY --from=composer:latest /usr/bin/composer /usr/local/bin/composer
+COPY --from=composer:2.7.2 /usr/bin/composer /usr/local/bin/composer
 
 # Copy php settings
 COPY ./php.ini ${PHP_INI_DIR}/conf.d/99-php.ini
