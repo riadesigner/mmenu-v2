@@ -1,7 +1,7 @@
 
 RewriteEngine On
 Options -Indexes
-DirectoryIndex index.html
+DirectoryIndex index.php
 
 RewriteBase /
 
@@ -18,11 +18,10 @@ RewriteRule ^loader.js$  http://%{HTTP_HOST}/loader.php   [R=301,L]
 SetOutputFilter DEFLATE
 </files>
 
-# # # # # # # # # # # # # # # # #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 # - all url go to index.php
-# - rewrite only if no exist 
-# such image or folder or file or favicon 
-# # # # # # # # # # # # # # # # #
+# - rewrite only if no exist such image or folder or file or favicon 
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
 RewriteCond %{REQUEST_URI} !(\.png|\.jpg|\.svg\.ico\.gif)$ [NC]
 RewriteCond %{REQUEST_FILENAME} !-d
