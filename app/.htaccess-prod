@@ -1,6 +1,5 @@
 
 RewriteEngine On
-
 Options -Indexes
 
 # # # # # # # # # # # # # # # # # 
