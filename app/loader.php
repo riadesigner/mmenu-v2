@@ -5,19 +5,21 @@ require_once 'config.php';
 
 header('Content-Type: text/javascript');
 
-$app_server = $CFG->base_url;
-$app_base = $CFG->base_app_url;
-$app_version = $CFG->version;
+echo "console.log('test 555');";
 
-$filename = "loader-tpl.js";
-$file=fopen($filename,"r");
-$loader = fread($file,filesize($filename));
-fclose($file);
+// $app_server = $CFG->base_url;
+// $app_base = $CFG->base_app_url;
+// $app_version = $CFG->version;
 
-$loader = str_replace("%[app_server]%",$app_server,$loader);
-$loader = str_replace("%[app_base]%",$app_base,$loader);
-$loader = str_replace("%[app_version]%",$app_version,$loader);
+// $filename = "loader-tpl.js";
+// $file=fopen($filename,"r");
+// $loader = fread($file,filesize($filename));
+// fclose($file);
 
-echo $loader;
+// $loader = str_replace("%[app_server]%",$app_server,$loader);
+// $loader = str_replace("%[app_base]%",$app_base,$loader);
+// $loader = str_replace("%[app_version]%",$app_version,$loader);
+
+// echo $loader;
 
 ?>
