@@ -18,7 +18,6 @@ ErrorDocument 403 /404
 
 RewriteRule ^loader.js$  /loader.php   [R=301,L]
 
-
 <files *.json>
 SetOutputFilter DEFLATE
 </files>
@@ -42,6 +41,5 @@ RewriteCond %{REQUEST_URI} !(\.png|\.jpg|\.svg\.ico\.gif)$ [NC]
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !favicon.ico
-#RewriteRule ^(.*)$ index.php [L,QSA]
 RewriteRule ^(.*)$ / [L,QSA]
 

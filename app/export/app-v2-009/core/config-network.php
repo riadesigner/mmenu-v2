@@ -16,7 +16,7 @@ if(J_ENV_LOCAL){
 	$CFG->dbpasswd      = $_ENV['LOCAL_DBPASS'];
 	$CFG->http			= $_ENV['LOCAL_HTTP'];	
 	$CFG->wwwroot	    = $_ENV['LOCAL_WWWROOT'];
-	$CFG->dirroot	    = $_ENV['WORKDIR'].'/'; // $_ENV['PROD_DIRROOT'];
+	$CFG->dirroot	    = $_ENV['WORKDIR'].'/';
 	$CFG->hide_index_page = false; // for testing
 	$CFG->session_secure = false;
 
@@ -36,7 +36,7 @@ if(J_ENV_LOCAL){
 	$CFG->dbpasswd      = $_ENV['PROD_DBPASS'];
 	$CFG->http			= $_ENV['PROD_HTTP'];	
 	$CFG->wwwroot	    = $_ENV['PROD_WWWROOT'];
-	$CFG->dirroot	    = $_ENV['WORKDIR'].'/'; // $_ENV['PROD_DIRROOT'];
+	$CFG->dirroot	    = $_ENV['WORKDIR'].'/';
 	$CFG->hide_index_page = true; // for testing
 	$CFG->session_secure = true; // session through https
 
