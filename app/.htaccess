@@ -3,29 +3,20 @@ RewriteEngine On
 Options -Indexes
 DirectoryIndex index.html
 
-#RewriteCond %{HTTPS} !on
-#RewriteCond %{HTTP_HOST} !^mmenu8\.localhost [NC]
-#RewriteRule ^https://%{HTTP_HOST}%{REQUEST_URI} [R,L]
-
 RewriteBase /
 
 ErrorDocument 404 /404
 ErrorDocument 403 /404
 
+RewriteCond %{ENV:VIRTUAL_HOST} "chefsmenu.ru"
 RewriteRule ^loader.js$  https://%{HTTP_HOST}/loader.php   [R=301,L]
+
+RewriteCond %{ENV:VIRTUAL_HOST} "localhost:8080"
+RewriteRule ^loader.js$  http://%{HTTP_HOST}/loader.php   [R=301,L]
 
 <files *.json>
 SetOutputFilter DEFLATE
 </files>
-
-# # # # # # # # # # # # # # # # # 
-# - remove last slash
-# - rewrite only if no exist the folder 
-# it was need for router
-# # # # # # # # # # # # # # # # #
-
-#RewriteCond %{REQUEST_FILENAME} !-d
-#RewriteRule ^(.*)/$ $1 [R=301,L]
 
 # # # # # # # # # # # # # # # # #
 # - all url go to index.php
