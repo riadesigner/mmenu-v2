@@ -246,15 +246,12 @@ export var VIEW_ITEM_IMAGE_CHANGE = {
 		this._behavior();
 		
 		this.$btnBack.on('touchend',function(){				
-
 			_this.stop_load_image();
 			_this.AJAX && _this.AJAX.abort();
-
 			_this._blur({onBlur:function(){
 				_this._end_loading();
 				_this._go_back();
 			}});
-
 			return false;
 		});
 
@@ -378,7 +375,6 @@ export var VIEW_ITEM_IMAGE_CHANGE = {
 		this.$inputs.blur();
 
 		this.canvas_prepare();
-
 		if(!this.cvs){return false};
 		
 		this._now_loading();
@@ -387,23 +383,18 @@ export var VIEW_ITEM_IMAGE_CHANGE = {
 
 		var fn = {
 			uploadComplete:function(evt){
-
 				_this._need2save(false);				
 				_this._end_loading();
 				_this.extra_loader_hide();
 				_this.btn_rotate_hide(false);
-
 				var response = JSON.parse(evt.target.responseText);
-
 				if(!response || response.error){					
 					_this.show_err_loading();
 				}else{					
-					
 					var newImageName = {image_name:response['image_name'], image_url:response['image_url']};
 					_this.onReady && _this.onReady(newImageName)
 					_this._go_back();
 				}
-
 			},
 			uploadProgress:function(evt){
 			   if (evt.lengthComputable){
@@ -415,13 +406,13 @@ export var VIEW_ITEM_IMAGE_CHANGE = {
 				_this.extra_loader_hide();
 				_this._end_loading();
 				_this.show_err_loading();
-				// console.log('upload faled',evt.target.responseText);
+				console.log('upload faled',evt.target.responseText);
 			},
 			uploadCanceled:function(evt){
 				_this.extra_loader_hide();
 				_this._end_loading();
 				_this.show_err_loading();
-				// console.log('upload canceled', evt.target.responseText);
+				console.log('upload canceled', evt.target.responseText);
 			}
 		};
 
@@ -441,9 +432,9 @@ export var VIEW_ITEM_IMAGE_CHANGE = {
 			}			
 		};
 
-		this.cvs.toBlob(function(blob){			
-				console.log("SAVE!", (blob.size/1000000).toFixed(2)+'Mb');				
-			    send.image(blob);
+		this.cvs.toBlob(function(blob){
+			console.log("SAVE!", (blob.size/1000000).toFixed(2)+'Mb');				
+			send.image(blob);
 		}, 'image/jpeg', 0.95); 
 
 	}

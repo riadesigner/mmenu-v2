@@ -1,5 +1,6 @@
 # From
 FROM php:8.3.4-fpm-alpine3.19
+# FROM php:8.3.6-fpm-alpine3.18
 
 # Labels
 LABEL creatorName="Vagner dos Santos Cardoso"
@@ -14,14 +15,14 @@ RUN set -eux \
   && apk add --no-cache \
   git vim zip unzip bash curl tzdata icu-libs \
   c-client make ca-certificates imap gmp gettext libssh2 yaml \
-  libintl libxslt libpng libwebp libjpeg-turbo freetype imap \
+  libintl libxslt libpng libwebp imap \
   linux-headers oniguruma libxslt libpq vips \
   gmp libzip libxml2 freetds
 
 # Install dependencies
 RUN set -eux \
   && apk add --no-cache --virtual .build_deps \
-  libpng-dev libwebp-dev libjpeg-turbo-dev freetype-dev imap-dev \
+  libpng-dev libwebp-dev imap-dev \
   linux-headers oniguruma-dev libxslt-dev postgresql-dev vips-dev \
   libssh2-dev gmp-dev libzip-dev libxml2-dev freetds-dev yaml-dev \
   $PHPIZE_DEPS
@@ -36,7 +37,6 @@ RUN set -eux \
   bcmath \
   mbstring \
   xml \
-  gd \
   exif \
   zip \
   soap \
@@ -95,6 +95,19 @@ RUN set -eux \
   # install opcache
   RUN set -eux \
   opcache
+
+  # GD with jpeg support
+  RUN set -eux \  
+  && apk add --no-cache \  
+  zlib-dev \
+  libpng-dev \
+  libjpeg-turbo \
+  libjpeg-turbo-dev \
+  libwebp-dev \ 
+  freetype \ 
+  freetype-dev \   
+  && docker-php-ext-configure gd --with-jpeg --with-webp --with-freetype \
+	&& docker-php-ext-install -j$(nproc) gd
 
 # Install composer
 COPY --from=composer:2.7.2 /usr/bin/composer /usr/local/bin/composer

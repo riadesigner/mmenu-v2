@@ -23,12 +23,10 @@ services:
       - php
     ports:
       - ${PROD_APACHE_HTTP}:80
-      - ${PROD_APACHE_HTTPS}:443
     environment:
       - VIRTUAL_HOST=${PROD_WWWROOT}      
     volumes:
-      - ./app:/var/www/app
-      - /etc/letsencrypt:/etc/letsencrypt
+      - ./app:/var/www/app      
 
   db:
     image: mariadb
