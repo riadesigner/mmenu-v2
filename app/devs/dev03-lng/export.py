@@ -33,7 +33,7 @@ except:
 
 # create folder name 
 dest = "app-v"+ver
-dest = os.path.abspath("../export/"+dest) 
+dest = os.path.abspath("../../export/"+dest) 
 
 # create folder if not exitst
 # stop if already exist 
