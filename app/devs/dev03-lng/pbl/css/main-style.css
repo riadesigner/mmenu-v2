@@ -62,40 +62,42 @@ a.mm2-home-link:hover{ color: %[color-home-link-hover]%; }
 
 .std-header {position: absolute;top:0;left:0;width: 100%;height: 14%; z-index: 20;}
 .std-content {position: absolute;top:14%;left:0;width: 100%;height:77%; z-index: 30;overflow: hidden;}
-.std-footer {position: absolute;bottom:0;left:0;width: 100%;height: 9%; z-index: 40;background: %[footer-background-color]%;}
+.std-footer {position: absolute;bottom:0;left:0;width: 100%;height: 6%; z-index: 40;background: %[footer-background-color]%;}
+.std-langs {position: absolute;bottom:14%;left:0;width: 100%;height: 10%; z-index: 50; border-top: %[border-style-1]%;}
 
-.mm2-std-content-wrapper {
-  position: absolute;
-  bottom:0;left:0;width:100%;height: 100%;  
-  border-top: %[border-style-1]%;
-}
-.multilang-mode .mm2-std-content-wrapper{height: 90%;}
+.mm2-std-content-wrapper {  position: absolute; bottom:0;left:0;width:100%;height: 100%; border-top: %[border-style-1]%; }
+.view-items .mm2-std-content-wrapper{ border-top:none; }
 
-.view-items .mm2-std-content-wrapper{
-  border-top:none;
-}
+/* 
+   ------ LANGS BUTTONS, MOBILE VERSION UI -------
+*/
+.std-langs {display: none;}
+.multilang-mode .std-langs {display: block;}
+.multilang-mode .std-content{height:65%;}
 
-/* --- LANG SECTION --- */
-.mm2-std-lang-section{display: none;position: absolute;bottom:0;left:0;width: 100%;height: 10%;background: pink;;}
-.multilang-mode .mm2-std-lang-section{display: block;}
-.mm2-lang-section__buttons{
-  display:flex;background: black;height: 100%;
+
+.multilang-mode .std-langs{display: block;}
+.mm2-langs__buttons{
+  display:flex;height: 100%;
   justify-content: space-evenly;
   flex-wrap: nowrap;
   align-items: center;
   gap:10px;
 }
-.mm2-lang-section__buttons>div{  text-align: center; flex: 1;}
-
-.mm2-lang-section__buttons>div span{
-  padding:3px 20px;border: 1px solid gray;border-radius: 6px;width: 100%;
-  max-width: 200px; display: block;color:gray; cursor: pointer;
+.mm2-langs__buttons>div{  text-align: center; flex: 1;}
+.mm2-langs__buttons>div span{
+  padding:3px 20px; border: 1px solid gray;border-radius: 6px;width: 100%;
+  max-width: 150px; display: block;color:gray; cursor: pointer;
+  margin: 0 auto; font-size: 1.3rem;
 }
-.mm2-lang-section__buttons>div.current span{background: gold;color:black;}
-.mm2-lang-section__buttons>div:not(.current).hover span{ color:gold;transition:.3s;}
-.mm2-lang-section__buttons>div:not(.current).active span{ color:black;background: gold;transition:0s;}
+.mm2-langs__buttons>div.current span{background: gold;color:black;}
+.mm2-langs__buttons>div:not(.current).hover span{ color:gold;transition:.3s;}
+.mm2-langs__buttons>div:not(.current).active span{ color:black;background: gold;transition:0s;}
+.mm2-langs__buttons>div:not(.current).mobile-active span{ color:black;background: gold;transition:0s;}
 
-.mm2-lang-section__buttons>div:not(.current).mobile-active span{ color:black;background: gold;transition:0s;}
+/* 
+   ------ HEADER UI -------
+*/
 
 .mm2-std-header-btn-back{
   width: 10%;height: 54px;  
@@ -1588,7 +1590,7 @@ a.mm2-home-link:hover{ color: %[color-home-link-hover]%; }
   .mm2-item-btn-addtocart{border-width: 1px !important; transition:0s;}
   .mm2-header-phone__text{ display: none;}
   .mm2-header-phone__icon{ width:12.2vw; height:12.2vw ;}
-  .mm2-allmenu-header-title__text{ font-size: 1em; }
+  .mm2-allmenu-header-title__text{ font-size: 1.5em; }
   .mm2-allmenu-row__title span{
     font-size: 5.8vw;
     line-height: 1;

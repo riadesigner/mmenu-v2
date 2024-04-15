@@ -5,7 +5,7 @@ export var VIEW_ALLMENU = {
 	init:function(options) {
 
 		this._init(options);		
-
+				
 		this.$headerTitle = this.$view.find(this._CN+"allmenu-header-title");
 		this.$headerPhone = this.$view.find(this._CN+"header-phone");
 
@@ -18,11 +18,12 @@ export var VIEW_ALLMENU = {
 		this.$cafeDescription = this.$view.find(this._CN+"cafe-description");		
 		this.$btnSlideUpAbout = this.$view.find(this._CN+"btn-slideup");		
 		
-		this.$btnsLangContainer = this.$view.find(this._CN+"lang-section__buttons");
+		// mobile version ui
+		this.$btnsLangContainer = this.$view.find(this._CN+"langs__buttons");		
 
 		this.CLASS_SHOWED_ABOUT = this.CN+"allmenu-about-showed";
 		this.LIST_SCROLLED = false;
-							
+		
 		GLB.MENU_TABLE_MODE.init(this);
 		
 		this.behavior();
@@ -34,25 +35,25 @@ export var VIEW_ALLMENU = {
 
 		var _this=this;		
 
-		GLB.MENU_TABLE_MODE.update();
-		
+		GLB.MENU_TABLE_MODE.update();		
 		console.log('allmenu',allmenu)
-
+		
+		// -----------------------
+		// MULTILANG BUILDING UI
+		// -----------------------
 		this.build_langs_ui();
 
-		this.all_menu = allmenu;		
+		this.all_menu = allmenu;	
 			
 		var fn = {
 			rebuild:function() {
-				var $ul = $("<ul></ul>");
-				
+				var $ul = $("<ul></ul>");				
 				$ul.on('touchstart',function(){
 					_this.LIST_SCROLLED = false					
 				});
 				$ul.on('touchmove',function(){
 					_this.LIST_SCROLLED = true;					
 				});
-
 				for (var i=0; i<_this.all_menu.arr.length;i++){
 					var m = _this.all_menu.arr[i];					
 					(function(m_id){
@@ -128,13 +129,13 @@ export var VIEW_ALLMENU = {
 	},
 	build_langs_ui:function(){
 		const _this=this;
-		this.$view.removeClass("multilang-mode");		
-		console.log('cafe=',GLB.CAFE.get());
+		this.$view.removeClass("multilang-mode");				
 		const CAFE = GLB.CAFE.get();
 		const extra_langs = CAFE.extra_langs?JSON.parse(CAFE.extra_langs):false;
 		if(!extra_langs) return;
 		this.$view.addClass("multilang-mode");
 
+		console.log('this.$btnsLangContainer', this.$btnsLangContainer.html())
 		this.$btnsLangContainer.html("");
 		const current = "ru";
 		const btns = [];
@@ -147,7 +148,7 @@ export var VIEW_ALLMENU = {
 			let currentClass = current===nm?'class="current"':'';
 			let $btn = $(`<div data-user-lang="${nm}" ${currentClass}><span>${nm}</span></div>`);
 			this.$btnsLangContainer.append($btn);					
-			btns.push($btn);	
+			btns.push($btn);				
 		};		
 
 		this.$btnsLangContainer.find('div').on("touchend click",function(e){
