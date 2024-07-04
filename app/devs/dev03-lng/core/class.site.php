@@ -283,6 +283,7 @@ class Site{
 	}	
 
 	static public function get_template(){
+		gLog("lang = ".self::$LANG, __FILE__);
 		$lang = match (self::$LANG) {
       		'ru' => 1,
       		default => 0,

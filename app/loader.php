@@ -3,7 +3,7 @@
 define("BASEPATH",__file__);
 require_once 'config.php';
 
-header('Content-Type: text/javascript');
+header('Content-Type: text/javascript; charset=utf-8');
 
 $app_server = $CFG->base_url;
 $app_base = $CFG->base_app_url;

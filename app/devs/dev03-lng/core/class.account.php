@@ -4,6 +4,7 @@ if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 use Aws\S3\S3Client;
 use Aws\S3\Exception\S3Exception;
+use chillerlan\QRCode\{QRCode, QROptions};
 
 class Account{
 
@@ -14,17 +15,13 @@ class Account{
 	static private $ERR_MESSAGE="";
 	static private $cafeTitle="";
 
-	static public function init($input_email,$input_key,$cafeTitle=""){
-		
+	static public function init($input_email,$input_key,$cafeTitle=""){		
 		self::$email = substr((string) $input_email, 0, 255);
 		self::$key = substr((string) $input_key, 0, 255);
 		self::$cafeTitle = substr((string) $cafeTitle, 0, 100);
-
 		self::$emailValid = preg_match("|^[0-9a-z_\.]+@[0-9a-z_^\.]+\.[a-z]{2,6}$|i", self::$email);
 		self::$keyValid = md5("new-email:".self::$email) === self::$key;
-
 		return (!self::$email || !self::$key || !self::$emailValid || !self::$keyValid)?false:true;
-
 	}
 
 	static public function already_activated(){
@@ -40,6 +37,8 @@ class Account{
 		$password = generate_password();
 		$user_id = self::add_new_user_to_db(self::$email,$password,$lang);
 			
+		glog("CLASSS_ACCOUNT:activate, $password, $user_id");		
+
 		if($user_id){
 
 			if($cafe = self::create_cafe_for($user_id,$lang)){
@@ -133,16 +132,14 @@ class Account{
 			return false;
 		}
 
-		glog("Saved new cafe, ".$newCafe);
+		glog("Saved new cafe, $newCafe");
 		
 		// UPDATE CAFE PARAMS		
-		
 		$newCafe->uniq_name = self::generate_uniqname($newCafe->id);				
-		glog("Generated uniq_name for cafe, ".$newCafe->uniq_name);			
-		
-		Tg_keys::update_all($newCafe->uniq_name);
+		glog("Generated uniq_name for cafe, ".$newCafe->uniq_name);		
 
 		$newCafe->qrcode = self::generate_qrcode($newCafe->id,$newCafe->uniq_name);
+		
 		if(!$newCafe->qrcode){
 			glog("Cant generated qrcode for cafe, ".$newCafe->id);			
 			return false;
@@ -150,7 +147,11 @@ class Account{
 			glog("Generated qr_code for cafe, ".$newCafe->id.", ".$newCafe->qrcode);
 		}
 
-		$newCafe->save();
+		$newCafe->save();		
+		glog("Updated new cafe, $newCafe, ".$newCafe->uniq_name);
+		glog("cafe $newCafe = ".var_export($newCafe,1), __FILE__);
+
+		Tg_keys::update_all($newCafe->uniq_name);
 
 		// CLONE SAMPLE MENU FOR NEWCAFE
 
@@ -294,13 +295,20 @@ class Account{
 		$prefix = $uniq_name.'/'.$uniq_name;		
 		$qrName = mb_strtolower($prefix)."-qrcode.png";
 		$url2cafe = $CFG->http.$CFG->wwwroot."/cafe/".$uniq_name;
-		$qr = QRCode::getMinimumQRCode($url2cafe, QR_ERROR_CORRECT_LEVEL_L);
-		$im = $qr->createImage(8, 20); // size, border
 
-	    ob_start();
-	    imagepng($im, null);
-	    $imageQrcode = ob_get_contents();
-	    ob_end_clean();
+		$options = new QROptions([
+			'outputType'   => QRCode::OUTPUT_IMAGE_PNG,
+			'returnResource'=> true,
+			'scale' => 30,
+			'quietzoneSize'=> 1,
+		]);
+		
+		$im = (new QRCode($options))->render($url2cafe);
+
+		ob_start();		
+		imagepng($im);
+		$imageQrcode = ob_get_contents();
+		ob_end_clean();
 
 		$bucket = $CFG->S3['bucket'];
 

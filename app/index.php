@@ -28,7 +28,6 @@ require_once WORK_DIR.APP_DIR.'core/class.lng.php';
 require_once WORK_DIR.APP_DIR.'core/class.lng_prefer.php';
 
 session_set_cookie_params(0, '/', '.'.$CFG->wwwroot, $CFG->session_secure, false);
-
 session_start();
 SQL::connect();
 
@@ -40,5 +39,5 @@ J_ENV_BETA && Site::add_body_classes('beta-mode');
 
 include (WORK_DIR.APP_DIR.Site::get_template());
 
-
+glog("start load, ".WORK_DIR.APP_DIR, __FILE__);
 ?>

@@ -53,16 +53,21 @@
 		$cafe = post_clean($_POST['cafe'], 100);		
 	}
 
+	glog("INITIATION NEW ACCOUNT: ".$email.", ".$key.", ".$cafe);	
+
 	if( Account::init($email,$key,$cafe) ){
-		
+		glog("Account inited");
+
 		if(Account::activate($lang)){
-			
+			glog("Account activated");
 			__answerjsonp("activation ok");
 		}else{
-			__errorjsonp($lang=='ru'?'Ошибка. Что-то не пошло не так..':'Error. Something is wrong.');
+			glog("ERR: Account activate");
+			__errorjsonp('Ошибка. Что-то не пошло не так..');
 		}
 	}else{
-		__errorjsonp($lang=='ru'?'Ошибка. Неправильная ссылка':'Error. Invalid link');
+		glog("ERR: Account init");
+		__errorjsonp('Ошибка. Неправильная ссылка');
 	}
 	
 ?>

@@ -9,40 +9,41 @@ class RDSAdmin{
 	static public function authorised($login="",$md5pass=""){
 		global $CFG;
 		
-
-
+		
 		$token = self::calculate_token($CFG->admin_login,md5((string) $CFG->admin_pass));
 
-		glog("\$try autho");
+		glog("try autho");
 
-		if($login=="" || $md5pass==""){	
+		isset($_SESSION[self::$SSNAME]) && glog("S1 ".$_SESSION[self::$SSNAME]);
+
+		if($login=="" || $md5pass==""){				
 
 			if(isset($_SESSION[self::$SSNAME])){
 				glog("sess ".$_SESSION[self::$SSNAME]);	
 			}else{
 				glog("sess not exist");
 			} 
-				
-			return isset($_SESSION[self::$SSNAME]) && $_SESSION[self::$SSNAME]===$token;
+			
+			if(isset($_SESSION[self::$SSNAME]) && $_SESSION[self::$SSNAME]===$token){
+				return $token;	
+			}else{
+				return false;
+			}			
 
 		}else{			
 
-
-			$_SESSION["vasya"] = "4444";	
-
+			glog("NEW ADMIN SESS");
+			
 			$ok_token = self::calculate_token($login,$md5pass);
 
-			glog("\$ok_token, \$token=". $ok_token.", ".$token);
+			if($ok_token===$token){				
+								
+				$_SESSION[self::$SSNAME] = $token;					
 
-			if($ok_token===$token){
+				return $_SESSION[self::$SSNAME];
 
-				
-				
-				glog("set sess ".self::$SSNAME."=".$token);
-
-				$_SESSION[self::$SSNAME] = $token;	
-				return true;
 			}else{
+				glog("TEST FAILED!!");
 				return false;
 			}
 		}

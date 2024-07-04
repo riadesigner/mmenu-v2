@@ -22,6 +22,8 @@ class Tg_keys{
 	}
 
 	static public function update_all($cafe_uniq_name){		
+		
+		glog("Tg_keys:update_all, creating keys for $cafe_uniq_name, file:".__FILE__);
 
 		if(!self::check_cafe($cafe_uniq_name)) return false;
 
@@ -35,7 +37,7 @@ class Tg_keys{
 			'manager'=>self::generate_tg_key($cafe_uniq_name),
 			'supervisor'=>self::generate_tg_key($cafe_uniq_name),
 		];		
-	
+
 		$ARR_KEYS = [];
 
 		foreach($ARR_NEW_TG_KEYS as $role=>$key){

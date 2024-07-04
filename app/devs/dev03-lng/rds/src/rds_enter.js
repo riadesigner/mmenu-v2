@@ -16,8 +16,9 @@ export var RDSEnter = {
 		});
 	},
 	try_enter:function() {
-		var _this = this;
+		var _this = this;		
 
+		console.log('!!URLSITE.base', URLSITE.base)
 		if(!this.$inputLogin.val() || !this.$inputPass.val()){
 			console.log("enter email and password");	
 		}else{
@@ -27,7 +28,7 @@ export var RDSEnter = {
 			var login = this.$inputLogin.val();
 			var pass = this.$inputPass.val();
 
-			console.log('url',url)
+			console.log('url = ',url)
 
 	        this.AJAX = $.ajax({
 	            url: url+"?callback=?",
@@ -36,14 +37,14 @@ export var RDSEnter = {
 	            method:"POST",
 	            success: function (answer) {
 	            	if(!answer.error){
-	            		console.log("OK!");
+	            		console.log("OK");
 	            		location.reload();
-					}else{
-						console.log(answer.error);
+					}else{						
+						console.log("err enter 1", answer.error);
 					}
 	            },
 	            error:function(response) {
-			           console.log("err enter",response);
+			           console.log("err enter 2",response);
 				}
 	        });	
 

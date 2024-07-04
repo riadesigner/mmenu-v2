@@ -3,7 +3,8 @@
         "php":"^8.1",
         "phpmailer/phpmailer": "^6.6",
          "aws/aws-sdk-php": "^3.100",
-        "vlucas/phpdotenv": "^5.6"
+        "vlucas/phpdotenv": "^5.6",
+        "chillerlan/php-qrcode": "^5.0"
     },
    "config": {        
       
