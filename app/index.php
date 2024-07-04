@@ -37,7 +37,11 @@ Site::init();
 J_ENV_MAINTENANCE && Site::add_body_classes('maintenance-mode');
 J_ENV_BETA && Site::add_body_classes('beta-mode');
 
-include (WORK_DIR.APP_DIR.Site::get_template());
 
-glog("start load, ".WORK_DIR.APP_DIR, __FILE__);
+$tpl = Site::get_template();
+
+include (WORK_DIR.APP_DIR.$tpl);
+
+
+
 ?>
