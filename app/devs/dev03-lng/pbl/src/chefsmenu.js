@@ -238,74 +238,53 @@ export var CHEFSMENU = {
             }
         };        
 
-        var url = GLB_APP_URL+"pbl/lib/pbl.get_all_menu.php";
-
-        this.AJAX = $.ajax({
-            url:url+'?callback=?',            
-            jsonpCallback:GLB.CALLBACK_RANDOM.get(),
-            dataType:"jsonp",
-            data:{cafe:'317zcy'},
-            method:"POST",
-            success: function (response){                
-                console.log('response',response)
-            },
-            error:function(response){
-                console.log('response',response)
-            }
-        });        
-
-        console.log('TEST PAUSE 1');
-        
-
-
-
-        // this.load_all_menu({onReady:function(){
+        this.load_all_menu({onReady:function(){
             
-        //     var cafe = _this.get_cafe();            
-        //     var label = cafe.skin_label;
+            var cafe = _this.get_cafe();            
+            var label = cafe.skin_label;
 
-        //     console.log('---cafe.lang---',cafe.lang)
+            console.log('---cafe.lang---',cafe.lang)
 
 
-        //     fn.attachSkin(label);
+            fn.attachSkin(label);
             
-        //     const ALL_VIEWS = GLB.UVIEWS.get();
-        //     if(cafe.lang.toLowerCase()!==GLB.LNG.get_current()){
-        //         GLB.LNG.update(cafe.lang);   
-        //         for(let i in ALL_VIEWS){
-        //             if(ALL_VIEWS.hasOwnProperty(i)){
-        //                 let VIEW = ALL_VIEWS[i].view;                        
-        //                 VIEW._update_lng();
-        //             }
-        //         } 
-        //     };
+            const ALL_VIEWS = GLB.UVIEWS.get();
+            if(cafe.lang.toLowerCase()!==GLB.LNG.get_current()){
+                GLB.LNG.update(cafe.lang);   
+                for(let i in ALL_VIEWS){
+                    if(ALL_VIEWS.hasOwnProperty(i)){
+                        let VIEW = ALL_VIEWS[i].view;                        
+                        VIEW._update_lng();
+                    }
+                } 
+            };
 
-        //     _this.show_win({skin:cafe.skin ,onReady:function(){
+            _this.show_win({skin:cafe.skin ,onReady:function(){
                             
-        //         GLB.CAFE.init(cafe);
-        //         GLB.VIEW_ALLMENU.update(_this.get_allmenu());
-        //         GLB.CART.init();
-        //         GLB.UVIEWS.go_first("fast");
+                GLB.CAFE.init(cafe);
+                GLB.VIEW_ALLMENU.update(_this.get_allmenu());
+                GLB.CART.init();
+                GLB.UVIEWS.go_first("fast");
                 
-        //         const MENU_IIKO_MODE = GLB.CAFE.get().iiko_api_key!=="";
-        //         const MENU_MODE = MENU_IIKO_MODE?_this.CLASS_IIKO_MODE:_this.CLASS_CHEFSMENU_MODE;
-        //         _this.$menu.addClass(MENU_MODE);
+                const MENU_IIKO_MODE = GLB.CAFE.get().iiko_api_key!=="";
+                const MENU_MODE = MENU_IIKO_MODE?_this.CLASS_IIKO_MODE:_this.CLASS_CHEFSMENU_MODE;
+                _this.$menu.addClass(MENU_MODE);
 
-        //         // only for menu page                
-        //         setTimeout(function() { 
-        //             _this.$body.removeClass(_this.CLASS_SHOW_PRELOAD);
-        //             _this.$menu.addClass(_this.CLASS_READY_TO_USE);                    
+                // only for menu page                
+                setTimeout(function() { 
+                    _this.$body.removeClass(_this.CLASS_SHOW_PRELOAD);
+                    _this.$menu.addClass(_this.CLASS_READY_TO_USE);                    
 
-        //         },50);
+                },50);
 
-        //         setTimeout(function() {
-        //             _this.end_loading(); 
-        //         },300);
+                setTimeout(function() {
+                    _this.end_loading(); 
+                },300);
                 
 
-        //     }});
+            }});
 
-        // }}); 
+        }}); 
 
 
 
@@ -487,52 +466,52 @@ export var CHEFSMENU = {
         console.log('data', data);
 
 
-        // if(!allmenu){ 
+        if(!allmenu){ 
             
 
-        //     this.AJAX = $.ajax({
-        //         url: url + "?callback=?",
-        //         jsonpCallback:GLB.CALLBACK_RANDOM.get(),
-        //         dataType: "jsonp",
-        //         method:"POST",
-        //         data:data,
-        //         success: function (response) {
+            this.AJAX = $.ajax({
+                url: url + "?callback=?",
+                jsonpCallback:GLB.CALLBACK_RANDOM.get(),
+                dataType: "jsonp",
+                method:"POST",
+                data:data,
+                success: function (response) {
 
-        //             if(response.error){
+                    if(response.error){
 
-        //                 console.log("error",response.error);
-        //                 _this.close_menu_win();
-        //                 _this.goto404();
+                        console.log("error",response.error);
+                        _this.close_menu_win();
+                        _this.goto404();
                     
-        //             }else{
+                    }else{
 
-        //                 var cafe = response.cafe;
-        //                 if(cafe.cafe_status == 1){
-        //                     _this.close_menu_win();
-        //                     _this.gotoArchive();                                    
-        //                 }else{
-        //                     var allmenu = fn.arr2obj(response.menu);
-        //                     window[_this.G_DATA].ALLMENU[cafe_uniq_name] = allmenu; 
-        //                     window[_this.G_DATA].ALLCAFE[cafe_uniq_name] = response.cafe; 
-        //                     setTimeout(function() {
-        //                         opt.onReady && opt.onReady();       
-        //                     },500);
-        //                 }
-        //             }
-        //         },
-        //         error:function(response) {
-        //             console.log("err response",response);
-        //             _this.goto404();
-        //         }
-        //     });
+                        var cafe = response.cafe;
+                        if(cafe.cafe_status == 1){
+                            _this.close_menu_win();
+                            _this.gotoArchive();                                    
+                        }else{
+                            var allmenu = fn.arr2obj(response.menu);
+                            window[_this.G_DATA].ALLMENU[cafe_uniq_name] = allmenu; 
+                            window[_this.G_DATA].ALLCAFE[cafe_uniq_name] = response.cafe; 
+                            setTimeout(function() {
+                                opt.onReady && opt.onReady();       
+                            },500);
+                        }
+                    }
+                },
+                error:function(response) {
+                    console.log("err response",response);
+                    _this.goto404();
+                }
+            });
 
 
-        // }else{
+        }else{
             
-        //     // console.log("load from cache");
-        //     opt.onReady && opt.onReady();
+            // console.log("load from cache");
+            opt.onReady && opt.onReady();
 
-        // };
+        };
 
     },
     goto404:function(){        
