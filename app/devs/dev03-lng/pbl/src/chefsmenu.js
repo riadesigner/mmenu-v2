@@ -478,7 +478,7 @@ export var CHEFSMENU = {
 
                     if(response.error){
 
-                        // console.log("error",response.error);
+                        console.log("error",response.error);
                         _this.close_menu_win();
                         _this.goto404();
                     
@@ -499,7 +499,7 @@ export var CHEFSMENU = {
                     }
                 },
                 error:function(response) {
-                    // console.log("err response",response);
+                    console.log("err response",response);
                     _this.goto404();
                 }
             });
@@ -514,7 +514,8 @@ export var CHEFSMENU = {
 
     },
     goto404:function(){        
-        location.href = this.CHEFS_URL.server+'cafe/';
+        console.log("TEST PAUSED")
+        // location.href = this.CHEFS_URL.server+'cafe/';
     },
     gotoArchive:function(){
         this.$body.addClass(this.CLASS_CAFE_IS_IN_ARCHIVE);        
