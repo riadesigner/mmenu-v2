@@ -67,7 +67,7 @@ export default (function($){
     /**
     * EXT_MODE – for mobile only.
     * if EXT_MODE, turn on:
-    * - view-choosinf-mode
+    * - view-choosing-mode
     * - view-thank-you
     */
     var EXT_MODE = GLB.META_VIEWPORT.is_mobile();  

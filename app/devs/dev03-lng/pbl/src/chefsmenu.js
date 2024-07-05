@@ -441,14 +441,12 @@ export var CHEFSMENU = {
     //      }
 
     // }, 
-    load_all_menu:function(opt){
-        
+    load_all_menu:function(opt){        
         var _this=this;
     
         var url = GLB_APP_URL+"pbl/lib/pbl.get_all_menu.php";
         
-        var cafe_uniq_name = this.get_uniq_name();
-
+        var cafe_uniq_name = this.get_uniq_name();        
 
         var allmenu =  window[_this.G_DATA].ALLMENU[cafe_uniq_name];            
 
@@ -465,6 +463,7 @@ export var CHEFSMENU = {
 
         var data = {cafe:cafe_uniq_name};
 
+        console.log('data', data);
 
 
         if(!allmenu){  
