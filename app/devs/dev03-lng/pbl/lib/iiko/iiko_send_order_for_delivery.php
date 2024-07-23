@@ -235,10 +235,7 @@ $order['externalNumber'] = $short_number;
 // --- preparing order for telegram ---
 
 $time_format = 24;
-$order_currency = !empty($cafe->cafe_currency) ? $cafe->cafe_currency : "RUB"; 
-$order_arr_currency = ["USD"=>"$", "RUB"=>"₽", "EUR"=>"€", "JPY"=>"¥", "GBP"=>"£", "KRW"=>"₩"];
-$str_currency = $order_arr_currency[$order_currency];
-
+$str_currency = "₽";
 
 $order_items_tg = [];
 foreach($orders as $order_row){

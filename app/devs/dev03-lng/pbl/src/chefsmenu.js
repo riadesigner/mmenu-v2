@@ -515,8 +515,8 @@ export var CHEFSMENU = {
 
     },
     goto404:function(){        
-        console.log("TEST PAUSED")
-        // location.href = this.CHEFS_URL.server+'cafe/';
+        // console.log("TEST PAUSED")
+        location.href = this.CHEFS_URL.server+'cafe/';
     },
     gotoArchive:function(){
         this.$body.addClass(this.CLASS_CAFE_IS_IN_ARCHIVE);        

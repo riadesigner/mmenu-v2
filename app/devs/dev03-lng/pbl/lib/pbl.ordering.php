@@ -97,9 +97,7 @@
 
 	$cafe_title = $cafe->cafe_title;
 	$time_format = 24;
-	$order_currency = !empty($cafe->cafe_currency) ? $cafe->cafe_currency : "RUB"; 
-	$order_arr_currency = ["USD"=>"$", "RUB"=>"₽", "EUR"=>"€", "JPY"=>"¥", "GBP"=>"£", "KRW"=>"₩"];
-	$str_currency = $order_arr_currency[$order_currency];
+	$str_currency = "₽";
 	$order_total_price = (float) $order_data["order_total_price"];
 
 	if($time_need==$time_sent){

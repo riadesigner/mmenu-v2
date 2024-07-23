@@ -472,7 +472,7 @@ export var VIEW_ORDERING = {
 		
 		var _this=this;
 
-// CHEFS_URL.base
+		// CHEFS_URL.base
 
 		var url = GLB_APP_URL+"pbl/lib/pbl.ordering.php"; 
 		var msg_something_wrong = GLB.LNG.get("lng_something_wrong");		
