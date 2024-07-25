@@ -18,7 +18,6 @@ use chillerlan\QRCode\{QRCode, QROptions};
 
 $data = "https://ya.ru";
 // $qr = (new QRCode)->render($data);
-
 // $options->outputInterface     = QRGdImageWEBP::class;
 
 $options = new QROptions([
@@ -40,7 +39,3 @@ $im = (new QRCode($options))->render($data);
 
 header('Content-type: image/png');
 imagepng($im);
-
-
-?>
-
