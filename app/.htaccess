@@ -12,7 +12,7 @@ RewriteCond %{ENV:VIRTUAL_HOST} "chefsmenu.ru"
 RewriteRule ^loader.js$  https://%{HTTP_HOST}/loader.php   [R=301,L]
 
 RewriteCond %{ENV:VIRTUAL_HOST} "chefsmenu.localhost"
-RewriteRule ^loader.js$  http://%{HTTP_HOST}/loader.php   [R=301,L]
+RewriteRule ^loader.js$  https://%{HTTP_HOST}/loader.php   [R=301,L]
 
 <files *.json>
 SetOutputFilter DEFLATE

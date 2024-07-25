@@ -28,6 +28,9 @@ if(J_ENV_LOCAL){
 		'bucket'=> $_ENV['LOCAL_S3_BUCKET']
 		];
 
+	$CFG->tg_cart_token =  $_ENV['TG_CART_DEV_TOKEN'];	
+	$CFG->tg_cart_bot =  $_ENV['TG_CART_DEV_BOT'];			
+
 }else{
 
 	$CFG->dblocation    = $_ENV['PROD_DBLOCATION'];
@@ -48,6 +51,9 @@ if(J_ENV_LOCAL){
 		'bucket'=> $_ENV['LOCAL_S3_BUCKET']
 		];
 
+	$CFG->tg_cart_token =  $_ENV['TG_CART_TOKEN'];	
+	$CFG->tg_cart_bot =  $_ENV['TG_CART_BOT'];	
+
 }
 
 	$CFG->dbh           = '';// соединение с БД;
@@ -56,7 +62,7 @@ if(J_ENV_LOCAL){
 	$CFG->admin_pass	=  $_ENV['ADMIN_PASS'];
 	$CFG->admin_email   = 'admin@chefsmenu.ru';
 
-	$CFG->tg_cart_token =  $_ENV['TG_CART_TOKEN'];
+	
 
 	$CFG->base_rds_url = $CFG->http.$CFG->admin_sub.'.'.$CFG->wwwroot.'/'.APP_DIR;
 	$CFG->base_app_url = $CFG->http.$CFG->wwwroot.'/'.APP_DIR;
@@ -78,8 +84,7 @@ if(J_ENV_LOCAL){
 
 	$CFG->support_email =  $_ENV['SUPPORT_EMAIL'];
 	$CFG->support_phone =  $_ENV['SUPPORT_PHONE'];;	
-	$CFG->support_telegram =  $_ENV['SUPPORT_TELEGRAM'];
-	$CFG->tg_cart_bot =  $_ENV['TG_CART_BOT'];
+	$CFG->support_telegram =  $_ENV['SUPPORT_TELEGRAM'];	
 
 	$CFG->email_sender = [
 		'host'=> $_ENV['EMAIL_SENDER_HOST'], 

@@ -22,11 +22,11 @@ services:
     depends_on:
       - php
     ports:
-      - ${LOCAL_APACHE_HTTP}:80
+      - ${LOCAL_APACHE_HTTP}:80      
     environment:
-      - VIRTUAL_HOST=${LOCAL_WWWROOT}       
+      - VIRTUAL_HOST=${LOCAL_WWWROOT}
     volumes:
-      - ./app:/var/www/app
+      - ./app:/var/www/app  
 
   db:
     image: mariadb
