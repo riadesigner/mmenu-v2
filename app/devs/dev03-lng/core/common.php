@@ -36,7 +36,7 @@ function __errorjson($msg): never{
 	exit();
 }
 
-function glog($msg, $script_file="", $pre="gLog:"){	
+function glog($msg, $script_file="", $pre="glog:"){	
 	global $CFG;		
 	if(J_ENV_TEST){			
 		$name = !empty($fileName)?$fileName:$CFG->log_file_name;

@@ -59,9 +59,9 @@ class Tg_hook {
 
         $this->calc_real_tg_user();
 
-        // -------------------------------------------------------------
-        //  IF KNOWN TG_USER, REGISTERED FOR RECEIVING ORDERS FROM MENU 
-        // -------------------------------------------------------------        
+        // -----------------------------------------------------------------
+        //  IF KNOWN TG_USER, WHO REGISTERED FOR RECEIVING ORDERS FROM MENU 
+        // -----------------------------------------------------------------        
         if($this->REAL_TG_USER){
 
             // ----------------------------------------
@@ -83,7 +83,7 @@ class Tg_hook {
                 // --------------------------------
                 //  IF REAL TG_USER INPUT «Отмена»
                 // --------------------------------
-                if($this->message==="отмена"){
+                if(mb_strtolower($this->message)==="отмена"){
 
                     $this->delete_real_user();
 
@@ -243,22 +243,25 @@ class Tg_hook {
     }
 
     private function delete_real_user(): void{
-
+        glog("отмена регистрации tg пользователя ".$this->tg_user_id);        
         $tg_users = new Smart_collect('tg_users',"WHERE tg_user_id='".$this->tg_user_id."'");
-        if($tg_users&&$tg_users->full()){	
-            $arr_users->get();
-            foreach($arr_users as $usr){
-                $usr->delete();
-            }            
+        
+        if($tg_users&&$tg_users->full()){	            
+            $usr = $tg_users->get(0);
+            glog("удаляется tg user ".$usr);
+            $usr->delete();            
+            $answer_message = "Все предыдущие регистрации для этого чата сняты. 
+            Для регистрации нового кафе и вашей роли в нем (официант, менеджер, администратор) – введите *«Секретный ключ».* 
+             _(Вы найдете его в Панели Управления Меню. В разделе «Настройка корзины». Скопируйте его и вставьте сюда.)_" ;                    
+        }else{
+            $answer_message = "вы не подписаны ни на одну роль к кафе";
         }                
-        $answer_message = "Все предыдущие регистрации для этого чата сняты. 
-        Для регистрации нового кафе и вашей роли в нем (официант, менеджер, администратор) – введите *«Секретный ключ».* 
-         _(Вы найдете его в Панели Управления Меню. В разделе «Настройка корзины». Скопируйте его и вставьте сюда.)_" ;        
+
         $this->send_message($answer_message);
     }
 
     private function show_status_real_user(): void{
-
+        global $CFG;
         if(!$this->REAL_TG_USER){
             $error_message = "неизвестная ошибка ".__LINE__;
             $this->send_error_message($error_message);
@@ -277,7 +280,7 @@ class Tg_hook {
             $cafe_title="Без названия";
         }
 
-        $cafe_url = !empty($cafe->subdomain)?"https://".$cafe->subdomain.".chefsmenu.ru":"https://chefsmenu.ru/cafe/".$cafe_uniq_name;
+        $cafe_url = !empty($cafe->subdomain)?$CFG->http.$cafe->subdomain.".".$CFG->wwwroot : $CFG->http.$CFG->wwwroot."/cafe/".$cafe_uniq_name;
         $cafe_link = "[{$cafe_title}]({$cafe_url})";
 
         switch($this->REAL_TG_USER->role){
@@ -290,8 +293,7 @@ class Tg_hook {
                 Ваша роль определена как «Менеджер». Вы можете подтверждать заказы, отправляя их в iiko. ";
             break;
             case 'supervisor':
-                $answer_message = "{$MANAGER_NAME}! Этот чат зарегистрирован для получения сводной информации
-                обо всех заказах (в стол, доставка, самовывоз) из Меню {$cafe_link}.
+                $answer_message = "{$MANAGER_NAME}! Вы зарегистрировали этот чат для получения сводной информации обо всех заказах (в стол, доставка, самовывоз) из Меню {$cafe_link}.
                 Ваша роль определена как «Администратор».  
                 Вы можете получать информацию о работе Официантов и Менеджеров за день, но не можете подтверждать заказы. ";
             break;								
@@ -409,7 +411,7 @@ class Tg_hook {
     }
 
     private function send_message($msg, $keyboard=""): void{
-        // glog($msg);
+        glog(sprintf('send message: %s',$msg));
         Order_sender::send_message_to_tg_user($this->tg_user_id, $msg, $this->REAL_TG_USER, $keyboard="");	
     }
 

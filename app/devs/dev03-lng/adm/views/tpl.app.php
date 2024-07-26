@@ -912,18 +912,20 @@ App&&App();
 
 					<div class="std-form__section-description">
 						<ol>
-							<li>скопируйте <strong>Секретный ключ,</strong></li>
+							<li>скопируйте <strong>Секретный ключ</strong>,</li>
 							<li>перейдите в чат <a target="_blank" href="https://t.me/<?=$CART_BOT_NAME;?>">@<?=$CART_BOT_NAME;?></a></li>
 							<li>и вставьте этот ключ в ответ на приветствие</li>
 						</ol>						
 					</div>
 
-					<p>Для каждой роли предусмотрен соответствующий ключ. </p>
+					<h2 id="anchor_secret_key">Секретный ключ:</h2>
+
+					<p>Для каждой роли предусмотрен свой ключ. </p>
 					<p><strong>Официант</strong> – будет получать заказы в стол (в кафе).</p>
 					<p><strong>Менеджер</strong> – будет получать внешние заказы на доставку или самовывоз.</p>
 					<p><strong>Администратор</strong> – будет получать статистику по всем заказам за день.</p>
 
-					<p>Нажмите на нужный ключ, чтобы его скопировать:</p>
+					<p>Нажмите на нужный ключ, чтобы скопировать:</p>
 
 					<div class="customizing-cart__all-keys">
 						<div class="customizing-cart__all-keys_key">
@@ -939,10 +941,21 @@ App&&App();
 							<div>администратор</div>
 						</div>						
 					</div>
-					
+
+					<hr>
+
+					<div class="customizing-cart__all-tgusers">
+						<p>Сейчас для кафе зарегистрированы телеграм пользователи:</p>
+						<ul>
+							<li class="tgusers-role-waiter">Официанты: <span>нет</span></li>
+							<li class="tgusers-role-manager">Менеджеры: <span>нет</span></li>
+							<li class="tgusers-role-supervisor">Администраторы: <span>нет</span></li>
+						</ul>
+					</div>
 
 					<div class="super-admin-only">
-						<hr><button name="update_all_tg_keys">Обновить телеграм ключи</button>
+						<hr>
+						<button name="update_all_tg_keys">Сбросить телеграм ключи</button>
 					</div>
 					
 				</div>										

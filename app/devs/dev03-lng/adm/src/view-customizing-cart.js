@@ -14,14 +14,14 @@ export var VIEW_CUSTOMIZING_CART = {
 		this.$buttonsOrderWay = this.$view.find('.customizing-cart__order-way');
 		
 		this.sa_bnt_upd_tg_keys =  this.$view.find('button[name="update_all_tg_keys"]');
-		
+		this.$section_tgusers = this.$view.find('.customizing-cart__all-tgusers');
+				
 		this.$iikoSectionOnly = this.$view.find('.iiko-section-only');
 
 		this.$btn_tg_key_waiter =  this.$view.find('button.key-waiter');
 		this.$btn_tg_key_manager =  this.$view.find('button.key-manager');
 		this.$btn_tg_key_supervisor =  this.$view.find('button.key-supervisor');
-		
-
+				
 		this.behavior();
 
 		return this;
@@ -34,8 +34,7 @@ export var VIEW_CUSTOMIZING_CART = {
 		this.iiko_set_section_visibility(GLB.THE_CAFE.is_iiko_mode());
 	},
 
-	update:function(USER){
-		
+	update:function(USER){		
 
 		var _this=this;
 		this._update();
@@ -50,27 +49,88 @@ export var VIEW_CUSTOMIZING_CART = {
 		this.NEW_ORDER_WAY = parseInt(cafe.order_way,10);				
 	
 		this.reset();		
-		this.rebuild();
-		
+		this.rebuild();		
+
 		this.load_tg_keys_async()
-		.then((keys)=>{				
-			this.update_tg_keys_buttons(keys);		
-			setTimeout(()=>{ 
-				this._end_loading();
-				this._page_show(); 
-			},300);
+		.then((keys)=>{							
+
+			this.update_tg_keys_buttons(keys);
+
+			this.load_tg_users_async()
+			.then((tg_users)=>{				
+
+				this.update_tg_users_list(tg_users);
+				this.end_updating();
+
+			})
+			.catch((vars)=>{
+				this.end_updating_with_error("Не удалось проверить пользователей телеграм чата для кафе");
+			})
 		})
 		.catch((vars)=>{
+			this.end_updating_with_error("Не удалось загрузить ключи для телеграма");
+		})
+	},
+
+	update_tg_users_list:function(tg_users){
+		
+		if(tg_users && tg_users.length){			
+			const $waiters = this.$section_tgusers.find('.tgusers-role-waiter span');
+			const $managers = this.$section_tgusers.find('.tgusers-role-manager span');
+			const $supervisors = this.$section_tgusers.find('.tgusers-role-supervisor span');
+			console.log('$waiters',$waiters.length,$waiters)
+			const users = {waiters:[],managers:[],supervisors:[]};
+
+			for(let i in tg_users){
+				switch(tg_users[i].role){
+					case 'waiter':
+					users.waiters.push(tg_users[i]);
+					case 'manager':
+					users.managers.push(tg_users[i]);
+					case 'supervisor':
+					users.supervisors.push(tg_users[i]);										
+				}				
+			};
+			const foo = {
+				make_string:function(users,$el){
+					let html = "";					
+					if(users.length){
+						let count = 0;
+						for(let i in users){														
+							console.log('u= ',users[i])
+							let nick = users[i].nickname ? ` (${users[i].nickname})` : "";
+							html+=`<strong>${users[i].name}${nick}</strong>`;
+							count++;
+							if(count<users.length){
+								html+=", ";
+							}
+						};
+						console.log('html',html);
+						$el.html(html);
+					}				
+				}
+			};
+			foo.make_string(users.waiters,$waiters);
+			foo.make_string(users.managers,$managers);
+			foo.make_string(users.supervisors,$supervisors);
+		}		
+	},
+	end_updating_with_error(error_message){
+		if(error_message){
 			GLB.VIEWS.modalMessage({
 				title:GLB.LNG.get("lng_attention"),
-				message:"Не удалось загрузить ключи для телеграма",
+				message:error_message,
 				btn_title:GLB.LNG.get('lng_ok')
 			});
-			setTimeout(()=>{ 
-				this._end_loading();
-				this._page_show(); 
-			},300);
-		})
+		};		
+		this.end_updating();
+	},
+
+	end_updating:function(){
+		setTimeout(()=>{ 
+			this._end_loading();
+			this._page_show(); 
+		},300);		
 	},
 
 	update_tg_keys_buttons:function(tg_keys){
@@ -290,6 +350,40 @@ export var VIEW_CUSTOMIZING_CART = {
 
 		})
 	},
+
+	load_tg_users_async:function(){
+		return new Promise((res,rej)=>{
+			
+			var PATH = 'adm/lib/';
+			var url = PATH + 'lib.get_tg_users.php';			
+			
+			this._now_loading();
+	
+			var data = {
+				cafe_uniq_name:GLB.THE_CAFE.get().uniq_name
+			};
+	
+			this.AJAX = $.ajax({
+				url: url+"?callback=?",
+				data:data,
+				method:"POST",
+				dataType: "jsonp",
+				success: function (response) {
+					console.log('==response==',response)
+					if(response && !response.error){
+						res(response)						
+					}else{
+						rej(response)						
+					}
+				},
+				error:function(response) {
+					console.log('==err response==',response)
+					rej(response)
+				}
+			});
+
+		})
+	},	
 
 	save:function(opt){
 

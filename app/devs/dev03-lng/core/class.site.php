@@ -293,7 +293,7 @@ class Site{
 	}	
 
 	static public function get_template(){
-		gLog("Getting template: ".self::$SITE_PAGE.", [".self::$LANG."]", __FILE__);		
+		glog("Getting template: ".self::$SITE_PAGE.", [".self::$LANG."]", __FILE__);		
 		$lang = match (self::$LANG) {
       		'ru' => 1,
       		default => 0,

@@ -411,6 +411,7 @@ textarea:focus.length-limit-reached{ animation: ani_limit_reached .3s linear;}
 .std-form button{margin:5px 0 10px 0;}
 .std-form ul{margin: 0 auto 10px auto;line-height: 1.4;}
 .std-form ul.std-form__structure{padding:0;list-style:none; }
+.std-form hr{ margin:6vw 0;border:0;border-top:1px solid rgba(0,0,0,.3);}
 .input-title{margin: 0 0 4px 0;}
 
 
@@ -904,6 +905,8 @@ textarea:focus.length-limit-reached{ animation: ani_limit_reached .3s linear;}
 
 .customizing-cart__all-keys_key{display: flex;align-items: center}
 .customizing-cart__all-keys_key>div:nth-child(2){font-size: .9rem;padding: 0 0 0 20px;;}
+
+.customizing-cart__all-tgusers{margin:2vw 0;}
 
 /*
 	iiko	

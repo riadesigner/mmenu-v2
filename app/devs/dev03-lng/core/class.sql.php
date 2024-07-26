@@ -30,7 +30,7 @@ class SQL {
         if(!self::connect()) return false;
         $result = self::$db->query($query);
         if($result){
-            // glog($query);
+            glog($query);
             return $result;            
         }else{            
             glogError($query.", ".self::$db->error);

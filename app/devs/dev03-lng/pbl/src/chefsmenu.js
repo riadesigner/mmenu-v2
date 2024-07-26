@@ -515,7 +515,7 @@ export var CHEFSMENU = {
 
     },
     goto404:function(){        
-        // console.log("TEST PAUSED")
+        //  console.log("TEST PAUSED")
         location.href = this.CHEFS_URL.server+'cafe/';
     },
     gotoArchive:function(){
