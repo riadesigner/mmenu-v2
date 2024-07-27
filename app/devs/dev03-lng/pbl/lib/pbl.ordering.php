@@ -139,7 +139,7 @@
 
 
 	// TG sending
-	$results = Order_sender::send_tg_order($cafe, ORDER_TARGET, $short_number, $ORDER->text);
+	$results = Order_sender::send_tg_order($cafe->uniq_name, ORDER_TARGET, $short_number, $ORDER->text);
 	if(	!$results || !count($results)){
 		__errorjsonp("--fail sending tg-order");
 	}

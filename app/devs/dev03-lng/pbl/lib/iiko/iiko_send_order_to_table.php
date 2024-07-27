@@ -294,7 +294,7 @@ __answerjsonp(["short_number"=>$short_number,"demo_mode"=>$DEMO_MODE, "notg_mode
 if(THE_ORDER_WAY===0){
 
 	// TG sending
-	$results = Order_sender::send_tg_order($cafe, ORDER_TARGET, $short_number, $TG_ORDER->text);
+	$results = Order_sender::send_tg_order($cafe->uniq_name, ORDER_TARGET, $short_number, $TG_ORDER->text);
 	if($results && count($results)){		
 		__answerjsonp(["short_number"=>$short_number, "results"=>$results]);	
 	}else{

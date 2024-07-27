@@ -21,12 +21,13 @@ if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 	$CFG->site_templates = [
      // en, ru templates
-     'Index'=>['title'=>['
-				Chefs Menu!', 'Chefs Menu! Онлайн Меню для кафе и ресторанов за 10 секунд!'], 'descr'=>['', 'Сервис быстрого создания электронного меню для
-				ресторанов и кафе, с удобным управлением, корзиной для приема заказов
-				и технической поддержкой – по цене двух кружек кофе в месяц!'], 'template'=>['site/views/tpl.site.php', 'site/views/tpl.site.php']],
+     'Index'=>[
+		'title'=>['', 'Chefs Menu! Онлайн Меню для кафе и ресторанов за 10 секунд!'], 
+		'descr'=>['', 'Сервис быстрого создания электронного меню для ресторанов и кафе, с удобным управлением, корзиной для приема заказов!'], 
+		'template'=>['site/views/tpl.site.php', 'site/views/tpl.site.php']],
      //cafe, address with subdomain
-     'Cafe'=>['title'=>['Chefs Menu!', 'Chefs Menu!'], 'descr'=>['', 'Меню работает на платформе Chefs Menu!'], 'template'=>['site/views/tpl.menu.php', 'site/views/tpl.menu.php']],
+     'Cafe'=>[
+		'title'=>['Chefs Menu!', 'Chefs Menu!'], 'descr'=>['', 'Меню работает на платформе Chefs Menu!'], 'template'=>['site/views/tpl.menu.php', 'site/views/tpl.menu.php']],
      //cafe, address without subdomain
      'Menu'=>['title'=>['Chefs Menu!', 'Chefs Menu!'], 'descr'=>['', 'Меню работает на платформе Chefs Menu!'], 'template'=>['site/views/tpl.menu.php', 'site/views/tpl.menu.php']],
      '404'=>['title'=>['Chefs Menu! Page not found', 'Chefs Menu! Страница не найдена'], 'descr'=>['', 'Сервис быстрого создания электронного меню для

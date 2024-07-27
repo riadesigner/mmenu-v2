@@ -305,19 +305,20 @@ App&&App();
 
 					<p><strong>Для подключения iiko:</strong></p>	
 					<ol>
-						<li>Создайте Внешнее Меню в <a href="#">iikoWeb</a>, если у вас его еще нет.</li>
-						<li>Получите API ключ в <a href="#">iikoIcloud</a>, специально для ChefsMenu.</li>
+						<li>Создайте Внешнее Меню в <strong><i>iikoWeb</i></strong>, если у вас его еще нет.</li>
+						<li>Получите API ключ в <strong><i>iikoIcloud</i></strong>, специально для ChefsMenu.</li>
 						<li>Вставьте полученный API ключ в поле ниже и нажмите кнопку «Сохранить». </li>
 					</ol>
 					
 					<input class="std-form__input" type="input" placeholder="0000000-000" name="iiko-api-key" maxlength="100" >
 
+					
+
 					<p>После этого, меню перейдет под управление сервиса iiko и будет по расписанию подгружать из него последнюю версию Внешнего меню.</p>
 
 					<p><strong>Подробности:</strong></p>
 
-					<p>Для то, чтобы узнать как работает ChefsMenu в связке c платформой iiko, какие преимущества это дает
-					 и как подключиться, посетите <a href="#">эту страницу.</a></p>
+					<p>Смотрите видео-инструкцию <a href="#" name="link-iiko-help">подключения iiko</a>.</p>
 
 				</div>						
 			</div>

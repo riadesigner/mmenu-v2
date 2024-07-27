@@ -9,18 +9,13 @@ export var VIEW_IIKO_ADDING_API_KEY = {
 		this.$btnBack = this.$footer.find('.back, .close, .cancel');
 		this.$btnSave = this.$view.find('.save');
 		
-		this.$inputIikoKey =  this.$form.find('input[name=iiko-api-key]');
-		
+		this.$inputIikoKey =  this.$form.find('input[name=iiko-api-key]');		
 		this.$linkIikoHelp =  this.$form.find('a[name=link-iiko-help]');
-		this.$linkIikoWeb =  this.$form.find('a[name=link-iiko-web]');
-		this.$linkIikoTransport =  this.$form.find('a[name=link-iiko-transport]');
 		
 		this.SITE_URL = CFG.base_url;
 		this.USER_EMAIL = CFG.user_email;
 
 		this.IIKO_HELP_URL = "#link-iiko-help"; 
-		this.IIKO_WEB_URL = "#link-Iiko-Web"; 
-		this.IIKO_TRANSPORT_URL = "#link-Iiko-Transport"; 
 
 		this.update_content_once();
 
@@ -55,8 +50,6 @@ export var VIEW_IIKO_ADDING_API_KEY = {
 	},
 	update_content_once:function(){
 		this.$linkIikoHelp.attr({href:this.IIKO_HELP_URL});
-		this.$linkIikoWeb.attr({href:this.IIKO_WEB_URL});
-		this.$linkIikoTransport.attr({href:this.IIKO_TRANSPORT_URL});
 	},
 	update_content:function(){		
 		let CAFE = GLB.THE_CAFE.get();

@@ -1030,15 +1030,9 @@ a.mm2-home-link:hover{ color: %[color-home-link-hover]%; }
   background: %[color-bg-shadow]%;
   transition:.8s;
 }
-.mm2-ordering-message-1 span, .mm2-ordering-message-2 span {
-  max-width: 400px;margin: 0 auto;display: inline-block;   
-  color:%[color-bright]%;
-}
+.mm2-ordering-message-1 span, .mm2-ordering-message-2 span {color:%[color-bright]%; }
 .mm2-ordering-message-1.flashed,
-.mm2-ordering-message-2.flashed{ 
-  %[attention-flashed]%;
-  transition:0s;
-}
+.mm2-ordering-message-2.flashed{ %[attention-flashed]%; transition:0s; }
 
 .mm2-ordering-message-1.mm2-input-error,
 .mm2-ordering-message-2.mm2-input-error{ display: block;}
@@ -1108,10 +1102,6 @@ a.mm2-home-link:hover{ color: %[color-home-link-hover]%; }
 .waiter-mode{display: none;}
 .mode-orderto-table .mm2-order-ok-operator-message .manager-mode{display: none;}
 .mode-orderto-table .mm2-order-ok-operator-message .waiter-mode{display: block;}
-
-.mm2-order-ok-operator-message span,
-.mm2-order-ok-demo-message span,
-.mm2-order-ok-notg-message span {max-width: 400px;margin: 0 auto;display: inline-block;}
 
 .mm2-order-ok-operator-message,
 .mm2-order-ok-demo-message,
@@ -1647,12 +1637,9 @@ a.mm2-home-link:hover{ color: %[color-home-link-hover]%; }
   .mm2-order-ok-report-main h2, 
   .mm2-order-ok-cart h2{ font-size: 1em;}
 
-  .mm2-order-ok-report-main h3{font-size: 1.5em;}
+  .mm2-order-ok-report-main h3{font-size: 6vw; padding: 1vw 5vw; line-height: 1.2;}
   .mm2-order-ok-report-other p{font-size: .9em;}
 
-/*  .mm2-order-ok-cart-list div:nth-child(1),
-  .mm2-order-ok-cart-list li div:nth-child(2){font-size: 1em;}
-*/
   .mm2-thank-you-cart-list div:nth-child(1),
   .mm2-thank-you-cart-list li div:nth-child(2){font-size: 1em;}
   

@@ -91,6 +91,8 @@ class Order_sender{
 	
 	static public function get_relevant_tg_users($cafe_uniq_name, $order_target){
 		
+		glog('cafe_uniq_name = '.$cafe_uniq_name);
+
 		if(gettype($cafe_uniq_name)!=="string"){
 			glogError("\$cafe_uniq_name=$cafe_uniq_name");
 			throw new Exception("неправильный тип сообщения ".__LINE__." ".__FILE__);
@@ -115,7 +117,8 @@ class Order_sender{
     ------------------------------------------- **/	
 	static public function send_tg_order($cafe_uniq_name, $order_target, $order_short_number, $tg_order_text, $keyboard=""){	 			
 		$results = [];
-		if(self::total_tg_users_for($cafe_uniq_name, $order_target)){						
+		if(self::total_tg_users_for($cafe_uniq_name, $order_target)){		
+			glog("cafe_uniq_name = ".$cafe_uniq_name);
 			$results = self::send_message_to_relevant_users($cafe_uniq_name, $order_target, $tg_order_text, $keyboard);
 			self::send_message_to_supervisors($cafe_uniq_name, $tg_order_text);
 		}		
@@ -204,7 +207,7 @@ class Order_sender{
 
 			// CREATING ORDER IN DB
 			$order = new Smart_object("orders");
-			$order->cafe_uniq_name = $cafe->uniq_name;		
+			$order->cafe_uniq_name = $cafe_uniq_name;		
 			$order->order_target = $order_target;
 			$order->table_number = $table_number;
 			$order->pending_mode = $pending_mode;
