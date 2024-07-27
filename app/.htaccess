@@ -8,11 +8,7 @@ RewriteBase /
 ErrorDocument 404 /404
 ErrorDocument 403 /404
 
-RewriteCond %{ENV:VIRTUAL_HOST} "chefsmenu.ru"
-RewriteRule ^loader.js$  https://%{HTTP_HOST}/loader.php   [R=301,L]
-
-RewriteCond %{ENV:VIRTUAL_HOST} "chefsmenu.localhost"
-RewriteRule ^loader.js$  https://%{HTTP_HOST}/loader.php   [R=301,L]
+RewriteRule ^loader.js$  loader.php   [R=301,L]
 
 <files *.json>
 SetOutputFilter DEFLATE

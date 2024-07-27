@@ -260,6 +260,26 @@ class Tg_hook {
         $this->send_message($answer_message);
     }
 
+    private function get_cafe_params($cafe_uniq_name): array{
+        global $CFG;
+
+        $arr_cafe = new Smart_collect("cafe","WHERE uniq_name='".$cafe_uniq_name."'");			
+
+        if($arr_cafe&& $arr_cafe->full()){
+            $cafe = $arr_cafe->get(0);
+            $cafe_title = $cafe->cafe_title;
+        }else{
+            $cafe_title="Без названия";
+        }
+        $cafe_url = !empty($cafe->subdomain)?$CFG->http.$cafe->subdomain.".".$CFG->wwwroot : $CFG->http.$CFG->wwwroot."/cafe/".$cafe_uniq_name;
+        $cafe_link = "[{$cafe_title}]({$cafe_url})";        
+        return [
+            'cafe_title'=>$cafe_title,
+            'cafe_url'=>$cafe_url,
+            'cafe_link'=>$cafe_link,
+        ];   
+    }
+
     private function show_status_real_user(): void{
         global $CFG;
         if(!$this->REAL_TG_USER){
@@ -271,29 +291,20 @@ class Tg_hook {
         $MANAGER_NAME = !empty($m->nickname)?$m->nickname:$m->name;
 
         $cafe_uniq_name  = $this->REAL_TG_USER->cafe_uniq_name;
-        $arr_cafe = new Smart_collect("cafe","WHERE uniq_name='".$cafe_uniq_name."'");			
+        $params = $this->get_cafe_params($cafe_uniq_name);        
 
-        if($arr_cafe&& $arr_cafe->full()){
-            $cafe = $arr_cafe->get(0);
-            $cafe_title = $cafe->cafe_title;
-        }else{
-            $cafe_title="Без названия";
-        }
-
-        $cafe_url = !empty($cafe->subdomain)?$CFG->http.$cafe->subdomain.".".$CFG->wwwroot : $CFG->http.$CFG->wwwroot."/cafe/".$cafe_uniq_name;
-        $cafe_link = "[{$cafe_title}]({$cafe_url})";
 
         switch($this->REAL_TG_USER->role){
             case 'waiter':
-                $answer_message = "{$MANAGER_NAME}! Этот чат зарегистрирован для получения заказов «В СТОЛ» из Меню {$cafe_link}.  
+                $answer_message = "{$MANAGER_NAME}! Этот чат зарегистрирован для получения заказов «В СТОЛ» из Меню ".$params['cafe_link'].".  
                 Ваша роль определена как «Официант».  Вы можете брать (подтверждать) заказы и отправлять их в iiko. ";
             break;
             case 'manager':
-                $answer_message = "{$MANAGER_NAME}! Этот чат зарегистрирован для получения заказов из Меню {$cafe_link} на «ДОСТАВКУ» и «САМОВЫВОЗ».  
+                $answer_message = "{$MANAGER_NAME}! Этот чат зарегистрирован для получения заказов из Меню ".$params['cafe_link']." на «ДОСТАВКУ» и «САМОВЫВОЗ».  
                 Ваша роль определена как «Менеджер». Вы можете подтверждать заказы, отправляя их в iiko. ";
             break;
             case 'supervisor':
-                $answer_message = "{$MANAGER_NAME}! Вы зарегистрировали этот чат для получения сводной информации обо всех заказах (в стол, доставка, самовывоз) из Меню {$cafe_link}.
+                $answer_message = "{$MANAGER_NAME}! Вы зарегистрировали этот чат для получения сводной информации обо всех заказах (в стол, доставка, самовывоз) из Меню ".$params['cafe_link'].".
                 Ваша роль определена как «Администратор».  
                 Вы можете получать информацию о работе Официантов и Менеджеров за день, но не можете подтверждать заказы. ";
             break;								
@@ -358,20 +369,28 @@ class Tg_hook {
             $this->send_error_message($error_message);
             return false;
         }
+        $user_role = $this->TG_KEY->role;
+        $cafe_uniq_name = $this->TG_KEY->cafe_uniq_name;
 
         $new_tg_user = new Smart_object('tg_users');
         $new_tg_user->tg_user_id = $this->tg_user_id;
         $new_tg_user->role = $user_role;
         $new_tg_user->name = $this->tg_user_name;		
         $new_tg_user->nickname = "";		
-        $new_tg_user->cafe_uniq_name = $this->TG_KEY->cafe_uniq_name;
+        $new_tg_user->cafe_uniq_name = $cafe_uniq_name;
         $new_tg_user->regdate = 'now()';
+
+        $params = $this->get_cafe_params($cafe_uniq_name);
+    
+        $cafe_link = $params['cafe_link'];;
+        $cafe_url = $params['cafe_url'];
+        $cafe_title = $params['cafe_title'];
 
         if(!$new_tg_user->save()){            
             $this->send_error_message($error_message);
             return false;
         }else{
-            $msg = "*Поздравляем!*  Вы успешно зарегистрировали этот чат для получения заказов из Меню «{$cafe_title}». ";
+            $msg = "*Поздравляем!*  Вы успешно зарегистрировали этот чат для получения заказов из Меню «{$cafe_link}». ";
             switch($user_role){
                 case 'waiter':
                 $msg.="Ваша роль определена как «Официант». Вы сможете отменять или подтверждать заказы «В стол». ";
@@ -384,7 +403,6 @@ class Tg_hook {
                 break;
             }
 
-            $cafe_url = !empty($cafe->subdomain)?"https://{$cafe->subdomain}.chefsmenu.ru" : "https://chefsmenu.ru/cafe/{$cafe_uniq_name}";
             $msg.=" 
             Откройте Меню [«{$cafe_title}»]($cafe_url) и отправьте пробный заказ.";
             $this->send_message($msg);
