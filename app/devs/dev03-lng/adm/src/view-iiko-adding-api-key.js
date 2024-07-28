@@ -15,7 +15,7 @@ export var VIEW_IIKO_ADDING_API_KEY = {
 		this.SITE_URL = CFG.base_url;
 		this.USER_EMAIL = CFG.user_email;
 
-		this.IIKO_HELP_URL = "#link-iiko-help"; 
+		this.IIKO_HELP_URL = "/iiko-connection"; 
 
 		this.update_content_once();
 

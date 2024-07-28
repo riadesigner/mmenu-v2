@@ -210,6 +210,10 @@ class Site{
 					self::$SITE_PAGE = 'TermsPage';	
 					self::add_body_classes('page-terms');
 				break;
+				case 'iiko-connection':					
+					self::$SITE_PAGE = 'IikoConnectionPage';	
+					self::add_body_classes('page-terms');
+				break;				
 				default:
 					if(empty($R->get(0))){
 						self::$SITE_PAGE = 'Index';
@@ -281,7 +285,7 @@ class Site{
       		'ru' => 1,
       		default => 0,
   		};
-		return self::$ARR_PAGES[self::$SITE_PAGE]['title'][$lang];
+		return self::$ARR_PAGES[self::$SITE_PAGE]['title'];
 	}
 
 	static public function get_description(){
@@ -289,7 +293,7 @@ class Site{
       		'ru' => 1,
       		default => 0,
   		};
-		return self::$ARR_PAGES[self::$SITE_PAGE]['descr'][$lang];
+		return self::$ARR_PAGES[self::$SITE_PAGE]['descr'];
 	}	
 
 	static public function get_template(){
@@ -298,7 +302,7 @@ class Site{
       		'ru' => 1,
       		default => 0,
   		};
-		return self::$ARR_PAGES[self::$SITE_PAGE]['template'][$lang];
+		return self::$ARR_PAGES[self::$SITE_PAGE]['template'];
 	}
 
 	/* PRIVATE */
