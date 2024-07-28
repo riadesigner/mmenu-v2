@@ -186,18 +186,23 @@ class Order_sender{
 
     /*
     	SAVE ORDER TO DB
+		CREATE & RETURN SHORT NUMBER
     ------------------------- **/	
-	static public function save_order_to_db($order_target, $pending_mode, $cafe, $order_data, $table_number=0, $demo_mode=true){		
+	static public function save_order_to_db($order_target, $pending_mode, $cafe, $order_data, $table_number=0, $demo_mode=false){		
 
 		$cafe_uniq_name = $cafe->uniq_name;
 		$id_cafe = $cafe->id;
 
+		$demo_mode_str = $demo_mode?"yes":"no";
+		glog("Saving order to db, demo_mode: $demo_mode_str, $demo_mode");
+
 		if(!$demo_mode){
 
 			$q = "SELECT COUNT(*) AS total FROM orders WHERE cafe_uniq_name='{$cafe_uniq_name}' AND date >= CURDATE()";
+			
 			$counter = SQL::first($q);
 			$count = (int) $counter["total"];
-			$count++;
+			$count++;			
 
 			$pre = date("y").substr(date("F"),0,1).date("d");
 			$num = sprintf("%03d", $count);

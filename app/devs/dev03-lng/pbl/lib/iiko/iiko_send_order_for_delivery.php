@@ -79,6 +79,9 @@ if(!$cafe->valid())__errorjsonp("Unknown cafe, ".__LINE__);
 
 $DEMO_MODE = (int) $cafe->cafe_status !== 2 ;
 
+$DEMO_MODE_STR = $DEMO_MODE?"yes":"no";
+glog("Send order to ".$cafe->cafe_title.", DEMO_MODE=$DEMO_MODE_STR",__FILE__);
+
 $k = $cafe->iiko_api_key;
 if(empty($k)) __errorjsonp("Cant find iiko api for the cafe, ".__LINE__);
 
@@ -221,8 +224,7 @@ $order = [
 	
 define("ORDER_TARGET",Order_sender::IIKO_DELIVERY);
 $pending_mode = THE_ORDER_WAY===1?true:false;
-$demo_mode = false;
-$short_number = Order_sender::save_order_to_db(ORDER_TARGET, $pending_mode, $cafe, $order, $demo_mode);
+$short_number = Order_sender::save_order_to_db(ORDER_TARGET, $pending_mode, $cafe, $order, $DEMO_MODE);
 if(!$short_number)__errorjsonp("--cant save order");
 
 $order['externalNumber'] = $short_number;

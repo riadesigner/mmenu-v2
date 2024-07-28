@@ -27,10 +27,10 @@ class SQL {
     }
 
     static public function query($query){
-        if(!self::connect()) return false;
+        if(!self::connect()) return false;        
+        glog($query);
         $result = self::$db->query($query);
-        if($result){
-            glog($query);
+        if($result){            
             return $result;            
         }else{            
             glogError($query.", ".self::$db->error);
@@ -38,22 +38,26 @@ class SQL {
         }
     }
 
-    static public function update($query){        
+    static public function update($query){   
+        glog($query);     
         $result = self::query($query);
         return $result ? self::$db->affected_rows: false;
     }
 
     static public function insert($query){
+        glog($query);
         $result = self::query($query);
         return $result ? self::$db->insert_id : false;
     }
 
     static public function delete($query){  
+        glog($query);
         $result = self::query($query);
         return $result;
     }
 
     static public function first($query){
+        glog($query);
         $result = self::query($query);
         return  ($result && $result->num_rows) ? $result->fetch_assoc(): false; 
     }
@@ -65,7 +69,6 @@ class SQL {
 
     static public function disconnect(): void{        
         self::$db && self::$db->close();
-        // glog('db disconnect ok');
     }  
 
 

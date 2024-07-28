@@ -24,7 +24,7 @@ export var VIEW_IIKO_CUSTOMIZATION = {
 		this.SITE_URL = CFG.base_url;
 		this.USER_EMAIL = CFG.user_email;
 		
-		this.IIKO_QRCODE_TABLES_URL = "#link-iiko-qrcode_tables"; 
+		this.IIKO_QRCODE_TABLES_URL = "/link-iiko-qrcode_tables"; 
 		
 		this.update_content_once();
 
