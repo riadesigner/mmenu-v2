@@ -17,9 +17,7 @@ class Tg_hook {
     private $tg_user_name= ""; // string
     //
     private $CALLBACK_MODE = false; // bool
-    private $REAL_TG_USER = false; // object
-    //
-    private $TG_KEY = false; // object
+    private $REAL_TG_USER = null; // Smart object | null        
 
     function __construct($data){
 
@@ -56,13 +54,13 @@ class Tg_hook {
             $this->send_error_message($error_message);
             return;
         }
-
-        $this->calc_real_tg_user();
+        
+        $this->REAL_TG_USER = $this->calc_real_tg_user();
 
         // -----------------------------------------------------------------
         //  IF KNOWN TG_USER, WHO REGISTERED FOR RECEIVING ORDERS FROM MENU 
         // -----------------------------------------------------------------        
-        if($this->REAL_TG_USER){
+        if($this->REAL_TG_USER){            
 
             // ----------------------------------------
             //  IF REAL TG_USER PRESSED CALBACK BUTTON
@@ -90,9 +88,9 @@ class Tg_hook {
                 // -------------------------------------
                 //  IF REAL TG_USER INPUT VALID TG_KEY
                 // -------------------------------------
-                }else if( $key = $this->check_tg_key()){
+                }else if( $NEW_KEY = $this->check_tg_key_string($this->message)){
 
-                    $this->change_role_to($key->role);
+                    $this->change_user_role($NEW_KEY);
 
                 // --------------------------------
                 //  IF REAL TG_USER INPUT «Имя»
@@ -115,7 +113,7 @@ class Tg_hook {
             // --------------------------------------------
             //  IF UNKNOWN (OR NEW) TG_USER ENTERED TG_KEY
             // --------------------------------------------
-            if($this->check_tg_key()){
+            if($this->TG_KEY = $this->check_tg_key_string($this->message)){                
                 if($this->check_cafe_by_tg_key()){
                     // -----------------------
                     //  CREATING NEW TG_USER
@@ -142,11 +140,12 @@ class Tg_hook {
     //
     // -------------------------------------------------
 
-    private function calc_real_tg_user(): void{        
-
+    private function calc_real_tg_user(){        
         $tg_users = new Smart_collect('tg_users',"WHERE tg_user_id='".$this->tg_user_id."'");
         if($tg_users&&$tg_users->full()){	
-            $this->REAL_TG_USER = $tg_users->get(0);
+            return $tg_users->get(0);
+        }else{
+            return null;
         }        
 
     }
@@ -339,20 +338,17 @@ class Tg_hook {
 
     }
 
-    private function check_tg_key(){
-        $tg_key = trim((string) $this->message);
-        $arr_keys = new Smart_collect('tg_keys',"WHERE tg_key='{$tg_key}'");
-        if($arr_keys&&$arr_keys->full()){             
-            $this->TG_KEY = $arr_keys->get(0);
-            return $this->TG_KEY;
+    private function check_tg_key_string($key_string=""){ 
+        $arr_keys = new Smart_collect('tg_keys',"WHERE tg_key='{$key_string}'");
+        if($arr_keys&&$arr_keys->full()){            
+            return $arr_keys->get(0);
         }else{
             return false;
         }
     }
 
-    private function check_cafe_by_tg_key(){
-		if(!$this->TG_KEY) return false;
-        $cafe_uniq_name = $this->TG_KEY->cafe_uniq_name;         
+    private function check_cafe_by_tg_key($TG_KEY){		
+        $cafe_uniq_name = $TG_KEY->cafe_uniq_name;         
 		$arr_cafe = new Smart_collect('cafe',"WHERE uniq_name='{$cafe_uniq_name}'");		
 		if($arr_cafe && $arr_cafe->full()){
 			$cafe = $arr_cafe->get(0);
@@ -362,7 +358,9 @@ class Tg_hook {
 		}
     }
 
-    private function change_role_to($new_role){            
+    // $NEW_KEY = Smart object
+    private function change_user_role($NEW_KEY){        
+
         $arrRoleNames = [
             "waiter"=>"ОФИЦИАНТ",
             "manager"=>"МЕНЕДЖЕР",
@@ -370,24 +368,34 @@ class Tg_hook {
         ];
 
         $error_message = "*Ой, что-то пошло не так!*
-        В данный момент невозможно поменять вашу роль на ".$arrRoleNames[$new_role].". Попробуйте позже или напишите разработчику сервиса.";
+        В данный момент невозможно поменять вашу роль на ".$arrRoleNames[$NEW_KEY->role].". Попробуйте позже или напишите разработчику сервиса., ";
 
-        if(!$this->TG_KEY || !$this->tg_user_id || !$this->tg_user_name || !$this->REAL_TG_USER) {
+        if(!$this->REAL_TG_USER) {
             $this->send_error_message($error_message);
             return false;
         }        
 
-        $user_role = $this->TG_KEY->role;
-        $cafe_uniq_name = $this->TG_KEY->cafe_uniq_name;
-
-        if($user_role===$new_role){
+        if( $this->REAL_TG_USER->role===$NEW_KEY->role){
             $this->send_error_message("Вы пытаетесь сменить роль на такую же. Возможно вы скопировали не тот Ключ.");
             return false;
         }
         
-        // $this->REAL_TG_USER->role = 
+        $this->REAL_TG_USER->role = $NEW_KEY->role;
+        
+        if(!$this->REAL_TG_USER->save()){
+            $this->send_error_message($error_message);
+            return false;
+        }        
 
-        $this->send_error_message("test stop");
+        $params = $this->get_cafe_params($this->REAL_TG_USER->cafe_uniq_name);
+    
+        $cafe_link = $params['cafe_link'];;
+        // $cafe_url = $params['cafe_url'];
+        // $cafe_title = $params['cafe_title'];
+
+        $answer_message = "Ок. Вы зарегистрировали этот чат для получения сводной информации обо всех заказах (в стол, доставка, самовывоз) из Меню ".$params['cafe_link'].". Ваша роль определена как «АДМИНИСТРАТОР». 
+        Вы можете получать информацию о работе Официантов и Менеджеров за день, но не можете подтверждать и брать заказы.";
+        $this->send_error_message($answer_message);
 
     }
     
