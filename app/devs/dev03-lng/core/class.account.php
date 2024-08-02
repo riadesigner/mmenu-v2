@@ -296,6 +296,7 @@ class Account{
 		$qrName = mb_strtolower($prefix)."-qrcode.png";
 		$url2cafe = $CFG->http.$CFG->wwwroot."/cafe/".$uniq_name;
 
+		// ----- CREATING PNG QR-CODE ----- \
 		$options = new QROptions([
 			'outputType'   => QRCode::OUTPUT_IMAGE_PNG,
 			'returnResource'=> true,
@@ -309,6 +310,7 @@ class Account{
 		imagepng($im);
 		$imageQrcode = ob_get_contents();
 		ob_end_clean();
+		// ----- CREATING PNG QR-CODE ----- /
 
 		$bucket = $CFG->S3['bucket'];
 

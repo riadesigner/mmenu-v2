@@ -1,6 +1,8 @@
 <?php
 if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
+use chillerlan\QRCode\{QRCode, QROptions};
+
 //       _______ ____  _   ______
 //       / / ___// __ \/ | / / __ \
 //  __  / /\__ \/ / / /  |/ / /_/ /
@@ -114,6 +116,39 @@ function iiko_tables_res_parse($res){
 }
 
 
+/* --------------------------------------------------
+
+	          QR-CODE FUNCTIONS 
+
+----------------------------------------------------- */
+// return qecode as imagedata or imagesource;
+function rds_qrcode_create_from($link="http://chefsmenu.ru/unknown", $asImageData = false ){		
+	$options = new QROptions([
+		'outputType'   => QRCode::OUTPUT_IMAGE_PNG,
+		'returnResource'=> true,
+		'scale' => 30,
+		'quietzoneSize'=> 1,
+	]);
+	$im = (new QRCode($options))->render($link);
+	ob_start();		
+	imagepng($im);
+	$imagedata = ob_get_contents();
+	ob_end_clean();
+	if($asImageData){		
+		return $imagedata;
+	}else{
+		return 'data:image/png;base64,'.base64_encode($imagedata);		
+	}
+}
+
+
+/* --------------------------------------------------
+
+	          DATE / TIME FUNCTIONS 
+
+----------------------------------------------------- */
+
+
 function CHEFS__beautiful_date($date,$lang="ru"){
 	if($lang=="ru"){
 		$monthes = [1 => 'Января', 2 => 'Февраля', 3 => 'Марта', 4 => 'Апреля', 5 => 'Мая', 6 => 'Июня', 7 => 'Июля', 8 => 'Августа', 9 => 'Сентября', 10 => 'Октября', 11 => 'Ноября', 12 => 'Декабря'];
@@ -142,6 +177,12 @@ function glb_russian_datetime_full($str_time,$time_format=24){
 	$m = $arrMounth[$date[1]-1];
 	return $date[0].' '.$m.'&nbsp;'.$date[2].", ".$time;
 }
+
+/* --------------------------------------------------
+
+	          COMMON FUNCTIONS 
+
+----------------------------------------------------- */
 
 function go($href): never{
 	@Header("Location: $href");exit();

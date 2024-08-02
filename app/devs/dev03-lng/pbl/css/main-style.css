@@ -921,8 +921,10 @@ a.mm2-home-link:hover{ color: %[color-home-link-hover]%; }
 .mm2-cart-result {
   display: block; position: absolute;top:17px;left:0;width: 25%;font-size: 1.1em;
   border-left: 8px solid %[cart-decor-color]%; padding:0 0 0 20px; 
-  color: %[color-front]%;
+  color: %[color-front]%;  
 }
+
+.mm2-ordering-mode {color: %[color-bright]%;font-size: 1.4rem; margin:5px 0 52px 0;line-height:1.4;}
 
 .mm2-cart-result span{color: %[color-bright]%;font-size: 1.1em;}
 .mm2-cart-result p{margin: 0 0 5px 0 ;padding: 0;line-height: 1.5;}
@@ -1347,6 +1349,11 @@ a.mm2-home-link:hover{ color: %[color-home-link-hover]%; }
 
 }
 
+/*
+
+  TABLET
+
+*/
 
 @media screen and (orientation:portrait){  
 
@@ -1502,14 +1509,14 @@ a.mm2-home-link:hover{ color: %[color-home-link-hover]%; }
   .mm2-ordering-field input, .mm2-ordering-field textarea{font-size: 3.1vw;}
   .mm2-ordering-field input[name=u_phone]{font-size: 3.8vw;color:%[color-bright]%;}
   .mm2-ordering-field textarea.mm2-ordering-address {height: 6em;}
-  .mm2-ordering-field textarea.mm2-ordering-comment {height: 6em;}
+  .mm2-ordering-field textarea.mm2-ordering-comment {height: 6em;}  
 
 }
 
 
 /*
 
-  PHONES
+  MOBILE / PHONES
 
 */
 
@@ -1646,6 +1653,8 @@ a.mm2-home-link:hover{ color: %[color-home-link-hover]%; }
   .mm2-order-ok-operator-message,
   .mm2-order-ok-demo-message,
   .mm2-order-ok-notg-message {font-size: 1em;}
+  
+  .mm2-ordering-mode {font-size: 1rem; margin:5px 0 19px 0;}
 
   .mm2-order-ok-report-main{padding: 0 0 15px 0;margin: 0 0 15px 0;}
   .mm2-order-ok-cart h2 {margin: 0 0 15px 0;}

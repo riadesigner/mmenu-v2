@@ -171,16 +171,24 @@ class Order_sender{
     	SEND IIKO-ORDER TO TABLE
     -------------------------------- **/
 	static public function send_iiko_order_to_table($token, $organization_id, $terminal_group_id, $order){	
+
+		glog("send iiko order to table, args: ".print_r([
+			'token'=>$token, 
+			'organization_id'=>$organization_id, 
+			'terminal_group_id'=>$terminal_group_id, 
+			'order'=>$order
+		],1));
+
 		$url     = 'api/1/order/create';
 		$headers = [
 		    "Content-Type"=>"application/json",
 		    "Authorization" => 'Bearer '.$token
 		]; 	 	
-		$params  = ['organizationId' => $organization_id, 'terminalGroupId' => $terminal_group_id, 'order' => $order]; 	
-		
-		glog("order = ".print_r($order,1));
+		$params  = ['organizationId' => $organization_id, 'terminalGroupId' => $terminal_group_id, 'order' => $order]; 			
 
-		$res = iiko_get_info($url,$headers,$params);
+		$res = iiko_get_info($url,$headers,$params);		
+		glog("iiko answer: ".print_r($res,1));
+
 		return $res;
 	}
 

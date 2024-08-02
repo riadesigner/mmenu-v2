@@ -23,7 +23,7 @@
 	require_once WORK_DIR.APP_DIR.'core/class.account.php';
 	require_once WORK_DIR.APP_DIR.'core/class.tg_keys.php';	
 	require_once WORK_DIR.APP_DIR.'core/class.email.php';	
-	require_once WORK_DIR.APP_DIR.'ext/qrcode/qrcode.php';
+	// require_once WORK_DIR.APP_DIR.'ext/qrcode/qrcode.php';
 	
 
 	session_start();
@@ -93,7 +93,7 @@
 			$name = "table-".$table['number'];
 			$uniq = $tables_uniq_names[$name];
 			$link = $CFG->wwwroot."/cafe/".mb_strtolower((string) $cafe->uniq_name)."/table/".$uniq;
-			$qr_image = iiko_generate_qrcode_for_the_link($link);
+			$qr_image = rds_qrcode_create_from($link);
 			$arr[] = [
 				"table_number"=>$table['number'],
 				"table_name"=>$table['name'],				
@@ -102,19 +102,6 @@
 			];
 		}
 		return $arr;
-	}
-
-	function iiko_generate_qrcode_for_the_link($link){
-		global $CFG;
-		
-		$qr = QRCode::getMinimumQRCode($link, QR_ERROR_CORRECT_LEVEL_L);
-		$im = $qr->createImage(8, 20); // size, border
-
-	    ob_start();
-	    imagepng($im);
-	    $imagedata = ob_get_clean();
-	    $src = 'data:image/png;base64,'.base64_encode($imagedata);
-	    return $src;
 	}
 	
 	function iiko_send_qrcodes_to_email($cafe, $user_email, $qrcodes){
