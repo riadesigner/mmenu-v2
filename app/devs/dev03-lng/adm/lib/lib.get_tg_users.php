@@ -39,7 +39,8 @@
 	$all_tg_users = new Smart_collect("tg_users","where cafe_uniq_name = '{$cafe_uniq_name}' ", "ORDER BY role");
 	
 	$ARR_TG_USERS = [];
-	if($all_tg_users && $all_tg_users->full()){						
+	if($all_tg_users && $all_tg_users->full()){
+		glog("total tg users for cafe {$cafe_uniq_name}: ".$all_tg_users->found());
 		foreach($all_tg_users->get() as $TG_USER){
 			array_push($ARR_TG_USERS, $TG_USER->export());
 		}		

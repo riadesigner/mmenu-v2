@@ -79,13 +79,20 @@ class Tg_hook {
                 }
 
             }else{
-
+                
                 // --------------------------------
                 //  IF REAL TG_USER INPUT «Отмена»
                 // --------------------------------
-                if(mb_strtolower($this->message)==="отмена"){
+                if($this->message==="отмена"){
 
                     $this->delete_real_user();
+
+                // -------------------------------------
+                //  IF REAL TG_USER INPUT VALID TG_KEY
+                // -------------------------------------
+                }else if( $key = $this->check_tg_key()){
+
+                    $this->change_role_to($key->role);
 
                 // --------------------------------
                 //  IF REAL TG_USER INPUT «Имя»
@@ -139,7 +146,7 @@ class Tg_hook {
 
         $tg_users = new Smart_collect('tg_users',"WHERE tg_user_id='".$this->tg_user_id."'");
         if($tg_users&&$tg_users->full()){	
-            $this->REAL_TG_USER = $tg_users->get(0);                        
+            $this->REAL_TG_USER = $tg_users->get(0);
         }        
 
     }
@@ -291,27 +298,23 @@ class Tg_hook {
         $MANAGER_NAME = !empty($m->nickname)?$m->nickname:$m->name;
 
         $cafe_uniq_name  = $this->REAL_TG_USER->cafe_uniq_name;
-        $params = $this->get_cafe_params($cafe_uniq_name);        
-
+        $params = $this->get_cafe_params($cafe_uniq_name);         
 
         switch($this->REAL_TG_USER->role){
             case 'waiter':
-                $answer_message = "{$MANAGER_NAME}! Этот чат зарегистрирован для получения заказов «В СТОЛ» из Меню ".$params['cafe_link'].".  
-                Ваша роль определена как «Официант».  Вы можете брать (подтверждать) заказы и отправлять их в iiko. ";
+                $answer_message = "{$MANAGER_NAME}! Этот чат зарегистрирован вами для получения заказов из Меню ".$params['cafe_link'].". Ваша роль определена как «ОФИЦИАНТ».  Вы можете брать (подтверждать) заказы «В СТОЛ».";
             break;
             case 'manager':
-                $answer_message = "{$MANAGER_NAME}! Этот чат зарегистрирован для получения заказов из Меню ".$params['cafe_link']." на «ДОСТАВКУ» и «САМОВЫВОЗ».  
-                Ваша роль определена как «Менеджер». Вы можете подтверждать заказы, отправляя их в iiko. ";
+                $answer_message = "{$MANAGER_NAME}! Этот чат зарегистрирован вами для получения заказов из Меню ".$params['cafe_link'].". Ваша роль определена как «МЕНЕДЖЕР». Вы можете подтверждать заказы на «ДОСТАВКУ» и «САМОВЫВОЗ».";
             break;
             case 'supervisor':
-                $answer_message = "{$MANAGER_NAME}! Вы зарегистрировали этот чат для получения сводной информации обо всех заказах (в стол, доставка, самовывоз) из Меню ".$params['cafe_link'].".
-                Ваша роль определена как «Администратор».  
-                Вы можете получать информацию о работе Официантов и Менеджеров за день, но не можете подтверждать заказы. ";
+                $answer_message = "{$MANAGER_NAME}! Этот чат зарегистрирован вами для получения сводной информации обо всех заказах (в стол, доставка, самовывоз) из Меню ".$params['cafe_link'].". Ваша роль определена как «АДМИНИСТРАТОР». Вы можете получать информацию о работе Официантов и Менеджеров за день, но не можете подтверждать и брать заказы.";
             break;								
         }
 
-        $answer_message.= "\n\n– _Чтобы зарегистрировать этот чат для другого Меню или выбрать другую роль (официант, менеджер, администратор), отмените текущую регистрацию. Для этого введите слово «Отмена»._";
-        $answer_message.= "\n\n– _Чтобы поменять свое имя в данном чате, введите слово «имя» и ваше новое имя. Например: имя Егор._";
+        $answer_message.= "\n\n– _Чтобы зарегистрировать этот чат для другой роли (официант, менеджер, администратор), введите соответствующий «Ключ»._";
+        $answer_message.= "\n\n– _Чтобы отменить свою регистрацию в данном чате, введите слово «Отмена»._";
+        $answer_message.= "\n\n– _Чтобы поменять свое имя в данном чате, введите слово «имя» и, через пробел, ваше новое имя. Например: имя Егор._";
 
         if($this->REAL_TG_USER->state==='active'){
             $button_state_title = "Закрыть смену";
@@ -359,11 +362,41 @@ class Tg_hook {
 		}
     }
 
+    private function change_role_to($new_role){            
+        $arrRoleNames = [
+            "waiter"=>"ОФИЦИАНТ",
+            "manager"=>"МЕНЕДЖЕР",
+            "supervisor"=>"АДМИНИСТРАТОР",
+        ];
+
+        $error_message = "*Ой, что-то пошло не так!*
+        В данный момент невозможно поменять вашу роль на ".$arrRoleNames[$new_role].". Попробуйте позже или напишите разработчику сервиса.";
+
+        if(!$this->TG_KEY || !$this->tg_user_id || !$this->tg_user_name || !$this->REAL_TG_USER) {
+            $this->send_error_message($error_message);
+            return false;
+        }        
+
+        $user_role = $this->TG_KEY->role;
+        $cafe_uniq_name = $this->TG_KEY->cafe_uniq_name;
+
+        if($user_role===$new_role){
+            $this->send_error_message("Вы пытаетесь сменить роль на такую же. Возможно вы скопировали не тот Ключ.");
+            return false;
+        }
+        
+        // $this->REAL_TG_USER->role = 
+
+        $this->send_error_message("test stop");
+
+    }
+    
+
     private function create_new_user(){
 
         $error_message = "*Ой, что-то пошло не так!*
-        в данный момент невозоможно зарегистрировать нового пользователя.   
-        Попробуйте позже или напишите администратору сервиса.";
+        В данный момент невозможно зарегистрировать нового пользователя.   
+        Попробуйте позже или напишите разработчику сервиса.";
 
         if(!$this->TG_KEY || !$this->tg_user_id || !$this->tg_user_name) {
             $this->send_error_message($error_message);

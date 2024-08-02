@@ -57,11 +57,9 @@ export var VIEW_CUSTOMIZING_CART = {
 			this.update_tg_keys_buttons(keys);
 
 			this.load_tg_users_async()
-			.then((tg_users)=>{				
-
+			.then((tg_users)=>{								
 				this.update_tg_users_list(tg_users);
 				this.end_updating();
-
 			})
 			.catch((vars)=>{
 				this.end_updating_with_error("Не удалось проверить пользователей телеграм чата для кафе");
@@ -78,26 +76,30 @@ export var VIEW_CUSTOMIZING_CART = {
 			const $waiters = this.$section_tgusers.find('.tgusers-role-waiter span');
 			const $managers = this.$section_tgusers.find('.tgusers-role-manager span');
 			const $supervisors = this.$section_tgusers.find('.tgusers-role-supervisor span');
-			console.log('$waiters',$waiters.length,$waiters)
+			
 			const users = {waiters:[],managers:[],supervisors:[]};
+
+			console.log('tg_users',tg_users)
 
 			for(let i in tg_users){
 				switch(tg_users[i].role){
 					case 'waiter':
 					users.waiters.push(tg_users[i]);
+					break;
 					case 'manager':
 					users.managers.push(tg_users[i]);
+					break;
 					case 'supervisor':
 					users.supervisors.push(tg_users[i]);										
+					break;
 				}				
 			};
 			const foo = {
 				make_string:function(users,$el){
 					let html = "";					
-					if(users.length){
+					if(users.length>0){						
 						let count = 0;
-						for(let i in users){														
-							console.log('u= ',users[i])
+						for(let i in users){																					
 							let nick = users[i].nickname ? ` (${users[i].nickname})` : "";
 							html+=`<strong>${users[i].name}${nick}</strong>`;
 							count++;
@@ -191,7 +193,7 @@ export var VIEW_CUSTOMIZING_CART = {
 		};
 
 		this.$buttonsOrderWay.html("");
-		var arrBtns = ["1. Только в TG", "2. В TG, затем в iiko"];
+		var arrBtns = ["1. Только в TG", "2. В TG, затем в iiko (beta)"];
 		for(let i=0;i<arrBtns.length;i++){
 			let checked = parseInt(GLB.THE_CAFE.get().order_way,10) == i?" checked":"";
 			let $btn = $("<div class='std-form__radio-button "+checked+"' mode='"+i+"'>"+arrBtns[i]+"</div>\n");
