@@ -1,11 +1,16 @@
 <?php
 
 /*
-	updagte all tg keys for cafe
-	creating keys for:
+
+	UPDATING ALL TG-KEYS FOR CAFE
+
+	1. creating new tg-keys for:
 	-> waiter	
 	-> manager
 	-> supervisor
+	
+	2. removing all tg users for this cafe
+
 */	
 
 	header('content-type: application/json; charset=utf-8');
@@ -37,9 +42,17 @@
 		__errorjsonp("Unknown or empty cafe uniq_name");
 	}
 	
-	$uniq_name = trim((string) $_POST['cafe_uniq_name']);
+	$cafe_uniq_name = trim((string) $_POST['cafe_uniq_name']);
 
-	$TG_KEYS = Tg_keys::update_all($uniq_name);		
+	$all_tg_users = new Smart_collect("tg_users","where cafe_uniq_name = '{$cafe_uniq_name}'");
+	if($all_tg_users && $all_tg_users->full()){
+		$arr = $all_tg_users->get();
+		foreach($arr as $user){
+			$user->delete();
+		}
+	}
+
+	$TG_KEYS = Tg_keys::update_all($cafe_uniq_name);		
 	if(!empty($TG_KEYS)){
 		__answerjsonp($TG_KEYS);
 	}else{

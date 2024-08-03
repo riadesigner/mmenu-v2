@@ -71,15 +71,33 @@ export var VIEW_CUSTOMIZING_CART = {
 	},
 
 	update_tg_users_list:function(tg_users){
-		
+
+		const $waiters = this.$section_tgusers.find('.tgusers-role-waiter span');
+		const $managers = this.$section_tgusers.find('.tgusers-role-manager span');
+		const $supervisors = this.$section_tgusers.find('.tgusers-role-supervisor span');	
+
 		if(tg_users && tg_users.length){			
-			const $waiters = this.$section_tgusers.find('.tgusers-role-waiter span');
-			const $managers = this.$section_tgusers.find('.tgusers-role-manager span');
-			const $supervisors = this.$section_tgusers.find('.tgusers-role-supervisor span');
-			
+
 			const users = {waiters:[],managers:[],supervisors:[]};
 
-			console.log('tg_users',tg_users)
+			const foo = {
+				make_string:function(users,$el){
+					let html = "";					
+					if(users.length>0){						
+						let count = 0;
+						for(let i in users){											
+							let name_string = users[i].nickname ? `${users[i].nickname} (${users[i].name})` : users[i].name;							
+							html+=`<strong>${name_string}</strong>`;
+							count++;
+							if(count<users.length){
+								html+=", ";
+							}
+						};
+						console.log('html',html);
+						$el.html(html);
+					}				
+				}
+			};	
 
 			for(let i in tg_users){
 				switch(tg_users[i].role){
@@ -94,28 +112,15 @@ export var VIEW_CUSTOMIZING_CART = {
 					break;
 				}				
 			};
-			const foo = {
-				make_string:function(users,$el){
-					let html = "";					
-					if(users.length>0){						
-						let count = 0;
-						for(let i in users){																					
-							let nick = users[i].nickname ? ` (${users[i].nickname})` : "";
-							html+=`<strong>${users[i].name}${nick}</strong>`;
-							count++;
-							if(count<users.length){
-								html+=", ";
-							}
-						};
-						console.log('html',html);
-						$el.html(html);
-					}				
-				}
-			};
 			foo.make_string(users.waiters,$waiters);
 			foo.make_string(users.managers,$managers);
 			foo.make_string(users.supervisors,$supervisors);
-		}		
+		}else{
+			$empty_string = "нет";
+			$waiters.html($empty_string);
+			$managers.html($empty_string);
+			$supervisors.html($empty_string);
+		}
 	},
 	end_updating_with_error(error_message){
 		if(error_message){
@@ -445,7 +450,8 @@ export var VIEW_CUSTOMIZING_CART = {
 					this.sa_update_all_tg_keys_asynq()
 					.then((keys)=>{									
 						this.update_tg_keys_buttons(keys);
-						this._end_loading();				
+						this.update_tg_users_list(false);
+						this._end_loading();
 					})
 					.catch((vars)=>{					
 						GLB.VIEWS.modalMessage({

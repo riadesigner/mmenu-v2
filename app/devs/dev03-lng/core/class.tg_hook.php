@@ -114,7 +114,7 @@ class Tg_hook {
             //  IF UNKNOWN (OR NEW) TG_USER ENTERED TG_KEY
             // --------------------------------------------
             if($this->TG_KEY = $this->check_tg_key_string($this->message)){                
-                if($this->check_cafe_by_tg_key()){
+                if($CAFE = $this->check_cafe_by_tg_key($this->TG_KEY)){
                     // -----------------------
                     //  CREATING NEW TG_USER
                     // -----------------------                    
@@ -256,11 +256,9 @@ class Tg_hook {
             $usr = $tg_users->get(0);
             glog("удаляется tg user ".$usr);
             $usr->delete();            
-            $answer_message = "Все предыдущие регистрации для этого чата сняты. 
-            Для регистрации нового кафе и вашей роли в нем (официант, менеджер, администратор) – введите *«Секретный ключ».* 
-             _(Вы найдете его в Панели Управления Меню. В разделе «Настройка корзины». Скопируйте его и вставьте сюда.)_" ;                    
+            $answer_message = "Ваша регистрация для этого чата снята.";                    
         }else{
-            $answer_message = "вы не подписаны ни на одну роль к кафе";
+            $answer_message = "Вы не подписаны ни на одну роль в кафе.";
         }                
 
         $this->send_message($answer_message);
@@ -299,21 +297,9 @@ class Tg_hook {
         $cafe_uniq_name  = $this->REAL_TG_USER->cafe_uniq_name;
         $params = $this->get_cafe_params($cafe_uniq_name);         
 
-        switch($this->REAL_TG_USER->role){
-            case 'waiter':
-                $answer_message = "{$MANAGER_NAME}! Этот чат зарегистрирован вами для получения заказов из Меню ".$params['cafe_link'].". Ваша роль определена как «ОФИЦИАНТ».  Вы можете брать (подтверждать) заказы «В СТОЛ».";
-            break;
-            case 'manager':
-                $answer_message = "{$MANAGER_NAME}! Этот чат зарегистрирован вами для получения заказов из Меню ".$params['cafe_link'].". Ваша роль определена как «МЕНЕДЖЕР». Вы можете подтверждать заказы на «ДОСТАВКУ» и «САМОВЫВОЗ».";
-            break;
-            case 'supervisor':
-                $answer_message = "{$MANAGER_NAME}! Этот чат зарегистрирован вами для получения сводной информации обо всех заказах (в стол, доставка, самовывоз) из Меню ".$params['cafe_link'].". Ваша роль определена как «АДМИНИСТРАТОР». Вы можете получать информацию о работе Официантов и Менеджеров за день, но не можете подтверждать и брать заказы.";
-            break;								
-        }
-
-        $answer_message.= "\n\n– _Чтобы зарегистрировать этот чат для другой роли (официант, менеджер, администратор), введите соответствующий «Ключ»._";
-        $answer_message.= "\n\n– _Чтобы отменить свою регистрацию в данном чате, введите слово «Отмена»._";
-        $answer_message.= "\n\n– _Чтобы поменять свое имя в данном чате, введите слово «имя» и, через пробел, ваше новое имя. Например: имя Егор._";
+        $answer_message = "{$MANAGER_NAME}! Этот чат был зарегистрирован вами ранее для получения заказов из Меню ".$params['cafe_link'].".";        
+        $answer_message .= $this->get_message_for($this->REAL_TG_USER->role);
+        $answer_message .= $this->get_short_help_message();
 
         if($this->REAL_TG_USER->state==='active'){
             $button_state_title = "Закрыть смену";
@@ -368,7 +354,8 @@ class Tg_hook {
         ];
 
         $error_message = "*Ой, что-то пошло не так!*
-        В данный момент невозможно поменять вашу роль на ".$arrRoleNames[$NEW_KEY->role].". Попробуйте позже или напишите разработчику сервиса., ";
+        В данный момент невозможно поменять вашу роль на ".$arrRoleNames[$NEW_KEY->role].". 
+        Попробуйте позже или напишите разработчику сервиса.";
 
         if(!$this->REAL_TG_USER) {
             $this->send_error_message($error_message);
@@ -387,14 +374,12 @@ class Tg_hook {
             return false;
         }        
 
-        $params = $this->get_cafe_params($this->REAL_TG_USER->cafe_uniq_name);
-    
-        $cafe_link = $params['cafe_link'];;
-        // $cafe_url = $params['cafe_url'];
-        // $cafe_title = $params['cafe_title'];
+        $params = $this->get_cafe_params($this->REAL_TG_USER->cafe_uniq_name);    
+        $cafe_link = $params['cafe_link'];
 
-        $answer_message = "Ок. Вы зарегистрировали этот чат для получения сводной информации обо всех заказах (в стол, доставка, самовывоз) из Меню ".$params['cafe_link'].". Ваша роль определена как «АДМИНИСТРАТОР». 
-        Вы можете получать информацию о работе Официантов и Менеджеров за день, но не можете подтверждать и брать заказы.";
+        $answer_message = "Ок. Вы зарегистрировали этот чат для Меню ".$params['cafe_link'].".";
+        $answer_message.= $this->get_message_for($NEW_KEY->role);
+        $answer_message.= $this->get_short_help_message();
         $this->send_error_message($answer_message);
 
     }
@@ -431,32 +416,33 @@ class Tg_hook {
             $this->send_error_message($error_message);
             return false;
         }else{
-            $msg = "*Поздравляем!*  Вы успешно зарегистрировали этот чат для получения заказов из Меню «{$cafe_link}». ";
-            switch($user_role){
-                case 'waiter':
-                $msg.="Ваша роль определена как «Официант». Вы сможете отменять или подтверждать заказы «В стол». ";
-                break;
-                case 'manager':
-                    $msg.="Ваша роль определена как «Менеджер. Вы сможете отменять или подтверждать внешние заказы на «Доставку» и «Самовывоз». ";
-                break;
-                case 'supervisor':
-                    $msg.="Ваша роль определена как «Администратор». Вы сможете получать информацию об всех заказах («В стол», «Доставка», «Самовывоз») и сводную информацию работы Менеджеров и Официантов за день. ";
-                break;
-            }
-
-            $msg.=" 
-            Откройте Меню [«{$cafe_title}»]($cafe_url) и отправьте пробный заказ.";
-            $this->send_message($msg);
+            $answer_message = "*Поздравляем!*  Вы успешно зарегистрировали этот чат для получения заказов из Меню «{$cafe_link}». ";
+            $answer_message .= $this->get_message_for($user_role); 
+            $answer_message .= $this->get_short_help_message();
+            $this->send_message($answer_message);
             return true;
         }
     }    
 
+    private function get_message_for($role){
+        $arr_messages = [
+            "waiter" => " Ваша роль определена как ОФИЦИАНТ. Вы можете брать (подтверждать) заказы В СТОЛ.",
+            "manager" => " Ваша роль определена как МЕНЕДЖЕР. Вы можете подтверждать заказы на ДОСТАВКУ и САМОВЫВОЗ.",
+            "supervisor" => " Ваша роль определена как АДМИНИСТРАТОР. Вы можете получать информацию о работе ОФИЦИАНТОВ и МЕНЕДЖЕРОВ, но не можете подтверждать и брать заказы.",
+        ];        
+        return $arr_messages[$role];
+    }
+
+    private function get_short_help_message(){        
+        $msg = "\n\n– _Чтобы зарегистрировать этот чат для другой роли (официант, менеджер, администратор), введите соответствующий «Ключ»._";
+        $msg.= "\n\n– _Чтобы отменить свою регистрацию в данном чате, введите слово «Отмена»._";
+        $msg.= "\n\n– _Чтобы поменять свое имя в данном чате, введите слово «имя» и, через пробел, ваше новое имя. Например: имя Егор._";
+        return $msg;
+    }    
+
     private function send_message_first_time(): void{
         $answer_message = "*".$this->tg_user_name.",*		
-        похоже, вы здесь впервые!     
-        Чтобы получать заказы из вашего Меню в этот чат, введите, пожалуйста, *«Секретный ключ».*          
-        _(Вы найдете его в Панели Управления Меню. В разделе «Настройка корзины». Скопируйте его и вставьте сюда.)_
-        ";
+        похоже, вы здесь впервые! Чтобы получать заказы из вашего Меню в этот чат, введите *«Секретный ключ».*";
         $this->send_message($answer_message);
     }
     private function get_manager_name(){
