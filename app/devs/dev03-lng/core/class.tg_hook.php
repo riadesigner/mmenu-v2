@@ -326,7 +326,9 @@ class Tg_hook {
     }
 
     private function check_tg_key_string($key_string=""){ 
-        $arr_keys = new Smart_collect('tg_keys',"WHERE tg_key='{$key_string}'");
+        if(!str_starts_with($key_string, '/start ')) return false;
+        $key = explode(" ",$key_string)[1];        
+        $arr_keys = new Smart_collect('tg_keys',"WHERE tg_key='{$key}'");
         if($arr_keys&&$arr_keys->full()){            
             return $arr_keys->get(0);
         }else{
@@ -364,7 +366,7 @@ class Tg_hook {
         }        
 
         if( $this->REAL_TG_USER->role===$NEW_KEY->role){
-            $this->send_error_message("Вы пытаетесь сменить роль на такую же. Возможно вы скопировали не тот Ключ.");
+            $this->send_error_message("Вы пытаетесь сменить роль на такую же. Возможно вы скопировали не ту ссылку.");
             return false;
         }
         
@@ -434,8 +436,9 @@ class Tg_hook {
         return $arr_messages[$role];
     }
 
+    // $msg = "\n\n– _Чтобы зарегистрировать этот чат для другой роли (официант, менеджер, администратор), введите соответствующий «Ключ»._";
+
     private function get_short_help_message(){        
-        $msg = "\n\n– _Чтобы зарегистрировать этот чат для другой роли (официант, менеджер, администратор), введите соответствующий «Ключ»._";
         $msg.= "\n\n– _Чтобы отменить свою регистрацию в данном чате, введите слово «Отмена»._";
         $msg.= "\n\n– _Чтобы поменять свое имя в данном чате, введите слово «имя» и, через пробел, ваше новое имя. Например: имя Егор._";
         return $msg;
