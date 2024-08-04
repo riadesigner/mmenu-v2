@@ -73,7 +73,7 @@ class Tg_keys{
 		$tgkey=null;
     	while($max--) 
     	$tgkey.=$chars[random_int(0,$size)]; 
-    	return $cafe_uniq_name.":".$tgkey;
+    	return $cafe_uniq_name."-".$tgkey;
 	}
 
 }

@@ -18,6 +18,7 @@ class Tg_hook {
     //
     private $CALLBACK_MODE = false; // bool
     private $REAL_TG_USER = null; // Smart object | null        
+    private $TG_KEY = null; // Smart object | null        
 
     function __construct($data){
 

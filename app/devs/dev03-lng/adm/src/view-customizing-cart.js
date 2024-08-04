@@ -21,7 +21,9 @@ export var VIEW_CUSTOMIZING_CART = {
 		this.$btn_tg_key_waiter =  this.$view.find('button.key-waiter');
 		this.$btn_tg_key_manager =  this.$view.find('button.key-manager');
 		this.$btn_tg_key_supervisor =  this.$view.find('button.key-supervisor');
-				
+
+		this.$btn_get_invitation_link =  this.$view.find('button[name=get_invitation_link]');
+
 		this.behavior();
 
 		return this;
@@ -76,28 +78,36 @@ export var VIEW_CUSTOMIZING_CART = {
 		const $managers = this.$section_tgusers.find('.tgusers-role-manager span');
 		const $supervisors = this.$section_tgusers.find('.tgusers-role-supervisor span');	
 
+		const foo = {
+			make_string:function(users,$el){
+				let html = "";					
+				if(users.length>0){						
+					let count = 0;
+					for(let i in users){											
+						let name_string = users[i].nickname ? `${users[i].nickname} (${users[i].name})` : users[i].name;							
+						html+=`<strong>${name_string}</strong>`;
+						count++;
+						if(count<users.length){
+							html+=", ";
+						}
+					};
+					console.log('html',html);
+					$el.html(html);
+				}				
+			},
+			reset_names:function(){
+				const $empty_string = "нет";
+				$waiters.html($empty_string);
+				$managers.html($empty_string);
+				$supervisors.html($empty_string);				
+			}
+		};
+
+		foo.reset_names();
+
 		if(tg_users && tg_users.length){			
 
 			const users = {waiters:[],managers:[],supervisors:[]};
-
-			const foo = {
-				make_string:function(users,$el){
-					let html = "";					
-					if(users.length>0){						
-						let count = 0;
-						for(let i in users){											
-							let name_string = users[i].nickname ? `${users[i].nickname} (${users[i].name})` : users[i].name;							
-							html+=`<strong>${name_string}</strong>`;
-							count++;
-							if(count<users.length){
-								html+=", ";
-							}
-						};
-						console.log('html',html);
-						$el.html(html);
-					}				
-				}
-			};	
 
 			for(let i in tg_users){
 				switch(tg_users[i].role){
@@ -115,11 +125,6 @@ export var VIEW_CUSTOMIZING_CART = {
 			foo.make_string(users.waiters,$waiters);
 			foo.make_string(users.managers,$managers);
 			foo.make_string(users.supervisors,$supervisors);
-		}else{
-			$empty_string = "нет";
-			$waiters.html($empty_string);
-			$managers.html($empty_string);
-			$supervisors.html($empty_string);
 		}
 	},
 	end_updating_with_error(error_message){
@@ -254,6 +259,7 @@ export var VIEW_CUSTOMIZING_CART = {
 			}});
 			e.originalEvent.cancelable && e.preventDefault();
 		});
+
 		this.$btn_tg_key_manager.on('touchend',(e)=>{
 			!_this.VIEW_SCROLLED && _this._blur({onBlur:()=>{
 				const role = 'manager';
@@ -264,6 +270,7 @@ export var VIEW_CUSTOMIZING_CART = {
 			}});
 			e.originalEvent.cancelable && e.preventDefault();
 		});
+
 		this.$btn_tg_key_supervisor.on('touchend',(e)=>{
 			!_this.VIEW_SCROLLED && _this._blur({onBlur:()=>{				
 				const role = 'supervisor';
@@ -276,12 +283,17 @@ export var VIEW_CUSTOMIZING_CART = {
 		});					
 
 		this.sa_bnt_upd_tg_keys.on('touchend',(e)=>{
-			!_this.VIEW_SCROLLED && this.sa_update_all_tg_keys();
+			!_this.VIEW_SCROLLED && this.su_update_all_tg_keys();
+			e.originalEvent.cancelable && e.preventDefault();
+		});
+
+		this.$btn_get_invitation_link.on('touchend',(e)=>{
+			!_this.VIEW_SCROLLED && this.create_invitation_link();
 			e.originalEvent.cancelable && e.preventDefault();
 		});
 
 	},
-	
+
 	tg_key_to_clipboard:function(tg_key, role) {		
 		navigator.clipboard.writeText(tg_key.toUpperCase()).then(() => {
 			let msg = "Ключ не удалось скопировать";
@@ -322,6 +334,56 @@ export var VIEW_CUSTOMIZING_CART = {
 				this._need2save(true);	
 			}
 		}
+	},
+
+	create_invitation_link:function(){
+		
+		const link = this.load_tg_link_async("manager")
+			.then((answer)=>{
+				console.log('link = ', answer);
+				this._end_loading();
+			})
+			.catch(e=>{
+				this._end_loading();
+				console.log('error',e);
+			})
+
+		return link;
+		console.log('fired create_invitation_link!');
+		
+	},
+	
+	load_tg_link_async:function(user_role){
+		return new Promise((res,rej)=>{
+			
+			var PATH = 'adm/lib/';
+			var url = PATH + 'lib.get_tg_link.php';			
+			
+			this._now_loading();
+
+			var data = {
+				cafe_uniq_name:GLB.THE_CAFE.get().uniq_name,
+				user_role:user_role,
+			};			
+
+			this.AJAX = $.ajax({
+				url: url+"?callback=?",
+				data:data,
+				method:"POST",
+				dataType: "jsonp",
+				success: function (response) {					
+					if(response && !response.error){
+						res(response)						
+					}else{
+						rej(response)						
+					}
+				},
+				error:function(response) {					
+					rej(response)
+				}
+			});			
+
+		});
 	},
 	
 	load_tg_keys_async:function(){
@@ -440,14 +502,14 @@ export var VIEW_CUSTOMIZING_CART = {
         });
 			
 	},
-	sa_update_all_tg_keys:function(){
+	su_update_all_tg_keys:function(){
 		var ask = `Вы уверены, что хотите заменить ключи телеграма. Всем сотрудникам придется зайти в телеграм канал заново.`;
 		GLB.VIEWS.modalConfirm({
 			title:"Внимание",
 			ask:ask,
 			action:(mode)=>{				
 				if(mode){
-					this.sa_update_all_tg_keys_asynq()
+					this.su_update_all_tg_keys_asynq()
 					.then((keys)=>{									
 						this.update_tg_keys_buttons(keys);
 						this.update_tg_users_list(false);
@@ -469,7 +531,7 @@ export var VIEW_CUSTOMIZING_CART = {
 			buttons:[GLB.LNG.get("lng_ok"),GLB.LNG.get("lng_cancel")]
 		});	
 	},
-	sa_update_all_tg_keys_asynq:function(){
+	su_update_all_tg_keys_asynq:function(){
 		return new Promise((res,rej)=>{
 
 			var PATH = 'adm/lib/';

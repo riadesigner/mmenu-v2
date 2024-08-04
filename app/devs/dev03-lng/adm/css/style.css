@@ -406,7 +406,7 @@ textarea:focus.length-limit-reached{ animation: ani_limit_reached .3s linear;}
 .std-form p {margin:0 0 20px 0;font-size: 1.3em;padding: 0;line-height: 1.3;}
 .std-form__subtitle{margin:40px 0 20px 0;font-size: 1.3em;padding: 0;line-height: 1.3;font-weight: bold;}
 .std-form h1 {margin:0 0 10px 0;font-size: 1.1rem;}
-.std-form h2 {margin:19px 0 10px 0;font-size: 1.1rem;}
+.std-form h2 {margin:19px 0 10px 0;font-size: 1.3rem;}
 .std-form h3 {margin:19px 0 10px 0;font-size: 1em;padding: 0;line-height: 1.3;}
 .std-form button{margin:5px 0 10px 0;}
 .std-form ul{margin: 0 auto 10px auto;line-height: 1.4;}

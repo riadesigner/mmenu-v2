@@ -296,8 +296,7 @@ class Site{
 		return self::$ARR_PAGES[self::$SITE_PAGE]['descr'];
 	}	
 
-	static public function get_template(){
-		glog("Getting template: ".self::$SITE_PAGE.", [".self::$LANG."]", __FILE__);		
+	static public function get_template(){		
 		$lang = match (self::$LANG) {
       		'ru' => 1,
       		default => 0,
