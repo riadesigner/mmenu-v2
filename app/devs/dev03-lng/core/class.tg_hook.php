@@ -9,16 +9,16 @@ require_once WORK_DIR.APP_DIR.'core/class.order_sender.php';
 
 class Tg_hook {
 
-    private $TG_TOKEN = "";    
+    private string $TG_TOKEN = "";    
     //
-    private $data = ""; // array
-    private $message = ""; // string 
-    private $tg_user_id= ""; // string
-    private $tg_user_name= ""; // string
+    private array $data = [];
+    private string $message = "";
+    private string $tg_user_id= "";
+    private string $tg_user_name= "";
     //
-    private $CALLBACK_MODE = false; // bool
-    private $REAL_TG_USER = null; // Smart object | null        
-    private $TG_KEY = null; // Smart object | null        
+    private bool $CALLBACK_MODE = false; 
+    private null|Smart_object $REAL_TG_USER = null;         
+    private null|Smart_object $TG_KEY = null;
 
     function __construct($data){
 
@@ -74,7 +74,7 @@ class Tg_hook {
                 }catch(Throwable $e){
                     glogError($e->getMessage());
                     $error_message = "О нет! Неизвестная ошибка. Обратитесь к администратору сервиса. (".__LINE__.")".__FILE__;
-                    $this->send_message($error_message);                    
+                    $this->send_error_message($error_message);                    
                 }
 
             }else{
@@ -147,8 +147,7 @@ class Tg_hook {
             return $tg_users->get(0);
         }else{
             return null;
-        }        
-
+        }
     }
 
     private function parse_user_callback(): void{
@@ -175,6 +174,11 @@ class Tg_hook {
                 $this->change_tg_user_state_to($params[1]);
 
             break;
+            case 'get_info':
+
+                $this->send_info_to_supervisor($params[1]);
+
+            break;                        
             default:
                 $this->unknown_command();
             break;            
@@ -320,14 +324,14 @@ class Tg_hook {
         }
     }
 
-    private function check_cafe_by_tg_key($TG_KEY){		
+    private function check_cafe_by_tg_key( Smart_object $TG_KEY): null|Smart_object{		
         $cafe_uniq_name = $TG_KEY->cafe_uniq_name;         
 		$arr_cafe = new Smart_collect('cafe',"WHERE uniq_name='{$cafe_uniq_name}'");		
 		if($arr_cafe && $arr_cafe->full()){
 			$cafe = $arr_cafe->get(0);
 			return $cafe;
 		}else{
-			return false;
+			return null;
 		}
     }
 
@@ -385,9 +389,12 @@ class Tg_hook {
         $user_role = $this->TG_KEY->role;
         $cafe_uniq_name = $this->TG_KEY->cafe_uniq_name;
 
+        $user_state = $user_role==='supervisor'?'active':'inactive';
+
         $new_tg_user = new Smart_object('tg_users');
         $new_tg_user->tg_user_id = $this->tg_user_id;
         $new_tg_user->role = $user_role;
+        $new_tg_user->state = $user_state;
         $new_tg_user->name = $this->tg_user_name;		
         $new_tg_user->nickname = "";		
         $new_tg_user->cafe_uniq_name = $cafe_uniq_name;
@@ -414,14 +421,12 @@ class Tg_hook {
 
     private function get_message_for($role){
         $arr_messages = [
-            "waiter" => " Ваша роль определена как ОФИЦИАНТ. Вы можете брать (подтверждать) заказы В СТОЛ.",
+            "waiter" => " Ваша роль определена как ОФИЦИАНТ. Вы можете брать (подтверждать) заказы К СТОЛУ (внутри кафе).",
             "manager" => " Ваша роль определена как МЕНЕДЖЕР. Вы можете подтверждать заказы на ДОСТАВКУ и САМОВЫВОЗ.",
             "supervisor" => " Ваша роль определена как АДМИНИСТРАТОР. Вы можете получать информацию о работе ОФИЦИАНТОВ и МЕНЕДЖЕРОВ, но не можете подтверждать и брать заказы.",
         ];        
         return $arr_messages[$role];
-    }
-
-    // $msg = "\n\n– _Чтобы зарегистрировать этот чат для другой роли (официант, менеджер, администратор), введите соответствующий «Ключ»._";
+    }    
 
     private function get_short_help_message(){        
         $str = "\n\n– _Чтобы отменить свою регистрацию в данном чате, введите слово «Отмена»._";
@@ -479,6 +484,16 @@ class Tg_hook {
         return $keyboard;
     }        
 
+    private function get_all_tg_users(): array{
+        if(!$this->REAL_TG_USER) return [];        
+        $tg_users = new Smart_collect('tg_users',"WHERE cafe_uniq_name='".$this->REAL_TG_USER->cafe_uniq_name."'");
+        if($tg_users&&$tg_users->full()){	
+            return $tg_users->get();
+        }else{
+            return [];
+        }                
+    }
+
     private function send_message_first_time(): void{
         $answer_message = "*".$this->tg_user_name.",*		
         похоже, вы здесь впервые! Чтобы получать заказы, 
@@ -489,6 +504,33 @@ class Tg_hook {
         $MANAGER_NAME = !empty($this->REAL_TG_USER->nickname)?$this->REAL_TG_USER->nickname:$this->REAL_TG_USER->name;        
         return $MANAGER_NAME;
     }
+
+    private function send_info_to_supervisor($keyword): void{            
+        if($keyword==='general'){
+            
+            $ARR_TG_USERS = $this->get_all_tg_users();
+            if($ARR_TG_USERS && count($ARR_TG_USERS)){
+                $empl=[
+                    "waiter"=>['total'=>0,'active'=>0],
+                    "manager"=>['total'=>0,'active'=>0],
+                    "supervisor"=>['total'=>0,'active'=>0],
+                ];
+                foreach($ARR_TG_USERS as $TG_USER){
+                    $empl[$TG_USER->role]['total']+=1;
+                    if($TG_USER->state==='active')
+                    $empl[$TG_USER->role]['active']+=1;
+                }
+                glog("\$empl = ".print_r($empl,1));
+                $str = "*Сейчас в чате: *";     
+                $str.="\n- официантов: ".$empl['waiter']['active']." из ".$empl['waiter']['total'];
+                $str.="\n- менеджеров: ".$empl['manager']['active']." из ".$empl['manager']['total'];
+                $str.="\n- администраторов: ".$empl['supervisor']['active']." из ".$empl['supervisor']['total'];
+            }
+            $this->send_message($str);  
+        }else{            
+            $this->send_error_message("Неизвестный запрос");
+        }        
+    }    
 
     private function send_to_relevant($msg, $keyboard=""): void{
         glog("send_to_relevant не реализована");
