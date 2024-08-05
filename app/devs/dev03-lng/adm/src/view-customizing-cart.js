@@ -18,11 +18,16 @@ export var VIEW_CUSTOMIZING_CART = {
 				
 		this.$iikoSectionOnly = this.$view.find('.iiko-section-only');
 
-		this.$btn_tg_key_waiter =  this.$view.find('button.key-waiter');
-		this.$btn_tg_key_manager =  this.$view.find('button.key-manager');
-		this.$btn_tg_key_supervisor =  this.$view.find('button.key-supervisor');
+		this.$link_reg_tg_waiter = this.$view.find('.customizing-cart__all-keylinks a.link-waiter'); 
+		this.$link_reg_tg_manager = this.$view.find('.customizing-cart__all-keylinks a.link-manager'); 
+		this.$link_reg_tg_supervisor = this.$view.find('.customizing-cart__all-keylinks a.link-supervisor'); 
 
-		this.$btn_get_invitation_link =  this.$view.find('button[name=get_invitation_link]');
+		this.$btn_tg_invite_link_waiter =  this.$view.find('button.invite-link-waiter');
+		this.$btn_tg_invite_link_manager =  this.$view.find('button.invite-link-manager');
+		this.$btn_tg_invite_link_supervisor =  this.$view.find('button.invite-link-supervisor');
+
+		this.TG_KEYS = null; // null | {waiter:string, manager:string, supervisor:string}					
+		this.TG_KEY_LINKS = null; // null | {waiter:string, manager:string, supervisor:string} 	
 
 		this.behavior();
 
@@ -68,6 +73,7 @@ export var VIEW_CUSTOMIZING_CART = {
 			})
 		})
 		.catch((vars)=>{
+			console.log('vars',vars)
 			this.end_updating_with_error("Не удалось загрузить ключи для телеграма");
 		})
 	},
@@ -146,18 +152,27 @@ export var VIEW_CUSTOMIZING_CART = {
 	},
 
 	update_tg_keys_buttons:function(tg_keys){
+
+		console.log('tg_keys',tg_keys)
+
 		const all_keys = tg_keys.reduce((acc,key)=>{
 			const role = key['role'] || "";
 			if(role) { acc[role] = key };
 			return acc;			
-		},{});			
-		this.TG_KEYS = all_keys;			
-		const waiter = all_keys['waiter']['tg_key'];
-		const manager = all_keys['manager']['tg_key'];
-		const supervisor = all_keys['supervisor']['tg_key'];		
-		waiter && this.$btn_tg_key_waiter.html(waiter.toUpperCase());		
-		manager && this.$btn_tg_key_manager.html(manager.toUpperCase());		
-		supervisor && this.$btn_tg_key_supervisor.html(supervisor.toUpperCase());
+		},{});		
+		
+		const tg_link = "https://t.me/chefsmenu_cart_dev_bot?start=";		
+
+		this.TG_KEYS = all_keys;					
+		this.TG_KEY_LINKS = {
+			waiter : tg_link + all_keys['waiter']['tg_key'],
+			manager : tg_link + all_keys['manager']['tg_key'],
+			supervisor : tg_link + all_keys['supervisor']['tg_key']
+		};
+		this.$link_reg_tg_waiter.attr({href : this.TG_KEY_LINKS['waiter']});
+		this.$link_reg_tg_manager.attr({href : this.TG_KEY_LINKS['manager']});
+		this.$link_reg_tg_supervisor.attr({href : this.TG_KEY_LINKS['supervisor']});
+
 	},
 	rebuild:function(){
 		
@@ -246,74 +261,58 @@ export var VIEW_CUSTOMIZING_CART = {
 				}});
 			}});
 			return false;
+		});		
+		
+
+		this.$btn_tg_invite_link_waiter.on('touchend',(e)=>{
+			if(!this.VIEW_SCROLLED){
+				const role = 'waiter';				
+				this.tg_link_to_clipboard(this.TG_KEY_LINKS[role], role);
+			} 
+			e.originalEvent.cancelable && e.preventDefault();
+		});
+
+		this.$btn_tg_invite_link_manager.on('touchend',(e)=>{
+			if(!this.VIEW_SCROLLED){
+				const role = 'manager';				
+				this.tg_link_to_clipboard(this.TG_KEY_LINKS[role], role);
+			} 
+			e.originalEvent.cancelable && e.preventDefault();
 		});
 		
-		this.$btn_tg_key_waiter.on('touchend',(e)=>{
-			!_this.VIEW_SCROLLED && _this._blur({onBlur:()=>{						
-				const role = 'waiter';
-				this.$btn_tg_key_waiter.focus();
-				setTimeout(()=>{
-					_this.tg_key_to_clipboard(this.TG_KEYS[role].tg_key,role);
-				},300)
-				
-			}});
+		this.$btn_tg_invite_link_supervisor.on('touchend',(e)=>{
+			if(!this.VIEW_SCROLLED){
+				const role = 'supervisor';				
+				this.tg_link_to_clipboard(this.TG_KEY_LINKS[role], role);
+			} 
 			e.originalEvent.cancelable && e.preventDefault();
 		});
-
-		this.$btn_tg_key_manager.on('touchend',(e)=>{
-			!_this.VIEW_SCROLLED && _this._blur({onBlur:()=>{
-				const role = 'manager';
-				this.$btn_tg_key_manager.focus();
-				setTimeout(()=>{
-				_this.tg_key_to_clipboard(this.TG_KEYS[role].tg_key,role);
-				},300)
-			}});
-			e.originalEvent.cancelable && e.preventDefault();
-		});
-
-		this.$btn_tg_key_supervisor.on('touchend',(e)=>{
-			!_this.VIEW_SCROLLED && _this._blur({onBlur:()=>{				
-				const role = 'supervisor';
-				this.$btn_tg_key_supervisor.focus();
-				setTimeout(()=>{
-				_this.tg_key_to_clipboard(this.TG_KEYS[role].tg_key,role);				
-				},300)
-			}});
-			e.originalEvent.cancelable && e.preventDefault();
-		});					
 
 		this.sa_bnt_upd_tg_keys.on('touchend',(e)=>{
 			!_this.VIEW_SCROLLED && this.su_update_all_tg_keys();
 			e.originalEvent.cancelable && e.preventDefault();
 		});
 
-		this.$btn_get_invitation_link.on('touchend',(e)=>{
-			!_this.VIEW_SCROLLED && this.create_invitation_link();
-			e.originalEvent.cancelable && e.preventDefault();
-		});
-
 	},
 
-	tg_key_to_clipboard:function(tg_key, role) {		
-		navigator.clipboard.writeText(tg_key.toUpperCase()).then(() => {
-			let msg = "Ключ не удалось скопировать";
-			if(role==='waiter'){
-				msg = 'Ключ <strong>для официанта</strong> скопирован';
-			}else if(role==='manager'){
-				msg = 'Ключ <strong>для менеджера</strong> скопирован';
-			}else if(role==='supervisor'){
-				msg = 'Ключ <strong>для администратора</strong> скопирован';
-			}	
+	tg_link_to_clipboard:function(tg_link, role) {				
+		navigator.clipboard.writeText(tg_link).then(() => {			
+			const arr_message = {
+				waiter:"Ссылка <strong>для официанта</strong> скопирована",
+				manager:"Ссылка <strong>для менеджера</strong> скопирована",
+				supervisor:"Ссылка <strong>для администратора</strong> скопирована",
+			};
+			const msg = arr_message[role];
 			GLB.VIEWS.modalMessage({
 				title:'Отлично!',
 				message:msg,
 				btn_title:GLB.LNG.get('lng_ok')
-			});		  
+			});
 		},() => {
-			let msg = "Ключ не удалось скопировать";
+			let errorMsg = "Ссылку не удалось скопировать";
 			GLB.VIEWS.modalMessage({
 				title:'Ошибка',
-				message:msg,
+				message:errorMsg,
 				btn_title:GLB.LNG.get('lng_ok')
 			});		  
 		});
@@ -336,55 +335,55 @@ export var VIEW_CUSTOMIZING_CART = {
 		}
 	},
 
-	create_invitation_link:function(){
+	// create_invitation_link:function(){
 		
-		const link = this.load_tg_link_async("manager")
-			.then((answer)=>{
-				console.log('link = ', answer);
-				this._end_loading();
-			})
-			.catch(e=>{
-				this._end_loading();
-				console.log('error',e);
-			})
+	// 	const link = this.load_tg_link_async("manager")
+	// 		.then((answer)=>{
+	// 			console.log('link = ', answer);
+	// 			this._end_loading();
+	// 		})
+	// 		.catch(e=>{
+	// 			this._end_loading();
+	// 			console.log('error',e);
+	// 		})
 
-		return link;
-		console.log('fired create_invitation_link!');
+	// 	return link;
+	// 	console.log('fired create_invitation_link!');
 		
-	},
+	// },
 	
-	load_tg_link_async:function(user_role){
-		return new Promise((res,rej)=>{
+	// load_tg_link_async:function(user_role){
+	// 	return new Promise((res,rej)=>{
 			
-			var PATH = 'adm/lib/';
-			var url = PATH + 'lib.get_tg_link.php';			
+	// 		var PATH = 'adm/lib/';
+	// 		var url = PATH + 'lib.get_tg_link.php';			
 			
-			this._now_loading();
+	// 		this._now_loading();
 
-			var data = {
-				cafe_uniq_name:GLB.THE_CAFE.get().uniq_name,
-				user_role:user_role,
-			};			
+	// 		var data = {
+	// 			cafe_uniq_name:GLB.THE_CAFE.get().uniq_name,
+	// 			user_role:user_role,
+	// 		};			
 
-			this.AJAX = $.ajax({
-				url: url+"?callback=?",
-				data:data,
-				method:"POST",
-				dataType: "jsonp",
-				success: function (response) {					
-					if(response && !response.error){
-						res(response)						
-					}else{
-						rej(response)						
-					}
-				},
-				error:function(response) {					
-					rej(response)
-				}
-			});			
+	// 		this.AJAX = $.ajax({
+	// 			url: url+"?callback=?",
+	// 			data:data,
+	// 			method:"POST",
+	// 			dataType: "jsonp",
+	// 			success: function (response) {					
+	// 				if(response && !response.error){
+	// 					res(response)						
+	// 				}else{
+	// 					rej(response)						
+	// 				}
+	// 			},
+	// 			error:function(response) {					
+	// 				rej(response)
+	// 			}
+	// 		});			
 
-		});
-	},
+	// 	});
+	// },
 	
 	load_tg_keys_async:function(){
 		return new Promise((res,rej)=>{

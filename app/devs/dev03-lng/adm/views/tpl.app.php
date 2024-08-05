@@ -902,51 +902,41 @@ App&&App();
 					<div class="customizing-cart__delivery-mode"><!-- [code] --></div>
 
 					<div class="iiko-section-only">
-						<h2>Варианты отправки заказов:</h2>
-						<p>Выберите подходящий вариант отправки заказов. Вариант №2 сейчас находится в стадии тестирования.</p>
+						<h2>Отправка заказов:</h2>
+						<p>Выберите подходящий вариант отправки заказов. Вариант №2 находится в стадии тестирования.</p>
 						<div class="customizing-cart__order-way"><!-- [code] --></div>
 					</div>
 
 					<h2>Получение заказов:</h2>
+<!-- <a target="_blank" href="https://t.me/<?=$CART_BOT_NAME;?>">@<?=$CART_BOT_NAME;?></a> -->
 
-					<p>Для получения заказов через телеграм:</p>
+					<p>Все заказы приходят в специальный телеграм-чат <strong>@<?=$CART_BOT_NAME;?></strong></p>					
+					<p>В этом чате у участников есть три роли – каждая со своей спецификой:</p>
 
-					<div class="std-form__section-description">
-						<ol>
-							<li>выберите ниже <strong>Секретный ключ</strong> с нужной ролью (официант, менеджер или администратор)</li>
-							<li>откройте чат <a target="_blank" href="https://t.me/<?=$CART_BOT_NAME;?>">@<?=$CART_BOT_NAME;?></a></li>
-							<li>вставьте выбранный вами ключ в чат</li>
-						</ol>						
-					</div>
-
-					<h2 id="anchor_secret_key">Секретный ключ:</h2>
-
-					<p>Для каждой роли предусмотрен свой ключ. </p>
 					<p><strong><i>Официант</i></strong> – будет получать заказы в стол (в кафе).</p>
 					<p><strong><i>Менеджер</i></strong> – будет получать внешние заказы на доставку или самовывоз.</p>
-					<p><strong><i>Администратор</i></strong> – будет получать статистику по всем заказам за день.</p>
+					<p><strong><i>Администратор</i></strong> – будет получать статистику по всем заказам за день.</p>					
 
-					<p>Нажмите на нужный ключ, чтобы его скопировать:</p>
-
-					<div class="customizing-cart__all-keys">
-						<div class="customizing-cart__all-keys_key">
-							<div><button class="std-special-single-button customizing-cart__tg_key key-waiter">TG_KEY:001</button></div>
-							<div>официант</div>
-						</div>
-						<div class="customizing-cart__all-keys_key">
-							<div><button class="std-special-single-button customizing-cart__tg_key key-manager">TG_KEY:002</button></div>
-							<div>менеджер</div>
-						</div>
-						<div class="customizing-cart__all-keys_key">
-							<div><button class="std-special-single-button customizing-cart__tg_key key-supervisor">TG_KEY:003</button></div>
-							<div>администратор</div>
-						</div>						
+					<p>Выберите нужную роль, чтобы зарегистрироваться в чате.</p >
+					
+					<div class="customizing-cart__all-keylinks">
+						<a href="<?=$CFG->http.$CFG->wwwroot;?>" target="_blank" class="link-waiter"><button class="std-special-single-button">ОФИЦИАНТ</button></a>
+						<a href="<?=$CFG->http.$CFG->wwwroot;?>" target="_blank" class="link-manager"><button class="std-special-single-button">МЕНЕДЖЕР</button></a>
+						<a href="<?=$CFG->http.$CFG->wwwroot;?>" target="_blank" class="link-supervisor"><button class="std-special-single-button">АДМИНИСТРАТОР</button></a>
 					</div>
 
-					<h2 id="anchor_invitation">Отправка приглашения:</h2>
+					<h2 id="anchor_invitation">Пригласить сотрудника:</h2>
 
-					<p>Чтобы пригласить в телеграм-чат нового Менеджера, Официанта или Администратора, скопируйте ниже соответствующую ссылку с инструкцией и отправьте ее адресату.</p>
+					<p>Чтобы пригласить в специальный телеграм-чат нового сотрудника, 
+						нажмите на соответствующую роль (кнопки ниже). При этом скопируется ссылка-приглашение, 
+						которой вы сможете поделиться:</p>
 
+					<div class="customizing-cart__all-invite-links">
+						<button class="std-special-single-button invite-link-waiter">ОФИЦИАНТ</button>
+						<button class="std-special-single-button invite-link-manager">МЕНЕДЖЕР</button>
+						<button class="std-special-single-button invite-link-supervisor">АДМИНИСТРАТОР</button>
+					</div>						
+					
 					<hr>
 
 					<div class="customizing-cart__all-tgusers">
@@ -957,13 +947,10 @@ App&&App();
 							<li class="tgusers-role-supervisor">Администраторы: <span>нет</span></li>
 						</ul>
 					</div>
-
-					<div class="super-admin-only">
-						<hr>
-						
-						<button name="get_invitation_link">Получить сслыку приглашения</button>
-
-						<hr>
+					
+					<hr>						
+					
+					<div class="super-admin-only">						
 						<p>Если нужно отозвать все разрешения и заново пересоздать ключи для доступа в телеграм, выберите:</p>
 						<button name="update_all_tg_keys">Сбросить телеграм ключи</button>
 					</div>

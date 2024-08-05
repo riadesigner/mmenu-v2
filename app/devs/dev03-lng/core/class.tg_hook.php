@@ -9,16 +9,16 @@ require_once WORK_DIR.APP_DIR.'core/class.order_sender.php';
 
 class Tg_hook {
 
-    private $TG_TOKEN = "";    
+    private string $TG_TOKEN = "";    
     //
-    private $data = ""; // array
-    private $message = ""; // string 
-    private $tg_user_id= ""; // string
-    private $tg_user_name= ""; // string
+    private array $data = [];
+    private string $message = "";
+    private string $tg_user_id= "";
+    private string $tg_user_name= "";
     //
-    private $CALLBACK_MODE = false; // bool
-    private $REAL_TG_USER = null; // Smart object | null        
-    private $TG_KEY = null; // Smart object | null        
+    private bool $CALLBACK_MODE = false; 
+    private null|Smart_object $REAL_TG_USER = null;         
+    private null|Smart_object $TG_KEY = null;
 
     function __construct($data){
 
@@ -74,7 +74,7 @@ class Tg_hook {
                 }catch(Throwable $e){
                     glogError($e->getMessage());
                     $error_message = "О нет! Неизвестная ошибка. Обратитесь к администратору сервиса. (".__LINE__.")".__FILE__;
-                    $this->send_message($error_message);                    
+                    $this->send_error_message($error_message);                    
                 }
 
             }else{
@@ -123,7 +123,7 @@ class Tg_hook {
                 }else{
                     // the tg key real, but cafe does not exist,
                     // so its might be the key needs to update
-                    $error_message = "О нет! Данный ключ вероятно устарел. Не найдено Меню с id: ".$this->TG_KEY->cafe_uniq_name;
+                    $error_message = "О нет! Данная ссылка вероятно устарела. Не найдено Меню с id: ".$this->TG_KEY->cafe_uniq_name;
                     $this->send_error_message($error_message);
                 }
             }else{
@@ -147,8 +147,7 @@ class Tg_hook {
             return $tg_users->get(0);
         }else{
             return null;
-        }        
-
+        }
     }
 
     private function parse_user_callback(): void{
@@ -175,6 +174,11 @@ class Tg_hook {
                 $this->change_tg_user_state_to($params[1]);
 
             break;
+            case 'get_info':
+
+                $this->send_info_to_supervisor($params[1]);
+
+            break;                        
             default:
                 $this->unknown_command();
             break;            
@@ -182,12 +186,13 @@ class Tg_hook {
     }
 
     private function unknown_command(): void{
-        glog("--unknown_command--");
+        $this->send_message("опция в разработке");
     }
 
     private function confirm_order($cafe_uniq_name, $order_short_number): void{        
         if(!$order = $this->valid_order($cafe_uniq_name, $order_short_number)){
-            throw new Exception("Заказ с номером {$order_short_number} не найден, (".__LINE__.")");                    
+            $this->send_error_message("Заказ с номером {$order_short_number} не найден");
+            return;
         }
         Order_sender::order_confirm_and_send_to_iiko($cafe_uniq_name, $order, $this->REAL_TG_USER);          
     }
@@ -196,9 +201,10 @@ class Tg_hook {
         $this->REAL_TG_USER->state = $state;
         $this->REAL_TG_USER->updated = 'now()';
         if(!$this->REAL_TG_USER->save()){
-            throw new Exception("Не получилось изменить статус пользователя. ".__LINE__);
+            $this->send_error_message("Не получилось изменить статус пользователя.");
+            return;            
         }else{
-            $name = $this->get_manager_name();
+            $name = $this->get_tg_user_name();
 
             if($state==="active"){                
                 $personal_message = "Ок, {$name}! Вы открыли смену.";
@@ -293,40 +299,24 @@ class Tg_hook {
             return;
         }
         $m = $this->REAL_TG_USER;
-        $MANAGER_NAME = !empty($m->nickname)?$m->nickname:$m->name;
+        $TG_USER_NAME = !empty($m->nickname)?$m->nickname:$m->name;
 
         $cafe_uniq_name  = $this->REAL_TG_USER->cafe_uniq_name;
         $params = $this->get_cafe_params($cafe_uniq_name);         
 
-        $answer_message = "{$MANAGER_NAME}! Этот чат был зарегистрирован вами ранее для получения заказов из Меню ".$params['cafe_link'].".";        
+        $answer_message = "{$TG_USER_NAME}! Этот чат был зарегистрирован вами ранее для получения заказов из Меню ".$params['cafe_link'].".";        
         $answer_message .= $this->get_message_for($this->REAL_TG_USER->role);
         $answer_message .= $this->get_short_help_message();
-
-        if($this->REAL_TG_USER->state==='active'){
-            $button_state_title = "Закрыть смену";
-            $button_state = "change_state:inactive";
-        }else{
-            $button_state_title = "Открыть смену";
-            $button_state = "change_state:active";            
-        }        
-
-        $keyboard = json_encode([
-            "inline_keyboard" => [
-                [
-                    [
-                        "text" => $button_state_title,
-                        "callback_data" => $button_state
-                    ]
-                ]
-            ]
-        ], JSON_UNESCAPED_UNICODE);	
-
+                
+        $keyboard = $this->get_keyboard($this->REAL_TG_USER);
         $this->send_message($answer_message, $keyboard);
 
     }
 
     private function check_tg_key_string($key_string=""){ 
-        $arr_keys = new Smart_collect('tg_keys',"WHERE tg_key='{$key_string}'");
+        if(!str_starts_with($key_string, '/start ')) return false;
+        $key = explode(" ",$key_string)[1];        
+        $arr_keys = new Smart_collect('tg_keys',"WHERE tg_key='{$key}'");
         if($arr_keys&&$arr_keys->full()){            
             return $arr_keys->get(0);
         }else{
@@ -334,19 +324,18 @@ class Tg_hook {
         }
     }
 
-    private function check_cafe_by_tg_key($TG_KEY){		
+    private function check_cafe_by_tg_key( Smart_object $TG_KEY): null|Smart_object{		
         $cafe_uniq_name = $TG_KEY->cafe_uniq_name;         
 		$arr_cafe = new Smart_collect('cafe',"WHERE uniq_name='{$cafe_uniq_name}'");		
 		if($arr_cafe && $arr_cafe->full()){
 			$cafe = $arr_cafe->get(0);
 			return $cafe;
 		}else{
-			return false;
+			return null;
 		}
     }
 
-    // $NEW_KEY = Smart object
-    private function change_user_role($NEW_KEY){        
+    private function change_user_role( Smart_object $NEW_KEY){        
 
         $arrRoleNames = [
             "waiter"=>"ОФИЦИАНТ",
@@ -364,7 +353,7 @@ class Tg_hook {
         }        
 
         if( $this->REAL_TG_USER->role===$NEW_KEY->role){
-            $this->send_error_message("Вы пытаетесь сменить роль на такую же. Возможно вы скопировали не тот Ключ.");
+            $this->send_message("Вы пытаетесь сменить роль на такую же. Возможно вы скопировали не ту ссылку.");
             return false;
         }
         
@@ -378,15 +367,16 @@ class Tg_hook {
         $params = $this->get_cafe_params($this->REAL_TG_USER->cafe_uniq_name);    
         $cafe_link = $params['cafe_link'];
 
-        $answer_message = "Ок. Вы зарегистрировали этот чат для Меню ".$params['cafe_link'].".";
+        $answer_message = "Ок. Вы зарегистрировались в QR-Меню ".$params['cafe_link'].".";
         $answer_message.= $this->get_message_for($NEW_KEY->role);
         $answer_message.= $this->get_short_help_message();
-        $this->send_error_message($answer_message);
+        
+        $keyboard = $this->get_keyboard($this->REAL_TG_USER);
+        $this->send_message($answer_message, $keyboard);
 
     }
-    
 
-    private function create_new_user(){
+    private function create_new_user():void{
 
         $error_message = "*Ой, что-то пошло не так!*
         В данный момент невозможно зарегистрировать нового пользователя.   
@@ -394,14 +384,17 @@ class Tg_hook {
 
         if(!$this->TG_KEY || !$this->tg_user_id || !$this->tg_user_name) {
             $this->send_error_message($error_message);
-            return false;
+            return;
         }
         $user_role = $this->TG_KEY->role;
         $cafe_uniq_name = $this->TG_KEY->cafe_uniq_name;
 
+        $user_state = $user_role==='supervisor'?'active':'inactive';
+
         $new_tg_user = new Smart_object('tg_users');
         $new_tg_user->tg_user_id = $this->tg_user_id;
         $new_tg_user->role = $user_role;
+        $new_tg_user->state = $user_state;
         $new_tg_user->name = $this->tg_user_name;		
         $new_tg_user->nickname = "";		
         $new_tg_user->cafe_uniq_name = $cafe_uniq_name;
@@ -415,64 +408,146 @@ class Tg_hook {
 
         if(!$new_tg_user->save()){            
             $this->send_error_message($error_message);
-            return false;
+            return;
         }else{
             $answer_message = "*Поздравляем!*  Вы успешно зарегистрировали этот чат для получения заказов из Меню «{$cafe_link}». ";
             $answer_message .= $this->get_message_for($user_role); 
             $answer_message .= $this->get_short_help_message();
-            $this->send_message($answer_message);
-            return true;
+            
+            $keyboard = $this->get_keyboard($new_tg_user);
+            $this->send_message($answer_message, $keyboard);                    
         }
     }    
 
     private function get_message_for($role){
         $arr_messages = [
-            "waiter" => " Ваша роль определена как ОФИЦИАНТ. Вы можете брать (подтверждать) заказы В СТОЛ.",
+            "waiter" => " Ваша роль определена как ОФИЦИАНТ. Вы можете брать (подтверждать) заказы К СТОЛУ (внутри кафе).",
             "manager" => " Ваша роль определена как МЕНЕДЖЕР. Вы можете подтверждать заказы на ДОСТАВКУ и САМОВЫВОЗ.",
             "supervisor" => " Ваша роль определена как АДМИНИСТРАТОР. Вы можете получать информацию о работе ОФИЦИАНТОВ и МЕНЕДЖЕРОВ, но не можете подтверждать и брать заказы.",
         ];        
         return $arr_messages[$role];
-    }
+    }    
 
     private function get_short_help_message(){        
-        $msg = "\n\n– _Чтобы зарегистрировать этот чат для другой роли (официант, менеджер, администратор), введите соответствующий «Ключ»._";
-        $msg.= "\n\n– _Чтобы отменить свою регистрацию в данном чате, введите слово «Отмена»._";
-        $msg.= "\n\n– _Чтобы поменять свое имя в данном чате, введите слово «имя» и, через пробел, ваше новое имя. Например: имя Егор._";
-        return $msg;
+        $str = "\n\n– _Чтобы отменить свою регистрацию в данном чате, введите слово «Отмена»._";
+        $str.= "\n\n– _Чтобы поменять свое имя в данном чате, введите слово «имя» и, через пробел, ваше новое имя. Например: имя Егор._";
+        return $str;
     }    
+    
+    private function get_keyboard( Smart_object $TG_USER): string{        
+        if($TG_USER->role==='waiter' || $TG_USER->role==='manager'){
+            $keyboard = $this->get_shifts_button($TG_USER);
+        }else if($TG_USER->role==='supervisor'){
+            $keyboard = $this->get_info_button($TG_USER);
+        }else{
+            $keyboard = "";
+        }    
+        return $keyboard;
+    }
+
+    private function get_info_button( Smart_object $TG_USER): string{
+        if(!$TG_USER) return "";
+        $button_state_title = "Кто в чате сейчас";
+        $button_state = "get_info:general";                    
+        $keyboard = json_encode([
+            "inline_keyboard" => [
+                [
+                    [
+                        "text" => $button_state_title,
+                        "callback_data" => $button_state
+                    ]
+                ]
+            ]
+        ], JSON_UNESCAPED_UNICODE);	        
+        return $keyboard;
+    }
+    
+    private function get_shifts_button( Smart_object $TG_USER): string{        
+        if(!$TG_USER) return "";
+        if($TG_USER->state==='active'){
+            $button_state_title = "Закрыть смену";
+            $button_state = "change_state:inactive";
+        }else{
+            $button_state_title = "Открыть смену";
+            $button_state = "change_state:active";            
+        }
+        $keyboard = json_encode([
+            "inline_keyboard" => [
+                [
+                    [
+                        "text" => $button_state_title,
+                        "callback_data" => $button_state
+                    ]
+                ]
+            ]
+        ], JSON_UNESCAPED_UNICODE);	        
+        return $keyboard;
+    }        
+
+    private function get_all_tg_users(): array{
+        if(!$this->REAL_TG_USER) return [];        
+        $tg_users = new Smart_collect('tg_users',"WHERE cafe_uniq_name='".$this->REAL_TG_USER->cafe_uniq_name."'");
+        if($tg_users&&$tg_users->full()){	
+            return $tg_users->get();
+        }else{
+            return [];
+        }                
+    }
 
     private function send_message_first_time(): void{
         $answer_message = "*".$this->tg_user_name.",*		
-        похоже, вы здесь впервые! Чтобы получать заказы из вашего Меню в этот чат, введите *«Секретный ключ».*";
+        похоже, вы здесь впервые! Чтобы получать заказы, 
+        попросите у администратора кафе специальную *«Ссылку-приглашение».*";
         $this->send_message($answer_message);
     }
-    private function get_manager_name(){
+    private function get_tg_user_name(){
         $MANAGER_NAME = !empty($this->REAL_TG_USER->nickname)?$this->REAL_TG_USER->nickname:$this->REAL_TG_USER->name;        
         return $MANAGER_NAME;
     }
+
+    private function send_info_to_supervisor($keyword): void{            
+        if($keyword==='general'){
+            
+            $ARR_TG_USERS = $this->get_all_tg_users();
+            if($ARR_TG_USERS && count($ARR_TG_USERS)){
+                $empl=[
+                    "waiter"=>['total'=>0,'active'=>0],
+                    "manager"=>['total'=>0,'active'=>0],
+                    "supervisor"=>['total'=>0,'active'=>0],
+                ];
+                foreach($ARR_TG_USERS as $TG_USER){
+                    $empl[$TG_USER->role]['total']+=1;
+                    if($TG_USER->state==='active')
+                    $empl[$TG_USER->role]['active']+=1;
+                }
+                glog("\$empl = ".print_r($empl,1));
+                $str = "*Сейчас в чате: *";     
+                $str.="\n- официантов: ".$empl['waiter']['active']." из ".$empl['waiter']['total'];
+                $str.="\n- менеджеров: ".$empl['manager']['active']." из ".$empl['manager']['total'];
+                $str.="\n- администраторов: ".$empl['supervisor']['active']." из ".$empl['supervisor']['total'];
+            }
+            $this->send_message($str);  
+        }else{            
+            $this->send_error_message("Неизвестный запрос");
+        }        
+    }    
 
     private function send_to_relevant($msg, $keyboard=""): void{
         glog("send_to_relevant не реализована");
         // Order_sender::send_message_to_relevant_users($cafe_uniq_name, $order_target, $msg, $keyboard="");        
     }
 
-    private function send_message($msg, $keyboard=""): void{
-        glog(sprintf('send message: %s',$msg));
-        Order_sender::send_message_to_tg_user($this->tg_user_id, $msg, $this->REAL_TG_USER, $keyboard="");	
+    private function send_message($msg, $keyboard=""): void{                
+        Order_sender::send_message_to_tg_user($this->tg_user_id, $msg, $this->REAL_TG_USER, $keyboard);	
     }
 
     private function send_error_message($msg, $keyboard=""): void{
-        glogError($msg);
-        Order_sender::send_message_to_tg_user($this->tg_user_id, $msg, $this->REAL_TG_USER, $keyboard="");	        
+        glogError($msg, __FILE__);
+        Order_sender::send_message_to_tg_user($this->tg_user_id, $msg, $this->REAL_TG_USER, $keyboard);	        
     }    
 
 
 }
-
-
-// set webhook
-// https://api.telegram.org/bot5864349836:AAGi-PI_20yJy8sIrPpU-oOHnIzlYJmjIbA/setwebhook?url=https://riadesign.ru/ext/tg/index.php
-
 
 
 ?>
