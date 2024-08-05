@@ -53,7 +53,7 @@ class Order_sender{
 			$res = self::send_message_to_tg_user($s->tg_user_id, $message, $s);
 			return $res;
 		}else{
-			glog("супервайзер(ы) для кафе (".$cafe_uniq_name.") не обнаружены.");
+			glog("администраторы кафе (".$cafe_uniq_name.") не обнаружены.");
 			return false;
 		}		
 	}	
@@ -70,7 +70,8 @@ class Order_sender{
 			"parse_mode" => "Markdown",
 			"chat_id" => $tg_user_id,
 			"disable_web_page_preview" => true
-		];		
+		];
+
 		if(!empty($keyboard)){
 			$send_data["reply_markup"] = $keyboard;
 		}
@@ -78,9 +79,9 @@ class Order_sender{
 		$res = send_telegram($method, $send_data, $tg_token);
 		
 		if($tg_user){
-			glog("Пользователю ".$tg_user->tg_user_id."(".$tg_user->name."/".$tg_user->nickname.") отправлено сообщение: ".$message);
+			glog("Пользователю ".$tg_user->tg_user_id."(".$tg_user->name."/".$tg_user->nickname.") отправлено сообщение: ".print_r($send_data,1)."\n\$keyboard=$keyboard");
 		}else{
-			glog("Пользователю {$tg_user_id} (роль неопределена) отправлено сообщение: ".$message);
+			glog("Пользователю {$tg_user_id} (роль неопределена) отправлено сообщение: ".print_r($send_data,1));
 		}	
 
 		glog("tg response: (".__LINE__.") ".print_r($res, 1));
