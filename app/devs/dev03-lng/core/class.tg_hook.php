@@ -156,16 +156,16 @@ class Tg_hook {
         $command = $params[0];
 
         switch($command){
-            case 'confirm_order':
+            case 'take_the_order':
                 $cafe_uniq_name= $params[1];
                 $order_short_number= $params[2];                
                 try{
 
-                    $this->confirm_order($cafe_uniq_name,$order_short_number);
+                    $this->take_the_order($cafe_uniq_name,$order_short_number);
 
                 }catch(Throwable $e){
                     glogError($e->getMessage());
-                    $error_message = "О нет, не получается подтвердить заказ. Техническая ошибка.";
+                    $error_message = "О нет, не получается взять заказ. Техническая ошибка.";
                     $this->send_error_message($error_message);
                 }
             break;
@@ -189,12 +189,19 @@ class Tg_hook {
         $this->send_message("опция в разработке");
     }
 
-    private function confirm_order($cafe_uniq_name, $order_short_number): void{        
+    private function take_the_order($cafe_uniq_name, $order_short_number): void{        
         if(!$order = $this->valid_order($cafe_uniq_name, $order_short_number)){
             $this->send_error_message("Заказ с номером {$order_short_number} не найден");
             return;
         }
-        Order_sender::order_confirm_and_send_to_iiko($cafe_uniq_name, $order, $this->REAL_TG_USER);          
+        // Order_sender::order_confirm_and_send_to_iiko($cafe_uniq_name, $order, $this->REAL_TG_USER);
+        try{
+            Order_sender::do_take_the_order($cafe_uniq_name, $order, $this->REAL_TG_USER);
+        }catch(Exception $e){            
+            glogError($e->getMessage());
+            $this->send_error_message("Невозможно взять заказ с номером {$order_short_number}. 
+            Если ошибка повторится, обратитесь в службу поддержки ChefsMenu.");
+        }        
     }
 
     private function change_tg_user_state_to($state): void{
@@ -538,12 +545,12 @@ class Tg_hook {
     }
 
     private function send_message($msg, $keyboard=""): void{                
-        Order_sender::send_message_to_tg_user($this->tg_user_id, $msg, $this->REAL_TG_USER, $keyboard);	
+        Order_sender::send_message_to_tg_user($this->tg_user_id, $msg, $keyboard);	
     }
 
     private function send_error_message($msg, $keyboard=""): void{
         glogError($msg, __FILE__);
-        Order_sender::send_message_to_tg_user($this->tg_user_id, $msg, $this->REAL_TG_USER, $keyboard);	        
+        Order_sender::send_message_to_tg_user($this->tg_user_id, $msg, $keyboard);	        
     }    
 
 

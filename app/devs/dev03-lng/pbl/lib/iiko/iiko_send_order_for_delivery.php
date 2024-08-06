@@ -79,9 +79,6 @@ if(!$cafe->valid())__errorjsonp("Unknown cafe, ".__LINE__);
 
 $DEMO_MODE = (int) $cafe->cafe_status !== 2 ;
 
-$DEMO_MODE_STR = $DEMO_MODE?"yes":"no";
-glog("Send order to ".$cafe->cafe_title.", DEMO_MODE=$DEMO_MODE_STR",__FILE__);
-
 $k = $cafe->iiko_api_key;
 if(empty($k)) __errorjsonp("Cant find iiko api for the cafe, ".__LINE__);
 
@@ -188,11 +185,18 @@ if(PICKUPSELF_MODE){
 	];
 }
 
+/** 
+ * ---------------------------------------------------
+ * 
+ * 
+ * 
+ * 		BUILDING ORDER ARRAY FOR SENDING TO IIKO
+ * 
+ * 
+ * 
+ * ---------------------------------------------------
+*/
 
-
-// --------------------------------------------
-//   BUILDING ORDER ARRAY FOR SENDING TO IIKO
-// --------------------------------------------
 
 $order = [
 		"menuId"=>"{$menu_id}",
@@ -218,10 +222,19 @@ $order = [
 	    // "externalData"=>""
 	];
 
-// -----------------------------
-//     SAVE COPY ORDER IN DB
-// -----------------------------
-	
+
+/** 
+ * ------------------------------------
+ * 
+ * 
+ * 
+ * 		SAVE COPY OF ORDER TO DB
+ * 
+ * 
+ * 
+ * ------------------------------------ 
+*/
+
 define("ORDER_TARGET",Order_sender::IIKO_DELIVERY);
 $pending_mode = THE_ORDER_WAY===1?true:false;
 $short_number = Order_sender::save_order_to_db(ORDER_TARGET, $pending_mode, $cafe, $order, $DEMO_MODE);
@@ -229,10 +242,17 @@ if(!$short_number)__errorjsonp("--cant save order");
 
 $order['externalNumber'] = $short_number;
 
-
-// -----------------------------------
-//     BUILDING ORDER FOR TELEGRAM 
-// -----------------------------------
+/** 
+ * -----------------------------------------
+ * 
+ * 
+ * 
+ * 			BUILDING ORDER FOR TELEGRAM 
+ * 
+ * 
+ * 
+ * ----------------------------------------- 
+*/
 
 // --- preparing order for telegram ---
 
@@ -278,6 +298,7 @@ foreach($orders as $order_row){
 }
 
 // --- building order for telegram ---
+
 $tg_order_mode  = PICKUPSELF_MODE?"самовывоз":"доставка";
 
 if(!PICKUPSELF_MODE){
@@ -298,6 +319,8 @@ $TG_ORDER->text .= "       {$tg_order_mode}\n";
 if(!PICKUPSELF_MODE){
 $TG_ORDER->text .= "       {$deliv_address}\n";	
 }
+$TG_ORDER->text .= "       тел: {$user_phone}\n";
+
 $TG_ORDER->text .= "       ------------\n";
 $TG_ORDER->text .= "       Создан: ".glb_russian_datetime($time_sent,$time_format)."\n";
 $TG_ORDER->text .= "       Сумма: {$total_price} {$str_currency}.\n";
@@ -332,10 +355,17 @@ $DEMO_MODE && __answerjsonp(["short_number"=>$short_number,"demo_mode"=>$DEMO_MO
 if(empty(Order_sender::total_tg_users_for($cafe->uniq_name,ORDER_TARGET))) 
 __answerjsonp(["short_number"=>$short_number,"demo_mode"=>$DEMO_MODE, "notg_mode"=>true]);
 
-
-// -----------------------------
-//         SEND ORDER
-// -----------------------------
+/** 
+ * -------------------------------
+ * 
+ * 
+ * 
+ * 			SEND ORDER 
+ * 
+ * 
+ * 
+ * -------------------------------
+*/
 
 //     --- TG ONLY ---
 
@@ -347,12 +377,11 @@ if(THE_ORDER_WAY===0){
 	if($results && count($results)){		
 		__answerjsonp(["short_number"=>$short_number, "demo_mode"=>$DEMO_MODE, "results"=>$results]);	
 	}else{
-		__errorjsonp("--fail sending delivery tg-order (way 1): ".print_r($results,true));	
+		$err_message = "--fail sending delivery tg-order (way 1): ".print_r($results,true);		
+		__errorjsonp($err_message);	
 	}
 
-//     --- TG, then IIKO ---
-
-  
+//     --- TG, then IIKO ---  
 }else if(THE_ORDER_WAY===1){	
 
 	// TG sending
