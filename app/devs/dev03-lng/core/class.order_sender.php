@@ -18,17 +18,20 @@ class Order_sender{
 	public const IIKO_TABLE = "iiko_table_order";
 	public const IIKO_DELIVERY = "iiko_delivery_order";
 
-
-	static public function total_tg_users_for(string $cafe_uniq_name, string $order_target){
-
+    /*
+    	GET COUNT OF RELEVANT TG-USERS
+    ----------------------------------- **/			
+	static public function total_tg_users_for($cafe_uniq_name, $order_target){	
+		$ARR_TG_USERS = self::get_team_tg_users($cafe_uniq_name, $order_target);
+		return count($ARR_TG_USERS);
 	}
 
     /*
     	GET CAFE SUPERVISORS
     ------------------------------------- **/		
-	static public function get_cafe_supervisors(string $cafe_uniq_name, int|undefined $except_id_user ): array{		
+	static public function get_cafe_supervisors(string $cafe_uniq_name, int|null $except_id_user=null ): array{		
 		$COND = "WHERE cafe_uniq_name='{$cafe_uniq_name}' AND role='supervisor'";
-		$EXCEPT_USER = $except_id_user?" AND id!={$except_id_user}":"";
+		$EXCEPT_USER = $except_id_user!==null?" AND id!={$except_id_user}":"";
 		$supervisors = new Smart_collect("tg_users",$COND.$EXCEPT_USER);
 		if($supervisors&&$supervisors->full()){
 			return $supervisors->get();
@@ -364,9 +367,9 @@ class Order_sender{
 	}
 
 
-	static public function get_team_tg_users($cafe_uniq_name, $order_target, int|undefined $except_user_id){
+	static public function get_team_tg_users($cafe_uniq_name, $order_target, int|null $except_user_id=null){
 		$ACTIVE_ONLY=" AND state='active'";
-		$EXCEPT_USER = $except_user_id? " AND id != $except_user_id" : "";
+		$EXCEPT_USER = $except_user_id!==null? " AND id != $except_user_id" : "";
 		$COND = match ($order_target) {
 			self::CHEFSMENU_ORDER => " AND role='manager'",
 			self::IIKO_TABLE => " AND role='waiter'",
