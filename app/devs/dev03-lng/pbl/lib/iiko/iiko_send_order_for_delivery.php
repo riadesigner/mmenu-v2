@@ -190,7 +190,7 @@ if(PICKUPSELF_MODE){
  * 
  * 
  * 
- * 		BUILDING ORDER ARRAY FOR SENDING TO IIKO
+ * 		BUILDING AN ORDER ARRAY FOR SENDING TO IIKO
  * 
  * 
  * 
@@ -237,7 +237,7 @@ $order = [
 
 define("ORDER_TARGET",Order_sender::IIKO_DELIVERY);
 $pending_mode = THE_ORDER_WAY===1?true:false;
-$short_number = Order_sender::save_order_to_db(ORDER_TARGET, $pending_mode, $cafe, $order, $DEMO_MODE);
+$short_number = Order_sender::save_order_to_db(ORDER_TARGET, $pending_mode, $cafe, $order, null, $DEMO_MODE);
 if(!$short_number)__errorjsonp("--cant save order");
 
 $order['externalNumber'] = $short_number;
@@ -367,33 +367,12 @@ __answerjsonp(["short_number"=>$short_number,"demo_mode"=>$DEMO_MODE, "notg_mode
  * -------------------------------
 */
 
-//     --- TG ONLY ---
-
-
-if(THE_ORDER_WAY===0){
-
-	// TG sending
-	$results = Order_sender::send_tg_order($cafe->uniq_name, ORDER_TARGET, $short_number, $TG_ORDER->text);
-	if($results && count($results)){		
-		__answerjsonp(["short_number"=>$short_number, "demo_mode"=>$DEMO_MODE, "results"=>$results]);	
-	}else{
-		$err_message = "--fail sending delivery tg-order (way 1): ".print_r($results,true);		
-		__errorjsonp($err_message);	
-	}
-
-//     --- TG, then IIKO ---  
-}else if(THE_ORDER_WAY===1){	
-
-	// TG sending
-	$results = Order_sender::send_tg_order_for_confirm($cafe->uniq_name, ORDER_TARGET, $short_number, $TG_ORDER->text);
-	if($results && count($results)){
-		__answerjsonp( ["short_number"=>$short_number, "demo_mode"=>$DEMO_MODE, "results"=>$results] );	
-	}else{
-		__errorjsonp("--fail sending delivery tg-order for confirm (way 2): ".print_r($results,true));	
-	}
-
-}else{
-	__errorjsonp("--unknown mode for sending".__file__);	
+try{
+	Order_sender::send_tg_order($cafe->uniq_name, ORDER_TARGET, $short_number, $TG_ORDER->text, THE_ORDER_WAY);
+	__answerjsonp( ["short_number"=>$short_number, "demo_mode"=>$DEMO_MODE] );	
+}catch(Exception $e){
+	glogError($e->getMessage().", ".__FILE__.", ".__LINE__);
+	__errorjsonp("--fail sending delivery tg-order for confirm (way 2): ");	
 }
 
 

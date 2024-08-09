@@ -28,72 +28,42 @@ class Order_sender{
 
     /*
     	GET CAFE SUPERVISORS
+		@return string[]
     ------------------------------------- **/		
 	static public function get_cafe_supervisors(string $cafe_uniq_name, int|null $except_id_user=null ): array{		
 		$COND = "WHERE cafe_uniq_name='{$cafe_uniq_name}' AND role='supervisor'";
 		$EXCEPT_USER = $except_id_user!==null?" AND id!={$except_id_user}":"";
-		$supervisors = new Smart_collect("tg_users",$COND.$EXCEPT_USER);
-		if($supervisors&&$supervisors->full()){
-			return $supervisors->get();
+		$SUPERVISORS = new Smart_collect("tg_users",$COND.$EXCEPT_USER);
+		if($SUPERVISORS&&$SUPERVISORS->full()){
+			return self::extract_tg_user_ids($SUPERVISORS);
 		}else{			
 			return [];
 		}		
 	}
 
-    /*
-    	SEND MESSAGE TO TG-USERS		
-    --------------------------------- **/	
-	static public function send_message_to_tg_users(string|array $tg_user_ids, $message, $keyboard=""){
-		global $CFG;
-		$tg_token = $CFG->tg_cart_token;
-
-		if(gettype($tg_user_ids)==='string'){ $tg_user_ids = [$tg_user_ids]; }
-		
-		foreach( $tg_user_ids as $tg_user_id){
-			$method = 'sendMessage';
-			$send_data = [
-				"text" => $message,
-				"parse_mode" => "Markdown",
-				"chat_id" => $tg_user_id,
-				"disable_web_page_preview" => true
-			];
-			if(!empty($keyboard)){ $send_data["reply_markup"] = $keyboard; }
-			$res = send_telegram($method, $send_data, $tg_token);
-			glog("tg response: ".print_r($res, 1).__FILE__.", ".__LINE__);
-		}			
-	}	
-
-    /*
-    	SEND TG-ORDER TO ALL TEAM TG-USERS
-    ------------------------------------------- **/	
-	static public function send_tg_order($cafe_uniq_name, $order_target, $order_short_number, $tg_order_text, $keyboard=""){	 					
-		$results = self::send_message_to_team_users($cafe_uniq_name, $order_target, $tg_order_text, $keyboard);
-		self::send_message_to_supervisors($cafe_uniq_name, $tg_order_text);
-		return $results;
-	}
 
     /*
     	SENDING TG-ORDER FOR CONFIRM TO ALL TEAM TG_USERS
     --------------------------------------------------------- **/
-	static public function send_tg_order_for_confirm($cafe_uniq_name, $order_target, $order_short_number, $tg_order_text){		
+	// static public function send_tg_order_for_confirm($cafe_uniq_name, $order_target, $order_short_number, $tg_order_text){		
 	
-		$waiter_mode = $order_target===self::IIKO_TABLE;
-		$button_take_title = $waiter_mode?"Я беру":"Взять заказ";
-		$button_take_the_order = "take_the_order:{$cafe_uniq_name}:{$order_short_number}";
+	// 	$waiter_mode = $order_target===self::IIKO_TABLE;
+	// 	$button_take_title = $waiter_mode?"Я беру":"Взять заказ";
+	// 	$button_take_the_order = "take_the_order:{$cafe_uniq_name}:{$order_short_number}";
 
-		$keyboard = json_encode([
-			"inline_keyboard" => [
-				[
-					[
-						"text" => $button_take_title,
-						"callback_data" => $button_take_the_order
-					]
-				]
-			]
-		], JSON_UNESCAPED_UNICODE);	
+	// 	$keyboard = json_encode([
+	// 		"inline_keyboard" => [
+	// 			[
+	// 				[
+	// 					"text" => $button_take_title,
+	// 					"callback_data" => $button_take_the_order
+	// 				]
+	// 			]
+	// 		]
+	// 	], JSON_UNESCAPED_UNICODE);	
 		
-		return self::send_tg_order($cafe_uniq_name, $order_target, $order_short_number, $tg_order_text, $keyboard);
-	}
+	// 	self::send_tg_order($cafe_uniq_name, $order_target, $order_short_number, $tg_order_text, $keyboard);
+	// }
 
     /*
     	SEND IIKO-ORDER FOR DELIVERY
@@ -140,8 +110,23 @@ class Order_sender{
     /*
     	SAVE ORDER TO DB
 		CREATE & RETURN SHORT NUMBER
-    ------------------------- **/	
-	static public function save_order_to_db($order_target, $pending_mode, $cafe, $order_data, $table_number=0, $demo_mode=false){		
+
+		@param string $order_target // self::CHEFSMENU_ORDER | self::IIKO-TABLE | self::IIKO-DELIVERY 
+		@param int $pending_mode // 0|1, IF NEEDS RESENT TO IIKO AFTER TAKING THE ORDER
+		@param Smart_object $cafe
+		@param array $order_data // order params
+		@param int|null $table_number
+		@param bool $demo_mode // !==2
+
+		@return string $short_number
+    ----------------------------------------------------- **/	
+	static public function save_order_to_db(
+		string $order_target, 
+		int $pending_mode, 
+		Smart_object $cafe, 
+		array $order_data, 
+		int|null $table_number=null, 
+		bool $demo_mode=false): string{		
 
 		$cafe_uniq_name = $cafe->uniq_name;
 		$id_cafe = $cafe->id;
@@ -163,26 +148,26 @@ class Order_sender{
 			
 			$order_data['externalNumber'] = $short_number;
 
-			// CREATING ORDER IN DB
-			$order = new Smart_object("orders");
-			$order->cafe_uniq_name = $cafe_uniq_name;		
-			$order->order_target = $order_target;
-			$order->table_number = $table_number;
-			$order->pending_mode = $pending_mode;
-			$order->short_number = $short_number;			
-			$order->date = "now()";
-			$order->updated = "now()";
-			$order->description = json_encode($order_data, JSON_UNESCAPED_UNICODE);
+			// SAVE ORDER TO DB
+			$ORDER = new Smart_object("orders");
+			$ORDER->cafe_uniq_name = $cafe_uniq_name;		
+			$ORDER->order_target = $order_target;
+			$ORDER->table_number = $table_number;
+			$ORDER->pending_mode = $pending_mode;
+			$ORDER->short_number = $short_number;			
+			$ORDER->date = "now()";
+			$ORDER->updated = "now()";
+			$ORDER->description = json_encode($order_data, JSON_UNESCAPED_UNICODE);
 			
-			$just_created_id = $order->save();			
+			$just_created_id = $ORDER->save();			
 
 			if(!$just_created_id) {
 				// cant saving order to db
 				return false;
 			}else{			
 				$order_uniq_id = $just_created_id."-".$id_cafe."-".$short_number;
-				$order->id_uniq = $order_uniq_id;			
-				$order->save();
+				$ORDER->id_uniq = $order_uniq_id;			
+				$ORDER->save();
 				return $short_number;
 			}
 
@@ -197,19 +182,69 @@ class Order_sender{
 	}
 
     /*
+    	SEND TG-ORDER TO ALL 
+		TEAM-TG-USERS AND SUPERVISORS
+
+		@param string $cafe_uniq_name
+		@param string $order_target // self::CHEFSMENU_ORDER | self::IIKO-TABLE | self::IIKO-DELIVERY 
+		@param string $order_short_number
+		@param string $tg_order_text		
+		@param int $pending_mode // 0|1, IF NEEDS RESENT TO IIKO AFTER TAKING THE ORDER
+    ---------------------------------------------------------------------------------- **/	
+	static public function send_tg_order($cafe_uniq_name, $order_target, $order_short_number, $tg_order_text, int $pending_mode=0): void {	 		
+		
+		$waiter_mode = $order_target===self::IIKO_TABLE;
+
+		$button_take_title = $waiter_mode?"Я беру":"Взять заказ";
+		$button_take_the_order = "take_the_order:{$cafe_uniq_name}:{$order_short_number}";
+		$keyboard = json_encode([
+			"inline_keyboard" => [
+				[
+					[
+						"text" => $button_take_title,
+						"callback_data" => $button_take_the_order
+					]
+				]
+			]
+		], JSON_UNESCAPED_UNICODE);	
+
+		// send message to team
+		$ARR_USERS_IDS = self::get_team_tg_users($cafe_uniq_name, $order_target);
+		count($ARR_USERS_IDS) && self::send_message_to_tg_users($ARR_USERS_IDS, $tg_order_text, $keyboard);		
+		
+		// send message to supervisors
+		$ARR_SUPERVISORS_IDS = self::get_cafe_supervisors($cafe_uniq_name); 		
+		count($ARR_SUPERVISORS_IDS) && self::send_message_to_tg_users($ARR_SUPERVISORS_IDS, $tg_order_text);
+
+		if(!$ARR_USERS_IDS || !count($ARR_USERS_IDS) ){
+			// сообщить администратору (если есть администратор), 
+			// что заказ отправлен с сайте, но некому получать –
+			// нет активных менеджеров или официантов.			
+		}		
+	}
+
+    /*
     	TAKING THE ORDER
-    ------------------------- **/			
-	static public function do_take_the_order(string $cafe_uniq_name, $order, Smart_object $TG_USER ):void{
-		$order_short_number = $order->short_number;
+
+		@param string $cafe_uniq_name
+		@param Smart_object $ORDER
+		@param Smart_object $TG_USER				
+    --------------------------------------- **/			
+	static public function do_take_the_order(string $cafe_uniq_name, Smart_object $ORDER, Smart_object $TG_USER ):void{
+
+		define('PENDING_MODE', (int) $ORDER->pending_mode===1);
+
+		$order_short_number = $ORDER->short_number;
 		$USER_NAME = !empty($TG_USER->nickname)?$TG_USER->nickname:$TG_USER->name;		
 		
 		$orders = new Smart_collect("orders","WHERE cafe_uniq_name='{$cafe_uniq_name}' AND short_number='{$order_short_number}'");
-		if($order->state==='taken'){
-			if($order->manager===$TG_USER->id){
+
+		if($ORDER->state==='taken'){
+			if($ORDER->manager===$TG_USER->id){
 				$cancel_message = "О нет, {$USER_NAME}! Вы уже взяли заказ {$order_short_number}.";
 				self::send_message_to_tg_users($TG_USER->tg_user_id, $cancel_message);				
 			}else{
-				$ORDER_MANAGER = self::get_tg_user_name_by_id($order->manager, true);
+				$ORDER_MANAGER = self::get_tg_user_name_by_id($ORDER->manager, true);
 				$cancel_message = "О нет, {$USER_NAME}! Заказ {$order_short_number} уже взял {$ORDER_MANAGER}";
 				self::send_message_to_tg_users($TG_USER->tg_user_id, $cancel_message);				
 			}			
@@ -217,26 +252,46 @@ class Order_sender{
 			// --------------------
 			//  TAKING THE ORDER
 			// --------------------		
-			$order->state = 'taken';			
-			$order->manager = $TG_USER->id;
-			$order->updated = 'now()';
+			$ORDER->state = 'taken';			
+			$ORDER->manager = $TG_USER->id;
+			$ORDER->updated = 'now()';
+						
+			if($ORDER->save()){													
+			
+				$keyboard = "";
 
-			if($order->save()){													
+				if(PENDING_MODE){
+					$button_send_to_iiko_title = "Отправить в iiko";
+					$button_send_to_iiko = "send_to_iiko:{$cafe_uniq_name}:{$order_short_number}";
+					$keyboard = json_encode([
+						"inline_keyboard" => [
+							[
+								[
+									"text" => $button_send_to_iiko_title,
+									"callback_data" => $button_send_to_iiko
+								]
+							]
+						]
+					], JSON_UNESCAPED_UNICODE);						
+				}
+
+				glog("=============== PENDING_MODE =============== ".(PENDING_MODE?'yes':'no'));
+				glog("=============== KEYBOARD =============== ".$keyboard);
 
 				// send answer to user
 				$personal_message = "Ок, ".$USER_NAME."! Вы взяли заказ {$order_short_number}.";				
-				self::send_message_to_tg_users($TG_USER->tg_user_id, $personal_message);			
+				self::send_message_to_tg_users($TG_USER->tg_user_id, $personal_message, $keyboard);
 				
-				// send message to team
+				// send message to team (except current user)
 				$NEW_ORDER_MANAGER = self::get_tg_user_name_by_id($TG_USER->id, true);
 				$message = $NEW_ORDER_MANAGER." взял заказ {$order_short_number}.";
-				$ARR_USERS = self::get_team_tg_users($cafe_uniq_name, $order_target, $TG_USER->id);					
-				count($ARR_USERS) && self::send_message_to_tg_userss($ARR_USERS, $message);
+				$ARR_USERS_IDS = self::get_team_tg_users($cafe_uniq_name, $ORDER->order_target, $TG_USER->id);					
+				count($ARR_USERS_IDS) && self::send_message_to_tg_users($ARR_USERS_IDS, $message);
 				
-				// send message to supervisors
+				// send message to supervisors (except current user)
 				$su_message = $NEW_ORDER_MANAGER." взял заказ {$order_short_number}.";
-				$ARR_SUPERVISORS = self::get_cafe_supervisors($cafe_uniq_name, $order_target, $TG_USER->id);
-				count($ARR_SUPERVISORS) && self::send_message_to_tg_userss($ARR_SUPERVISORS, $message);
+				$ARR_SUPERVISORS_IDS = self::get_cafe_supervisors($cafe_uniq_name, $TG_USER->id);
+				count($ARR_SUPERVISORS_IDS) && self::send_message_to_tg_users($ARR_SUPERVISORS_IDS, $message);
 
 			}else{
 				throw new Exception('Cant updating order status.'.__FILE__.", ".__LINE__);				
@@ -245,13 +300,24 @@ class Order_sender{
 	}
 
     /*
-    	CONFIRMING ORDER
-    ------------------------- **/		
-	static public function order_confirm_and_send_to_iiko($cafe_uniq_name, $order, $tg_user ){
-			
-		$order_short_number = $order->short_number;
+    	SEND ORDER TO IIKO
+		(FOR PENDING MODE)
 
-		$MANAGER_NAME = !empty($tg_user->nickname)?$tg_user->nickname:$tg_user->name;
+		@param string $cafe_uniq_name
+		@param string $order_short_number
+		@param Smart_object $TG_USER
+    ----------------------------------- **/		
+	static public function send_order_to_iiko($cafe_uniq_name, $order_short_number, Smart_object $TG_USER ):void {
+
+		glog("----------- TEST send_order_to_iiko ----------- ".$cafe_uniq_name.", ".$order_short_number);
+
+	}
+	
+	static public function send_order_to_iiko_old($cafe_uniq_name, $order_short_number, Smart_object $TG_USER ) {
+			
+		// $order_short_number = $order->short_number;
+
+		$MANAGER_NAME = !empty($TG_USER->nickname)?$TG_USER->nickname:$TG_USER->name;
 
 		$ERROR_IIKO_SENDING_MESSAGE = "О нет, ".$MANAGER_NAME."! Ошибка отправки заказа {$order_short_number} в iiko.";
 		$ERROR_MESSAGE = "О нет, ".$MANAGER_NAME."! Неизвестная ошибка. Заказ {$order_short_number} не может быть подтвержден.";	
@@ -259,26 +325,26 @@ class Order_sender{
 		$orders = new Smart_collect("orders","WHERE cafe_uniq_name='{$cafe_uniq_name}' AND short_number='{$order_short_number}'");
 			
 		if($order->state==='taken'){
-			if($order->manager===$tg_user->id){
-				if($tg_user->role==="waiter"){
+			if($order->manager===$TG_USER->id){
+				if($TG_USER->role==="waiter"){
 					$cancel_message = "О нет, ".$MANAGER_NAME."! Вы уже взяли (подтвердили) заказ {$order_short_number} и отправили в iiko.";
 				}else{
 					$cancel_message = "О нет, ".$MANAGER_NAME."! Заказ {$order_short_number} уже был вами подтвержден и отправлен в iiko.";
 				}				
-				self::send_message_to_tg_users($tg_user->tg_user_id, $cancel_message);
+				self::send_message_to_tg_users($TG_USER->tg_user_id, $cancel_message);
 			}else{
 				$manager_name = self::get_tg_user_name_by_id($order->manager);
-				if($tg_user->role==="waiter"){
+				if($TG_USER->role==="waiter"){
 					$cancel_message = "О нет, ".$MANAGER_NAME."! Заказ {$order_short_number} уже взяли (подтвердили) и отправили в iiko. Официант: {$manager_name}";
 				}else{
 					$cancel_message = "О нет, ".$MANAGER_NAME."! Заказ {$order_short_number} уже был подтвержден и отправлен в iiko. Его менеджер: {$manager_name}";
 				}				
-				self::send_message_to_tg_users($tg_user->tg_user_id, $cancel_message);
+				self::send_message_to_tg_users($TG_USER->tg_user_id, $cancel_message);
 			}
 		}else if($order->state==='cancelled'){
 
 			$cancel_message = "О нет, ".$MANAGER_NAME."! Заказ {$order_short_number} был ранее отменен.";
-			self::send_message_to_tg_users($tg_user->tg_user_id, $cancel_message);
+			self::send_message_to_tg_users($TG_USER->tg_user_id, $cancel_message);
 			
 		}else{
 
@@ -354,7 +420,8 @@ class Order_sender{
 				
 				$action = $tg_user->role==="waiter"?"взял": "подтвердил";
 
-				$ok_message = "Ок, ".$MANAGER_NAME." {$action} заказ {$order_short_number}.";										
+				$ok_message = "Ок, ".$MANAGER_NAME." {$action} заказ {$order_short_number}.";				
+				// xxx						
 				self::send_message_to_team_users($cafe_uniq_name, $order->order_target, $ok_message);
 				self::send_message_to_supervisors($cafe_uniq_name, $order->order_target, $ok_message);					
 
@@ -366,8 +433,28 @@ class Order_sender{
 				
 	}
 
+	static public function extract_tg_user_ids(Smart_collect $TG_USERS): array{
+		if($TG_USERS && $TG_USERS->full()){
+			$ARR = []; 
+			foreach($TG_USERS->get() as $TG_USER){
+				array_push($ARR, $TG_USER->tg_user_id);
+			}
+			return $ARR;
+		}else{
+			return [];
+		}
+	}
 
-	static public function get_team_tg_users($cafe_uniq_name, $order_target, int|null $except_user_id=null){
+    /*
+    	GET TEAM (the relevant MANAGERS or WAITERS for the order)
+
+		@param string $cafe_uniq_name
+		@param string $order_target // self::CHEFSMENU_ORDER|self::IIKO_TABLE|self::IIKO_DELIVERY
+		@param int|null $except_user_id
+
+		@return array // string[]
+    ------------------------------------------------------------------------------- **/			
+	static public function get_team_tg_users($cafe_uniq_name, $order_target, int|null $except_user_id=null): array{
 		$ACTIVE_ONLY=" AND state='active'";
 		$EXCEPT_USER = $except_user_id!==null? " AND id != $except_user_id" : "";
 		$COND = match ($order_target) {
@@ -377,8 +464,8 @@ class Order_sender{
 			default => "",
 		};
 		$q = "WHERE cafe_uniq_name='{$cafe_uniq_name}' ".$COND.$ACTIVE_ONLY.$EXCEPT_USER;		
-		$tg_users = new Smart_collect("tg_users",$q);		
-		return $tg_users->get();
+		$TG_USERS = new Smart_collect("tg_users",$q);		
+		return self::extract_tg_user_ids($TG_USERS);
 	}
 
 	static public function get_tg_user_name_by_id(int $id, $full=false){
@@ -393,6 +480,32 @@ class Order_sender{
 			return "Не определен";
 		}
 	}
+
+    /*
+    	SEND MESSAGE TO TG-USERS	 	
+
+		@param string|string[] $tg_user_ids
+	 	@param string $message
+	 	@param string|undefined $keyboard		
+    --------------------------------------------------- **/		
+	static public function send_message_to_tg_users(string|array $tg_user_ids, $message, $keyboard=""): void{
+		global $CFG;
+		$tg_token = $CFG->tg_cart_token;
+		if(gettype($tg_user_ids)==='string'){ $tg_user_ids = [$tg_user_ids]; }		
+		foreach( $tg_user_ids as $tg_user_id){
+			$method = 'sendMessage';
+			$send_data = [
+				"text" => $message,
+				"parse_mode" => "Markdown",
+				"chat_id" => $tg_user_id,
+				"disable_web_page_preview" => true
+			];
+			if(!empty($keyboard)){ $send_data["reply_markup"] = $keyboard; }
+			$res = send_telegram($method, $send_data, $tg_token);			
+			glog("tg response: ".print_r($res, 1).__FILE__.", ".__LINE__);
+		}			
+	}	
+
 
 }
 		
