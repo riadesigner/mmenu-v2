@@ -275,9 +275,6 @@ class Order_sender{
 					], JSON_UNESCAPED_UNICODE);						
 				}
 
-				glog("=============== PENDING_MODE =============== ".(PENDING_MODE?'yes':'no'));
-				glog("=============== KEYBOARD =============== ".$keyboard);
-
 				// send answer to user
 				$personal_message = "Ок, ".$USER_NAME."! Вы взяли заказ {$order_short_number}.";				
 				self::send_message_to_tg_users($TG_USER->tg_user_id, $personal_message, $keyboard);
