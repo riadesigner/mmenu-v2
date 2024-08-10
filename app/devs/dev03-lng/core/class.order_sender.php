@@ -239,7 +239,7 @@ class Order_sender{
 		
 		$orders = new Smart_collect("orders","WHERE cafe_uniq_name='{$cafe_uniq_name}' AND short_number='{$order_short_number}'");
 
-		if($ORDER->state==='taken'){
+		if($ORDER->state!=='created'){
 			if($ORDER->manager===$TG_USER->id){
 				$cancel_message = "О нет, {$USER_NAME}! Вы уже взяли заказ {$order_short_number}.";
 				self::send_message_to_tg_users($TG_USER->tg_user_id, $cancel_message);				
@@ -304,142 +304,118 @@ class Order_sender{
 		@param string $order_short_number
 		@param Smart_object $TG_USER
     ----------------------------------- **/		
-	static public function send_order_to_iiko($cafe_uniq_name, $order_short_number, Smart_object $TG_USER ):void {
+	static public function send_order_to_iiko(string $cafe_uniq_name, string $order_short_number, Smart_object $TG_USER ):void {
 
-		glog("----------- TEST send_order_to_iiko ----------- ".$cafe_uniq_name.", ".$order_short_number);
+		if(!$ORDER = self::get_order_by_params($cafe_uniq_name, $order_short_number)){
+			$warn_message = "О нет! Заказ {$order_short_number} не найден.";
+			self::send_message_to_tg_users($TG_USER->tg_user_id, $warn_message);
+			return;
+		}else{
+			if($ORDER->state==='sentout'){
+				$warn_message = "Вы уже отправили заказ {$order_short_number} в iiko.";
+				self::send_message_to_tg_users($TG_USER->tg_user_id, $warn_message);
+				return;				
+			}else{
+				// -------------------------
+				//   SENDING ORDER TO IIKO
+				// -------------------------
+				if(!$CAFE = self::get_cafe_by_uniq_name($cafe_uniq_name)){
+					glogError("не найдено кафе $cafe_uniq_name, ".__FILE__.", ".__LINE__);
+					$err_message = "О нет! Заказ не найден или устарел.";
+					self::send_message_to_tg_users($TG_USER->tg_user_id, $err_message);
+					return;					
+				}
+				$k = $CAFE->iiko_api_key;	
 
-	}
+				if(empty($k)){
+					glogError("не найден iiko_api_key для кафе $cafe_uniq_name, ".__FILE__.", ".__LINE__);
+					$err_message = "О нет! Заказ не найден или устарел.";
+					self::send_message_to_tg_users($TG_USER->tg_user_id, $err_message);
+					return;
+				}					
+
+				// getting token 
+				$url     = 'api/1/access_token';
+				$headers = ["Content-Type"=>"application/json"];
+				$params  = ["apiLogin" => $k];
+				$res = iiko_get_info($url,$headers,$params);
+				if(!isset($res["token"]) || empty($res["token"])){
+					glogError("Не походит token (iiko) для кафе $cafe_uniq_name, ".__FILE__.", ".__LINE__);
+					$err_message = "О нет! Ошибка настройки. Если она повторится, обратитесь к разработчику ChefsMenu";
+					self::send_message_to_tg_users($TG_USER->tg_user_id, $err_message);
+				}				
+				$token = $res["token"];
+
+				// getting organization 
+				$orgs = $CAFE->iiko_organizations;
+				$orgs = !empty($orgs)?json_decode((string) $orgs,true):false;
+				if(!$orgs) {
+					glogError("Не найдена организация (iiko) для кафе $cafe_uniq_name, ".__FILE__.", ".__LINE__);
+					$err_message = "О нет! Ошибка настройки. Если она повторится, обратитесь к разработчику ChefsMenu";
+					self::send_message_to_tg_users($TG_USER->tg_user_id, $err_message);
+					return;
+				}
+				$organization_id = $orgs['current_organization_id'];
 	
-	static public function send_order_to_iiko_old($cafe_uniq_name, $order_short_number, Smart_object $TG_USER ) {
-			
-		// $order_short_number = $order->short_number;
-
-		$MANAGER_NAME = !empty($TG_USER->nickname)?$TG_USER->nickname:$TG_USER->name;
-
-		$ERROR_IIKO_SENDING_MESSAGE = "О нет, ".$MANAGER_NAME."! Ошибка отправки заказа {$order_short_number} в iiko.";
-		$ERROR_MESSAGE = "О нет, ".$MANAGER_NAME."! Неизвестная ошибка. Заказ {$order_short_number} не может быть подтвержден.";	
-		
-		$orders = new Smart_collect("orders","WHERE cafe_uniq_name='{$cafe_uniq_name}' AND short_number='{$order_short_number}'");
-			
-		if($order->state==='taken'){
-			if($order->manager===$TG_USER->id){
-				if($TG_USER->role==="waiter"){
-					$cancel_message = "О нет, ".$MANAGER_NAME."! Вы уже взяли (подтвердили) заказ {$order_short_number} и отправили в iiko.";
-				}else{
-					$cancel_message = "О нет, ".$MANAGER_NAME."! Заказ {$order_short_number} уже был вами подтвержден и отправлен в iiko.";
-				}				
-				self::send_message_to_tg_users($TG_USER->tg_user_id, $cancel_message);
-			}else{
-				$manager_name = self::get_tg_user_name_by_id($order->manager);
-				if($TG_USER->role==="waiter"){
-					$cancel_message = "О нет, ".$MANAGER_NAME."! Заказ {$order_short_number} уже взяли (подтвердили) и отправили в iiko. Официант: {$manager_name}";
-				}else{
-					$cancel_message = "О нет, ".$MANAGER_NAME."! Заказ {$order_short_number} уже был подтвержден и отправлен в iiko. Его менеджер: {$manager_name}";
-				}				
-				self::send_message_to_tg_users($TG_USER->tg_user_id, $cancel_message);
-			}
-		}else if($order->state==='cancelled'){
-
-			$cancel_message = "О нет, ".$MANAGER_NAME."! Заказ {$order_short_number} был ранее отменен.";
-			self::send_message_to_tg_users($TG_USER->tg_user_id, $cancel_message);
-			
-		}else{
-
-			// -----------------------
-			//  CONFIRMING THE ORDER
-			// -----------------------
-			
-			$cafes = new Smart_collect("cafe","WHERE uniq_name='{$cafe_uniq_name}'");
-			if(!$cafes || !$cafes->full()){
-				throw new Exception('не найдено кафе '.$cafe_uniq_name." (".__LINE__.")");
-			}else{
-				$cafe = $cafes->get(0);
-			}
-
-			$k = $cafe->iiko_api_key;
-			
-			if(empty($k)){
-				throw new Exception('не найден iiko_api_key для кафе '.$cafe_uniq_name." (".__LINE__.")");				
-			}
-
-			// GETTING TOKEN FROM IIKO 
-			$url     = 'api/1/access_token';
-			$headers = ["Content-Type"=>"application/json"];
-			$params  = ["apiLogin" => $k];
-			$res = iiko_get_info($url,$headers,$params);
-			if(!isset($res["token"]) || empty($res["token"])) return $ERROR_MESSAGE."(".__LINE__.")";
-			$token = $res["token"];
-
-			$orgs = $cafe->iiko_organizations;
-			$orgs = !empty($orgs)?json_decode((string) $orgs,true):false;
-			if(!$orgs) return $ERROR_MESSAGE."(".__LINE__.")";
-			$organization_id = $orgs['current_organization_id'];
-
-			$terminal_groups = $cafe->iiko_terminal_groups;
-			$terminal_groups = !empty($terminal_groups)?json_decode((string) $terminal_groups,true):false;
-			if(!$terminal_groups) return $ERROR_MESSAGE."(".__LINE__.")";
-			$terminal_group_id = $terminal_groups['current_terminal_group_id'];		
-			
-			$comment_addition = $tg_user->role === "waiter"? "Официант: ".$MANAGER_NAME : "Менеджер: ".$MANAGER_NAME;
-			$comment = "Подтвержден через телеграм. ".$comment_addition;
-
-			$order_data = json_decode((string) $order->description,1); 
-			$order_data["comment"] = $comment;
-
-			// ---------------------------------------------
-			//      SEND PENDING IIKO-ORDER TO DELIVERY
-			// ---------------------------------------------							
-			if($order->order_target===self::IIKO_DELIVERY){
-				$result = self::send_iiko_order_for_delivery($token, $organization_id, $terminal_group_id, $order_data);
-
-			// ---------------------------------------------
-			//      SEND PENDING IIKO-ORDER TO TABLE
-			// ---------------------------------------------					
-			}else if($order->order_target===self::IIKO_TABLE){
-				$result = self::send_iiko_order_to_table($token, $organization_id, $terminal_group_id, $order_data);
-			
-			}else{
-				throw new Exception('Неизвестная ошибка.'.__LINE__);
-				return;
-			}
-
-			if(isset($result['error']) && !empty($result['error']) ){						 
-				glogError("Order_sender answer (".__LINE__."): ".print_r($result, 1));						
-				throw new Exception('Неизвестная ошибка.'.__LINE__);
-				return;
-			}
-
-			$order->state = 'taken';			
-			$order->manager = $tg_user->id;
-			$order->updated = 'now()';
-
-			if($order->save()){					
+				// getting terminals 
+				$terminal_groups = $CAFE->iiko_terminal_groups;
+				$terminal_groups = !empty($terminal_groups)?json_decode((string) $terminal_groups,true):false;
+				if(!$terminal_groups){
+					glogError("Не найдена терминальная группа (iiko) для кафе $cafe_uniq_name, ".__FILE__.", ".__LINE__);
+					$err_message = "О нет! Ошибка настройки. Если она повторится, обратитесь к разработчику ChefsMenu";
+					self::send_message_to_tg_users($TG_USER->tg_user_id, $err_message);
+					return;					
+				}
+				$terminal_group_id = $terminal_groups['current_terminal_group_id'];		
 				
-				$action = $tg_user->role==="waiter"?"взял": "подтвердил";
+				$MANAGER_NAME = self::get_tg_user_public_name($TG_USER);
 
-				$ok_message = "Ок, ".$MANAGER_NAME." {$action} заказ {$order_short_number}.";				
-				// xxx						
-				self::send_message_to_team_users($cafe_uniq_name, $order->order_target, $ok_message);
-				self::send_message_to_supervisors($cafe_uniq_name, $order->order_target, $ok_message);					
+				$comment_addition = $TG_USER->role === "waiter"? "Официант: ".$MANAGER_NAME : "Менеджер: ".$MANAGER_NAME;
+				$comment = "Отправлен через телеграм. ".$comment_addition;
+				$order_data = json_decode((string) $ORDER->description, 1); 
+				$order_data["comment"] = $comment;
 
-			}else{
-				throw new Exception('Неизвестная ошибка.'.__LINE__);
+				try{
+					// ---------------------------------------------
+					//      SEND PENDING IIKO-ORDER TO DELIVERY
+					// ---------------------------------------------							
+					if($ORDER->order_target===self::IIKO_DELIVERY){
+						self::send_iiko_order_for_delivery($token, $organization_id, $terminal_group_id, $order_data);
+					// ---------------------------------------------
+					//      SEND PENDING IIKO-ORDER TO TABLE
+					// ---------------------------------------------					
+					}else if($ORDER->order_target===self::IIKO_TABLE){
+						self::send_iiko_order_to_table($token, $organization_id, $terminal_group_id, $order_data);
+					}else{
+						throw new Exception("Не найден ORDER_TARGET для кафе $cafe_uniq_name");
+					}					
+				}catch( Exception $e){
+					glogError($e->getMessage().", ".__FILE__.", ".__LINE__);
+					$err_message = "О нет! Ошибка настройки. Если она повторится, обратитесь к разработчику ChefsMenu";
+					self::send_message_to_tg_users($TG_USER->tg_user_id, $err_message);					
+					return;					
+				}
+
+				$ORDER->state = 'sentout';				
+				$ORDER->updated = 'now()';
+
+				if(!$ORDER->save()){
+					glogError("Cant save the order {$order_short_number} for cafe {$cafe_uniq_name}, ".__FILE__.", ".__LINE__);
+					$err_message = "Заказ отправлен, но его статус не обновлен. Если ошибка повторится, обратитесь к разработчику ChefsMenu";
+					self::send_message_to_tg_users($TG_USER->tg_user_id, $err_message);					
+					return;					
+				}
+
+				// ----------------------
+				//      OK MESSAGE
+				// ----------------------
+				$ok_message = "Заказ {$order_short_number} отправлен в iiko";
+				self::send_message_to_tg_users($TG_USER->tg_user_id, $ok_message);
+				return;			
+
 			}
-			
 		}
-				
-	}
 
-	static public function extract_tg_user_ids(Smart_collect $TG_USERS): array{
-		if($TG_USERS && $TG_USERS->full()){
-			$ARR = []; 
-			foreach($TG_USERS->get() as $TG_USER){
-				array_push($ARR, $TG_USER->tg_user_id);
-			}
-			return $ARR;
-		}else{
-			return [];
-		}
 	}
 
     /*
@@ -463,19 +439,6 @@ class Order_sender{
 		$q = "WHERE cafe_uniq_name='{$cafe_uniq_name}' ".$COND.$ACTIVE_ONLY.$EXCEPT_USER;		
 		$TG_USERS = new Smart_collect("tg_users",$q);		
 		return self::extract_tg_user_ids($TG_USERS);
-	}
-
-	static public function get_tg_user_name_by_id(int $id, $full=false){
-		$TG_USER = new Smart_object("tg_users", $id);
-		if($TG_USER && $TG_USER->valid()){
-			if($full){
-				return !empty($TG_USER->nickname) ? $TG_USER->nickname."(".$TG_USER->name.")" : $TG_USER->name;
-			}else{
-				return !empty($TG_USER->nickname) ? $TG_USER->nickname:$TG_USER->name;
-			}			
-		}else{
-			return "Не определен";
-		}
 	}
 
     /*
@@ -502,6 +465,68 @@ class Order_sender{
 			glog("tg response: ".print_r($res, 1).__FILE__.", ".__LINE__);
 		}			
 	}	
+	
+	static public function get_order_by_params(string $cafe_uniq_name, string $order_short_number):Smart_object|null{
+		$query = "WHERE cafe_uniq_name='{$cafe_uniq_name}' AND short_number='{$order_short_number}'";
+		$ORDERS = new Smart_collect("orders", $query);			
+		if(!$ORDERS || !$ORDERS->full()){
+			return null;	
+		}else{
+			return $ORDERS->get(0);
+		}
+	}		
+
+	static public function get_cafe_by_uniq_name(string $cafe_uniq_name):Smart_object|null{
+		$CAFES = new Smart_collect("cafe","WHERE uniq_name='{$cafe_uniq_name}'");
+		if(!$CAFES || !$CAFES->full()){
+			return null;	
+		}else{
+			return $CAFES->get(0);
+		}
+	}	
+
+	static public function extract_tg_user_ids(Smart_collect $TG_USERS): array{
+		if($TG_USERS && $TG_USERS->full()){
+			$ARR = []; 
+			foreach($TG_USERS->get() as $TG_USER){
+				array_push($ARR, $TG_USER->tg_user_id);
+			}
+			return $ARR;
+		}else{
+			return [];
+		}
+	}
+
+    /*
+    	GET TG-USER NAME	 	
+
+		// return NICKNAME if exist
+		// otherwise return NAME 
+		// if $full is true, return PUBLIC NAME
+
+		@param int $id
+		@param bool $full
+		
+		@return string 
+    ------------------------------------------------------------------------- **/		
+	static public function get_tg_user_name_by_id(int $id, $full=false ):string {
+		$TG_USER = new Smart_object("tg_users", $id);
+		if($TG_USER && $TG_USER->valid()){
+			if($full){
+				return self::get_tg_user_public_name($TG_USER);
+			}else{
+				return !empty($TG_USER->nickname) ? $TG_USER->nickname:$TG_USER->name;
+			}			
+		}else{
+			return "Неизвестный";
+		}
+	}
+		
+    static public function get_tg_user_public_name(Smart_object $TG_USER):string{
+		if(empty($TG_USER->name)) return "Неизвестный";
+        $public_name = !empty($TG_USER->nickname)?$TG_USER->nickname." (".$TG_USER->name.")":$TG_USER->name;
+        return $public_name;
+    }	
 
 
 }

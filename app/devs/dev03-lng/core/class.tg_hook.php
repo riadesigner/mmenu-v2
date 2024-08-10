@@ -162,13 +162,9 @@ class Tg_hook {
                 $this->take_the_order($cafe_uniq_name,$order_short_number);
             break;            
             case 'send_to_iiko':
-                glog('============$params[0]===========', $params[0]);
-                glog('============$params[1]===========', $params[1]);
-                glog('============$params[2]===========', $params[2]);
-                // $cafe_uniq_name = $params[1];
-                // $order_short_number = $params[2];
-                // Order_sender::send_order_to_iiko($cafe_uniq_name, $order_short_number, $this->REAL_TG_USER);
-
+                $cafe_uniq_name = $params[1];
+                $order_short_number = $params[2];
+                Order_sender::send_order_to_iiko($cafe_uniq_name, $order_short_number, $this->REAL_TG_USER);
             break;
             case 'change_state':
 
@@ -521,6 +517,7 @@ class Tg_hook {
         попросите у администратора кафе специальную *«Ссылку-приглашение».*";
         $this->send_message($answer_message);
     }
+    
     private function get_tg_user_name(){
         $MANAGER_NAME = !empty($this->REAL_TG_USER->nickname)?$this->REAL_TG_USER->nickname:$this->REAL_TG_USER->name;        
         return $MANAGER_NAME;
