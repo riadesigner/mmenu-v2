@@ -29,6 +29,8 @@ export var VIEW_CUSTOMIZING_CART = {
 		this.TG_KEYS = null; // null | {waiter:string, manager:string, supervisor:string}					
 		this.TG_KEY_LINKS = null; // null | {waiter:string, manager:string, supervisor:string} 	
 
+		this.tgbot_link = options.vars['tgbot_link'];
+
 		this.behavior();
 
 		return this;
@@ -153,21 +155,17 @@ export var VIEW_CUSTOMIZING_CART = {
 
 	update_tg_keys_buttons:function(tg_keys){
 
-		console.log('tg_keys',tg_keys)
-
 		const all_keys = tg_keys.reduce((acc,key)=>{
 			const role = key['role'] || "";
 			if(role) { acc[role] = key };
 			return acc;			
 		},{});		
-		
-		const tg_link = "https://t.me/chefsmenu_cart_dev_bot?start=";		
 
 		this.TG_KEYS = all_keys;					
 		this.TG_KEY_LINKS = {
-			waiter : tg_link + all_keys['waiter']['tg_key'],
-			manager : tg_link + all_keys['manager']['tg_key'],
-			supervisor : tg_link + all_keys['supervisor']['tg_key']
+			waiter : this.tgbot_link + all_keys['waiter']['tg_key'],
+			manager : this.tgbot_link + all_keys['manager']['tg_key'],
+			supervisor : this.tgbot_link + all_keys['supervisor']['tg_key']
 		};
 		this.$link_reg_tg_waiter.attr({href : this.TG_KEY_LINKS['waiter']});
 		this.$link_reg_tg_manager.attr({href : this.TG_KEY_LINKS['manager']});

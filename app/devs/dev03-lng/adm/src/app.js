@@ -146,9 +146,9 @@ export default function(){
 		VIEW_CUSTOMIZING_CART.init({
 		name:"view-customizing-cart",
 		template:"#templates .view-customizing-cart",
-		anim:'animLeft'
-	}));	
-
+		anim:'animLeft',
+		vars:{tgbot_link:CFG.tgbot_link}
+	}));
 
 	VIEWS.addView(
 		VIEW_CAFE_DESCRIPTION.init({
