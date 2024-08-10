@@ -278,7 +278,7 @@ foreach ($orders as $order_row) {
 
 $DEMO_MODE && __answerjsonp(["short_number"=>$short_number,"demo_mode"=>$DEMO_MODE]);
 
-if(empty(Order_sender::total_tg_users_for($cafe->uniq_name, ORDER_TARGET))) 
+if(!Order_sender::total_tg_users_for($cafe->uniq_name, ORDER_TARGET)) 
 __answerjsonp(["short_number"=>$short_number,"demo_mode"=>$DEMO_MODE, "notg_mode"=>true]);
 
 
@@ -287,36 +287,12 @@ __answerjsonp(["short_number"=>$short_number,"demo_mode"=>$DEMO_MODE, "notg_mode
 //         SEND ORDER
 // -----------------------------
 
-
-//     --- TG ONLY ---
-
-
-if(THE_ORDER_WAY===0){
-
-	// TG sending
-	$results = Order_sender::send_tg_order($cafe->uniq_name, ORDER_TARGET, $short_number, $TG_ORDER->text);
-	if($results && count($results)){		
-		__answerjsonp(["short_number"=>$short_number, "results"=>$results]);	
-	}else{
-		__errorjsonp("--fail sending tg order to table (way 1): ".print_r($results,true));	
-	}
-
-//     --- TG, then IIKO ---
-
-  
-}else if(THE_ORDER_WAY===1){	
-
-	// TG sending
-	$results = Order_sender::send_tg_order_for_confirm($cafe->uniq_name, ORDER_TARGET, $short_number, $TG_ORDER->text);
-	if($results && count($results)){
-		__answerjsonp( ["short_number"=>$short_number, "results"=>$results] );	
-	}else{
-		__errorjsonp("--fail sending tg order to table for confirm (way 2): ".print_r($results,true));	
-	}
-
+try{
+	Order_sender::send_tg_order($cafe->uniq_name, ORDER_TARGET, $short_number, $TG_ORDER->text, THE_ORDER_WAY);
+	__answerjsonp( ["short_number"=>$short_number, "demo_mode"=>$DEMO_MODE] );	
+}catch(Exception $e){
+	glogError($e->getMessage().", ".__FILE__.", ".__LINE__);
+	__errorjsonp("--fail sending delivery tg-order for confirm (way 2): ");	
 }
-
-
-
 
 ?>

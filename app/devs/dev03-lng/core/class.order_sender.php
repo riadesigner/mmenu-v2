@@ -21,7 +21,7 @@ class Order_sender{
     /*
     	GET COUNT OF RELEVANT TG-USERS
     ----------------------------------- **/			
-	static public function total_tg_users_for($cafe_uniq_name, $order_target){	
+	static public function total_tg_users_for($cafe_uniq_name, $order_target):int{	
 		$ARR_TG_USERS = self::get_team_tg_users($cafe_uniq_name, $order_target);
 		return count($ARR_TG_USERS);
 	}
@@ -40,30 +40,6 @@ class Order_sender{
 			return [];
 		}		
 	}
-
-
-    /*
-    	SENDING TG-ORDER FOR CONFIRM TO ALL TEAM TG_USERS
-    --------------------------------------------------------- **/
-	// static public function send_tg_order_for_confirm($cafe_uniq_name, $order_target, $order_short_number, $tg_order_text){		
-	
-	// 	$waiter_mode = $order_target===self::IIKO_TABLE;
-	// 	$button_take_title = $waiter_mode?"Я беру":"Взять заказ";
-	// 	$button_take_the_order = "take_the_order:{$cafe_uniq_name}:{$order_short_number}";
-
-	// 	$keyboard = json_encode([
-	// 		"inline_keyboard" => [
-	// 			[
-	// 				[
-	// 					"text" => $button_take_title,
-	// 					"callback_data" => $button_take_the_order
-	// 				]
-	// 			]
-	// 		]
-	// 	], JSON_UNESCAPED_UNICODE);	
-		
-	// 	self::send_tg_order($cafe_uniq_name, $order_target, $order_short_number, $tg_order_text, $keyboard);
-	// }
 
     /*
     	SEND IIKO-ORDER FOR DELIVERY
@@ -195,7 +171,8 @@ class Order_sender{
 		
 		$waiter_mode = $order_target===self::IIKO_TABLE;
 
-		$button_take_title = $waiter_mode?"Я беру":"Взять заказ";
+		// $button_take_title = $waiter_mode?"Я беру":"Взять заказ";
+		$button_take_title = "Взять заказ";
 		$button_take_the_order = "take_the_order:{$cafe_uniq_name}:{$order_short_number}";
 		$keyboard = json_encode([
 			"inline_keyboard" => [
