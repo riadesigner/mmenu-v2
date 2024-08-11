@@ -38,7 +38,7 @@ $id_cafe = (int) $_POST['id_cafe'];
 $cafe = new Smart_object("cafe",$id_cafe);
 if(!$cafe->valid())__errorjsonp("Unknown cafe, ".__LINE__);
 
-$DEMO_MODE = (int) $cafe->cafe_status !== 2 ;
+define('DEMO_MODE', (int) $cafe->cafe_status !== 2);
 
 $k = $cafe->iiko_api_key;
 if(empty($k)) __errorjsonp("Cant find iiko api for the cafe, ".__LINE__);
@@ -181,7 +181,7 @@ $order = [
  
 define("ORDER_TARGET",Order_sender::IIKO_TABLE);
 $pending_mode = THE_ORDER_WAY===1?true:false;
-$short_number = Order_sender::save_order_to_db(ORDER_TARGET, $pending_mode, $cafe, $order, $table_number, $DEMO_MODE);
+$short_number = Order_sender::save_order_to_db(ORDER_TARGET, $pending_mode, $cafe, $order, $table_number, DEMO_MODE);
 if(!$short_number)__errorjsonp("--cant save order");
 
 $order['externalNumber'] = $short_number;
@@ -276,12 +276,12 @@ foreach ($orders as $order_row) {
 	$TG_ORDER->text .= $order_items_separate;
 }
 
-$DEMO_MODE && __answerjsonp(["short_number"=>$short_number,"demo_mode"=>$DEMO_MODE]);
+// DEMO MODE
+DEMO_MODE && __answerjsonp(["short_number"=>$short_number,"demo_mode"=>DEMO_MODE, "notg_mode"=>false]);
 
-if(!Order_sender::total_tg_users_for($cafe->uniq_name, ORDER_TARGET)) 
-__answerjsonp(["short_number"=>$short_number,"demo_mode"=>$DEMO_MODE, "notg_mode"=>true]);
-
-
+// IF HAS NOT ACTIVE WAITERS
+define('NOTG_MODE', !Order_sender::total_tg_users_for($cafe->uniq_name, ORDER_TARGET));
+NOTG_MODE && __answerjsonp(["short_number"=>$short_number,"demo_mode"=>DEMO_MODE, "notg_mode"=>true]);
 
 // -----------------------------
 //         SEND ORDER
@@ -289,7 +289,7 @@ __answerjsonp(["short_number"=>$short_number,"demo_mode"=>$DEMO_MODE, "notg_mode
 
 try{
 	Order_sender::send_tg_order($cafe->uniq_name, ORDER_TARGET, $short_number, $TG_ORDER->text, THE_ORDER_WAY);
-	__answerjsonp( ["short_number"=>$short_number, "demo_mode"=>$DEMO_MODE] );	
+	__answerjsonp( ["short_number"=>$short_number, "demo_mode"=>DEMO_MODE, "notg_mode"=>NOTG_MODE] );	
 }catch(Exception $e){
 	glogError($e->getMessage().", ".__FILE__.", ".__LINE__);
 	__errorjsonp("--fail sending delivery tg-order for confirm (way 2): ");	

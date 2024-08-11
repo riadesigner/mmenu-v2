@@ -28,7 +28,7 @@ class Tg_hook {
 
         $this->TG_TOKEN = $CFG->tg_cart_token;
 
-        glog("tg answer: ".print_r($data, 1));
+        glog("tg answer: ".print_r($data, 1).", ".__FILE__.", ".__LINE__);
 
         // IF WAS PRESSED A CALBACK BUTTON        
         $this->CALLBACK_MODE = !empty($data['callback_query']);

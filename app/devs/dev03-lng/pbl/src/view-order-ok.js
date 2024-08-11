@@ -56,12 +56,15 @@ export var VIEW_ORDER_OK = {
 		if(order.demo_mode){
 			this.$msgDemo.show();
 			this.$msgManager.hide()
-		};
-
-		if(order.notg_mode){
+		}else if(order.notg_mode){
+			this.$msgDemo.hide();
 			this.$msgNotFoundTgUsers.show();
 			this.$msgManager.hide()
-		};		
+		}else{
+			this.$msgDemo.hide();
+			this.$msgNotFoundTgUsers.hide();
+			this.$msgManager.show()
+		}
 
 		var phone = GLB.CAFE.get('cafe_phone');
 		phone!=="" ? this.$headerPhone.find(this._CN+"header-phone__text").html(phone) : this.$headerPhone.hide();
