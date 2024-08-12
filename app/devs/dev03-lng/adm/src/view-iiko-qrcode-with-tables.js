@@ -46,9 +46,10 @@ export var VIEW_IIKO_QRCODE_WITH_TABLES = {
 
 	/**
 	* @param table_sections: array
+	* @param tables_uniq_names: object {'tabel-1':'1-uniq-name', ...}
 	* @return void
 	*/
-	update_menulinks_list:function(table_sections, tables_uniq_names){		
+	update_menulinks_list:function(table_sections, tables_uniq_names){	
 		this.$list_of_menulinks.html("");		
 		const str = this.build_tables_list(table_sections, tables_uniq_names);		
 		if(str){
