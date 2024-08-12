@@ -217,9 +217,19 @@
 	$cafe->rev+=1;
 
 	if($cafe->save()){	
-		__answerjsonp($cafe->export());
+
+		try{
+			// обновляем в БД имена-ссылки на меню для столиков
+			Qr_tables::update($cafe);
+			__answerjsonp($cafe->export());			
+		}catch( Exception $e){
+			glogError($e->getMessage());
+			__errorjsonp("--cant update cafe info");
+		}			
+		
 	}else{
-		__errorjsonp("Can not save cafe iiko api key, ".__LINE__);
+		glogError("Can't save cafe iiko api key, ".__FILE__.", ".__LINE__);
+		__errorjsonp("Can't save cafe ".$cafe->id." iiko api key");
 	}
 
 

@@ -23,7 +23,7 @@
 	require_once WORK_DIR.APP_DIR.'core/class.account.php';
 	require_once WORK_DIR.APP_DIR.'core/class.tg_keys.php';	
 	require_once WORK_DIR.APP_DIR.'core/class.email.php';	
-	// require_once WORK_DIR.APP_DIR.'ext/qrcode/qrcode.php';
+	require_once WORK_DIR.APP_DIR.'core/class.qr_tables.php';	
 	
 
 	session_start();
@@ -51,57 +51,27 @@
 		
 	$user_email = post_clean($_POST['user_email']);
 		
-	// getting uniq keys for tables
-	$uniqs_was_modified = false;	
-
-	$tables_uniq_names = $cafe->tables_uniq_names ? json_decode((string) $cafe->tables_uniq_names, 1) : [];
-	
-	foreach($arr_tables as $table){
-		$table_number = "table-".$table["number"];
-		if(!isset($tables_uniq_names[$table_number])){
-			$uniq_name = $table["number"]."-".get_random_string(16);
-			$tables_uniq_names[$table_number] = $uniq_name;
-			$uniqs_was_modified = true;
-		}		
+	try{
+		// обновляем в БД имена-ссылки на меню для столиков
+		Qr_tables::update($cafe);		
+	}catch( Exception $e){
+		glogError($e->getMessage());
+		__errorjsonp("--cant update cafe info");
 	}	
-
-	if($uniqs_was_modified){
-		$cafe->tables_uniq_names = json_encode($tables_uniq_names, JSON_UNESCAPED_UNICODE);
-		$cafe->updated_date = 'now()';
-		$cafe->rev+=1;
-		if(!$cafe->save()){
-			__errorjsonp("cant save information to cafe, ".__LINE__);
-		}
+	
+	try{
+		// получаем сслыки и qr-коды для столиков		
+		$qrcodes = Qr_tables::make_qrcodes($cafe,$arr_tables);
+	}catch( Exception $e){
+		glogError($e->getMessage());
+		__errorjsonp("--cant create table qr-codes");
 	}
-		
-
-	// make qrcodes
-	$qrcodes = iiko_make_all_qrcodes($cafe,$arr_tables,$tables_uniq_names);
 
 	// send qrcodes
 	if($qrcodes && count($qrcodes)>0){
 		iiko_send_qrcodes_to_email($cafe, $user_email, $qrcodes);	
 	}else{
 		__errorjsonp("empty list to send");
-	}
-	
-
-	function iiko_make_all_qrcodes($cafe, $arr_tables, $tables_uniq_names){
-		global $CFG; 
-		$arr = [];
-		foreach($arr_tables as $table){
-			$name = "table-".$table['number'];
-			$uniq = $tables_uniq_names[$name];
-			$link = $CFG->wwwroot."/cafe/".mb_strtolower((string) $cafe->uniq_name)."/table/".$uniq;
-			$qr_image = rds_qrcode_create_from($link);
-			$arr[] = [
-				"table_number"=>$table['number'],
-				"table_name"=>$table['name'],				
-				"table_link"=>$link,
-				"table_qr_image"=>$qr_image
-			];
-		}
-		return $arr;
 	}
 	
 	function iiko_send_qrcodes_to_email($cafe, $user_email, $qrcodes){

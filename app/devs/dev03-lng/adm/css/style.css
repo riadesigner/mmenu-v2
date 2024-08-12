@@ -501,6 +501,8 @@ textarea:focus.length-limit-reached{ animation: ani_limit_reached .3s linear;}
     background-repeat: no-repeat;
     background-position: 100% 0;	
 }
+.std-form__radio-button.mini{ display: inline-block; margin:0px 6px 6px 0px;}
+.std-form__radio-button.mini.checked:after {display: none;}
 
 .std-form__separator{border-top:3px solid #FFF040;margin: 30px 0 20px 0;}
 

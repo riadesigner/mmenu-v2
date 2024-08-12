@@ -19,7 +19,7 @@
 	require_once WORK_DIR.APP_DIR.'core/class.smart_object.php';
 	require_once WORK_DIR.APP_DIR.'core/class.smart_collect.php';
 	require_once WORK_DIR.APP_DIR.'core/class.user.php';
-	
+	require_once WORK_DIR.APP_DIR.'core/class.qr_tables.php';	
 
 	session_start();
 	SQL::connect();
@@ -94,7 +94,14 @@
 	if(!$cafe->save()){
 		__errorjsonp("--cant update cafe info");
 	}else{
-		__answerjsonp($arr_tables);	
+		try{
+			// обновляем в БД имена-ссылки на меню для столиков
+			Qr_tables::update($cafe);
+			__answerjsonp($arr_tables);	
+		}catch( Exception $e){
+			glogError($e->getMessage());
+			__errorjsonp("--cant update cafe info");
+		}		
 	}	
 	
 
