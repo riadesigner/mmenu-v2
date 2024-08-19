@@ -89,7 +89,7 @@ export var VIEW_ALL_MENU = {
 
 		this.$btnIikoReload.on("touchend",()=>{
 			if(!this.LOADING){
-				this.reload_iiko_menu();
+				this.ask_to_reload_iiko_menu();
 			}else{
 				console.log("try later, please")
 			};
@@ -97,114 +97,173 @@ export var VIEW_ALL_MENU = {
 		});
 
 	},
-	reload_iiko_menu:function() {
-		const _this=this;
 
-		const cafe = GLB.THE_CAFE.get();
-
-		const fn = {
-			message_something_wrong:()=>{
-
-			}
-		};
-
-		const foo = {
-			reload_iiko_menu:()=>{				
-				_this.now_loading();
-				_this._page_hide();
-								
-				let iiko_extmenus = cafe.iiko_extmenus;
-				iiko_extmenus = iiko_extmenus?JSON.parse(iiko_extmenus):false;
-
-				if(!iiko_extmenus){					
-					this.error_message();
-					setTimeout(()=>{ this.end_loading(); this._page_show();},200);
-				};
-
-				const extmenu_id = iiko_extmenus['current_extmenu_id'];				
-				
-				const Loader = GLB.IIKO_LOADER.init();
-
-				Loader.load_extmenu_asynq(extmenu_id)
-				.then((vars)=>{
-					
-					const [roughMenu, roughMenuHash, need2update] = vars;
-
-					if(!roughMenu || !roughMenuHash){
-						this.error_message();
-						setTimeout(()=>{ this.end_loading(); this._page_show();},200);
-						return false
-					}
-
-					console.log('roughMenu',roughMenu);					
-					
-					if(roughMenu && roughMenuHash && need2update){
-						// new menu
-						const newMenu = GLB.IIKO_EXT_MENU_PARSER.parse(roughMenu);					
-						console.log('newMenu',newMenu)
-						foo.update_iiko_menu(newMenu,roughMenuHash);
-					}else{
-						// actual menu
-						let msg = `У вас сейчас актуальное меню. 
-							Обновлять не требуется.`;
-						GLB.VIEWS.modalMessage({
-							title:GLB.LNG.get("lng_ok"),
-							message:msg,
-							btn_title:GLB.LNG.get('lng_close'),
-							on_close:function(){}
-						});
-						setTimeout(()=>{ this.end_loading(); this._page_show();},200);
-					}
-
-				})
-				.catch((vars)=>{					
-					this.error_message();
-					setTimeout(()=>{ this.end_loading(); this._page_show();},200);
-					console.log('err load iiko ext menu',vars)	
-				});
-
-			},
-			update_iiko_menu:(newMenu,roughMenuHash)=>{
-				
-				const opt = {
-					id_cafe:cafe.id,
-					newMenu:newMenu,
-					roughMenuHash:roughMenuHash,
-					onReady:function() {											
-						console.log("Menu was updated!");							
-						setTimeout(()=>{
-							_this.update(_this.ID_USER); // reload & redraw list of categories
-						},300);							
-					},
-					onError:function(errMsg) {
-						console.log("errMsg",errMsg);
-						let msg = `<p>Не удалось обновить существующее меню, 
-						попробуйте позже или обратитесь к разработчику</p>`;
-						_this.error_message(msg);
-						_this.end_loading();
-						_this._page_show();
-					}};
-								
-				GLB.IIKO_UPDATER.init(opt);					
-				
-			}
-		};
-
+	ask_to_reload_iiko_menu:function() {
 		GLB.VIEWS.modalConfirm({
 			title:GLB.LNG.get("lng_attention"),
 			ask:`<p>Меню из iiko заменит текущее меню в ChefsMenu. 
 			При этом, поля, заполненные вами здесь, 
 			сохранятся в новом меню.</p>`,
-			action:function(){									
-				foo.reload_iiko_menu();
+			action:()=>{			
+				this.now_loading();
+				this._page_hide();						
+				this.do_reload_iiko_menu();
 			},
-			cancel:function(){
+			cancel:()=>{
 				console.log("cancel reloading")
 			},
 			buttons:[GLB.LNG.get("lng_ok"),GLB.LNG.get("lng_cancel")]
 		});
 
+	},
+	do_reload_iiko_menu:function(){		
 
+		const cafe = GLB.THE_CAFE.get();
+
+		let iiko_extmenus = cafe.iiko_extmenus;
+		iiko_extmenus = iiko_extmenus?JSON.parse(iiko_extmenus):false;
+
+		if(!iiko_extmenus){					
+			this.error_message();
+			setTimeout(()=>{ this.end_loading(); this._page_show();},200);
+		};
+
+		const extmenu_id = iiko_extmenus['current_extmenu_id'];				
+		
+		const Loader = GLB.IIKO_LOADER.init();
+
+		Loader.load_extmenu_asynq(extmenu_id)
+		.then((vars)=>{
+			
+			const [roughMenu, roughMenuHash, need2update] = vars;
+
+			// --------------------
+			//  IF MENU DATA WRONG
+			// --------------------
+			if(!roughMenu || !roughMenuHash){
+				this.error_message();
+				setTimeout(()=>{ this.end_loading(); this._page_show();},200);
+				return false
+			}
+
+			console.log('roughMenu',roughMenu);					
+			
+			if(roughMenu && roughMenuHash && need2update){
+				// --------------
+				//  IF NEW MENU
+				// --------------
+				const newMenu = GLB.IIKO_EXT_MENU_PARSER.parse(roughMenu);					
+				console.log('newMenu',newMenu)
+				this.do_update_iiko_menu(cafe, newMenu, roughMenuHash);
+
+			}else{
+
+				// ----------------
+				//  IF ACTUAL MENU
+				// ----------------
+				// ----------------------------------------					
+				//  ask if needs to reload iiko menu force
+				// ----------------------------------------
+				let msg = `У вас сейчас актуальное меню. 
+					Обновлять не требуется.`;
+				GLB.VIEWS.modalConfirm({
+					title:GLB.LNG.get("lng_attention"),
+					ask:`<p>${msg}</p><p>Все равно обновить?</p>`,
+					action:()=>{
+						// -------------------------
+						//  IF NEED TO RELOAD FORCE	
+						// -------------------------								
+						this.do_reload_iiko_menu_force();
+					},
+					cancel:()=>{
+						this.end_loading(); 
+						this._page_show();
+					},
+					buttons:["Да","Нет"]
+				});				
+			}
+
+		})
+		.catch((vars)=>{					
+			this.error_message();
+			setTimeout(()=>{ this.end_loading(); this._page_show();},200);
+			console.log('err load iiko ext menu',vars)	
+		});
+
+	},
+	do_reload_iiko_menu_force:function(){	
+		// ---------------------------------------------
+		//  clearing menu hash before load last version
+		// ---------------------------------------------
+		console.log('start clearing hash')
+		this.clear_menu_hash_async()
+		.then((vars)=>{					
+			console.log('ok clearing hash')
+			GLB.THE_CAFE.set({iiko_current_extmenu_hash:''});			
+			this.do_reload_iiko_menu();
+		})
+		.catch((err)=>{
+			let msg = `<p>Не удалось обновить существующее меню. 
+			Попробуйте позже или обратитесь к разработчику</p>`;
+			this.error_message(msg);
+			this.end_loading();
+			this._page_show();
+		})
+	},
+	do_update_iiko_menu:function(cafe, newMenu,roughMenuHash){
+		const _this=this;
+		const opt = {
+			id_cafe:cafe.id,
+			newMenu:newMenu,
+			roughMenuHash:roughMenuHash,
+			onReady:function() {											
+				console.log("Menu was updated!");							
+				setTimeout(()=>{
+					_this.update(_this.ID_USER); // reload & redraw list of categories
+				},300);							
+			},
+			onError:function(errMsg) {
+				console.log("errMsg",errMsg);
+				let msg = `<p>Не удалось обновить существующее меню, 
+				попробуйте позже или обратитесь к разработчику</p>`;
+				_this.error_message(msg);
+				_this.end_loading();
+				_this._page_show();
+			}};								
+		GLB.IIKO_UPDATER.init(opt);		
+	},		
+	clear_menu_hash_async:function(){
+		return new Promise((res,rej)=>{
+
+			let PATH = 'adm/lib/iiko/';
+			
+            let url = PATH + 'lib.clear_iiko_extmenu_hash.php';
+        	let CAFE = GLB.THE_CAFE.get();
+
+            let data = {
+                id_cafe:CAFE.id           
+            };
+
+            this.AJAX = $.ajax({
+                url: url+"?callback=?",
+                dataType:"jsonp",
+                data:data,
+                method:"POST",
+                success:function(result) {             
+                    console.log('result',result);
+                    if(result && !result.error){
+                        res(result); 
+                    }else{
+                        rej(result.error);
+                    }
+                },
+                error:function(result) {                    
+                	console.log('result',result);
+                    rej(result);                
+                }
+            });
+			
+		});
 	},
 	update_iiko_mode:function(){		
 		if(GLB.THE_CAFE.is_iiko_mode()){
@@ -375,10 +434,9 @@ export var VIEW_ALL_MENU = {
 								title:GLB.LNG.get("lng_attention"),
 								ask:"Вы уверены, что хотите удалить раздел со всеми блюдами?",
 								action:function(){									
-									fn.delete_the_menu(id_menu, context);
+									fn.delete_the_menu(id_menu, context);									
 								},
-								cancel:function(){
-									console.log("cancel deleting")
+								cancel:function(){									
 									_this.MENU_LIST && _this.MENU_LIST.closeAll();
 								},
 								buttons:[GLB.LNG.get("lng_delete"),GLB.LNG.get("lng_cancel")]
@@ -616,6 +674,7 @@ export var VIEW_ALL_MENU = {
 			btn_title:GLB.LNG.get('lng_close'),
 			on_close:function(){}
 		});		
+		console.log('err:' + msg);
 	}
 
 };

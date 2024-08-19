@@ -15,8 +15,6 @@ export var IikoUpdater = {
         return this;
     },
     start_update:function(opt){
-        
-        var _this=this;        
 
         var PATH = 'adm/lib/iiko/';
         var url = PATH + 'iiko.upgrade_to_menu_from_iiko.php';

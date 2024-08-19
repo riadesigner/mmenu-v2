@@ -40,6 +40,7 @@ export var VIEW_MODAL_CONFIRM = {
 		};
 
 		this.CONFIRM_ACTION = opt.action || function(){};		
+		this.CANCEL_ACTION = opt.cancel || function(){};		
 		
 
 	},	
@@ -47,12 +48,12 @@ export var VIEW_MODAL_CONFIRM = {
 		var _this=this;
 		this.$view.find('.ok').on('touchend',function(e){
 			GLB.VIEWS.hideModalConfirm();
-			_this.CONFIRM_ACTION(true);
+			_this.CONFIRM_ACTION();
 			return false;
 		});
 		this.$view.find('.cancel').on('touchend',function(e){			
 			GLB.VIEWS.hideModalConfirm();
-			_this.CONFIRM_ACTION(false);
+			_this.CANCEL_ACTION();
 			return false;
 		});
 	}
