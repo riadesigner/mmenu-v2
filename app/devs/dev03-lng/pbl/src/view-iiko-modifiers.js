@@ -1,5 +1,6 @@
 import {GLB} from './glb.js';
 import $ from 'jquery';
+import {IIKO_ITEM_MODIFIERS} from './iiko/iiko-item-modifiers.js';
 
 export var VIEW_IIKO_MODIFIERS = {
 	init:function(options) {
@@ -33,37 +34,10 @@ export var VIEW_IIKO_MODIFIERS = {
 
 		return this;
 	},
-	collect_modifiers:function(){
-		let modifiers = this.ITEM_DATA.iiko_modifiers_parsed;		
-		// flatting array of modifiers and their groups,
-		// collecting all modifiers from groups to one list ( one level array)
-		this.ARR_MODIFIERS = [];
-		if(modifiers && modifiers.length){
-			for(let groups in modifiers){
-				let group =  modifiers[groups];
-				let arr_m = group.items;
-				let modifierGroupId = group.modifierGroupId?group.modifierGroupId:"";
-				let modifierGroupName = group.name?group.name:"";
-				console.log('modifierGroupId,modifierGroupName',modifierGroupId,modifierGroupName)
-				if(arr_m && arr_m.length){
-					for(let m in arr_m){
-						let mod = arr_m[m];
-						// copy modifiersGroup properties 
-						// to every modifiers (if it enables)
-						mod.modifierGroupId = modifierGroupId;
-						mod.modifierGroupName = modifierGroupName;
-						this.ARR_MODIFIERS.push(mod);
-					}
-				}
-			}			
-		};
-	},	
 	insert_data:function(){
 		var _this=this;		
-
-		let arr = this.ARR_MODIFIERS;
-
-		console.log("----arr----",arr)			
+		let arr = this.MODIFIERS.get();
+		console.log("---- arr modifiers ----",arr)			
 
 		if(arr.length){
 			const $m_list = $('<ul></ul>');  
@@ -106,11 +80,11 @@ export var VIEW_IIKO_MODIFIERS = {
 		this.SIZER = sizer;		
 		this.TOTAL_ADD_TO_CART=1;		
 		this.onAddToCart = opt.onAddToCart;
+				
+		this.MODIFIERS =  $.extend({},IIKO_ITEM_MODIFIERS);
+		this.MODIFIERS.init(this.ITEM_DATA);		
 		
-		
-		console.log("====menu2====",this._get_anim());
-
-		this.collect_modifiers();
+		// this.collect_modifiers();
 		this.insert_data();
 		this.update_header(menu);
 		
@@ -122,8 +96,8 @@ export var VIEW_IIKO_MODIFIERS = {
 		const s = sizer.get_all();
 		let price = s.price;
 		let volume = s.volume;
-		let sizeName = s.sizeName;
-		let sizeId = s.sizeId;
+		// let sizeName = s.sizeName;
+		// let sizeId = s.sizeId;
 	
 		const currency_symbol = GLB.CAFE.get('cafe_currency').symbol;
 		this.$item_price.html(price + " " + currency_symbol);
@@ -224,11 +198,10 @@ export var VIEW_IIKO_MODIFIERS = {
 	recalc_modifiers:function() {
 		let _this = this;		
 		let total_modif_price = 0;
-		let arr_usr_chosen = [];		
-
-		this.ARR_MODIFIERS.length && this.$MODIFIERS_BTNS && this.$MODIFIERS_BTNS.each(function(index){
+		let arr_usr_chosen = [];
+			this.MODIFIERS.get().length && this.$MODIFIERS_BTNS && this.$MODIFIERS_BTNS.each(function(index){
 			if($(this).hasClass('chosen')){
-				const mod = _this.ARR_MODIFIERS[index];
+				const mod = _this.MODIFIERS.get(index);
 				const id = mod.modifierId;
 				const price = mod.price;
 				const name = mod.name
@@ -238,9 +211,7 @@ export var VIEW_IIKO_MODIFIERS = {
 				total_modif_price += parseInt(price,10);
 			}
 		});
-
 		return [ arr_usr_chosen, parseInt(total_modif_price,10)];
-
 	},
 	hide:function() {
 		GLB.UVIEWS.go_back();

@@ -27,9 +27,9 @@ export var CART = {
 		let uniq_by_time = Math.floor((Date.now() * Math.random()) / 1000).toString();			
 		return prefix+uniq_by_time;
 	},
-	add_order:function(item,opt) {
-		console.log('item',item)
-
+	add_order:function(item_data,opt) {
+		console.log('item_data',item_data)
+		const item = item_data;
 		let total_in_cart = this.get_total_orders(item.id);		
 		let uniq_name, pre_order, count;
 		const IIKO_MODE = GLB.CAFE.get().iiko_api_key!=="";

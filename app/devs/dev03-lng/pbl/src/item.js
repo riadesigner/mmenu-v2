@@ -1,4 +1,5 @@
 import {GLB} from './glb.js';
+import {IIKO_ITEM} from './iiko/iiko-item.js';
 import {IIKO_ITEM_SIZER} from './iiko/iiko-item-sizer.js';
 
 import $ from 'jquery';
@@ -84,18 +85,36 @@ export var ITEM = {
 	},
 	add_item_to_cart:function() {						
 		const IIKO_MODE = GLB.CAFE.get().iiko_api_key!=="";		
-		if(GLB.CART){				
+		const item_data = this.get(); // Object
+		const menu = this.objParent.get_menu_data();				
+
+		if(GLB.CART){		
+			// ----------------
+			//  IIKO MODE MENU
+			// ----------------		
 			if(IIKO_MODE){
-				let menu = this.objParent.get_menu_data();
-				let item = this.ITEM_DATA;				
-				GLB.VIEW_IIKO_MODIFIERS.update(menu,item,this.IIKO_SIZER,{
-					onAddToCart:(total_in_cart)=>{ 						
-						this.update_cart_btn(total_in_cart);		
-					}});
-				GLB.UVIEWS.set_current("the-iiko-modifiers");
+
+				this.IIKO_ITEM = $.extend({},IIKO_ITEM);	
+				this.IIKO_ITEM.init(this.ITEM_DATA);
+				if(this.IIKO_ITEM.has_modifiers()){
+					// SHOW MODAL WINDOW WITH MODIFIERS OPTIONS
+					GLB.VIEW_IIKO_MODIFIERS.update(menu, item_data, this.IIKO_SIZER, {
+						onAddToCart:(total_in_cart)=>{ 						
+							this.update_cart_btn(total_in_cart);
+							this.play_smile_animation();		
+						}});
+					GLB.UVIEWS.set_current("the-iiko-modifiers");
+				}else{
+					// JUST ADDING To CART THE ONE
+					let total_in_cart = GLB.CART.add_order(item_data, {count:1});
+					this.update_cart_btn(total_in_cart);	
+					this.play_smile_animation();	
+				}			
 			}else{		
-			// CHEFSMENU MODE
-				let total_in_cart = GLB.CART.add_order(this.get(),{count:1});
+			// --------------------	
+			// CHEFSMENU MODE MENU
+			// --------------------
+				let total_in_cart = GLB.CART.add_order(item_data, {count:1});
 				this.update_cart_btn(total_in_cart);
 				this.play_smile_animation();
 			}
