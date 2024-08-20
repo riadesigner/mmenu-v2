@@ -267,7 +267,12 @@ export var VIEW_ALLITEMS = {
 			var item = this.ITEMS[currId];
 			item && item.portrait_close_large_image(fast);
 		}
-	},	
+	},
+	current_item_close_modifiers:function(){
+		var currId = this.ALL_ITEMS.arr[this.CURRENT].id;
+		var item = this.ITEMS[currId];	
+		item && item.close_modifiers_panel();
+	},
 	current_item_close_description:function(){
 		var currId = this.ALL_ITEMS.arr[this.CURRENT].id;
 		var item = this.ITEMS[currId];	
@@ -277,6 +282,7 @@ export var VIEW_ALLITEMS = {
 		if(!this.get_total()) return false;
 		
 		this.current_item_close_description();
+		this.current_item_close_modifiers();
 
 		if(this.CURRENT<this.get_total()-1){
 			this.CURRENT+=1;
@@ -289,6 +295,7 @@ export var VIEW_ALLITEMS = {
 		if(!this.get_total()) return false;
 		
 		this.current_item_close_description();
+		this.current_item_close_modifiers();
 		
 		if(this.CURRENT>0){
 			this.CURRENT-=1;

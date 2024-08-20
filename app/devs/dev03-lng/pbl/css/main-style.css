@@ -460,6 +460,19 @@ a.mm2-home-link:hover{ color: %[color-home-link-hover]%; }
 .mm2-item-data {position: absolute;top:0;left:0;width: 100%; overflow: hidden;z-index: 10;}
 .mm2-item-footer {position: absolute;height: 20%; bottom:0;left:0;width: 100%; z-index: 30;display: table;}
 
+.mm2-item-data{border:4px solid red;}
+.mm2-item{border:4px solid blue;}
+
+.mm2-item-modifiers-panel{
+  width: 100%;height: 100%;position: absolute;
+  top:0;left:0;border:4px solid pink;z-index: 40;
+  background-color: rgba(51, 51, 51, 0.4);
+  transform: translateY(100%);
+  opacity: 0; transition:.3s;
+}
+.mm2-item.showed-modifiers .mm2-item-modifiers-panel{
+  transform: translateY(0); opacity: 1;  
+}
 
 /* --- IIKO MODIFIERS --- */
 
@@ -556,15 +569,15 @@ a.mm2-home-link:hover{ color: %[color-home-link-hover]%; }
 
 /* --- / VIEW IIKO MODIFIERS --- */
 
+/* -- SMILE -- */
 .mm2-item-anim {  
   position: absolute;
   bottom:50px;
   height: 10px;
   z-index: 20;
   transform:translateZ(0);
-  will-change: transform, opacity;  
+  will-change: transform, opacity;
 }
-
 .mm2-item-anim div {  
   position: absolute;bottom:0;
   left:-70px;width: 46px;height: 46px;

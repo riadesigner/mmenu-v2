@@ -42,6 +42,7 @@ export var ITEM = {
 		this.CLASS_LARGE_IMAGE = this.CN+"show-large-image";
 		this.CLASS_FULL_DESCRIPTION = this.CN+"show-full-description";
 		this.CLASS_IMAGE_READY_TO_ZOOM = this.CN+"image-ready-to-zoom";
+		this.CLASS_SHOWED_MODIFIERS = 'showed-modifiers';
 				
 		this.STARTSCROLL=0;
 		this.DESCR_SCROLLED = false;
@@ -98,12 +99,13 @@ export var ITEM = {
 				this.IIKO_ITEM.init(this.ITEM_DATA);
 				if(this.IIKO_ITEM.has_modifiers()){
 					// SHOW MODAL WINDOW WITH MODIFIERS OPTIONS
-					GLB.VIEW_IIKO_MODIFIERS.update(menu, item_data, this.IIKO_SIZER, {
-						onAddToCart:(total_in_cart)=>{ 						
-							this.update_cart_btn(total_in_cart);
-							this.play_smile_animation();		
-						}});
-					GLB.UVIEWS.set_current("the-iiko-modifiers");
+					this.$item.addClass('showed-modifiers');
+					// GLB.VIEW_IIKO_MODIFIERS.update(menu, item_data, this.IIKO_SIZER, {
+					// 	onAddToCart:(total_in_cart)=>{ 						
+					// 		this.update_cart_btn(total_in_cart);
+					// 		this.play_smile_animation();		
+					// 	}});
+					// GLB.UVIEWS.set_current("the-iiko-modifiers");
 				}else{
 					// JUST ADDING To CART THE ONE
 					let total_in_cart = GLB.CART.add_order(item_data, {count:1});
@@ -495,5 +497,9 @@ export var ITEM = {
 	portrait_show_descr:function(){				
 		this.$item.addClass(this.CLASS_FULL_DESCRIPTION);
 		this.update_layout();
+	},
+	close_modifiers_panel:function(){
+		this.$item.removeClass(this.CLASS_SHOWED_MODIFIERS);
+		this.$item.addClass('xxx');
 	}	
 };
