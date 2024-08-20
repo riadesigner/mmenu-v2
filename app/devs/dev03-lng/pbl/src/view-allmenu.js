@@ -132,7 +132,7 @@ export var VIEW_ALLMENU = {
 		this.$view.removeClass("multilang-mode");				
 		const CAFE = GLB.CAFE.get();
 		const extra_langs = CAFE.extra_langs?JSON.parse(CAFE.extra_langs):false;
-		if(!extra_langs ||  !extra_langs.length) return;
+		if(!extra_langs) return;
 		
 		this.$view.addClass("multilang-mode");
 

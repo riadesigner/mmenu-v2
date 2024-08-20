@@ -63,11 +63,16 @@
 
 	// REMOVING LANGUAGE
 	if($lang_to_delete && $lang_code_to_delete){		
-		if(isset($ARR_LANG[$lang_code_to_delete])) unset($ARR_LANG[$lang_code_to_delete]);		
+		if(isset($ARR_LANG[$lang_code_to_delete])) unset($ARR_LANG[$lang_code_to_delete]);				
 	}	
 
-	
-	$cafe->extra_langs = json_encode($ARR_LANG, JSON_UNESCAPED_UNICODE); 
+	if(count($ARR_LANG)){
+		$LANG_JSON = json_encode($ARR_LANG, JSON_UNESCAPED_UNICODE);
+	}else{
+		$LANG_JSON = "";
+	}
+
+	$cafe->extra_langs = $LANG_JSON; 
 	$cafe->updated_date = 'now()';
 	$cafe->rev+=1;
 
