@@ -276,9 +276,9 @@ a.mm2-home-link:hover{ color: %[color-home-link-hover]%; }
   top:50%;left:0;transform:translateY(-50%);
 }
 
-.mm2-allmenu-header-title__text {    
-  font-size: 1.2em;line-height: 2;
-  padding: 0 40px 0 40px; 
+.mm2-allmenu-header-title__text {
+  font-size: 1.2em;line-height: 1;
+  padding: 0 65px 0 40px; 
 }
 .mm2-allmenu-header-title__icon{
   position: absolute;transition:.3s;
@@ -1580,7 +1580,7 @@ a.mm2-home-link:hover{ color: %[color-home-link-hover]%; }
   .mm2-item-btn-addtocart{border-width: 1px !important; transition:0s;}
   .mm2-header-phone__text{ display: none;}
   .mm2-header-phone__icon{ width:12.2vw; height:12.2vw ;}
-  .mm2-allmenu-header-title__text{ font-size: 1.5em; }
+  .mm2-allmenu-header-title__text{ font-size: 1.4rem; }
   .mm2-allmenu-row__title span{
     font-size: 5.8vw;
     line-height: 1;

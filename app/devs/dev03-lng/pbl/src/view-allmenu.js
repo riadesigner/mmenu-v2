@@ -90,8 +90,8 @@ export var VIEW_ALLMENU = {
 			}
 		};
 		
-		
-		this.$headerTitle.find(this._CN+"allmenu-header-title__text").html(GLB.CAFE.get('cafe_title'));
+		const cafeTitleStr = GLB.CAFE.get('cafe_title');
+		this.$headerTitle.find(this._CN+"allmenu-header-title__text").html(cafeTitleStr);
 
 		var phone = GLB.CAFE.get('cafe_phone');
 		phone!=="" ? this.$headerPhone.find(this._CN+"header-phone__text").html(phone) : this.$headerPhone.hide();
