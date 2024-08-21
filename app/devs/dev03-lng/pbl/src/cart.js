@@ -23,42 +23,67 @@ export var CART = {
 	},
 	
 	// new 
-	create_uniq_name:function(prefix) {
-		let uniq_by_time = Math.floor((Date.now() * Math.random()) / 1000).toString();			
-		return prefix+uniq_by_time;
-	},
-	add_order:function(item_data,opt) {
-		console.log('item_data',item_data)
-		const item = item_data;
-		let total_in_cart = this.get_total_orders(item.id);		
-		let uniq_name, pre_order, count;
-		const IIKO_MODE = GLB.CAFE.get().iiko_api_key!=="";
-		
-		if(!IIKO_MODE){			
-			// CHEFSMENU WAY			 
-			uniq_name = 'chefsmenu-order-'+item.id;			
-			count = opt.count;
-			pre_order = {
-				itemId:item.id,				
-				uniq_name:uniq_name,
-				price: item.price,
-				count:total_in_cart + count,
-				volume:item.volume,
-				item_data:item
-			}
-		}else{			
-			// IIKO WAY			
-			uniq_name = this.create_uniq_name('iiko-order-'+item.id+'-');
-			count = opt.count;
-			pre_order = opt;			
-			pre_order.uniq_name = uniq_name;
-		};
-		
-		this.ALL_ORDERS[uniq_name] = pre_order;
-		this.update_btn_cart();
-		return total_in_cart + count;
+	// create_uniq_name:function(prefix) {
+	// 	let uniq_by_time = Math.floor((Date.now() * Math.random()) / 1000).toString();			
+	// 	return prefix+uniq_by_time;
+	// },
 
+	/**
+	 * @param preorder: preorderObject
+	 * preorderObject = { 
+	 *   itemId:string;
+	 *   uniq_name: string;
+	 *   price: number;
+	 *   count:number;
+	 *   volume:string;
+	 *   item_data:object;
+	 *	 sizeName: string; / optional (IIKO)
+	 *	 sizeId: string; / optional (IIKO)
+	 *	 sizeCode: string; / optional (IIKO)			
+	 *	 chosen_modifiers: string; / optional (IIKO)
+	 * }
+	*/
+	add_preorder:function(preorder){						
+		let total_in_cart = this.get_total_orders(preorder.itemId);				
+		this.ALL_ORDERS[preorder.uniq_name] = preorder;
+		this.update_btn_cart();
+		return total_in_cart + preorder.count;
 	},
+
+	// // @param item_data: Object
+	// add_order:function(item_data, opt) {
+
+	// 	const IIKO_MODE = GLB.CAFE.get().iiko_api_key!=="";		
+
+	// 	const item = item_data;
+	// 	let total_in_cart = this.get_total_orders(item.id);		
+	// 	let uniq_name, pre_order, count;
+				
+	// 	if(!IIKO_MODE){			
+	// 		// CHEFSMENU WAY			 
+	// 		uniq_name = 'chefsmenu-order-'+item.id;
+	// 		count = opt.count;
+	// 		pre_order = {
+	// 			itemId:item.id,				
+	// 			uniq_name:uniq_name,
+	// 			price: item.price,
+	// 			count:total_in_cart + count,
+	// 			volume:item.volume,
+	// 			item_data:item
+	// 		}
+	// 	}else{			
+	// 		// IIKO WAY			
+	// 		uniq_name = this.create_uniq_name('iiko-order-'+item.id+'-');
+	// 		count = opt.count;
+	// 		pre_order = opt;			
+	// 		pre_order.uniq_name = uniq_name;
+	// 	};
+		
+	// 	this.ALL_ORDERS[uniq_name] = pre_order;
+	// 	this.update_btn_cart();
+	// 	return total_in_cart + count;
+
+	// },
 	get:function(orderId) {		
 		let order = this.ALL_ORDERS[orderId];
 		return order;
@@ -94,6 +119,7 @@ export var CART = {
 	},
 	get_total_price:function() {		
 		let total_price = 0;
+		console.log('this.ALL_ORDERS',this.ALL_ORDERS)
 		for(let i in this.ALL_ORDERS){
 			if(this.ALL_ORDERS.hasOwnProperty(i)){
 				let order = this.ALL_ORDERS[i];
@@ -102,6 +128,7 @@ export var CART = {
 				}
 			}
 		};		
+		console.log('total_price ==== ',total_price);
 		return total_price;
 	},
 	add_one:function(orderId){

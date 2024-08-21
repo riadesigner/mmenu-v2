@@ -73,14 +73,14 @@ export var VIEW_IIKO_MODIFIERS = {
 		};
 
 	},	
-	update:function(menu,item,sizer,opt) {
+	update:function(menu,iiko_item,sizer,opt) {
 				
-		this.ITEM_DATA = item;
+		this.ITEM_DATA = iiko_item.get();
 		this.MENU = menu;
 		this.SIZER = sizer;		
 		this.TOTAL_ADD_TO_CART=1;		
 		this.onAddToCart = opt.onAddToCart;
-				
+					
 		this.MODIFIERS =  $.extend({},IIKO_ITEM_MODIFIERS);
 		this.MODIFIERS.init(this.ITEM_DATA);		
 		
@@ -172,12 +172,9 @@ export var VIEW_IIKO_MODIFIERS = {
 		const price_item = parseInt(price,10);				
 		let [chosen_modifiers, price_modifiers] = this.recalc_modifiers();
 		let price_items_and_modifieers = price_item + price_modifiers;
-		let total_price = this.TOTAL_ADD_TO_CART * price_items_and_modifieers;
-		let str_total_price = "<div>В корзину</div><div> "+total_price+" руб.</div>";
 		
-		this.$modifiers_counter.find('span').html(""+this.TOTAL_ADD_TO_CART);
-		this.$modifiers_btn_cart.find('span').html(str_total_price);
-
+		let total_price = this.TOTAL_ADD_TO_CART * price_items_and_modifieers;
+				
 		this.PRE_ORDER = {
 			itemId:this.ITEM_DATA.id,				
 			price:price_items_and_modifieers,
@@ -189,12 +186,19 @@ export var VIEW_IIKO_MODIFIERS = {
 			item_data:this.ITEM_DATA,
 			chosen_modifiers:chosen_modifiers
 		};		
+		
+		this.update_ui(this.TOTAL_ADD_TO_CART, total_price);
 
 		if(!this.TOTAL_ADD_TO_CART){
 			this.PRE_ORDER = false;
 			GLB.UVIEWS.go_back();
 		}
 	},	
+	update_ui:function(total_add_to_cart, total_price){
+		const str_total_price = "<div>В корзину</div><div> "+total_price+" руб.</div>";
+		this.$modifiers_counter.find('span').html(""+total_add_to_cart);
+		this.$modifiers_btn_cart.find('span').html(str_total_price);
+	},
 	recalc_modifiers:function() {
 		let _this = this;		
 		let total_modif_price = 0;

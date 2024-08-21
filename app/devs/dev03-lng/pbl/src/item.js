@@ -1,8 +1,7 @@
 import {GLB} from './glb.js';
+import $ from 'jquery';
 import {IIKO_ITEM} from './iiko/iiko-item.js';
 import {IIKO_ITEM_SIZER} from './iiko/iiko-item-sizer.js';
-
-import $ from 'jquery';
 
 export var ITEM = {
 	init:function(objParent,itemData,index) {
@@ -60,8 +59,8 @@ export var ITEM = {
 
 		this.$elParent.append(this.$item);		
 
-		if(this.ITEM_DATA.created_by=="iiko"){			
-			this.iiko_build_sizes_and_modifiers();
+		if(this.ITEM_DATA.created_by=="iiko"){
+			this.init_iiko_item();						
 		};
 
 		this.insert_data();
@@ -84,6 +83,23 @@ export var ITEM = {
 	get_element:function() {
 		return this.$item;
 	},
+	init_iiko_item:function(){
+		// INIT IIKO ITEM
+		this.IIKO_ITEM = $.extend({},IIKO_ITEM);	
+		this.IIKO_ITEM.init(this.ITEM_DATA);		
+		// BUILDING SIZES AND MODIFIERS UI
+		this.IIKO_SIZER = $.extend({},IIKO_ITEM_SIZER);	
+		this.IIKO_SIZER.init(this.ITEM_DATA,{onUpdate:(vars)=>{
+			this.iiko_update_price_and_ui(vars);
+		}});		
+		const [$btns_mobiles,$btns_desktop] = this.IIKO_SIZER.get_buttons();		
+		if($btns_mobiles && $btns_mobiles.size()){
+			this.$item.addClass('item-sized');
+			this.$iiko_btns_sizes_wrapper_mobile.prepend($btns_mobiles);	
+			this.$iiko_btns_sizes_wrapper_desktop.prepend($btns_desktop);	
+		}		
+		this.IIKO_ITEM.add_sizer(this.IIKO_SIZER);
+	},
 	add_item_to_cart:function() {						
 		const IIKO_MODE = GLB.CAFE.get().iiko_api_key!=="";		
 		const item_data = this.get(); // Object
@@ -93,10 +109,8 @@ export var ITEM = {
 			// ----------------
 			//  IIKO MODE MENU
 			// ----------------		
-			if(IIKO_MODE){
+			if(IIKO_MODE && this.IIKO_ITEM){
 
-				this.IIKO_ITEM = $.extend({},IIKO_ITEM);	
-				this.IIKO_ITEM.init(this.ITEM_DATA);
 				if(this.IIKO_ITEM.has_modifiers()){
 					// SHOW MODAL WINDOW WITH MODIFIERS OPTIONS
 					this.$item.addClass('showed-modifiers');
@@ -108,7 +122,9 @@ export var ITEM = {
 					// GLB.UVIEWS.set_current("the-iiko-modifiers");
 				}else{
 					// JUST ADDING To CART THE ONE
-					let total_in_cart = GLB.CART.add_order(item_data, {count:1});
+					const preorder = this.IIKO_ITEM.get_preorder(1);
+					let total_in_cart = GLB.CART.add_preorder(preorder);					
+					// let total_in_cart = GLB.CART.add_order(item_data, {count:1});					
 					this.update_cart_btn(total_in_cart);	
 					this.play_smile_animation();	
 				}			
@@ -116,44 +132,36 @@ export var ITEM = {
 			// --------------------	
 			// CHEFSMENU MODE MENU
 			// --------------------
-				let total_in_cart = GLB.CART.add_order(item_data, {count:1});
+				const preorder = this.chefsmenu_get_preorder();
+				let total_in_cart = GLB.CART.add_order2(preorder);
 				this.update_cart_btn(total_in_cart);
 				this.play_smile_animation();
 			}
 		}
+	},
+	chefsmenu_get_preorder:function(){
+		// ------------------------------------------------------------
+		//  chefsmenu mode has no modifiers
+		//  and all uniq_name pre-order for each item will be the same
+		// -------------------------------------------------------------
+		const item = this.ITEM_DATA;
+		const uniq_name = `chefsmenu-pre-order-${item.id}`;
+		const pre_order = {			
+			itemId:item.id,				
+			uniq_name:uniq_name,
+			price: item.price,
+			count: 1,
+			volume:item.volume,
+			item_data:item
+		};
+		return pre_order;
 	},
 	play_smile_animation:function() {
 		this.$item.removeClass(this.CLASS_PLAY_ADDTOCART);				
 		setTimeout(()=>{ this.$item.addClass(this.CLASS_PLAY_ADDTOCART);},60);
 	},
 
-	iiko_build_sizes_and_modifiers:function() {		
 
-		const item = this.ITEM_DATA;		
-
-		if(item.iiko_sizes){
-			item.iiko_sizes_parsed = JSON.parse(item.iiko_sizes);				
-		};		
-		
-		if(item.iiko_modifiers){
-			item.iiko_modifiers_parsed = JSON.parse(item.iiko_modifiers);				
-		};
-		
-		this.IIKO_SIZER = $.extend({},IIKO_ITEM_SIZER);	
-		this.IIKO_SIZER.init(item,{onUpdate:(vars)=>{
-			this.iiko_update_price_and_volume(vars);
-		}});
-		
-		const [$btns_mobiles,$btns_desktop] = this.IIKO_SIZER.get_buttons();
-		
-		if($btns_mobiles && $btns_mobiles.size()){
-			this.$iiko_btns_sizes_wrapper_mobile.prepend($btns_mobiles);	
-			this.$iiko_btns_sizes_wrapper_desktop.prepend($btns_desktop);	
-		}else{
-			// this.$item.addClass('item-not-sized');
-		}
-
-	},
 	insert_data:function() {
 		var _this=this;
 		
@@ -193,7 +201,7 @@ export var ITEM = {
 		this.$item.find(this._CN+"item-about").html(item.description);
 		
 		if(IIKO_MODE){
-			this.iiko_update_price_and_volume(this.IIKO_SIZER.get_all());
+			this.iiko_update_price_and_ui(this.IIKO_SIZER.get_all());
 		}else{
 			// CHEFSMENU MODE ONLY
 			this.$item.find(this._CN+"item-price span").html(item.price+" "+GLB.CAFE.get('cafe_currency').symbol);
@@ -211,7 +219,7 @@ export var ITEM = {
 			this.$btnAddToCart.removeClass("this-cart-full");	
 		}
 	},
-	iiko_update_price_and_volume:function(vars) {				
+	iiko_update_price_and_ui:function(vars) {				
 		var currency_symbol = GLB.CAFE.get('cafe_currency').symbol;
 		this.$item_price.html(vars.price + " " + currency_symbol);
 		this.$item_volume.html(vars.volume);							
