@@ -1,14 +1,16 @@
-// import {GLB} from '../glb.js';
-// import $ from 'jquery';
+import {GLB} from '../glb.js';
+import $ from 'jquery';
+import {IIKO_ITEM_SIZER} from './iiko-item-sizer.js';
+import {IIKO_ITEM_MODIFIERS} from './iiko-item-modifiers.js';
 
 /**
  * @param item_data: Object
  * 
 */
 export const IIKO_ITEM = {
-	init:function(item_data) {
+	init:function(item_data, opt) {
 		this.item_data = item_data;	
-		this.SIZER = null;	
+		this.opt = opt;
 		this._prepare();
 		return this;
 	},
@@ -22,16 +24,7 @@ export const IIKO_ITEM = {
 	// @return boolean
 	has_sizes:function() {
 		this.item_data.iiko_sizes_parsed && this.item_data.iiko_sizes_parsed.length;
-		// return this.item_data.iiko_sizes!=="";
 	},
-	// @param IIKO_SIZER STATIC CLASS
-	add_sizer:function(sizer){
-		this.SIZER = sizer;
-	},
-	// @param IIKO_MODIFIERS STATIC CLASS
-	add_modifiers:function(modifiers){
-		this.MODIFIERS = modifiers;
-	},	
 	get_preorder:function(count){
 		
 		const price = this.get_price();
@@ -59,7 +52,7 @@ export const IIKO_ITEM = {
 	// @return number
 	get_price:function() {		
 				
-		const s = this.SIZER.get();
+		const s = this.IIKO_SIZER.get();
 		
 		// let [chosen_modifiers, price_modifiers] = this.recalc_modifiers();
 		// let result_price = parseInt(s.price,10) + parseInt(price_modifiers,10);
@@ -68,21 +61,31 @@ export const IIKO_ITEM = {
 		return result_price; 
 
 	},	
-
-	get_modifiers:function(){
-
+	get_sizer_price:function(){
+		return this.IIKO_SIZER.get();
 	},
-	get_sizes:function(){
-
-	},	
+	get_ui_price_buttons:function(){
+		return this.IIKO_SIZER.get_ui();
+	},
 	// private
 	_prepare:function(){
-		if(this.item_data.iiko_sizes!==""){
-			this.item_data.iiko_sizes_parsed = JSON.parse(this.item_data.iiko_sizes);				
-		};				
-		if(this.item_data.iiko_modifiers){
-			this.item_data.iiko_modifiers_parsed = JSON.parse(this.item_data.iiko_modifiers);				
-		};		
+
+		// BUILDING SIZES UI
+		this.IIKO_SIZER = $.extend({},IIKO_ITEM_SIZER);	
+		this.IIKO_SIZER.init(this.item_data,{onUpdate:(vars)=>{
+			// this.iiko_update_price_and_ui(vars);
+		}});
+
+		// BUILDING IIKO MODIFIERS UI
+		this.IIKO_MODIFIERS = $.extend({},IIKO_ITEM_MODIFIERS);	
+		this.IIKO_MODIFIERS.init(this.item_data);
+
+		// if(this.item_data.iiko_sizes!==""){
+		// 	this.item_data.iiko_sizes_parsed = JSON.parse(this.item_data.iiko_sizes);				
+		// };				
+		// if(this.item_data.iiko_modifiers){
+		// 	this.item_data.iiko_modifiers_parsed = JSON.parse(this.item_data.iiko_modifiers);				
+		// };		
 	},
 	calc_order_uniq_name:function(prefix){
 		if(this.has_sizes() || this.has_modifiers()){

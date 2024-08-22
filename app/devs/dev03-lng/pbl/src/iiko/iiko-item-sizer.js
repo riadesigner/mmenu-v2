@@ -20,7 +20,7 @@ export var IIKO_ITEM_SIZER = {
 			volume:0
 		};		
 	},
-	get_buttons:function() {
+	get_ui:function() {
 		return [this.$arr_btns['mobile'],this.$arr_btns['desktop']];		
 	},
 	get:function() {		
