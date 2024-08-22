@@ -45,6 +45,8 @@ export var IIKO_ITEM_SIZER = {
 		
 		const sizes =  this.get_all();
 
+		console.log('sizes',sizes)
+
 		const foo = {
 			create_btns:($btns)=>{
 				for(var i=0; i<sizes.length;i++){

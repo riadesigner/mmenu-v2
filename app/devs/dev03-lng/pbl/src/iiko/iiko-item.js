@@ -61,7 +61,7 @@ export const IIKO_ITEM = {
 		return result_price; 
 
 	},	
-	get_sizer_price:function(){
+	sizer_get_vars:function(){
 		return this.IIKO_SIZER.get();
 	},
 	get_ui_price_buttons:function(){
@@ -70,22 +70,21 @@ export const IIKO_ITEM = {
 	// private
 	_prepare:function(){
 
+		if(this.item_data.iiko_sizes!==""){
+			this.item_data.iiko_sizes_parsed = JSON.parse(this.item_data.iiko_sizes);				
+		};				
+		if(this.item_data.iiko_modifiers){
+			this.item_data.iiko_modifiers_parsed = JSON.parse(this.item_data.iiko_modifiers);				
+		};		
+
 		// BUILDING SIZES UI
-		this.IIKO_SIZER = $.extend({},IIKO_ITEM_SIZER);	
-		this.IIKO_SIZER.init(this.item_data,{onUpdate:(vars)=>{
-			// this.iiko_update_price_and_ui(vars);
-		}});
+		this.IIKO_SIZER = $.extend({},IIKO_ITEM_SIZER);			
+		this.IIKO_SIZER.init(this.item_data,{onUpdate:this.opt.on_update_size});
 
 		// BUILDING IIKO MODIFIERS UI
 		this.IIKO_MODIFIERS = $.extend({},IIKO_ITEM_MODIFIERS);	
 		this.IIKO_MODIFIERS.init(this.item_data);
 
-		// if(this.item_data.iiko_sizes!==""){
-		// 	this.item_data.iiko_sizes_parsed = JSON.parse(this.item_data.iiko_sizes);				
-		// };				
-		// if(this.item_data.iiko_modifiers){
-		// 	this.item_data.iiko_modifiers_parsed = JSON.parse(this.item_data.iiko_modifiers);				
-		// };		
 	},
 	calc_order_uniq_name:function(prefix){
 		if(this.has_sizes() || this.has_modifiers()){

@@ -87,10 +87,12 @@ export var ITEM = {
 		
 		// INIT IIKO ITEM
 		this.IIKO_ITEM = $.extend({},IIKO_ITEM);	
-		this.IIKO_ITEM.init(this.item_data);
+		this.IIKO_ITEM.init(this.item_data, {on_update_size:(vars)=>{
+			this.iiko_update_price_and_volume(vars);
+		}});
 
 		// BUILD UI SIZE BUTTONS
-		const [$btns_mobiles,$btns_desktop] = this.IIKO_ITEM.get_ui_price_buttons();
+		const [$btns_mobiles,$btns_desktop] = this.IIKO_ITEM.get_ui_price_buttons();		
 		if($btns_mobiles && $btns_mobiles.size()){
 			this.$item.addClass('item-sized');
 			this.$iiko_btns_sizes_wrapper_mobile.prepend($btns_mobiles);	
@@ -159,7 +161,6 @@ export var ITEM = {
 		setTimeout(()=>{ this.$item.addClass(this.CLASS_PLAY_ADDTOCART);},60);
 	},
 
-
 	insert_data:function() {
 		var _this=this;
 		
@@ -199,7 +200,7 @@ export var ITEM = {
 		this.$item.find(this._CN+"item-about").html(item.description);
 		
 		if(IIKO_MODE){
-			this.iiko_update_price_and_ui(this.IIKO_SIZER.get());
+			this.iiko_update_price_and_volume(this.IIKO_ITEM.sizer_get_vars());
 		}else{
 			// CHEFSMENU MODE ONLY
 			this.$item.find(this._CN+"item-price span").html(item.price+" "+GLB.CAFE.get('cafe_currency').symbol);
@@ -217,7 +218,8 @@ export var ITEM = {
 			this.$btnAddToCart.removeClass("this-cart-full");	
 		}
 	},
-	iiko_update_price_and_ui:function(vars) {				
+	iiko_update_price_and_volume:function(vars) {	
+		console.log('vars = ',vars)			
 		var currency_symbol = GLB.CAFE.get('cafe_currency').symbol;
 		this.$item_price.html(vars.price + " " + currency_symbol);
 		this.$item_volume.html(vars.volume);							
