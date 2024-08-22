@@ -2,13 +2,14 @@ import {GLB} from './glb.js';
 import $ from 'jquery';
 import {IIKO_ITEM} from './iiko/iiko-item.js';
 import {IIKO_ITEM_SIZER} from './iiko/iiko-item-sizer.js';
+import {IIKO_ITEM_MODIFIERS} from './iiko/iiko-item-modifiers.js';
 
 export var ITEM = {
 	init:function(objParent,itemData,index) {
 
 		this.objParent = objParent;
 		this.$elParent = objParent.get_element();
-		this.ITEM_DATA = itemData;		
+		this.item_data = itemData;		
 		this.INDEX = index;
 
 		this.CN = "mm2-";
@@ -21,7 +22,7 @@ export var ITEM = {
 		this.$item = this.$tpl.clone();
 		this.$item.css({transform:"translateX("+(this.INDEX*100)+"%)"});
 
-		this.ITEM_DATA.image_url == "" && this.$item.addClass("has-no-image");
+		this.item_data.image_url == "" && this.$item.addClass("has-no-image");
 
 		this.$btnAddToCart = this.$item.find(this._CN+"item-btn-addtocart");
 		this.$totalInCart = this.$item.find(this._CN+"item-btn-addtocart__count");
@@ -59,7 +60,7 @@ export var ITEM = {
 
 		this.$elParent.append(this.$item);		
 
-		if(this.ITEM_DATA.created_by=="iiko"){
+		if(this.item_data.created_by=="iiko"){
 			this.init_iiko_item();						
 		};
 
@@ -78,20 +79,22 @@ export var ITEM = {
         });
     },	
 	get:function() {
-		return this.ITEM_DATA;	
+		return this.item_data;	
 	},
 	get_element:function() {
 		return this.$item;
 	},
 	init_iiko_item:function(){
+		
 		// INIT IIKO ITEM
 		this.IIKO_ITEM = $.extend({},IIKO_ITEM);	
-		this.IIKO_ITEM.init(this.ITEM_DATA);		
-		// BUILDING SIZES AND MODIFIERS UI
+		this.IIKO_ITEM.init(this.item_data);		
+		
+		// BUILDING SIZES UI
 		this.IIKO_SIZER = $.extend({},IIKO_ITEM_SIZER);	
-		this.IIKO_SIZER.init(this.ITEM_DATA,{onUpdate:(vars)=>{
+		this.IIKO_SIZER.init(this.item_data,{onUpdate:(vars)=>{
 			this.iiko_update_price_and_ui(vars);
-		}});		
+		}});
 		const [$btns_mobiles,$btns_desktop] = this.IIKO_SIZER.get_buttons();		
 		if($btns_mobiles && $btns_mobiles.size()){
 			this.$item.addClass('item-sized');
@@ -99,6 +102,12 @@ export var ITEM = {
 			this.$iiko_btns_sizes_wrapper_desktop.prepend($btns_desktop);	
 		}		
 		this.IIKO_ITEM.add_sizer(this.IIKO_SIZER);
+		
+		// BUILDING IIKO MODIFIERS UI
+		this.IIKO_MODIFIERS = $.extend({},IIKO_ITEM_MODIFIERS);	
+		this.IIKO_MODIFIERS.init(this.item_data);	
+		this.IIKO_ITEM.add_modifiers(this.IIKO_MODIFIERS);
+		
 	},
 	add_item_to_cart:function() {						
 		const IIKO_MODE = GLB.CAFE.get().iiko_api_key!=="";		
@@ -144,7 +153,7 @@ export var ITEM = {
 		//  chefsmenu mode has no modifiers
 		//  and all uniq_name pre-order for each item will be the same
 		// -------------------------------------------------------------
-		const item = this.ITEM_DATA;
+		const item = this.item_data;
 		const uniq_name = `chefsmenu-pre-order-${item.id}`;
 		const pre_order = {			
 			itemId:item.id,				
@@ -167,7 +176,7 @@ export var ITEM = {
 		
 		const IIKO_MODE = GLB.CAFE.get().iiko_api_key!=="";
 
-		var item = this.ITEM_DATA;
+		var item = this.item_data;
 		this.$item.attr({id:item.id});
 
 		item.mode_spicy = parseInt(item.mode_spicy,10);
@@ -201,7 +210,7 @@ export var ITEM = {
 		this.$item.find(this._CN+"item-about").html(item.description);
 		
 		if(IIKO_MODE){
-			this.iiko_update_price_and_ui(this.IIKO_SIZER.get_all());
+			this.iiko_update_price_and_ui(this.IIKO_SIZER.get());
 		}else{
 			// CHEFSMENU MODE ONLY
 			this.$item.find(this._CN+"item-price span").html(item.price+" "+GLB.CAFE.get('cafe_currency').symbol);
@@ -310,7 +319,7 @@ export var ITEM = {
 		
 
 		var params = this.calc_image_bounds();
-		var src = this.ITEM_DATA.image_url;
+		var src = this.item_data.image_url;
 	
 		this.$image = $(image_object).css({
 			position:"absolute",

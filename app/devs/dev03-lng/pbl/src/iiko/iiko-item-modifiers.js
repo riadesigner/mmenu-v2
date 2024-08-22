@@ -1,5 +1,5 @@
-// import {GLB} from '../glb.js';
-// import $ from 'jquery';
+import {GLB} from '../glb.js';
+import $ from 'jquery';
 
 /**
  * @param item_data: Object
@@ -8,7 +8,10 @@
 export const IIKO_ITEM_MODIFIERS = {
 	init:function(item_data) {
 		this.item_data = item_data;		
+		this.MODIF_SCROLLED = false;
+		this.UI = {list:null,btns:null};
 		this._collect();
+		this._build();
 		return this;
 	},
 	// @param index: number
@@ -20,7 +23,60 @@ export const IIKO_ITEM_MODIFIERS = {
 			return this.ARR_MODIFIERS;
 		}
 	},
-	// private
+	// @return {list:jQueryElement; btns:jQueryElement;}
+	get_ui:function(){
+		return this.UI;
+	},
+	recalc:function() {
+		let _this = this;		
+		let total_modif_price = 0;
+		let arr_usr_chosen = [];
+			this.get().length 
+			&& this.$MODIFIERS_BTNS 
+			&& this.$MODIFIERS_BTNS.each(function(index){
+			if($(this).hasClass('chosen')){
+				const mod = _this.MODIFIERS.get(index);
+				const id = mod.modifierId;
+				const price = mod.price;
+				const name = mod.name
+				const modifierGroupId = mod.modifierGroupId;
+				const modifierGroupName = mod.modifierGroupName;								
+				arr_usr_chosen.push({id,name,price,modifierGroupId,modifierGroupName});
+				total_modif_price += parseInt(price,10);
+			}
+		});
+		return [ arr_usr_chosen, parseInt(total_modif_price,10)];
+	},
+
+	// private	
+	_build:function(){		
+		const _this=this;
+		let arr = this.get();	
+		if(arr.length){
+			const $m_list = $('<ul></ul>');  
+			for(let m in arr){
+				let m_name = arr[m].name;
+				let m_price = arr[m].price;
+				$m_list.append([
+					'<li>',
+						'<div class="m-check"><span></span></div>',
+						'<div class="m-title">'+m_name+'</div>',
+						'<div class="m-price">+'+m_price+' руб.</div>',
+					'</li>'
+					].join(''));								
+			}											
+			const $btns = $m_list.find('li');			
+			$btns.on('touchend click',function(e, index){
+				if(!_this.MODIF_SCROLLED){
+					$(this).toggleClass('chosen');
+					_this.recalc();	
+				};				
+				e.originalEvent.cancelable && e.preventDefault();
+			});		
+			GLB.MOBILE_BUTTONS.bhv([$btns]);
+			this.UI = {list:$m_list, btns:$btns };	
+		}
+	},		
 	_collect:function(){
 		let modifiers = this.item_data.iiko_modifiers_parsed;		
 		// flatting array of modifiers and their groups,
@@ -45,5 +101,5 @@ export const IIKO_ITEM_MODIFIERS = {
 				}
 			}			
 		};
-	}	
+	}
 };

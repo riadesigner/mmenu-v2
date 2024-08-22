@@ -44,8 +44,13 @@ export var CART = {
 	 * }
 	*/
 	add_preorder:function(preorder){						
-		let total_in_cart = this.get_total_orders(preorder.itemId);				
-		this.ALL_ORDERS[preorder.uniq_name] = preorder;
+		let total_in_cart = this.get_total_orders(preorder.itemId);
+		const order = this.ALL_ORDERS[preorder.uniq_name];
+		if(order){
+			order.count+=preorder.count;
+		}else{
+			this.ALL_ORDERS[preorder.uniq_name] = preorder;
+		}
 		this.update_btn_cart();
 		return total_in_cart + preorder.count;
 	},
@@ -119,7 +124,7 @@ export var CART = {
 	},
 	get_total_price:function() {		
 		let total_price = 0;
-		console.log('this.ALL_ORDERS',this.ALL_ORDERS)
+		console.log('this.ALL_ORDERS for total price',this.ALL_ORDERS)
 		for(let i in this.ALL_ORDERS){
 			if(this.ALL_ORDERS.hasOwnProperty(i)){
 				let order = this.ALL_ORDERS[i];
@@ -157,11 +162,11 @@ export var CART = {
 		}else{			
 			this.$menu.removeClass('cart-is-full');
 		};		
-		
 		this.$btnCartFooter.html(this.the_total());		
 	},
 	the_total:function() {
-		return ""+this.get_total_price()+"&nbsp;"+GLB.CAFE.get('cafe_currency').symbol;
+		return `${this.get_total_price()} ${GLB.CAFE.get('cafe_currency').symbol}`;
+		// return ""+this.get_total_price()+"&nbsp;"+GLB.CAFE.get('cafe_currency').symbol;
 	},
 	cart_clear:function(argument) {
 		this.ALL_ORDERS = {};		

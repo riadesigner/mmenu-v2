@@ -34,45 +34,45 @@ export var VIEW_IIKO_MODIFIERS = {
 
 		return this;
 	},
-	insert_data:function(){
-		var _this=this;		
-		let arr = this.MODIFIERS.get();
-		console.log("---- arr modifiers ----",arr)			
+	// insert_data:function(){
+	// 	var _this=this;		
+	// 	let arr = this.MODIFIERS.get();
+	// 	console.log("---- arr modifiers ----",arr)			
 
-		if(arr.length){
-			const $m_list = $('<ul></ul>');  
-			for(let m in arr){
-				let m_name = arr[m].name;
-				let m_price = arr[m].price;
-				$m_list.append([
-					'<li>',
-						'<div class="m-check"><span></span></div>',
-						'<div class="m-title">'+m_name+'</div>',
-						'<div class="m-price">+'+m_price+' руб.</div>',
-					'</li>'
-					].join(''));								
-			}						
-			this.$modifiers_list.html("").append($m_list);			
+	// 	if(arr.length){
+	// 		const $m_list = $('<ul></ul>');  
+	// 		for(let m in arr){
+	// 			let m_name = arr[m].name;
+	// 			let m_price = arr[m].price;
+	// 			$m_list.append([
+	// 				'<li>',
+	// 					'<div class="m-check"><span></span></div>',
+	// 					'<div class="m-title">'+m_name+'</div>',
+	// 					'<div class="m-price">+'+m_price+' руб.</div>',
+	// 				'</li>'
+	// 				].join(''));								
+	// 		}						
+	// 		this.$modifiers_list.html("").append($m_list);			
 			
-			const $btns = this.$modifiers_list.find('li');			
+	// 		const $btns = this.$modifiers_list.find('li');			
 
-			$btns.on('touchend click',function(e, index){
-				if(!_this.MODIF_SCROLLED){
-					$(this).toggleClass('chosen');
-					_this.recalc_sum();	
-				};				
-				e.originalEvent.cancelable && e.preventDefault();
-			});
+	// 		$btns.on('touchend click',function(e, index){
+	// 			if(!_this.MODIF_SCROLLED){
+	// 				$(this).toggleClass('chosen');
+	// 				_this.recalc_sum();	
+	// 			};				
+	// 			e.originalEvent.cancelable && e.preventDefault();
+	// 		});
 
-			GLB.MOBILE_BUTTONS.bhv([$btns]);
+	// 		GLB.MOBILE_BUTTONS.bhv([$btns]);
 
-			this.$MODIFIERS_BTNS = $btns;
+	// 		this.$MODIFIERS_BTNS = $btns;
 
-		}else{
-			this.$modifiers_list.html("");
-		};
+	// 	}else{
+	// 		this.$modifiers_list.html("");
+	// 	};
 
-	},	
+	// },	
 	update:function(menu,iiko_item,sizer,opt) {
 				
 		this.ITEM_DATA = iiko_item.get();
@@ -93,7 +93,7 @@ export var VIEW_IIKO_MODIFIERS = {
 
 		this.$item_title.html(item.title);		
 		
-		const s = sizer.get_all();
+		const s = sizer.get();
 		let price = s.price;
 		let volume = s.volume;
 		// let sizeName = s.sizeName;
@@ -160,63 +160,63 @@ export var VIEW_IIKO_MODIFIERS = {
 		this.onAddToCart && this.onAddToCart(total_in_cart);	
 		this.hide();
 	},
-	recalc_sum:function() {		
+	// recalc_sum:function() {		
 				
-		const s = this.SIZER.get_all();
-		const price = s.price;
-		const volume = s.volume;
-		const sizeName = s.sizeName;
-		const sizeId = s.sizeId;
-		const sizeCode = s.sizeCode;		
+	// 	const s = this.SIZER.get();
+	// 	const price = s.price;
+	// 	const volume = s.volume;
+	// 	const sizeName = s.sizeName;
+	// 	const sizeId = s.sizeId;
+	// 	const sizeCode = s.sizeCode;		
 
-		const price_item = parseInt(price,10);				
-		let [chosen_modifiers, price_modifiers] = this.recalc_modifiers();
-		let price_items_and_modifieers = price_item + price_modifiers;
+	// 	const price_item = parseInt(price,10);				
+	// 	let [chosen_modifiers, price_modifiers] = this.recalc_modifiers();
+	// 	let price_items_and_modifieers = price_item + price_modifiers;
 		
-		let total_price = this.TOTAL_ADD_TO_CART * price_items_and_modifieers;
+	// 	let total_price = this.TOTAL_ADD_TO_CART * price_items_and_modifieers;
 				
-		this.PRE_ORDER = {
-			itemId:this.ITEM_DATA.id,				
-			price:price_items_and_modifieers,
-			count:this.TOTAL_ADD_TO_CART,
-			volume:volume,
-			sizeName:sizeName,
-			sizeId:sizeId,
-			sizeCode:sizeCode,
-			item_data:this.ITEM_DATA,
-			chosen_modifiers:chosen_modifiers
-		};		
+	// 	this.PRE_ORDER = {
+	// 		itemId:this.ITEM_DATA.id,				
+	// 		price:price_items_and_modifieers,
+	// 		count:this.TOTAL_ADD_TO_CART,
+	// 		volume:volume,
+	// 		sizeName:sizeName,
+	// 		sizeId:sizeId,
+	// 		sizeCode:sizeCode,
+	// 		item_data:this.ITEM_DATA,
+	// 		chosen_modifiers:chosen_modifiers
+	// 	};		
 		
-		this.update_ui(this.TOTAL_ADD_TO_CART, total_price);
+	// 	this.update_ui(this.TOTAL_ADD_TO_CART, total_price);
 
-		if(!this.TOTAL_ADD_TO_CART){
-			this.PRE_ORDER = false;
-			GLB.UVIEWS.go_back();
-		}
-	},	
+	// 	if(!this.TOTAL_ADD_TO_CART){
+	// 		this.PRE_ORDER = false;
+	// 		GLB.UVIEWS.go_back();
+	// 	}
+	// },	
 	update_ui:function(total_add_to_cart, total_price){
 		const str_total_price = "<div>В корзину</div><div> "+total_price+" руб.</div>";
 		this.$modifiers_counter.find('span').html(""+total_add_to_cart);
 		this.$modifiers_btn_cart.find('span').html(str_total_price);
 	},
-	recalc_modifiers:function() {
-		let _this = this;		
-		let total_modif_price = 0;
-		let arr_usr_chosen = [];
-			this.MODIFIERS.get().length && this.$MODIFIERS_BTNS && this.$MODIFIERS_BTNS.each(function(index){
-			if($(this).hasClass('chosen')){
-				const mod = _this.MODIFIERS.get(index);
-				const id = mod.modifierId;
-				const price = mod.price;
-				const name = mod.name
-				const modifierGroupId = mod.modifierGroupId;
-				const modifierGroupName = mod.modifierGroupName;								
-				arr_usr_chosen.push({id,name,price,modifierGroupId,modifierGroupName});
-				total_modif_price += parseInt(price,10);
-			}
-		});
-		return [ arr_usr_chosen, parseInt(total_modif_price,10)];
-	},
+	// recalc_modifiers:function() {
+	// 	let _this = this;		
+	// 	let total_modif_price = 0;
+	// 	let arr_usr_chosen = [];
+	// 		this.MODIFIERS.get().length && this.$MODIFIERS_BTNS && this.$MODIFIERS_BTNS.each(function(index){
+	// 		if($(this).hasClass('chosen')){
+	// 			const mod = _this.MODIFIERS.get(index);
+	// 			const id = mod.modifierId;
+	// 			const price = mod.price;
+	// 			const name = mod.name
+	// 			const modifierGroupId = mod.modifierGroupId;
+	// 			const modifierGroupName = mod.modifierGroupName;								
+	// 			arr_usr_chosen.push({id,name,price,modifierGroupId,modifierGroupName});
+	// 			total_modif_price += parseInt(price,10);
+	// 		}
+	// 	});
+	// 	return [ arr_usr_chosen, parseInt(total_modif_price,10)];
+	// },
 	hide:function() {
 		GLB.UVIEWS.go_back();
 	}

@@ -23,13 +23,18 @@ export var IIKO_ITEM_SIZER = {
 	get_buttons:function() {
 		return [this.$arr_btns['mobile'],this.$arr_btns['desktop']];		
 	},
-	get_all:function() {		
+	get:function() {		
 		return this.VARS;
 	},
-	get_current:function() {
-		let v = this.VARS;
-		return [v.price,v.volume,v.sizeName,v.sizeId,v.sizeCode];
+	get_all:function(){
+		return this.ITEM_DATA.iiko_sizes_parsed;
 	},
+	
+	// get_current:function() {
+	// 	let v = this.VARS;
+	// 	return [v.price, v.volume, v.sizeName, v.sizeId, v.sizeCode];
+	// },
+
 	// private
 	set_current_vars:function(vars) {		
 		this.VARS = vars;
@@ -37,9 +42,8 @@ export var IIKO_ITEM_SIZER = {
 	build:function() {
 
 		var _this=this;
-
-		const item = this.ITEM_DATA;
-		const sizes =  item.iiko_sizes_parsed;
+		
+		const sizes =  this.get_all();
 
 		const foo = {
 			create_btns:($btns)=>{
@@ -89,7 +93,7 @@ export var IIKO_ITEM_SIZER = {
 			};
 		}else{
 			this.reset();
-			console.log("something wrong with iiko sizes",item);
+			console.log("something wrong with iiko sizes",this.ITEM_DATA.id);
 		}
 	
 	},

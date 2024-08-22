@@ -7,7 +7,8 @@
 */
 export const IIKO_ITEM = {
 	init:function(item_data) {
-		this.item_data = item_data;		
+		this.item_data = item_data;	
+		this.SIZER = null;	
 		this._prepare();
 		return this;
 	},
@@ -20,15 +21,20 @@ export const IIKO_ITEM = {
 	},
 	// @return boolean
 	has_sizes:function() {
-		return this.item_data.iiko_sizes!=="";
+		this.item_data.iiko_sizes_parsed && this.item_data.iiko_sizes_parsed.length;
+		// return this.item_data.iiko_sizes!=="";
 	},
-	// @param SIZER STATIC CLASS
+	// @param IIKO_SIZER STATIC CLASS
 	add_sizer:function(sizer){
 		this.SIZER = sizer;
 	},
+	// @param IIKO_MODIFIERS STATIC CLASS
+	add_modifiers:function(modifiers){
+		this.MODIFIERS = modifiers;
+	},	
 	get_preorder:function(count){
 		
-		const price_items_and_modifieers = '';		
+		const price = this.get_price();
 		const uniq_name = this.calc_order_uniq_name(`iiko-order-${this.item_data.id}`);
 		const volume = '';
 		const sizeName = '';
@@ -38,7 +44,7 @@ export const IIKO_ITEM = {
 		const preorderObject = {
 		itemId: this.item_data.id,
 			uniq_name: uniq_name,
-			price: price_items_and_modifieers,
+			price: price,
 			count: count,
 			volume: volume,
 			item_data: this.item_data,			
@@ -49,6 +55,26 @@ export const IIKO_ITEM = {
 		};			
 		return preorderObject;
 	},
+	
+	// @return number
+	get_price:function() {		
+				
+		const s = this.SIZER.get();
+		
+		// let [chosen_modifiers, price_modifiers] = this.recalc_modifiers();
+		// let result_price = parseInt(s.price,10) + parseInt(price_modifiers,10);
+		const modif_price = 0;
+		const result_price = parseInt(s.price,10) + modif_price;
+		return result_price; 
+
+	},	
+
+	get_modifiers:function(){
+
+	},
+	get_sizes:function(){
+
+	},	
 	// private
 	_prepare:function(){
 		if(this.item_data.iiko_sizes!==""){
