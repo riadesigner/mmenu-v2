@@ -18,32 +18,30 @@ export const IIKO_ITEM = {
 		return this.item_data;
 	},
 	// @return boolean
-	has_modifiers:function() {
+	has_modifiers:function() {		
 		return this.item_data.iiko_modifiers!=="";
 	},
 	// @return boolean
-	has_sizes:function() {
-		this.item_data.iiko_sizes_parsed && this.item_data.iiko_sizes_parsed.length;
+	has_sizes:function() {		
+		return this.item_data.iiko_sizes_parsed && this.item_data.iiko_sizes_parsed.length;
 	},
 	get_preorder:function(count){
 		
+		const s = this.IIKO_SIZER.get();
 		const price = this.get_price();
 		const uniq_name = this.calc_order_uniq_name(`iiko-order-${this.item_data.id}`);
-		const volume = '';
-		const sizeName = '';
-		const sizeId = '';
-		const sizeCode = '';
 		const chosen_modifiers = '';
+
 		const preorderObject = {
 		itemId: this.item_data.id,
 			uniq_name: uniq_name,
 			price: price,
 			count: count,
-			volume: volume,
+			volume: s.volume,
 			item_data: this.item_data,			
-			sizeName:sizeName,
-			sizeId:sizeId,
-			sizeCode:sizeCode,			
+			sizeName: s.sizeName,
+			sizeId: s.sizeId,
+			sizeCode: s.sizeCode,			
 			chosen_modifiers:chosen_modifiers
 		};			
 		return preorderObject;
@@ -66,6 +64,9 @@ export const IIKO_ITEM = {
 	},
 	get_ui_price_buttons:function(){
 		return this.IIKO_SIZER.get_ui();
+	},
+	get_ui_modifiers:function(){
+		return this.IIKO_MODIFIERS.get_ui();
 	},
 	// private
 	_prepare:function(){

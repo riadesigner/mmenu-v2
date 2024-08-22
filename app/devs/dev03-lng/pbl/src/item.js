@@ -42,6 +42,8 @@ export var ITEM = {
 		this.CLASS_FULL_DESCRIPTION = this.CN+"show-full-description";
 		this.CLASS_IMAGE_READY_TO_ZOOM = this.CN+"image-ready-to-zoom";
 		this.CLASS_SHOWED_MODIFIERS = 'showed-modifiers';
+
+		// mm2-item-modifiers-panel__list
 				
 		this.STARTSCROLL=0;
 		this.DESCR_SCROLLED = false;
@@ -54,7 +56,11 @@ export var ITEM = {
 		this.$item_volume2 = this.$item.find(this._CN+"item-volume2");				
 		this.$iiko_btns_sizes_wrapper_mobile = this.$item.find(this._CN+"item-btns-sizes-mobile");		
 		this.$iiko_btns_sizes_wrapper_desktop = this.$item.find(this._CN+"item-btns-sizes-desktop");
-		
+
+		// MODIFIERS PANEL (ONLY FOR IIKO_MODE)
+		this.$modifiers_panel_list = this.$item.find(this._CN+"item-modifiers-panel__list");
+		this.$modifiers_panel_footer = this.$item.find(this._CN+"item-modifiers-panel__footer");
+
 		this.behavior();
 
 		this.$elParent.append(this.$item);		
@@ -99,9 +105,17 @@ export var ITEM = {
 			this.$iiko_btns_sizes_wrapper_desktop.prepend($btns_desktop);	
 		}
 
+		// BUILD UI MODIFIERS PANEL
+		if(this.IIKO_ITEM.has_modifiers()){
+			// {list:jQueryElement, btns:jQueryElement}
+			const modif = this.IIKO_ITEM.get_ui_modifiers();
+			this.$modifiers_panel_list.append(modif.list);
+			this.$modifiers_panel_footer.append(modif.btns);
+		}
+
 	},
 	add_item_to_cart:function() {						
-		const IIKO_MODE = GLB.CAFE.get().iiko_api_key!=="";		
+		const IIKO_MODE = GLB.CAFE.is_iiko_mode();		
 		const item_data = this.get(); // Object
 		const menu = this.objParent.get_menu_data();				
 
@@ -114,12 +128,6 @@ export var ITEM = {
 				if(this.IIKO_ITEM.has_modifiers()){
 					// SHOW MODAL WINDOW WITH MODIFIERS OPTIONS
 					this.$item.addClass('showed-modifiers');
-					// GLB.VIEW_IIKO_MODIFIERS.update(menu, item_data, this.IIKO_SIZER, {
-					// 	onAddToCart:(total_in_cart)=>{ 						
-					// 		this.update_cart_btn(total_in_cart);
-					// 		this.play_smile_animation();		
-					// 	}});
-					// GLB.UVIEWS.set_current("the-iiko-modifiers");
 				}else{
 					// JUST ADDING To CART THE ONE
 					const preorder = this.IIKO_ITEM.get_preorder(1);

@@ -23,5 +23,9 @@ export var CAFE = {
 		var symbol = arr[cur.toUpperCase()];
 		var currency = !symbol ? {code:"USD",symbol:"$"} :  {code:cur,symbol:symbol};
 		return currency;
+	},
+	// @return boolean 
+	is_iiko_mode:function(){
+		return this.get().iiko_api_key!=="";
 	}
 };
