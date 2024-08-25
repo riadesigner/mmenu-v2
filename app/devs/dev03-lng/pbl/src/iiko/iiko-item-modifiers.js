@@ -7,8 +7,7 @@ import $ from 'jquery';
 */
 export const IIKO_ITEM_MODIFIERS = {
 	init:function(item_data) {
-		this.item_data = item_data;		
-		this.MODIF_SCROLLED = false;		
+		this.item_data = item_data;
 		this._collect();
 		this._build_list_ui();
 		return this;
@@ -26,13 +25,18 @@ export const IIKO_ITEM_MODIFIERS = {
 	get_ui:function(){
 		return this.UI;
 	},
+
+	// @return { 
+	//   arr_usr_chosen: array; 
+	//   total_modif_price: integer;
+	// }
 	recalc:function() {
 		let _this = this;		
 		let total_modif_price = 0;
 		let arr_usr_chosen = [];
 			this.get().length 
-			&& this.$MODIFIERS_BTNS 
-			&& this.$MODIFIERS_BTNS.each(function(index){
+			&& this.$MODIFIERS_ROWS 
+			&& this.$MODIFIERS_ROWS.each(function(index){
 			if($(this).hasClass('chosen')){
 				const mod = _this.get(index);
 				const id = mod.modifierId;
@@ -44,7 +48,10 @@ export const IIKO_ITEM_MODIFIERS = {
 				total_modif_price += parseInt(price,10);
 			}
 		});
-		return [ arr_usr_chosen, parseInt(total_modif_price,10)];
+		return {
+			arr_usr_chosen: arr_usr_chosen,
+			total_modif_price: parseInt(total_modif_price,10)
+		};
 	},
 
 	// private	
@@ -57,23 +64,14 @@ export const IIKO_ITEM_MODIFIERS = {
 				let m_name = arr[m].name;
 				let m_price = arr[m].price;
 				$m_list.append([
-					'<li>',
+					'<li class="btn-modifier">',
 						'<div class="m-check"><span></span></div>',
 						'<div class="m-title">'+m_name+'</div>',
 						'<div class="m-price">+'+m_price+' руб.</div>',
 					'</li>'
 					].join(''));								
 			}											
-			const $btns = $m_list.find('li');			
-			$btns.on('touchend click',function(e, index){
-				if(!_this.MODIF_SCROLLED){
-					$(this).toggleClass('chosen');
-					_this.recalc();	
-				};				
-				e.originalEvent.cancelable && e.preventDefault();
-			});		
-			GLB.MOBILE_BUTTONS.bhv([$btns]);
-			this.$MODIFIERS_BTNS = $btns;
+			this.$MODIFIERS_ROWS = $m_list.find('li');
 			this.UI = $m_list;	
 		}
 	},		

@@ -15,6 +15,7 @@ export var ITEM_MODIF_PANEL = {
 		this.$modif_btn_cart = this.$modif_panel_footer.find('.btn-cart');
 		this.$modif_btn_plus = this.$modif_panel_footer.find('.btn-plus');
 		this.$modif_btn_minus = this.$modif_panel_footer.find('.btn-minus');		
+		this.$modif_total_in_cart = this.$modif_panel_footer.find('.total-in-cart');
 
 		this.MODIF_STARTSCROLL=0;
 		this.MODIF_SCROLLED = false;
@@ -62,6 +63,26 @@ export var ITEM_MODIF_PANEL = {
 	},
 	insert:function($modifiers_list){		
 		this.$modif_panel_list.append($modifiers_list);
+		const $btns = $modifiers_list.find('.btn-modifier');
+		$btns.on('touchend click',(e)=>{
+			if(!this.MODIF_SCROLLED){				
+				$(e.currentTarget).toggleClass('chosen');
+				this.on_press_modif && this.on_press_modif();
+			};				
+			e.originalEvent.cancelable && e.preventDefault();
+		});		
+		GLB.MOBILE_BUTTONS.bhv([$btns]);
+	},
+	// @param cost:number
+	// @param with_options:boolean
+	update_ui:function(total_price, count, with_options=false){
+		let str = `${total_price} руб.`;		
+		str = !with_options? `Без опций<br>${str}`: `В корзину<br>${str}`; 
+		this.$modif_btn_cart.html(str);
+		this.$modif_total_in_cart.html(count.toString());
+	},
+	on_press_modif:function(foo){
+		this.on_press_modif = foo;
 	},
 	on_pressed_cart:function(foo){
 		this.on_pressed_cart = foo;

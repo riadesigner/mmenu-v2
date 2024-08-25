@@ -127,9 +127,7 @@ export var ITEM = {
 
 				if(this.IIKO_ITEM.has_modifiers()){
 					// SHOW MODAL WINDOW WITH MODIFIERS OPTIONS		
-					this.MODIF_PANEL.open({on_close:()=>{
-						// this.update_cart_btn();		
-					}});					
+					this.MODIF_PANEL.open();					
 				}else{
 					// JUST ADDING TO CART THE ONE
 					const preorder = this.IIKO_ITEM.get_preorder(1);
