@@ -58,8 +58,11 @@ export var ITEM = {
 		this.$iiko_btns_sizes_wrapper_desktop = this.$item.find(this._CN+"item-btns-sizes-desktop");
 
 		// MODIFIERS PANEL (ONLY FOR IIKO_MODE)
-		this.$modifiers_panel_list = this.$item.find(this._CN+"item-modifiers-panel__list");
-		this.$modifiers_panel_footer = this.$item.find(this._CN+"item-modifiers-panel__footer");
+		this.$modif_panel_list = this.$item.find(this._CN+"item-modifiers-panel__list");
+		this.$modif_panel_footer = this.$item.find(this._CN+"item-modifiers-panel__footer");		
+		this.$modif_btn_cart = this.$modif_panel_footer.find('.btn-cart');
+		this.$modif_btn_plus = this.$modif_panel_footer.find('.btn-plus');
+		this.$modif_btn_minus = this.$modif_panel_footer.find('.btn-minus');
 
 		this.behavior();
 
@@ -106,13 +109,12 @@ export var ITEM = {
 		}
 
 		// BUILD UI MODIFIERS PANEL
-		if(this.IIKO_ITEM.has_modifiers()){
-			// {list:jQueryElement, btns:jQueryElement}
-			const modif = this.IIKO_ITEM.get_ui_modifiers();
-			this.$modifiers_panel_list.append(modif.list);
-			this.$modifiers_panel_footer.append(modif.btns);
-		}
+		this.IIKO_ITEM.has_modifiers() && this.build_modifiers_panel();
 
+	},
+	build_modifiers_panel:function(){
+		const $modifiers_list = this.IIKO_ITEM.get_ui_modifiers();
+		this.$modif_panel_list.append($modifiers_list);
 	},
 	add_item_to_cart:function() {						
 		const IIKO_MODE = GLB.CAFE.is_iiko_mode();		
@@ -126,8 +128,8 @@ export var ITEM = {
 			if(IIKO_MODE && this.IIKO_ITEM){
 
 				if(this.IIKO_ITEM.has_modifiers()){
-					// SHOW MODAL WINDOW WITH MODIFIERS OPTIONS
-					this.$item.addClass('showed-modifiers');
+					// SHOW MODAL WINDOW WITH MODIFIERS OPTIONS					
+					this.open_modifiers_panel();					
 				}else{
 					// JUST ADDING To CART THE ONE
 					const preorder = this.IIKO_ITEM.get_preorder(1);
@@ -359,7 +361,13 @@ export var ITEM = {
 	behavior:function() {
 		var _this = this;
 
-		GLB.MOBILE_BUTTONS.bhv([this.$btnAddToCart]);		
+		GLB.MOBILE_BUTTONS.bhv([
+			this.$btnAddToCart,
+			// modifiers panel
+			this.$modif_btn_cart,
+			this.$modif_btn_plus,
+			this.$modif_btn_minus,
+		]);		
 
 		var fn = {
 			bhvSwipe:function(opt) {
@@ -470,6 +478,11 @@ export var ITEM = {
 			return false;
 		});
 
+		this.$modif_btn_cart.on('touchend click',()=>{
+			this.close_modifiers_panel();
+			// !_this.CART_OFF && _this.add_item_to_cart();
+			return false;
+		});
 
 	},
 
@@ -514,8 +527,12 @@ export var ITEM = {
 		this.$item.addClass(this.CLASS_FULL_DESCRIPTION);
 		this.update_layout();
 	},
+	open_modifiers_panel:function(){
+		this.$item.addClass(this.CLASS_SHOWED_MODIFIERS);	
+		this.objParent.hide_bhv_btns(true);
+	},
 	close_modifiers_panel:function(){
-		this.$item.removeClass(this.CLASS_SHOWED_MODIFIERS);
-		this.$item.addClass('xxx');
-	}	
+		this.$item.removeClass(this.CLASS_SHOWED_MODIFIERS);		
+		this.objParent.hide_bhv_btns(false);
+	}		
 };

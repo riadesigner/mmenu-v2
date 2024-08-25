@@ -42,14 +42,15 @@ export var VIEW_ALLITEMS = {
 
 		this.$headerIcon.addClass(_this.CN+"icon-"+ GLB.MENU_ICONS.get(this.MENU.id_icon));
 
-		this._content_hide();
+		this._content_hide();		
 		
 		var allitems = this.chefsmenu.get_allitems(this.MENU);		
 
 		var fn = {
-			on_built:function(){
-				console.log("ok!")
-				_this._content_show();					
+			on_built:function(){				
+				console.log("ok!")		
+				_this.hide_bhv_btns(false);					
+				_this._content_show();						
 				setTimeout(function(){ 
 					_this.chefsmenu.end_loading(); 
 					setTimeout(function(){ 

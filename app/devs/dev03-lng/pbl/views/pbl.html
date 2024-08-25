@@ -148,58 +148,6 @@
 		</div>
 	</div>
 
-	<div class="std-view view-iiko-modifiers">
-		<div class="std-header">		
-
-			<div class="mm2-std-header-btn-back"><span class="mm2-icon-i-back"></span></div>
-			<div class="mm2-std-header-icon"></div>
-			<div class="mm2-std-header-title"><span><!-- Menu title --></span></div>
-
-			<div class="mm2-std-header-btn-right mm2-btn-close-items">
-				<span class="mm2-icon-i-close"></span>
-			</div>
-			
-		</div>
-		<div class="std-content">
-			<div class="mm2-std-content-wrapper">
-				<div class="mm2-item-modifiers ">
-					<div class="mm2-item-modifiers-wrapper">
-						<div class="mm2-item-modifiers__title-section">
-							<div class="mm2-item-modifiers__item-title">--</div>
-							<div class="mm2-item-modifiers__item-price">--</div>
-							<div class="mm2-item-modifiers__item-volume">--</div>
-						</div>				
-						<div class="mm2-item-modifiers__sizes-section"><!-- buttons --></div>	
-						<div class="mm2-item-modifiers__subtitle-section">
-							<div>Добавить</div>
-						</div>								
-						<div class="mm2-item-modifiers__list-section"><!-- list --></div>
-					</div>			
-				</div>
-
-			</div>			
-		</div>	
-		<div class="std-footer modifiers-special">			
-			<div class="mm2-std-footer-left">
-				<div class="mm2-btn-footer mm2-btn-back">
-					<span lang="lng_back">Back</span>
-				</div>
-			</div>
-			<div class="mm2-std-footer-center">
-				<div class="mm2-footer-modifiers__count-buttons noselect">
-					<div class="mm2-footer-modifiers__count-buttons_minus"><span>–</span></div>
-					<div class="mm2-footer-modifiers__count-buttons_counter"><span>1</span></div>
-					<div class="mm2-footer-modifiers__count-buttons_plus"><span>+</span></div>
-				</div>
-			</div>
-			<div class="mm2-std-footer-right">
-				<div class="mm2-footer-modifiers__basket">
-					<span><div>В корзину</div><div>0 руб.</div></span>					
-				</div>
-			</div>
-		</div>
-	</div>
-
 	<div class="std-view view-table-change">
 		<div class="std-header">
 			<div class="mm2-std-header-btn-back"><span class="mm2-icon-i-back"></span></div>
@@ -622,18 +570,29 @@
 			<div class="mm2-item-footer-wrapper">
 				<div class="mm2-item-footer-right-section">
 					<div class="mm2-item-btn-addtocart">
-						<div class="mm2-item-btn-addtocart__label">Добавить<br>в корзину</div>
-						<div class='mm2-item-btn-addtocart__icon'></div>
+						<div class="mm2-item-btn-addtocart__label">Добавить<br>в&nbsp;корзину</div>
+						<div class='mm2-item-btn-addtocart__icon'><span></span></div>
 						<div class='mm2-item-btn-addtocart__count'>0</div>
 					</div>
 				</div>				
 			</div>			
 		</div>	
-		<div class="mm2-item-modifiers-panel">
+		<div class="mm2-item-modifiers-panel no-select">
+			<div class="mm2-item-modifiers-panel__tops-space">
+				<div>Выберите опции:</div>
+			</div>
 			<div class="mm2-item-modifiers-panel__list"></div>
 			<div class="mm2-item-modifiers-panel__footer">
-				<div>+ 1 -</div>
-				<div>в корзину</div>
+				<div class="mm2-item-modifiers-panel__footer-container">
+					<div class="mm2-item-modifiers-panel__footer_counter">
+						<div class="btn-minus">–</div>
+						<div class="total-in-cart">1</div>
+						<div class="btn-plus">+</div>
+					</div>
+					<div class="mm2-item-modifiers-panel__footer_addtocart">
+						<div class="btn-cart">Без опций <br>1300 руб.</div>
+					</div>
+				</div>
 			</div>
 		</div>
 	</div>

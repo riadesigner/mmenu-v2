@@ -23,7 +23,7 @@ export const IIKO_ITEM_MODIFIERS = {
 			return this.ARR_MODIFIERS;
 		}
 	},
-	// @return {list:jQueryElement; btns:jQueryElement;}
+	// @return jQueryElement (list of modifiers)	
 	get_ui:function(){
 		return this.UI;
 	},
@@ -74,7 +74,7 @@ export const IIKO_ITEM_MODIFIERS = {
 				e.originalEvent.cancelable && e.preventDefault();
 			});		
 			GLB.MOBILE_BUTTONS.bhv([$btns]);
-			this.UI = {list:$m_list, btns:$btns };	
+			this.UI = $m_list;	
 		}
 	},		
 	_collect:function(){
