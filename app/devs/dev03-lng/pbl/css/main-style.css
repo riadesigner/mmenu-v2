@@ -469,7 +469,7 @@ a.mm2-home-link:hover{ color: %[color-home-link-hover]%; }
 }
 .mm2-item.showed-modifiers .mm2-item-modifiers-panel{ 
   transform: translateY(0); opacity: 1; }
-.mm2-item-modifiers-panel__tops-space{height: 25%;position: relative;}
+.mm2-item-modifiers-panel__tops-space{height: 45%;position: relative;}
 .mm2-item-modifiers-panel__tops-space>div{
   position: absolute;bottom:0;left:0;width:100%;padding:10px 0;
   text-align: center;color: #b4b4b4;font:.9rem "Open Sans";
@@ -478,7 +478,7 @@ a.mm2-home-link:hover{ color: %[color-home-link-hover]%; }
 }
 
 .mm2-item-modifiers-panel__list{   
-  height: 55%; padding: 0;
+  height: 35%; padding: 0;
   background-color: %[color-bg]%;
   overflow:hidden; overflow-y: auto; -webkit-overflow-scrolling: touch; 
   border-bottom:1px solid gray; }
