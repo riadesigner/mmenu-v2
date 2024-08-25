@@ -8,10 +8,9 @@ import $ from 'jquery';
 export const IIKO_ITEM_MODIFIERS = {
 	init:function(item_data) {
 		this.item_data = item_data;		
-		this.MODIF_SCROLLED = false;
-		this.UI = {list:null,btns:null};
+		this.MODIF_SCROLLED = false;		
 		this._collect();
-		this._build();
+		this._build_list_ui();
 		return this;
 	},
 	// @param index: number
@@ -35,13 +34,13 @@ export const IIKO_ITEM_MODIFIERS = {
 			&& this.$MODIFIERS_BTNS 
 			&& this.$MODIFIERS_BTNS.each(function(index){
 			if($(this).hasClass('chosen')){
-				const mod = _this.MODIFIERS.get(index);
+				const mod = _this.get(index);
 				const id = mod.modifierId;
 				const price = mod.price;
 				const name = mod.name
 				const modifierGroupId = mod.modifierGroupId;
 				const modifierGroupName = mod.modifierGroupName;								
-				arr_usr_chosen.push({id,name,price,modifierGroupId,modifierGroupName});
+				arr_usr_chosen.push({id, name, price, modifierGroupId, modifierGroupName });
 				total_modif_price += parseInt(price,10);
 			}
 		});
@@ -49,7 +48,7 @@ export const IIKO_ITEM_MODIFIERS = {
 	},
 
 	// private	
-	_build:function(){		
+	_build_list_ui:function(){		
 		const _this=this;
 		let arr = this.get();	
 		if(arr.length){
@@ -74,6 +73,7 @@ export const IIKO_ITEM_MODIFIERS = {
 				e.originalEvent.cancelable && e.preventDefault();
 			});		
 			GLB.MOBILE_BUTTONS.bhv([$btns]);
+			this.$MODIFIERS_BTNS = $btns;
 			this.UI = $m_list;	
 		}
 	},		

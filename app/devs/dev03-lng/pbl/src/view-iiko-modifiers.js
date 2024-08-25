@@ -139,7 +139,12 @@ export var VIEW_IIKO_MODIFIERS = {
 			this.TOTAL_ADD_TO_CART--;
 			this.recalc_sum();			
 			e.originalEvent.cancelable && e.preventDefault();
-		});		
+		});			
+
+		this.$modifiers_btn_cart.on('touchend click',(e)=>{
+			this.add_order_to_cart();
+			e.originalEvent.cancelable && e.preventDefault();
+		});
 
 		this.$modifiers_list.on("touchstart",(e)=>{
 			this.MODIF_SCROLLED = false;
@@ -147,12 +152,7 @@ export var VIEW_IIKO_MODIFIERS = {
 
 		this.$modifiers_list.on("touchmove",(e)=> {
 			this.MODIF_SCROLLED = true;
-		});		
-
-		this.$modifiers_btn_cart.on('touchend click',(e)=>{
-			this.add_order_to_cart();
-			e.originalEvent.cancelable && e.preventDefault();
-		});
+		});			
 
 	},
 	add_order_to_cart:function() {		

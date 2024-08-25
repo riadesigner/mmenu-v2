@@ -10,7 +10,10 @@ import {IIKO_ITEM_MODIFIERS} from './iiko-item-modifiers.js';
 export const IIKO_ITEM = {
 	init:function(item_data, opt) {
 		this.item_data = item_data;	
-		this.opt = opt;
+		this.opt = opt;				
+		this.on_update_size = this.opt.on_update_size;
+		this.on_update_total_in_cart = this.opt.on_update_total_in_cart;
+		this.MODIF_PANEL = this.opt.modifiers_panel;
 		this._prepare();
 		return this;
 	},
@@ -80,12 +83,26 @@ export const IIKO_ITEM = {
 
 		// BUILDING SIZES UI
 		this.IIKO_SIZER = $.extend({},IIKO_ITEM_SIZER);			
-		this.IIKO_SIZER.init(this.item_data,{onUpdate:this.opt.on_update_size});
+		this.IIKO_SIZER.init(this.item_data,{onUpdate:this.on_update_size});
 
 		// BUILDING IIKO MODIFIERS UI
 		this.IIKO_MODIFIERS = $.extend({},IIKO_ITEM_MODIFIERS);	
 		this.IIKO_MODIFIERS.init(this.item_data);
 
+		// SETUP MODIFIERS PANEL
+		if(this.has_modifiers() && this.MODIF_PANEL){
+			const $modifiers_list = this.get_ui_modifiers();			
+			this.MODIF_PANEL.insert($modifiers_list);
+			this.MODIF_PANEL.on_pressed_cart(()=>{ 
+				console.log('button add to cart pressed');  
+				const preorder = this.get_preorder(1);
+				let total_in_cart = GLB.CART.add_preorder(preorder);		
+				this.on_update_total_in_cart && this.on_update_total_in_cart(total_in_cart);									
+				this.MODIF_PANEL.close();
+			});
+			this.MODIF_PANEL.on_pressed_plus(()=>{ console.log('button plus pressed');  });
+			this.MODIF_PANEL.on_pressed_minus(()=>{ console.log('button minus pressed');  });
+		}
 	},
 	calc_order_uniq_name:function(prefix){
 		if(this.has_sizes() || this.has_modifiers()){
@@ -96,3 +113,11 @@ export const IIKO_ITEM = {
 		}
 	}
 };
+
+
+	// // private
+	// _add_order_to_cart:function() {		
+	// 	// let total_in_cart = GLB.CART.add_order(this.ITEM_DATA, this.PRE_ORDER);
+	// 	// this.onAddToCart && this.onAddToCart(total_in_cart);	
+	// 	this.close();
+	// }	

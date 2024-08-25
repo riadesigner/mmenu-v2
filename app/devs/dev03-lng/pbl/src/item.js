@@ -55,7 +55,7 @@ export var ITEM = {
 		this.$iiko_btns_sizes_wrapper_mobile = this.$item.find(this._CN+"item-btns-sizes-mobile");		
 		this.$iiko_btns_sizes_wrapper_desktop = this.$item.find(this._CN+"item-btns-sizes-desktop");
 
-		// MODIFIERS PANEL (ONLY FOR IIKO_MODE)
+		// UNIVERSAL MODIFIERS PANEL (ONLY FOR IIKO_MODE NOW)		
 		this.MODIF_PANEL = $.extend({},ITEM_MODIF_PANEL);
 		this.MODIF_PANEL.init(this.$item, {
 			on_open:()=>{this.objParent.hide_bhv_btns(true);},
@@ -94,9 +94,16 @@ export var ITEM = {
 		
 		// INIT IIKO ITEM
 		this.IIKO_ITEM = $.extend({},IIKO_ITEM);	
-		this.IIKO_ITEM.init(this.item_data, {on_update_size:(vars)=>{
-			this.iiko_update_price_and_volume(vars);
-		}});
+		this.IIKO_ITEM.init(this.item_data, {
+			modifiers_panel:this.MODIF_PANEL,
+			on_update_size:(vars)=>{
+				this.iiko_update_price_and_volume(vars);
+			},
+			on_update_total_in_cart:(total_in_cart)=>{
+				this.update_cart_btn(total_in_cart);
+				this.play_smile_animation();
+			}						
+		});
 
 		// BUILD UI SIZE BUTTONS
 		const [$btns_mobiles,$btns_desktop] = this.IIKO_ITEM.get_ui_price_buttons();		
@@ -104,12 +111,6 @@ export var ITEM = {
 			this.$item.addClass('item-sized');
 			this.$iiko_btns_sizes_wrapper_mobile.prepend($btns_mobiles);	
 			this.$iiko_btns_sizes_wrapper_desktop.prepend($btns_desktop);	
-		}
-		
-		// INSERT MODIFIERS LIST
-		if(this.IIKO_ITEM.has_modifiers()){
-			const $modifiers_list = this.IIKO_ITEM.get_ui_modifiers();
-			this.MODIF_PANEL.insert($modifiers_list);
 		}
 
 	},
@@ -126,12 +127,13 @@ export var ITEM = {
 
 				if(this.IIKO_ITEM.has_modifiers()){
 					// SHOW MODAL WINDOW WITH MODIFIERS OPTIONS		
-					this.MODIF_PANEL.open();
+					this.MODIF_PANEL.open({on_close:()=>{
+						// this.update_cart_btn();		
+					}});					
 				}else{
-					// JUST ADDING To CART THE ONE
+					// JUST ADDING TO CART THE ONE
 					const preorder = this.IIKO_ITEM.get_preorder(1);
-					let total_in_cart = GLB.CART.add_preorder(preorder);					
-					// let total_in_cart = GLB.CART.add_order(item_data, {count:1});					
+					let total_in_cart = GLB.CART.add_preorder(preorder);
 					this.update_cart_btn(total_in_cart);	
 					this.play_smile_animation();	
 				}			
