@@ -32,14 +32,16 @@ export const IIKO_ITEM = {
 	get_preorder:function(count){
 		
 		const s = this.IIKO_SIZER.get();
-		const price = this.get_price();
+						
 		const uniq_name = this.calc_order_uniq_name(`iiko-order-${this.item_data.id}`);
-		const chosen_modifiers = '';
+		const chosen_modifiers = this.IIKO_MODIFIERS.get_selected();
+		const modifiers_cost = this.IIKO_MODIFIERS.get_cost();
+		const total_price = (this.get_price() + modifiers_cost);
 
 		const preorderObject = {
 		itemId: this.item_data.id,
 			uniq_name: uniq_name,
-			price: price,
+			price: total_price,
 			count: count,
 			volume: s.volume,
 			item_data: this.item_data,			
@@ -52,17 +54,10 @@ export const IIKO_ITEM = {
 	},
 	
 	// @return number
-	get_price:function() {		
-				
+	get_price:function() {
 		const s = this.IIKO_SIZER.get();
-		
-		// let [chosen_modifiers, price_modifiers] = this.recalc_modifiers();
-		// let result_price = parseInt(s.price,10) + parseInt(price_modifiers,10);
-		const modif_price = 0;
-		const result_price = parseInt(s.price,10) + modif_price;
-		return result_price; 
-
-	},	
+		return parseInt(s.price,10);
+	},
 	sizer_get_vars:function(){
 		return this.IIKO_SIZER.get();
 	},

@@ -8,6 +8,9 @@ import $ from 'jquery';
 export const IIKO_ITEM_MODIFIERS = {
 	init:function(item_data) {
 		this.item_data = item_data;
+		this.ARR_MODIFIERS = [];
+		this.arr_usr_chosen = [];
+		this.total_modif_price = 0;
 		this._collect();
 		this._build_list_ui();
 		return this;
@@ -25,7 +28,14 @@ export const IIKO_ITEM_MODIFIERS = {
 	get_ui:function(){
 		return this.UI;
 	},
-
+	// @return number
+	get_cost:function(){
+		return this.total_modif_price;
+	},
+	// @return array
+	get_selected:function(){
+		return this.arr_usr_chosen;
+	},
 	// @return { 
 	//   arr_usr_chosen: array; 
 	//   total_modif_price: integer;
@@ -48,9 +58,11 @@ export const IIKO_ITEM_MODIFIERS = {
 				total_modif_price += parseInt(price,10);
 			}
 		});
+		this.arr_usr_chosen = arr_usr_chosen;
+		this.total_modif_price = parseInt(total_modif_price,10);
 		return {
-			arr_usr_chosen: arr_usr_chosen,
-			total_modif_price: parseInt(total_modif_price,10)
+			arr_usr_chosen: this.arr_usr_chosen,
+			total_modif_price: this.total_modif_price 
 		};
 	},
 
@@ -78,15 +90,14 @@ export const IIKO_ITEM_MODIFIERS = {
 	_collect:function(){
 		let modifiers = this.item_data.iiko_modifiers_parsed;		
 		// flatting array of modifiers and their groups,
-		// collecting all modifiers from groups to one list ( one level array)
-		this.ARR_MODIFIERS = [];
+		// collecting all modifiers from groups to one list ( one level array)		
 		if(modifiers && modifiers.length){
 			for(let groups in modifiers){
 				let group =  modifiers[groups];
 				let arr_m = group.items;
 				let modifierGroupId = group.modifierGroupId?group.modifierGroupId:"";
 				let modifierGroupName = group.name?group.name:"";
-				console.log('modifierGroupId,modifierGroupName',modifierGroupId,modifierGroupName)
+				// console.log('modifierGroupId,modifierGroupName',modifierGroupId,modifierGroupName)
 				if(arr_m && arr_m.length){
 					for(let m in arr_m){
 						let mod = arr_m[m];

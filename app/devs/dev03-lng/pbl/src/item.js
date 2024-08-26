@@ -227,8 +227,7 @@ export var ITEM = {
 			this.$btnAddToCart.removeClass("this-cart-full");	
 		}
 	},
-	iiko_update_price_and_volume:function(vars) {	
-		console.log('vars = ',vars)			
+	iiko_update_price_and_volume:function(vars) {			
 		var currency_symbol = GLB.CAFE.get('cafe_currency').symbol;
 		this.$item_price.html(vars.price + " " + currency_symbol);
 		this.$item_volume.html(vars.volume);							
@@ -367,11 +366,9 @@ export var ITEM = {
 		var fn = {
 			bhvSwipe:function(opt) {
 				if(!_this.is_portrait()) return false;
-				if(opt.direction=="up"){
-					console.log("==up")
+				if(opt.direction=="up"){					
 					_this.bhv_portrait_touched(true);
-				}else if(opt.direction=="down" && !_this.has_class_large()){
-					console.log("==down")
+				}else if(opt.direction=="down" && !_this.has_class_large()){					
 					_this.bhv_portrait_touched();
 				}else if(opt.direction=="left"){
 					_this.objParent.try_next();
@@ -450,8 +447,7 @@ export var ITEM = {
 			return false;
 		});
 
-		this.$btnReadMore.on("touchend click",function(){
-			console.log("btnReadMore clicked")
+		this.$btnReadMore.on("touchend click",function(){			
 			_this.is_portrait() 
 			&& _this.has_class_description()
 			&& _this.portrait_close_descr();

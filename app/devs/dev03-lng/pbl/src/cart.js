@@ -54,41 +54,6 @@ export var CART = {
 		this.update_btn_cart();
 		return total_in_cart + preorder.count;
 	},
-
-	// // @param item_data: Object
-	// add_order:function(item_data, opt) {
-
-	// 	const IIKO_MODE = GLB.CAFE.get().iiko_api_key!=="";		
-
-	// 	const item = item_data;
-	// 	let total_in_cart = this.get_total_orders(item.id);		
-	// 	let uniq_name, pre_order, count;
-				
-	// 	if(!IIKO_MODE){			
-	// 		// CHEFSMENU WAY			 
-	// 		uniq_name = 'chefsmenu-order-'+item.id;
-	// 		count = opt.count;
-	// 		pre_order = {
-	// 			itemId:item.id,				
-	// 			uniq_name:uniq_name,
-	// 			price: item.price,
-	// 			count:total_in_cart + count,
-	// 			volume:item.volume,
-	// 			item_data:item
-	// 		}
-	// 	}else{			
-	// 		// IIKO WAY			
-	// 		uniq_name = this.create_uniq_name('iiko-order-'+item.id+'-');
-	// 		count = opt.count;
-	// 		pre_order = opt;			
-	// 		pre_order.uniq_name = uniq_name;
-	// 	};
-		
-	// 	this.ALL_ORDERS[uniq_name] = pre_order;
-	// 	this.update_btn_cart();
-	// 	return total_in_cart + count;
-
-	// },
 	get:function(orderId) {		
 		let order = this.ALL_ORDERS[orderId];
 		return order;
