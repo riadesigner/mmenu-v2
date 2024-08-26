@@ -528,7 +528,6 @@ a.mm2-home-link:hover{ color: %[color-home-link-hover]%; }
 .mm2-item-modifiers-panel__footer_counter .btn-minus.mobile-active,
 .mm2-item-modifiers-panel__footer_counter .btn-plus.mobile-active{background-color: #484848;}
 
-
 .mm2-item-modifiers-panel__footer_counter .total-in-cart{ width:40%;text-align: center;font:1.1rem "Open Sans";}
 .mm2-item-modifiers-panel__footer_addtocart{width:50%;height:66px;}
 .mm2-item-modifiers-panel__footer_addtocart .btn-cart{
