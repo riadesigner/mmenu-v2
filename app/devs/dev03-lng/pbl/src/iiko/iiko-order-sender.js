@@ -165,10 +165,9 @@ export var IIKO_ORDER_SENDER = {
             return false;
         }else{                        
             var duration = (new Date().getTime()-token_date)/3600000;
-            console.log("duration",duration);
             if(!duration || duration>.5){
                 // if more than 30 minutes
-                console.log("token too old, and will be get new");                
+                console.log("token too old, and will be get new");
                 return false;                
             }else{
                 return token;

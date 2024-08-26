@@ -10,10 +10,7 @@ $.fn.swipe = function (options) {
             fastSwipe:true,
             onTouch: function (detail){},
             onMove: function (detail){},
-            onSwipe: function (detail){
-					
-            		console.log("onSwipe!!")
-            },
+            onSwipe: function (detail){},
             onEnd: function () {}		
 		}, options||{});
         

@@ -7,7 +7,6 @@ export var CHEFSMENU = {
         var _this=this;
         
         if(!opt.G_DATA || !opt.$link || !opt.CHEFS_URL){
-            // console.log('wrong chefsmenu params');
             return false;
         };
 
@@ -165,8 +164,6 @@ export var CHEFSMENU = {
         
         GLB.TABINDEX.init();
 
-        // console.log("--- preparing menu ready ---");
-
         this.onMenuReady && this.onMenuReady();
 
     },
@@ -242,9 +239,6 @@ export var CHEFSMENU = {
             
             var cafe = _this.get_cafe();            
             var label = cafe.skin_label;
-
-            console.log('---cafe.lang---',cafe.lang)
-
 
             fn.attachSkin(label);
             

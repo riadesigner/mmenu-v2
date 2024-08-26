@@ -88,8 +88,7 @@ export var CART = {
 		return total;
 	},
 	get_total_price:function() {		
-		let total_price = 0;
-		console.log('this.ALL_ORDERS for total price',this.ALL_ORDERS)
+		let total_price = 0;		
 		for(let i in this.ALL_ORDERS){
 			if(this.ALL_ORDERS.hasOwnProperty(i)){
 				let order = this.ALL_ORDERS[i];
@@ -97,12 +96,10 @@ export var CART = {
 					total_price += (parseInt(order.price,10) * order.count);
 				}
 			}
-		};		
-		console.log('total_price ==== ',total_price);
+		};				
 		return total_price;
 	},
-	add_one:function(orderId){
-		console.log('add_one', orderId)
+	add_one:function(orderId){		
 		let order = this.ALL_ORDERS[orderId];
 		if(order){
 			order.count++;
@@ -113,8 +110,7 @@ export var CART = {
 		let order = this.ALL_ORDERS[orderId];
 		if(order){
 			order.count--;
-			if(!order.count){ 
-				console.log("delete!");
+			if(!order.count){ 				
 				delete this.ALL_ORDERS[orderId];
 			};
 			this.update_btn_cart();				

@@ -136,7 +136,6 @@ export var VIEW_ALLMENU = {
 		
 		this.$view.addClass("multilang-mode");
 
-		console.log('this.$btnsLangContainer', this.$btnsLangContainer.html())
 		this.$btnsLangContainer.html("");
 		const current = "ru";
 		const btns = [];
