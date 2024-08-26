@@ -28,13 +28,7 @@ export var IIKO_ITEM_SIZER = {
 	},
 	get_all:function(){
 		return this.ITEM_DATA.iiko_sizes_parsed;
-	},
-	
-	// get_current:function() {
-	// 	let v = this.VARS;
-	// 	return [v.price, v.volume, v.sizeName, v.sizeId, v.sizeCode];
-	// },
-
+	},	
 	// private
 	set_current_vars:function(vars) {		
 		this.VARS = vars;
@@ -42,11 +36,7 @@ export var IIKO_ITEM_SIZER = {
 	build:function() {
 
 		var _this=this;
-		
 		const sizes =  this.get_all();
-
-		console.log('sizes',sizes)
-
 		const foo = {
 			create_btns:($btns)=>{
 				for(var i=0; i<sizes.length;i++){
