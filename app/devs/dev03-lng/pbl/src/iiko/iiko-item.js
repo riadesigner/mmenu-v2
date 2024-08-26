@@ -97,7 +97,7 @@ export const IIKO_ITEM = {
 			});
 			// update behaviors
 			this.MODIF_PANEL.on_pressed_cart(()=>{ 				
-				const preorder = this.get_preorder(1);
+				const preorder = this.get_preorder(this.TOTAL_ADD_TO_CART);
 				let total_in_cart = GLB.CART.add_preorder(preorder);		
 				this.on_update_total_in_cart && this.on_update_total_in_cart(total_in_cart);									
 				this.MODIF_PANEL.close();
@@ -120,10 +120,9 @@ export const IIKO_ITEM = {
 	update_modifiers_ui:function(){
 		const {arr_usr_chosen, total_modif_price} = this.IIKO_MODIFIERS.recalc();
 		const with_options = arr_usr_chosen.length > 0;
-		let total_price = this.get_price(); 
-		if(with_options){ total_price += total_modif_price;}				
-		total_price*=this.TOTAL_ADD_TO_CART;
-		this.MODIF_PANEL.update_ui(total_price, this.TOTAL_ADD_TO_CART, with_options);
+		let price = this.get_price(); 
+		if(with_options){ price += total_modif_price;}				
+		this.MODIF_PANEL.show_price(price, this.TOTAL_ADD_TO_CART);
 	},
 	calc_order_uniq_name:function(prefix){
 		if(this.has_sizes() || this.has_modifiers()){
