@@ -87,14 +87,14 @@ export var CHEFSMENU = {
             anim:'animLeft'
         }));
 
-        GLB.UVIEWS.addview(
-            GLB.VIEW_IIKO_MODIFIERS.init({
-            name:"the-iiko-modifiers",
-            template:PATH_TO_TEMPLATES+" .view-iiko-modifiers",
-            chefsmenu:_this,
-            noclose:this.NO_CLOSE,
-            anim:'zoomOut'
-        }));  
+        // GLB.UVIEWS.addview(
+        //     GLB.VIEW_IIKO_MODIFIERS.init({
+        //     name:"the-iiko-modifiers",
+        //     template:PATH_TO_TEMPLATES+" .view-iiko-modifiers",
+        //     chefsmenu:_this,
+        //     noclose:this.NO_CLOSE,
+        //     anim:'zoomOut'
+        // }));  
 
         GLB.UVIEWS.addview(
             GLB.VIEW_TABLE_CHANGE.init({

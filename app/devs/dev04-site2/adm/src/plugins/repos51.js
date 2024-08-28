@@ -280,10 +280,10 @@ $.extend({
 					}
 				};
 
-				this.$parent[0].addEventListener("touchstart", fn.touchStart,false);
-				this.$parent[0].addEventListener("touchmove", fn.touchMove,false);
-				this.$parent[0].addEventListener("touchend", fn.touchEnd,false);
-				this.$parent[0].addEventListener("touchcancel", fn.touchEnd,false);
+				this.$parent[0].addEventListener("touchstart", fn.touchStart, $.supportsPassive()? {passive:true} : false);
+				this.$parent[0].addEventListener("touchmove", fn.touchMove, $.supportsPassive()? {passive:true} : false);
+				this.$parent[0].addEventListener("touchend", fn.touchEnd, false );
+				this.$parent[0].addEventListener("touchcancel", fn.touchEnd, false);
 
 				this.$parent.on("contextmenu", false);
 

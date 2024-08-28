@@ -43,7 +43,6 @@ import {IikoLoader} from './iiko/iiko-loader.js';
 import {ExtMenuParser} from './iiko/iiko-extmenu-parser.js';
 import {IikoUpdater} from './iiko/iiko-updater.js';
 
-
 GLB.LNG = LNG;
 GLB.CURRENCY = CURRENCY;
 GLB.MENU_ICONS = MENU_ICONS;
@@ -88,7 +87,7 @@ GLB.VIEW_ACTION_SHEET = VIEW_ACTION_SHEET;
 GLB.PARAMS = {};
 
 export default function(){
-	
+		
 	$(function(){
 
 	window.onkeydown = evt => {
@@ -96,8 +95,7 @@ export default function(){
 	    	console.log("tab!!!!")
 	        evt.preventDefault();
 	    }
-	};
-
+	};	
 
 	LNG.init(CFG.user_lang);
 	MENU_ICONS.init({LNG:LNG});

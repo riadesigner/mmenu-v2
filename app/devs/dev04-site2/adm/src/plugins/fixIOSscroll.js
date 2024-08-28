@@ -1,4 +1,3 @@
-
 export default
 $.fixIOSscroll = function($el){
 	
@@ -28,9 +27,9 @@ $.fixIOSscroll = function($el){
 			    lastY = top;
 			}
 		};
-		
-        $el[0].addEventListener("touchstart", fn.touchStart,false);
-        $el[0].addEventListener("touchmove", fn.touchMove,false);
+
+		$el[0].addEventListener("touchstart", fn.touchStart, $.supportsPassive()? {passive:true} : false);
+        $el[0].addEventListener("touchmove", fn.touchMove, $.supportsPassive()? {passive:true} : false);
 
         return this;
 

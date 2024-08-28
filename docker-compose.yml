@@ -47,15 +47,3 @@ services:
     restart: always
     ports:
       - ${LOCAL_ADMINER_EXPOSE}:8080
-
-  # phpmyadmin:
-  #   image: phpmyadmin
-  #   container_name: docker.phpmyadmin
-  #   tty: true
-  #   depends_on:
-  #     - db
-  #   ports:
-  #     - 8181:80
-  #   environment:
-  #     PMA_ARBITRARY: 1
-  #     PMA_PORT: 3308

@@ -146,8 +146,8 @@ $.fn.swipe = function (options) {
                 $this.mousemove(fn.mouseMove);
             };
 
-            this.addEventListener("touchstart", fn.touchStart);
-            this.addEventListener("touchmove", fn.touchMove);
+            this.addEventListener("touchstart", fn.touchStart, $.supportsPassive()? {passive:true} : false);
+            this.addEventListener("touchmove", fn.touchMove, $.supportsPassive()? {passive:true} : false);
             this.addEventListener("touchend", fn.touchEnd);
             this.addEventListener("touchcancel", fn.touchCancel);		
 			
