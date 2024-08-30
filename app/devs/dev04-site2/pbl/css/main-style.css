@@ -25,7 +25,7 @@
 a.mm2-home-link{ color:%[color-home-link]%; }
 a.mm2-home-link:hover{ color: %[color-home-link-hover]%; }
 
-.mm2-menu-banner{text-align: center;margin: 12vw 0 1vw 0;}
+.mm2-menu-banner{text-align: center;margin: 27vw 0 1vw 0;}
 .mm2-menu-banner__logo{
   width: 90px;height: 45px; background: %[banner-bg-color]%;
   border-radius: 5px;margin: 0 auto 10px auto;
@@ -227,7 +227,7 @@ a.mm2-home-link:hover{ color: %[color-home-link-hover]%; }
 /* --- HEADER TABLE NUMBER --- */
 
 .mm2-header__table-number{position: absolute;
-  top:0;right: 20%;text-align: center;padding:6px 10px 8px 10px ;
+  top:0;right: 7%;text-align: center;padding:6px 10px 8px 10px ;
   border:1px solid lightgrey;border-top:0px none;border-radius: 0 0 7px 7px;
   display: none;
 }
@@ -235,6 +235,7 @@ a.mm2-home-link:hover{ color: %[color-home-link-hover]%; }
 .mm2-header__table-number_label{font-size:2vw;color:lightgray;line-height: 1;}
 .mm2-header__table-number.mobile-active:after{transition:0s; %[footer-btn-bright-mobile-active]%;}
 .mode-orderto-table .mm2-header__table-number{display: block;}
+.mode-orderto-table .mm2-header-phone{display: none;}
 
 
 /* --- TABLES LIST --- */
@@ -1660,7 +1661,7 @@ a.mm2-home-link:hover{ color: %[color-home-link-hover]%; }
   .mm2-allmenu-row__title span{
     font-size: 5.8vw;
     line-height: 1;
-    padding: 8.4vw 0 8.4vw 8vw;
+    padding: 7.4vw 0 7.4vw 8vw;
   }
   .mm2-allmenu-row__icon{width: 15vw;height: 15vw;}
   .mm2-allmenu-row__arrow {width: 10vw; height: 10vw;}
