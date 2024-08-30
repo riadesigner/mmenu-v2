@@ -18,8 +18,8 @@ export var VIEW_CART = {
 
 		this.$btnClearCart = this.$view.find(this._CN+"btn-clear, "+this._CN+"header-btn-clear"); 
 		this.$btnOrdering = this.$view.find(this._CN+"btn-ordering"); 		
-		this.$itemsContainer = this.$view.find(this._CN+"cart-allitems"); 
-		
+		this.$itemsContainer = this.$view.find(this._CN+"cart-allitems"); 		
+		this.update_ui();		
 		this.clear_cart_container();
 		this.behavior();
 
@@ -277,5 +277,10 @@ export var VIEW_CART = {
 	remove_from_cart:function(orderId){		
 		GLB.CART.remove_one(orderId);
 		this.update(orderId);
+	},
+	update_ui:function(){		
+		const IIKO_MODE = GLB.CAFE.iiko_api_key!=="";
+		const str_btn_title = IIKO_MODE && GLB.MENU_TABLE_MODE.is_table_mode() ? 'Отправить<br>заказ' : 'Оформить<br>заказ';		
+		this.$btnOrdering.html(`<span>${str_btn_title}</span>`);
 	}
 };
