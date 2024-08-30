@@ -104,16 +104,11 @@ class Site{
 						self::add_body_classes("page-control-panel");
 					}
 				break;
-				case 'cafe':					
-					$uniq_cafe = substr((string) $R->get(1), 0, 255);					
-					if(!$uniq_cafe){
-						glogError("Requested cafe, uniq name unknown",__FILE__);
-						self::$SITE_PAGE = '404';
-						self::add_body_classes("page-404");
-						glogError("Unknown path: ".$_SERVER['REQUEST_URI'],__FILE__);
-					}else{
-						glog("Requested cafe {$uniq_cafe}",__FILE__);
-						self::$UNIQ_CAFE = $uniq_cafe;						
+				case 'cafe':		
+					// PAGE PBL MENU (FOR THE CAFE)
+					$cafe_uniq_name = substr((string) $R->get(1), 0, 255);					
+					if($cafe_uniq_name && self::_check_cafe($cafe_uniq_name)){
+						self::$UNIQ_CAFE = self::$Cafe->uniq_name;
 						self::$SITE_PAGE = 'Menu';
 						self::add_body_classes("page-menu");
 						if($R->get(2)!==null && $R->get(2)=="table" && $R->get(3)!==null){
@@ -121,6 +116,11 @@ class Site{
 							self::add_body_classes("mode-orderto-table");
 							self::add_body_data("table-uniq", post_clean($table_number));			
 						}
+					}else{
+						glogError("Requested cafe, uniq name unknown",__FILE__);
+						self::$SITE_PAGE = '404';
+						self::add_body_classes("page-404");
+						glogError("Unknown path: ".$_SERVER['REQUEST_URI'],__FILE__);						
 					}
 				break;
 				case 'confirmpass':
@@ -317,6 +317,22 @@ class Site{
 			self::$ARR_BODY_DATA[] = 'data-'.$data_name.'="'.$data.'"';
 		}		
 	}	
+
+	static public function get_cafe(): Smart_object|null{
+		return isset(self::$Cafe) ? self::$Cafe : null;
+	}
+
+	// PRIVATE
+
+	static private function _check_cafe($uniq_name): bool{	
+		$allcafe = new Smart_collect("cafe", "where uniq_name='{$uniq_name}'");
+		if($allcafe->full()){ 
+			self::$Cafe = $allcafe->get(0);
+			return true;
+		}else{
+			return false;
+		}
+	}
 
 	static private function real_cafe_subdomain(){	
 		$allcafe = new Smart_collect("cafe", "where subdomain='".self::$SUB_DOMAIN."'");

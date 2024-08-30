@@ -2,7 +2,7 @@ import {GLB} from './glb.js';
 import $ from 'jquery';
 import {IIKO_ITEM} from './iiko/iiko-item.js';
 import {ITEM_MODIF_PANEL} from './item-modif-panel.js';
-
+import swipe from './plugins/swipe.js'; // no delete from here
 
 export var ITEM = {
 	init:function(objParent,itemData,index) {

@@ -36,6 +36,12 @@
 
 const GLB_APP_URL = '<?=Site::get_app_url();?>'; 
 
+<?php
+$Cafe = Site::get_cafe();
+$CAFE_TITLE = $Cafe ? $Cafe->cafe_title : '';
+$CAFE_UNIQ_NAME = $Cafe ? $Cafe->uniq_name : '';
+?>
+
 var SITE_CFG = {
 	lang:	'<?=SITE::get_lang();?>',
 	home_page: '<?=SITE::get_link("home");?>/',	
@@ -52,7 +58,7 @@ $(function() {
 </head>
 <body class='<?=Site::get_body_classes();?>' <?=Site::get_body_data();?> >
 
-<div autoload="yes" noclose="yes" class="chefsmenu-link" data-cafe="<?=Site::$UNIQ_CAFE;?>"></div>
+<div autoload="yes" noclose="yes" class="chefsmenu-link" data-cafe="<?=$CAFE_UNIQ_NAME;?>" data-cafe-title="<?=$CAFE_TITLE;?>"></div>
 
 <div class="menupage-logo"><img src="./pbl/i/pbl_chefs_logo.svg"></div>
 

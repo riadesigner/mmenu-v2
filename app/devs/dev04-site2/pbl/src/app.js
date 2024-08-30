@@ -2,9 +2,6 @@
 import {GLB} from './glb.js';
 import $ from 'jquery';
 
-import swipe from './plugins/swipe.js';
-import longpress from './plugins/longpress.js';
-
 import {META_VIEWPORT} from './meta-viewport.js';
 import {CALLBACK_RANDOM} from './callback-random.js';
 import {MOBILE_BUTTONS} from './mobile_buttons.js';
@@ -29,7 +26,7 @@ import {VIEW_THANK_YOU} from './view-thank-you.js';
 import {VIEW_ORDERING} from './view-ordering.js';
 import {VIEW_ORDER_OK} from './view-order-ok.js';
 import {VIEW_ORDER_CANCEL} from './view-order-cancel.js';
-// import {VIEW_IIKO_MODIFIERS} from './view-iiko-modifiers.js';
+
 import {VIEW_TABLE_CHANGE} from './view-table-change.js';
 
 GLB.META_VIEWPORT = META_VIEWPORT;
@@ -54,7 +51,7 @@ GLB.VIEW_CHOOSING_MODE = $.extend( VIEW_CHOOSING_MODE, VIEW_STD );
 GLB.VIEW_THANK_YOU = $.extend( VIEW_THANK_YOU, VIEW_STD );
 GLB.VIEW_ORDER_OK = $.extend( VIEW_ORDER_OK, VIEW_STD );
 GLB.VIEW_ORDER_CANCEL = $.extend( VIEW_ORDER_CANCEL, VIEW_STD );
-// GLB.VIEW_IIKO_MODIFIERS = $.extend( VIEW_IIKO_MODIFIERS, VIEW_STD );
+
 GLB.VIEW_TABLE_CHANGE = $.extend( VIEW_TABLE_CHANGE, VIEW_STD );
 
 
