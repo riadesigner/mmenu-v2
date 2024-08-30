@@ -24,10 +24,10 @@ export const IIKO_ITEM = {
 	// @return boolean
 	has_modifiers:function() {		
 		return this.item_data.iiko_modifiers!=="";
-	},
+	},	
 	// @return boolean
 	has_sizes:function() {		
-		return this.item_data.iiko_sizes_parsed && this.item_data.iiko_sizes_parsed.length;
+		return this.item_data.iiko_sizes_parsed && this.item_data.iiko_sizes_parsed.length > 1;
 	},
 	get_preorder:function(count){
 		
@@ -38,7 +38,7 @@ export const IIKO_ITEM = {
 		const modifiers_cost = this.IIKO_MODIFIERS.get_cost();
 		const total_price = (this.get_price() + modifiers_cost);
 
-		const preorderObject = {
+		const pre_order = {
 		itemId: this.item_data.id,
 			uniq_name: uniq_name,
 			price: total_price,
@@ -50,7 +50,7 @@ export const IIKO_ITEM = {
 			sizeCode: s.sizeCode,			
 			chosen_modifiers:chosen_modifiers
 		};			
-		return preorderObject;
+		return pre_order;
 	},
 	
 	// @return number
@@ -120,9 +120,14 @@ export const IIKO_ITEM = {
 		this.MODIF_PANEL.show_price(price, this.TOTAL_ADD_TO_CART);
 	},
 	calc_order_uniq_name:function(prefix){
-		if(this.has_sizes() || this.has_modifiers()){
-			let uniq_by_time = Math.floor((Date.now() * Math.random()) / 1000).toString();			
-			return `${prefix}-${uniq_by_time}`;
+		console.log(`this.has_sizes() = ${this.has_sizes()}`)
+		console.log(`this.IIKO_MODIFIERS.get_selected() = ${this.IIKO_MODIFIERS.get_selected()}`)
+		// if item has sizes more than one
+		// or user selected at least one modifier
+		// make a uniq ID for order 
+		if(this.has_sizes() || this.IIKO_MODIFIERS.get_selected().length > 0){			
+			let sufix = Math.floor((Date.now() * Math.random()) / 1000).toString();			
+			return `${prefix}-${sufix}`;
 		}else{			
 			return prefix;
 		}
