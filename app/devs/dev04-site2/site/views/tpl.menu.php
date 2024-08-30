@@ -60,9 +60,9 @@ $(function() {
 
 <div autoload="yes" noclose="yes" class="chefsmenu-link" data-cafe="<?=$CAFE_UNIQ_NAME;?>" data-cafe-title="<?=$CAFE_TITLE;?>"></div>
 
-<div class="menupage-logo"><img src="./pbl/i/pbl_chefs_logo.svg"></div>
+<div class="menupage-logo"> <?=$CAFE_TITLE;?></div>
 
-<div class="archive-message">Кафе находится в архиве</div>
+<div class="archive-message">Меню находится в архиве</div>
 
 <div class="menupage-loader">
 	<div class="menupage-loader-wrapper">
@@ -79,7 +79,7 @@ $(function() {
 		</div>
 	</div>
 </div>
-<div class="menupage-footer">Ria Design Studio, <?=Date('Y');?></span></div>
+<div class="menupage-footer">&copy; ChefsMenu – QR Menu <?=Date('Y');?></span></div>
 	
 
 
