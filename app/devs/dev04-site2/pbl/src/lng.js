@@ -51,7 +51,7 @@ export var LNG = {init:function(lang){
 			lng_our_adress:['Our address:','Наш адрес:'],
 			lng_chef_cook:['Chef-cook:','Шеф-повар:'],
 			lng_work_hours:['Work hours:','Часы работы:'],
-			lng_slogan:['Create your own menu', 'Создай свое меню'],
+			lng_motto:['QR-Menu – simple!', 'QR-Меню – это просто!'],
 			lng_cafe_desc_title:['Welcome!', 'Добро пожаловать!'],
 			
 			//VIEW_CART				

@@ -36,7 +36,7 @@ a.mm2-home-link:hover{ color: %[color-home-link-hover]%; }
   left: 50%;top:50%;transform:translate(-50%,-50%);
 }
 
-.mm2-menu-banner__link{text-align: center;margin: 0 auto;font: .8rem arial;}
+.mm2-menu-banner__link{text-align: center;margin: 0 auto;font: .7rem arial;}
 .mm2-menu-banner__link:link,.mm2-menu-banner__link:visited{color: %[color-front]%;text-decoration: none;}
 .mm2-menu-banner__link:hover{color: %[color-bright]%;}
 
