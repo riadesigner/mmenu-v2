@@ -119,12 +119,14 @@ export const IIKO_ITEM = {
 		if(with_options){ price += total_modif_price;}				
 		this.MODIF_PANEL.show_price(price, this.TOTAL_ADD_TO_CART);
 	},
-	calc_order_uniq_name:function(prefix){
-		console.log(`this.has_sizes() = ${this.has_sizes()}`)
-		console.log(`this.IIKO_MODIFIERS.get_selected() = ${this.IIKO_MODIFIERS.get_selected()}`)
+	calc_order_uniq_name:function(prefix){		
 		// if item has sizes more than one
 		// or user selected at least one modifier
 		// make a uniq ID for order 
+		// TODO:
+		// make uniq hash for each order 
+		// based on the options selected by the user		
+		// and then compare the hashes
 		if(this.has_sizes() || this.IIKO_MODIFIERS.get_selected().length > 0){			
 			let sufix = Math.floor((Date.now() * Math.random()) / 1000).toString();			
 			return `${prefix}-${sufix}`;
