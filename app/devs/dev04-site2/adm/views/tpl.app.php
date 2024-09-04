@@ -641,10 +641,19 @@ App&&App();
 					</div> 
 
 					<div class="chefsmenu-mode-only">
-						<div class="std-form__section-description">Объем</div>		
-						<input class="std-form__input item-volume" type="text" name="item-volume" maxlength="555">
-						<div class="std-form__section-description" >Стоимость(₽):</div>		
-						<input class="std-form__input item-price" type="text" name="item-price" maxlength="555">
+						<div class="std-form-double">
+							<div>
+								<div class="std-form__section-description">Объем</div>		
+								<input class="std-form__input item-volume" type="text" name="item-volume" maxlength="555">								
+							</div>
+							<div>
+								<div class="std-form__section-description" >Стоимость(₽):</div>		
+								<input class="std-form__input item-price" type="text" name="item-price" maxlength="555">
+							</div>
+						</div>
+						<div class="add-size-and-price">
+							<button class="std-special-single-button">Добавить объем</button>
+						</div>
 					</div>
 
 					<div class="iiko-mode-only ">

@@ -540,6 +540,10 @@ textarea:focus.length-limit-reached{ animation: ani_limit_reached .3s linear;}
     height: 10px;	
 }
 
+.std-form-double{display: flex; gap:8px;}
+.std-form-double>div{width: 50%;}
+
+.add-size-and-price{margin:0 0 10px 0;text-align: right;}
 
 .customize-interface__lang,
 .customize-interface__cart-mode,
