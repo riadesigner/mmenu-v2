@@ -24,12 +24,13 @@ export var VIEW_EDIT_ITEM = {
 		this.$item_iiko_price = this.$form.find('.item-price__iiko');
 
 		// CHESMENU MODE ONLY
-		this.$item_chefsmenu_volume = this.$form.find('.item-volume');
-		this.$item_chefsmenu_price = this.$form.find('.item-price');
+		this.$price_list = this.$form.find('.price-list-section .price-list');
+		this.$price_list_row_tpl = $('#templates .tpl-item-edit__price-list-row')
+		this.$btn_price_list_add_row = this.$form.find('.price-list-section .btn-add-price');
 
 		// MULTI-LANGUAGE SECTIONS
 		this.$item_edits_container = this.$form.find('.item-edits-container');
-		this.$tpl_item_edit_form = $('#templates .tpl-item-edit-form');
+		this.$tpl_item_edit_form = $('#templates .tpl-item-edit__extra-lang');
 
 		this.CURR_LANG_TO_EDIT = "ru";
 
@@ -166,9 +167,7 @@ export var VIEW_EDIT_ITEM = {
 				// ------------------------------
 				// CHEFSMENU MODE / EDITITING ITEM
 				// ------------------------------
-				this.$item_chefsmenu_volume.val(this.ITEM.volume);
-				this.$item_chefsmenu_price.val(this.ITEM.price);
-			
+				this.chefmenu_mode_rebuild_price_form();
 			};
 
 			this.$btnChangeSection.html(this.CURRENT_MENU.title);
@@ -180,6 +179,27 @@ export var VIEW_EDIT_ITEM = {
 		},350);
 		
 	},	
+	chefmenu_mode_rebuild_price_form:function(){
+		const arr_prices = [
+			{volume:'100 мл', price:100 },			
+		];
+		const foo = {
+			add_row:(row)=>{
+				const $tpl_row = this.$price_list_row_tpl.clone();		
+				const $volume = $tpl_row.find('.item-volume');
+				const $price = $tpl_row.find('.item-price');
+				$volume.val(row.volume);
+				$price.val(row.price);
+				$volume.on('keyup',()=>{this.need2save(true);});
+				$price.on('keyup',()=>{this.need2save(true);});
+				this.$price_list.append($tpl_row);
+			}
+		};
+		this.$price_list.html('');
+		for(let i in arr_prices){
+			foo.add_row(arr_prices[i]);
+		}		
+	},
 	rebuild_data_sections:function() {
 		// MULTI-LANGUAGE SECTIONS BUILDING
 		this.$item_edits_container.html("");
@@ -270,9 +290,18 @@ export var VIEW_EDIT_ITEM = {
 
 		// FOR CHESMENU MODE ONLY
 		if(!GLB.THE_CAFE.is_iiko_mode()){			
-			this.$item_chefsmenu_volume.on('keyup',()=>{this.need2save(true);});
-			this.$item_chefsmenu_price.on('keyup',()=>{this.need2save(true);});
+			
+			this.$btn_price_list_add_row.on('touchend',()=>{
+				this._blur({onBlur:()=>{
+					if(!this.LOADING && !this.VIEW_SCROLLED){
+						console.log('add!');
+					};
+				}});
+				return false;	
+			});
+
 		};
+
 	
 	},
 

@@ -224,8 +224,9 @@ textarea:focus.length-limit-reached{ animation: ani_limit_reached .3s linear;}
 #the-app-views .lang-tabs li:last-child{border-right:0px none;}
 #the-app-views .lang-tabs li.current{background: #FBEC3E;}
 
-.std-special-single-button{background: #FFF040;font:1rem arial;padding:10px 20px;border:none;color:black;border-radius: 20px;}
+.std-special-single-button{background: #FFF040;font:.9rem arial;padding:10px 20px;border:none;color:black;border-radius: 20px;}
 .std-special-single-button:active{background: #000000;color: #FFF040;}
+
 
 
 .app-view-footer {padding: 5px 5px 0 5px;background: #FFF040;}

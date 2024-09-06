@@ -641,18 +641,17 @@ App&&App();
 					</div> 
 
 					<div class="chefsmenu-mode-only">
-						<div class="std-form-double">
-							<div>
-								<div class="std-form__section-description">Объем</div>		
-								<input class="std-form__input item-volume" type="text" name="item-volume" maxlength="555">								
+						<div class="price-list-section">
+							<div class="std-form-double">
+								<div class="std-form__section-description">Объем</div>
+								<div class="std-form__section-description" >Стоимость(₽):</div>
 							</div>
-							<div>
-								<div class="std-form__section-description" >Стоимость(₽):</div>		
-								<input class="std-form__input item-price" type="text" name="item-price" maxlength="555">
+							<div class="price-list">
+								<!-- tpl -->
 							</div>
-						</div>
-						<div class="add-size-and-price">
-							<button class="std-special-single-button">Добавить объем</button>
+							<div class="add-size-and-price">
+								<button class="btn-add-price std-special-single-button">Добавить объем</button>
+							</div>
 						</div>
 					</div>
 
@@ -682,6 +681,21 @@ App&&App();
 			<div class="button-section"><div class="button save"><span lang="lng_save"><!-- Save --></span></div></div>
 		</div>
 	</div>
+
+	<!-- - - - - - - - TPL PRICE LIST ROW - - - - - - - - - - - - -  -->
+	<div class="tpl-item-edit__price-list-row std-form-double">								
+		<div><input class="std-form__input item-volume" type="text" name="item-volume" maxlength="555"></div>
+		<div><input class="std-form__input item-price" type="text" name="item-price" maxlength="555"></div>
+	</div>
+	
+	<!-- - - - - - - - TPL EXTRA LANG - - - - - - - - - - - - - - -  -->
+	<div class="tpl-item-edit__extra-lang extra-lang-section">
+		<div class="std-form__section-description" >Название</div>
+		<textarea class="std-form__textarea item-title" rows="3" name="item-title" maxlength="555" ></textarea>
+
+		<div class="std-form__section-description" >Описание</div>
+		<textarea class="std-form__textarea item-description" rows="5" name="item-description" maxlength="555"></textarea>
+	</div>	
 
 <!-- - - - - - - - VIEW REPLACING PARENT SECTION OF ITEM  - - - - - - - - - -->
 
@@ -1146,17 +1160,6 @@ App&&App();
 			</div> 
 		</div>
 	</div>
-
-<!-- - - - - - - - ITEM EDIT FORM - - - - - - - - - - - - - - -  -->
-
-<div class="tpl-item-edit-form extra-lang-section">
-	<div class="std-form__section-description" >Название</div>
-	<textarea class="std-form__textarea item-title" rows="3" name="item-title" maxlength="555" ></textarea>
-
-	<div class="std-form__section-description" >Описание</div>
-	<textarea class="std-form__textarea item-description" rows="5" name="item-description" maxlength="555"></textarea>
-</div>	
-
 
 <!-- - - - - - - - DEFAULT VIEW MODAL MESSAGE - - - - - - - - -->
 
