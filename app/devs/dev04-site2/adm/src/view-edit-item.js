@@ -233,6 +233,7 @@ export var VIEW_EDIT_ITEM = {
 				if(!this.LOADING && !this.VIEW_SCROLLED){
 					this.sizes_add_row();
 					this.sizes_update_buttons();
+					this.need2save(true);
 				};
 			}});
 			return false;	
@@ -242,6 +243,7 @@ export var VIEW_EDIT_ITEM = {
 				if(!this.LOADING && !this.VIEW_SCROLLED){
 					this.sizes_del_row();
 					this.sizes_update_buttons();
+					this.need2save(true);
 				};
 			}});
 			return false;	
