@@ -27,6 +27,7 @@ export var VIEW_EDIT_ITEM = {
 		this.$price_list = this.$form.find('.price-list-section .price-list');
 		this.$price_list_row_tpl = $('#templates .tpl-item-edit__price-list-row')
 		this.$btn_price_list_add_row = this.$form.find('.price-list-section .btn-add-price');
+		this.$btn_price_list_del_row = this.$form.find('.price-list-section .btn-del-price');
 
 		// MULTI-LANGUAGE SECTIONS
 		this.$item_edits_container = this.$form.find('.item-edits-container');
@@ -75,7 +76,8 @@ export var VIEW_EDIT_ITEM = {
 
 			this.ACTION_MODE = 'add';
 			this._update_title(GLB.LNG.get("lng_item_add"));
-			this.$sectionChooseMenu.hide();			
+			this.$sectionChooseMenu.hide();		
+			this.sizes_rebuild();	
 
 		}else{		
 
@@ -167,7 +169,7 @@ export var VIEW_EDIT_ITEM = {
 				// ------------------------------
 				// CHEFSMENU MODE / EDITITING ITEM
 				// ------------------------------
-				this.chefmenu_mode_rebuild_price_form();
+				this.sizes_rebuild();
 			};
 
 			this.$btnChangeSection.html(this.CURRENT_MENU.title);
@@ -179,29 +181,75 @@ export var VIEW_EDIT_ITEM = {
 		},350);
 		
 	},	
-	chefmenu_mode_rebuild_price_form:function(){
-		const arr_prices = [
-			{volume:'100 мл', price:100 },			
-		];
-		const foo = {
-			add_row:(row)=>{
-				const $tpl_row = this.$price_list_row_tpl.clone();		
-				const $volume = $tpl_row.find('.item-volume');
-				const $price = $tpl_row.find('.item-price');
-				$volume.val(row.volume);
-				$price.val(row.price);
-				$volume.on('keyup',()=>{this.need2save(true);});
-				$price.on('keyup',()=>{this.need2save(true);});
-				this.$price_list.append($tpl_row);
-			}
+
+	// SIZES PART FOR CHEFSMENU MODE	
+	sizes_update_buttons:function(){
+		const $rows = this.$price_list.find('.tpl-item-edit__price-list-row');
+		if($rows.length > 1 ){
+			this.$btn_price_list_del_row.show();
+		}else{
+			this.$btn_price_list_del_row.hide();
 		};
-		this.$price_list.html('');
-		for(let i in arr_prices){
-			foo.add_row(arr_prices[i]);
+		if($rows.length > 4 ){
+			this.$btn_price_list_add_row.hide();
+		}else{
+			this.$btn_price_list_add_row.show();
 		}		
 	},
-	rebuild_data_sections:function() {
-		// MULTI-LANGUAGE SECTIONS BUILDING
+	sizes_del_row:function(){
+		const $rows = this.$price_list.find('.tpl-item-edit__price-list-row');
+		if($rows.length > 1){ $rows.eq($rows.length-1).remove(); }		
+	},
+	sizes_add_row:function(row_data){
+		const row = row_data ? row_data : this.sizes_get_default();
+		const $tpl_row = this.$price_list_row_tpl.clone();		
+		const $volume = $tpl_row.find('.item-volume');
+		const $price = $tpl_row.find('.item-price');
+		$volume.val(row.volume);
+		$price.val(row.price);
+		$volume.on('keyup',()=>{this.need2save(true);});
+		$price.on('keyup',()=>{this.need2save(true);});
+		this.$price_list.append($tpl_row);		
+	},
+	sizes_get_default:function(){
+		return {volume:'0 г', price:0 };
+	},
+	sizes_rebuild:function(){		
+		this.$price_list.html('');
+		if(this.ITEM){
+			const sizes = this.ITEM.sizes?JSON.parse(this.ITEM.sizes,1):[];								
+			const arr_sizes = sizes.length ? sizes : [this.sizes_get_default()];
+			for(let i in arr_sizes){
+				this.sizes_add_row(arr_sizes[i]);
+			}
+		}else{
+			this.sizes_add_row();
+		};
+		this.sizes_update_buttons();
+	},
+	sizes_behaviors:function(){
+		this.$btn_price_list_add_row.on('touchend',()=>{
+			this._blur({onBlur:()=>{
+				if(!this.LOADING && !this.VIEW_SCROLLED){
+					this.sizes_add_row();
+					this.sizes_update_buttons();
+				};
+			}});
+			return false;	
+		});
+		this.$btn_price_list_del_row.on('touchend',()=>{
+			this._blur({onBlur:()=>{
+				if(!this.LOADING && !this.VIEW_SCROLLED){
+					this.sizes_del_row();
+					this.sizes_update_buttons();
+				};
+			}});
+			return false;	
+		});		
+	},
+
+	// MULTI-LANGUAGE SECTIONS BUILDING
+	rebuild_data_sections:function() {		
 		this.$item_edits_container.html("");
 		const fn = {
 			build_inputs:(lang_code)=>{
@@ -239,6 +287,17 @@ export var VIEW_EDIT_ITEM = {
 		let val = $input.val();
 		val = $.clear_user_input(val,GLB.INPUTS_LENGTH.get(name));
 		return val;
+	},
+	// @return array
+	get_chefsmode_sizes:function(){
+		let arr_sizes = [];
+		this.$price_list.find('.tpl-item-edit__price-list-row').each((i, el)=>{
+			const volume = $(el).find('input[name=item-volume]').val();  
+			const price = $(el).find('input[name=item-price]').val();  
+			const size = { volume:volume, size:price};
+			arr_sizes.push(size);
+		});
+		console.log('size',arr_sizes);
 	},
 	price_to_number:function(price){
 		var cafe = GLB.THE_CAFE.get();
@@ -289,20 +348,9 @@ export var VIEW_EDIT_ITEM = {
 		});
 
 		// FOR CHESMENU MODE ONLY
-		if(!GLB.THE_CAFE.is_iiko_mode()){			
-			
-			this.$btn_price_list_add_row.on('touchend',()=>{
-				this._blur({onBlur:()=>{
-					if(!this.LOADING && !this.VIEW_SCROLLED){
-						console.log('add!');
-					};
-				}});
-				return false;	
-			});
-
+		if(!GLB.THE_CAFE.is_iiko_mode()){						
+			this.sizes_behaviors();
 		};
-
-	
 	},
 
 	need2save:function(mode){
@@ -315,15 +363,16 @@ export var VIEW_EDIT_ITEM = {
 	},
 	get_user_inputs:function(lang) {		
 		if(!GLB.THE_CAFE.is_iiko_mode()){
-			// IF CHEFSMENU MODE
+			// CHEFSMENU MODE
 			return {
 				title: this.get_data('item-title',lang),
 				description: this.get_data('item-description',lang),
-				volume: this.$item_chefsmenu_volume.val(),
-				price: this.$item_chefsmenu_price.val() 			
+				sizes: this.get_chefsmode_sizes(),
+				volume: '',
+				price: 0 			
 			};			
 		}else{
-			// IF IIKO MODE
+			// IIKO MODE
 			return {
 				title: this.get_data('item-title',lang),
 				description: this.get_data('item-description',lang),
@@ -373,23 +422,24 @@ export var VIEW_EDIT_ITEM = {
 		// ------------------------
 		// FOR CHEFSMENU MODE ONLY
 		// ------------------------
-		if(!GLB.THE_CAFE.is_iiko_mode()){			
-			if(!all_inputs['ru'].price){
-				all_inputs['ru'].price = 0;
-			}else{			
-				var price_msk = /^[\d]*[\.\,]*[\d]*$/;
-				var res = price_msk.test(all_inputs['ru'].price); 
-				if(!res){
-					GLB.VIEWS.modalMessage({
-						title:GLB.LNG.get("lng_attention"),
-						message:"Введите корректное значение стоимости",
-						btn_title:GLB.LNG.get('lng_close')					
-					});
-					return false;
-				}else{					
-					all_inputs['ru'].price = this.price_to_number( all_inputs['ru'].price );				
-				}
-			};
+		if(!GLB.THE_CAFE.is_iiko_mode()){
+			// TODO			
+			// if(!all_inputs['ru'].price){
+			// 	all_inputs['ru'].price = 0;
+			// }else{			
+			// 	var price_msk = /^[\d]*[\.\,]*[\d]*$/;
+			// 	var res = price_msk.test(all_inputs['ru'].price); 
+			// 	if(!res){
+			// 		GLB.VIEWS.modalMessage({
+			// 			title:GLB.LNG.get("lng_attention"),
+			// 			message:"Введите корректное значение стоимости",
+			// 			btn_title:GLB.LNG.get('lng_close')					
+			// 		});
+			// 		return false;
+			// 	}else{					
+			// 		all_inputs['ru'].price = this.price_to_number( all_inputs['ru'].price );				
+			// 	}
+			// };
 		};
 
 		let some_extra_fields_is_empty = 0;

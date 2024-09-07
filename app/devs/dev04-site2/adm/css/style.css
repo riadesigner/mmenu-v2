@@ -228,7 +228,6 @@ textarea:focus.length-limit-reached{ animation: ani_limit_reached .3s linear;}
 .std-special-single-button:active{background: #000000;color: #FFF040;}
 
 
-
 .app-view-footer {padding: 5px 5px 0 5px;background: #FFF040;}
 .app-view-footer:after{display: table;clear: both;content: "";}
 .app-view-footer .button-section{width: 33.3%;float: left;height:100%; overflow: hidden;transition:.5s;will-change:opacity;}
@@ -543,8 +542,6 @@ textarea:focus.length-limit-reached{ animation: ani_limit_reached .3s linear;}
 
 .std-form-double{display: flex; gap:8px;}
 .std-form-double>div{width: 50%;}
-
-.add-size-and-price{margin:0 0 10px 0;text-align: right;}
 
 .customize-interface__lang,
 .customize-interface__cart-mode,
@@ -914,6 +911,15 @@ textarea:focus.length-limit-reached{ animation: ani_limit_reached .3s linear;}
 .customizing-cart__all-keys_key>div:nth-child(2){font-size: .9rem;padding: 0 0 0 20px;;}
 
 .customizing-cart__all-tgusers{margin:2vw 0;}
+
+/* 
+	VIEW EDIT ITEM 
+*/
+
+.view-edit-item .sizes-buttons{margin:0 0 10px 0;}
+.view-edit-item .sizes-buttons > button {float:right}
+.view-edit-item .sizes-buttons::after{clear: both;content: "";display: table;}
+.view-edit-item .sizes-buttons > button {margin-left:5px;}
 
 /*
 	iiko	

@@ -649,8 +649,9 @@ App&&App();
 							<div class="price-list">
 								<!-- tpl -->
 							</div>
-							<div class="add-size-and-price">
-								<button class="btn-add-price std-special-single-button">Добавить объем</button>
+							<div class="sizes-buttons">								
+								<button class="btn-add-price std-special-single-button">Добавить</button>
+								<button class="btn-del-price std-special-single-button">Убрать</button>
 							</div>
 						</div>
 					</div>
