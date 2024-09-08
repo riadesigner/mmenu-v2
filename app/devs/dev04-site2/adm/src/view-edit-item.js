@@ -316,11 +316,12 @@ export var VIEW_EDIT_ITEM = {
 		val = $.clear_user_input(val,GLB.INPUTS_LENGTH.get(name));
 		return val;
 	},
-	inputs_to_number:function(num){				
-		return isNaN(num)? 0 : parseInt(num,10);
+	inputs_to_number:function(str){				
+		return isNaN(str)? 0 : parseInt(str,10);
 	},	
-	inputs_to_float:function(num){				
-		return isNaN(num)? 0 : parseFloat(num,10);
+	inputs_to_float:function(str){		
+		var str = str.replace(/\,/g,'.');
+		return isNaN(str)? 0 : parseFloat(str,10);
 	},
 
 	behavior:function()	{
