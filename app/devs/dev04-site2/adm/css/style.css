@@ -916,6 +916,11 @@ textarea:focus.length-limit-reached{ animation: ani_limit_reached .3s linear;}
 	VIEW EDIT ITEM 
 */
 
+.view-edit-item .sizes-list {display: flex;gap:8px}
+.view-edit-item .sizes-list > div:nth-child(1){width:40%;}
+.view-edit-item .sizes-list > div:nth-child(2){width:10%;}
+.view-edit-item .sizes-list > div:nth-child(3){width:50%;}
+
 .view-edit-item .sizes-buttons{margin:0 0 10px 0;}
 .view-edit-item .sizes-buttons > button {float:right}
 .view-edit-item .sizes-buttons::after{clear: both;content: "";display: table;}

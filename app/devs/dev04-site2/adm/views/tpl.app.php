@@ -684,8 +684,9 @@ App&&App();
 	</div>
 
 	<!-- - - - - - - - TPL PRICE LIST ROW - - - - - - - - - - - - -  -->
-	<div class="tpl-item-edit__price-list-row std-form-double">								
+	<div class="tpl-item-edit__price-list-row sizes-list">								
 		<div><input class="std-form__input item-volume" type="text" name="item-volume" maxlength="555"></div>
+		<div><button name="item-units" value="г">г</button></div>
 		<div><input class="std-form__input item-price" type="text" name="item-price" maxlength="555"></div>
 	</div>
 	

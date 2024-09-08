@@ -182,7 +182,22 @@ export var VIEW_EDIT_ITEM = {
 		
 	},	
 
-	// SIZES PART FOR CHEFSMENU MODE	
+	// SIZES PART FOR CHEFSMENU MODE
+
+	// @return array [{price:number, volume:number, units:string}];
+	// for example: [{price:100, volume:200, units:'мл'}];
+	sizes_get_inputs:function(){
+		const arr_sizes = [];
+		const $rows = this.$price_list.find('.tpl-item-edit__price-list-row');
+		$rows.each((i, row)=>{			
+			const price = this.inputs_to_number($(row).find('input[name=item-price]').val());
+			const volume = this.inputs_to_float($(row).find('input[name=item-volume]').val());
+			const units = $(row).find('button[name=item-units]').val();
+			arr_sizes.push({price:price,volume:volume, units:units});			
+		});
+		console.log('arr_sizes',arr_sizes)
+		return arr_sizes;		
+	},
 	sizes_update_buttons:function(){
 		const $rows = this.$price_list.find('.tpl-item-edit__price-list-row');
 		if($rows.length > 1 ){
@@ -205,14 +220,25 @@ export var VIEW_EDIT_ITEM = {
 		const $tpl_row = this.$price_list_row_tpl.clone();		
 		const $volume = $tpl_row.find('.item-volume');
 		const $price = $tpl_row.find('.item-price');
+		const $btn_units = $tpl_row.find('button[name=item-units]');
+		$btn_units.on('touchend',()=>{ this.sizes_toggle_units($btn_units); });
 		$volume.val(row.volume);
 		$price.val(row.price);
 		$volume.on('keyup',()=>{this.need2save(true);});
 		$price.on('keyup',()=>{this.need2save(true);});
 		this.$price_list.append($tpl_row);		
 	},
+	sizes_toggle_units:function($btn){		
+		if($btn.val()=="г"){
+			$btn.val("мл").html("мл");
+		}else if($btn.val()=="мл"){
+			$btn.val("л").html("л");
+		}else if($btn.val()=="л"){
+			$btn.val("г").html("г");
+		}
+	},
 	sizes_get_default:function(){
-		return {volume:'0 г', price:0 };
+		return {volume:0, price:0 };
 	},
 	sizes_rebuild:function(){		
 		this.$price_list.html('');
@@ -262,8 +288,8 @@ export var VIEW_EDIT_ITEM = {
 			}
 		};
 		const ALL_LANGS = this.LTABS.get_langs();
-		// BUILD INPUTS FOR EACH LANG
-		// EVEN, IF WE HAVE ONLY RUSSIAN
+		// build inputs for each lang
+		// even, if we have only russian
 		for(let lang_code in ALL_LANGS){				
 			fn.build_inputs(lang_code);
 		};
@@ -290,26 +316,12 @@ export var VIEW_EDIT_ITEM = {
 		val = $.clear_user_input(val,GLB.INPUTS_LENGTH.get(name));
 		return val;
 	},
-	// @return array
-	get_chefsmode_sizes:function(){
-		let arr_sizes = [];
-		this.$price_list.find('.tpl-item-edit__price-list-row').each((i, el)=>{
-			const volume = $(el).find('input[name=item-volume]').val();  
-			const price = $(el).find('input[name=item-price]').val();  
-			const size = { volume:volume, size:price};
-			arr_sizes.push(size);
-		});
-		console.log('size',arr_sizes);
-	},
-	price_to_number:function(price){
-		var cafe = GLB.THE_CAFE.get();
-		var price = price.replace(/\,/g,'.');
-		if(isNaN(price)){
-			return 0;
-		}else{
-			return parseInt(price,10);
-		}
+	inputs_to_number:function(num){				
+		return isNaN(num)? 0 : parseInt(num,10);
 	},	
+	inputs_to_float:function(num){				
+		return isNaN(num)? 0 : parseFloat(num,10);
+	},
 
 	behavior:function()	{
 	
@@ -363,25 +375,15 @@ export var VIEW_EDIT_ITEM = {
 			this.$view.removeClass('need-to-save');
 		}
 	},
-	get_user_inputs:function(lang) {		
-		if(!GLB.THE_CAFE.is_iiko_mode()){
-			// CHEFSMENU MODE
-			return {
-				title: this.get_data('item-title',lang),
-				description: this.get_data('item-description',lang),
-				sizes: this.get_chefsmode_sizes(),
-				volume: '',
-				price: 0 			
-			};			
-		}else{
-			// IIKO MODE
-			return {
-				title: this.get_data('item-title',lang),
-				description: this.get_data('item-description',lang),
-			};			
+	get_user_inputs:function(lang) {
+		// collect title & description only,
+		// where language = lang
+		return {
+			title: this.get_data('item-title',lang),
+			description: this.get_data('item-description',lang),
 		};		
 	},
-	colllect_all_inputs:function() {
+	colllect_user_inputs:function() {
 		const all_inputs = {};
 		const ALL_LANGS = this.LTABS.get_langs();
 		for(let lng in ALL_LANGS){
@@ -401,7 +403,15 @@ export var VIEW_EDIT_ITEM = {
 		const pos = this.POS_ORDER;
 		const created_by = this.ITEM?this.ITEM.created_by:"chefsmenu";
 
-		const all_inputs = this.colllect_all_inputs();
+		// collect titles & desctiptions for all languages
+		const all_inputs = this.colllect_user_inputs();
+
+		// ------------------------
+		// FOR CHEFSMENU MODE ONLY
+		// ------------------------
+		if(!GLB.THE_CAFE.is_iiko_mode()){			
+			all_inputs['ru'].sizes = this.sizes_get_inputs();
+		};		
 
 		if(!all_inputs['ru'].title){
 			GLB.VIEWS.modalMessage({
@@ -419,37 +429,14 @@ export var VIEW_EDIT_ITEM = {
 				on_close:()=>{this._page_to_top();}
 			});
 			return false;
-		};		
-
-		// ------------------------
-		// FOR CHEFSMENU MODE ONLY
-		// ------------------------
-		if(!GLB.THE_CAFE.is_iiko_mode()){
-			// TODO			
-			// if(!all_inputs['ru'].price){
-			// 	all_inputs['ru'].price = 0;
-			// }else{			
-			// 	var price_msk = /^[\d]*[\.\,]*[\d]*$/;
-			// 	var res = price_msk.test(all_inputs['ru'].price); 
-			// 	if(!res){
-			// 		GLB.VIEWS.modalMessage({
-			// 			title:GLB.LNG.get("lng_attention"),
-			// 			message:"Введите корректное значение стоимости",
-			// 			btn_title:GLB.LNG.get('lng_close')					
-			// 		});
-			// 		return false;
-			// 	}else{					
-			// 		all_inputs['ru'].price = this.price_to_number( all_inputs['ru'].price );				
-			// 	}
-			// };
 		};
 
 		let some_extra_fields_is_empty = 0;
 		const ALL_LANGS = this.LTABS.get_langs();
 		if(Object.keys(ALL_LANGS).length>1){
 			// search if any inputs in extra langs is empty;			
-			for(let code in ALL_LANGS){
-				if(this.inputs_has_empty_values(all_inputs[code])){
+			for(let lng in ALL_LANGS){
+				if(this.inputs_has_empty_values(all_inputs[lng])){
 					some_extra_fields_is_empty++;
 				}				
 			};
@@ -462,6 +449,8 @@ export var VIEW_EDIT_ITEM = {
 			created_by,
 			pos
 		};
+
+		console.log('pre save all_inputs',all_inputs);
 
 		const errMessage = `Ошибка. Не удалось сохранить.`;
 		const errMessageLimitsItems = `<p>Общее количество блюд в вашем меню достигло лимита.</p>
