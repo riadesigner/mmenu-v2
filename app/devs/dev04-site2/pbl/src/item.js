@@ -1,6 +1,7 @@
 import {GLB} from './glb.js';
 import $ from 'jquery';
 import {IIKO_ITEM} from './iiko/iiko-item.js';
+import {CHEFS_ITEM} from './chefs/chefs-item.js';
 import {ITEM_MODIF_PANEL} from './item-modif-panel.js';
 import swipe from './plugins/swipe.js'; // no delete from here
 
@@ -68,7 +69,9 @@ export var ITEM = {
 
 		if(this.item_data.created_by=="iiko"){
 			this.init_iiko_item();									
-		};
+		}else{
+			this.init_chefs_item();
+		}
 
 		this.insert_data();
 		this.update_lng();
@@ -90,6 +93,30 @@ export var ITEM = {
 	get_element:function() {
 		return this.$item;
 	},
+	init_chefs_item:function(){
+		
+		// INIT CHEFS ITEM
+		this.CHEFS_ITEM = $.extend({},CHEFS_ITEM);	
+		this.CHEFS_ITEM.init(this.item_data, {
+			modifiers_panel:false,
+			on_update_size:(vars)=>{
+				this.update_price_and_volume(vars);
+			},
+			on_update_total_in_cart:(total_in_cart)=>{
+				this.update_cart_btn(total_in_cart);
+				this.play_smile_animation();
+			}						
+		});
+
+		// BUILD UI SIZE BUTTONS
+		const [$btns_mobiles,$btns_desktop] = this.CHEFS_ITEM.get_ui_price_buttons();		
+		if($btns_mobiles && $btns_mobiles.size()){
+			this.$item.addClass('item-sized');
+			this.$iiko_btns_sizes_wrapper_mobile.prepend($btns_mobiles);	
+			this.$iiko_btns_sizes_wrapper_desktop.prepend($btns_desktop);	
+		}
+
+	},	
 	init_iiko_item:function(){
 		
 		// INIT IIKO ITEM
