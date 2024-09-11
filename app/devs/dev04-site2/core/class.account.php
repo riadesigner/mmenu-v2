@@ -185,8 +185,7 @@ class Account{
 						$newItem->id_menu = $newMenu->id;
 						$newItem->title = $item->title;						
 						$newItem->description = $item->description;
-						$newItem->volume = $item->volume;
-						$newItem->price = $item->price;
+						$newItem->sizes = $item->sizes;
 						$newItem->updated_date = 'now()';
 						$newItem->image_name = "";
 						$newItem->image_url = "";
