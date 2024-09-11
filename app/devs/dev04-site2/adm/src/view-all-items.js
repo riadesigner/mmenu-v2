@@ -144,7 +144,6 @@ export var VIEW_ALL_ITEMS = {
 			itemDelete:function(item){ _this.delete_item_confirm(item); },
 			itemReplace:function(direction){ _this.item_replace(direction);},
 			currency : 'RUB',
-			pricePrecision : GLB.THE_CAFE.get().price_precision,
 			currencySign : GLB.CURRENCY.get_current(),
 			managedByIiko:managedByIiko
 		});

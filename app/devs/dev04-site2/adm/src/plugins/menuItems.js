@@ -14,7 +14,6 @@ export default $.extend({
 			var itemDelete =  opt.itemDelete;
 			var currency =  opt.currency;
 			var currencySign =  opt.currencySign;			
-			var pricePrecision =  opt.pricePrecision;
 			var itemReplace =  opt.itemReplace;
 			var managedByIiko = opt.itemReplace;
 
@@ -45,9 +44,9 @@ export default $.extend({
 				},
 				fill_with_content:function($p,item){
 
-					var created_external = item.created_by=='iiko';
-
-					if(created_external){
+					var created_by_iiko = item.created_by=='iiko';
+					
+					if(created_by_iiko){
 						var arr_price = [];
 						var iiko_sizes = item.iiko_sizes ? JSON.parse(item.iiko_sizes) : [];
 						for(var s in iiko_sizes){
@@ -55,20 +54,22 @@ export default $.extend({
 						};
 						var price = arr_price.join('/');
 					}else{
-						var price = parseFloat(item.price).toFixed(pricePrecision);
-						price = price.replace(/\./g,',');											
+						const arr_price = [];
+						const sizes = item.sizes ? JSON.parse(item.sizes) : [];
+						if(sizes.length){
+							for(let s in sizes){
+								arr_price.push(sizes[s].price);
+							}			
+						}else{
+							arr_price.push(0);
+						};						
+						var price = arr_price.join('/');
 					};
 
 					var item_title = item.title || "";
 					var item_description = item.description || "";
 					var item_volume = item.volume || "";
-
-					if(created_external){
-						var strPrice = price + '&nbsp;' + currencySign;
-					}else{
-						var strPrice = currency=='RUB' ? item.price + '&nbsp;' + currencySign : currencySign + '&nbsp;' + item.price;	
-					}
-					
+					var strPrice = price + '&nbsp;' + currencySign;
 
 					$p.find(".item-title > div").html(item_title);
 					$p.find(".item-description").html(item_description+"<div class='item-volume'>"+item_volume+"</div>");
@@ -79,7 +80,7 @@ export default $.extend({
 					parseInt(item.mode_vege,10) && $p.addClass('flag-vege-enable');
 					item.image_url && $p.addClass('image-available');
 
-					if(managedByIiko && !created_external){
+					if(managedByIiko && !created_by_iiko){
 						$p.addClass('item-highlighted');
 					};
 					

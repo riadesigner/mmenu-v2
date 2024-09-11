@@ -183,10 +183,10 @@ export var VIEW_EDIT_ITEM = {
 	},	
 
 	// SIZES PART FOR CHEFSMENU MODE
-
 	// @return array [{price:number, volume:number, units:string}];
 	// for example: [{price:100, volume:200, units:'мл'}];
 	sizes_get_inputs:function(){
+		if(GLB.THE_CAFE.is_iiko_mode()){ return [];}
 		const arr_sizes = [];
 		const $rows = this.$price_list.find('.tpl-item-edit__price-list-row');
 		$rows.each((i, row)=>{			
@@ -194,8 +194,7 @@ export var VIEW_EDIT_ITEM = {
 			const volume = this.inputs_to_float($(row).find('input[name=item-volume]').val());
 			const units = $(row).find('button[name=item-units]').val();
 			arr_sizes.push({price:price,volume:volume, units:units});			
-		});
-		console.log('arr_sizes',arr_sizes)
+		});		
 		return arr_sizes;		
 	},
 	sizes_update_buttons:function(){
@@ -220,10 +219,19 @@ export var VIEW_EDIT_ITEM = {
 		const $tpl_row = this.$price_list_row_tpl.clone();		
 		const $volume = $tpl_row.find('.item-volume');
 		const $price = $tpl_row.find('.item-price');
-		const $btn_units = $tpl_row.find('button[name=item-units]');
-		$btn_units.on('touchend',()=>{ this.sizes_toggle_units($btn_units); });
+		const $btn_units = $tpl_row.find('button[name=item-units]');		
+		$btn_units.on('touchend',()=>{ 			
+			this._blur({onBlur:()=>{
+				if(!this.LOADING && !this.VIEW_SCROLLED){
+					this.sizes_toggle_units($btn_units);
+					this.need2save(true);
+				};
+			}});			
+			return false;			
+		});
 		$volume.val(row.volume);
 		$price.val(row.price);
+		$btn_units.val(row.units).html(row.units);
 		$volume.on('keyup',()=>{this.need2save(true);});
 		$price.on('keyup',()=>{this.need2save(true);});
 		this.$price_list.append($tpl_row);		
@@ -238,7 +246,7 @@ export var VIEW_EDIT_ITEM = {
 		}
 	},
 	sizes_get_default:function(){
-		return {volume:0, price:0 };
+		return {volume:0, price:0, units:"г" };
 	},
 	sizes_rebuild:function(){		
 		this.$price_list.html('');
@@ -385,14 +393,14 @@ export var VIEW_EDIT_ITEM = {
 		};		
 	},
 	colllect_user_inputs:function() {
-		const all_inputs = {};
+		const text_inputs = {};
 		const ALL_LANGS = this.LTABS.get_langs();
 		for(let lng in ALL_LANGS){
 			if(ALL_LANGS.hasOwnProperty(lng)){
-				all_inputs[lng] = this.get_user_inputs(lng);
+				text_inputs[lng] = this.get_user_inputs(lng);
 			}
 		};
-		return all_inputs;
+		return text_inputs;
 	},
 	inputs_has_empty_values:function(inputs) {		
 		return (!inputs['title'] || !inputs['description']);
@@ -405,16 +413,9 @@ export var VIEW_EDIT_ITEM = {
 		const created_by = this.ITEM?this.ITEM.created_by:"chefsmenu";
 
 		// collect titles & desctiptions for all languages
-		const all_inputs = this.colllect_user_inputs();
+		const text_inputs = this.colllect_user_inputs();
 
-		// ------------------------
-		// FOR CHEFSMENU MODE ONLY
-		// ------------------------
-		if(!GLB.THE_CAFE.is_iiko_mode()){			
-			all_inputs['ru'].sizes = this.sizes_get_inputs();
-		};		
-
-		if(!all_inputs['ru'].title){
+		if(!text_inputs['ru'].title){
 			GLB.VIEWS.modalMessage({
 				title:GLB.LNG.get("lng_attention"),
 				message:"Укажите название блюда",
@@ -422,7 +423,7 @@ export var VIEW_EDIT_ITEM = {
 				on_close:()=>{this._page_to_top();}
 			});
 			return false;
-		}else if(all_inputs['ru'].title.length<3){
+		}else if(text_inputs['ru'].title.length<3){
 			GLB.VIEWS.modalMessage({
 				title:GLB.LNG.get("lng_attention"),
 				message:"Название блюда слишком короткое",
@@ -437,21 +438,27 @@ export var VIEW_EDIT_ITEM = {
 		if(Object.keys(ALL_LANGS).length>1){
 			// search if any inputs in extra langs is empty;			
 			for(let lng in ALL_LANGS){
-				if(this.inputs_has_empty_values(all_inputs[lng])){
+				if(this.inputs_has_empty_values(text_inputs[lng])){
 					some_extra_fields_is_empty++;
 				}				
 			};
 		};
 
+		// ------------------------
+		// FOR CHEFSMENU MODE ONLY
+		// ------------------------
+		const sizes = this.sizes_get_inputs();
+
 		const data = {			
-			all_inputs,
+			text_inputs,
+			sizes,
 			id_menu,
 			id_item,
 			created_by,
 			pos
 		};
 
-		console.log('pre save all_inputs',all_inputs);
+		console.log('pre save data',data);
 
 		const errMessage = `Ошибка. Не удалось сохранить.`;
 		const errMessageLimitsItems = `<p>Общее количество блюд в вашем меню достигло лимита.</p>
@@ -480,7 +487,7 @@ export var VIEW_EDIT_ITEM = {
 	            		this._end_loading();
 	            		this.error_message(errMessage);
 	            	};
-	            	console.log('result 1',typeof result.error, result);						
+	            	console.log('result 1', result);						
 
 				})
 				.catch((result)=>{

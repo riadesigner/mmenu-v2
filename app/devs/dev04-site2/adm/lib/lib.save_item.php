@@ -44,38 +44,27 @@
 	$item_created_by = post_clean($_POST['created_by']);
 
 
-	if(!isset($_POST['all_inputs']) || empty($_POST['all_inputs']))__errorjsonp("--Not found user inputs");
-	$all_inputs = $_POST['all_inputs']; 
+	if(!isset($_POST['text_inputs']) || empty($_POST['text_inputs']))__errorjsonp("--Not found user inputs");
+	$text_inputs = $_POST['text_inputs']; 
 
 	// ---------------------------------
 	// FOR RUSSIAN LANG (BY DEFAULT)
 	// ---------------------------------
 
-	$item_title = post_clean($all_inputs['ru']['title'],$CFG->inputs_length['item-title']);
-	$item_description = post_clean($all_inputs['ru']['description'],$CFG->inputs_length['item-description']);	
+	$item_title = post_clean($text_inputs['ru']['title'],$CFG->inputs_length['item-title']);
+	$item_description = post_clean($text_inputs['ru']['description'],$CFG->inputs_length['item-description']);	
 	$pos = (int) $_POST['pos'];
 	
 	// ---------------------------------
 	// THIS PART ONLY FOR CHEFMENU MODE
 	// ---------------------------------
-	 
-	if(!isset($all_inputs['ru']['volume']) ){
-		 $item_volume = "";
-	}else{
-		$item_volume = $all_inputs['ru']['volume'];		
-	} 	
-
-	if(!isset($all_inputs['ru']['price']) ){
-		$item_price = 0;
-	}else{
-		$item_price = (float) $all_inputs['ru']['price'];		
-	}	
+	$sizes = !isset($_POST['sizes']) ? [] : json_encode($_POST['sizes'], JSON_UNESCAPED_UNICODE);
 
 	// ------------------------------------
 	// SAVING EXTRA DATA (OTHER LANGUAGES)
 	// ------------------------------------
-	unset($all_inputs['ru']);
-	$extra_data = count($all_inputs)? json_encode($all_inputs, JSON_UNESCAPED_UNICODE):"";	
+	unset($text_inputs['ru']);
+	$extra_data = count($text_inputs)? json_encode($text_inputs, JSON_UNESCAPED_UNICODE):"";	
 	
 
 	if(isset($_POST['id_item']) && !empty($_POST['id_item'])){
@@ -91,14 +80,9 @@
 		$item->title = !empty($item_title)?$item_title:"Untitled";
 		$item->description = $item_description;
 		$item->pos = $pos;
+		$item->sizes = $sizes; // FOR CHEFMENUMODE ONLY
 		$item->extra_data = $extra_data;
 		$item->updated_date = 'now()';
-
-		if($item_created_by!=='iiko'){
-			// ONLY FOR CHEFMENU MODE
-			$item->volume = $item_volume;
-			$item->price = $item_price;
-		}
 
 	}else{
 
@@ -117,8 +101,7 @@
 		$item->id_cafe = $cafe->id;
 		$item->title = !empty($item_title)?$item_title:"Sample item ".($count);
 		$item->description = $item_description;
-		$item->volume = $item_volume;
-		$item->price = $item_price;
+		$item->sizes = $sizes; // FOR CHEFMENUMODE ONLY
 		$item->extra_data = $extra_data;
 		$item->updated_date = 'now()';
 		$item->pos = $pos;
@@ -140,6 +123,5 @@
 		__errorjsonp("Something wrong. Not saved item");
 
 	}
-
 
 ?>
