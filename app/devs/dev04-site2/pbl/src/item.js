@@ -97,7 +97,7 @@ export var ITEM = {
 		this.IIKO_ITEM.init(this.item_data, {
 			modifiers_panel:this.MODIF_PANEL,
 			on_update_size:(vars)=>{
-				this.iiko_update_price_and_volume(vars);
+				this.update_price_and_volume(vars);
 			},
 			on_update_total_in_cart:(total_in_cart)=>{
 				this.update_cart_btn(total_in_cart);
@@ -209,11 +209,10 @@ export var ITEM = {
 		this.$item.find(this._CN+"item-about").html(item.description);
 		
 		if(IIKO_MODE){
-			this.iiko_update_price_and_volume(this.IIKO_ITEM.sizer_get_vars());
+			this.update_price_and_volume(this.IIKO_ITEM.sizer_get_vars());
 		}else{
 			// CHEFSMENU MODE ONLY
-			this.$item.find(this._CN+"item-price span").html(item.price+" "+GLB.CAFE.get('cafe_currency').symbol);
-			this.$item.find(this._CN+"item-volume").html(item.volume);
+			// this.update_price_and_volume(this.IIKO_ITEM.sizer_get_vars());
 		}
 
 		this.update_item_data_container();		
@@ -227,7 +226,7 @@ export var ITEM = {
 			this.$btnAddToCart.removeClass("this-cart-full");	
 		}
 	},
-	iiko_update_price_and_volume:function(vars) {			
+	update_price_and_volume:function(vars) {			
 		var currency_symbol = GLB.CAFE.get('cafe_currency').symbol;
 		this.$item_price.html(vars.price + " " + currency_symbol);
 		this.$item_volume.html(vars.volume);							
