@@ -168,29 +168,12 @@ export var ITEM = {
 			// --------------------	
 			// CHEFSMENU MODE MENU
 			// --------------------
-				const preorder = this.chefsmenu_get_preorder();
-				let total_in_cart = GLB.CART.add_order2(preorder);
+			const preorder = this.CHEFS_ITEM.get_preorder(1);				
+				let total_in_cart = GLB.CART.add_preorder(preorder);
 				this.update_cart_btn(total_in_cart);
 				this.play_smile_animation();
 			}
 		}
-	},
-	chefsmenu_get_preorder:function(){
-		// ------------------------------------------------------------
-		//  chefsmenu mode has no modifiers
-		//  and all uniq_name pre-order for each item will be the same
-		// -------------------------------------------------------------
-		const item = this.item_data;
-		const uniq_name = `chefsmenu-pre-order-${item.id}`;
-		const pre_order = {			
-			itemId:item.id,				
-			uniq_name:uniq_name,
-			price: item.price,
-			count: 1,
-			volume:item.volume,
-			item_data:item
-		};
-		return pre_order;
 	},
 	play_smile_animation:function() {
 		this.$item.removeClass(this.CLASS_PLAY_ADDTOCART);				
@@ -237,9 +220,8 @@ export var ITEM = {
 		
 		if(IIKO_MODE){
 			this.update_price_and_volume(this.IIKO_ITEM.sizer_get_vars());
-		}else{
-			// CHEFSMENU MODE ONLY
-			// this.update_price_and_volume(this.IIKO_ITEM.sizer_get_vars());
+		}else{			
+			this.update_price_and_volume(this.CHEFS_ITEM.sizer_get_vars());
 		}
 
 		this.update_item_data_container();		
@@ -256,8 +238,8 @@ export var ITEM = {
 	update_price_and_volume:function(vars) {			
 		var currency_symbol = GLB.CAFE.get('cafe_currency').symbol;
 		this.$item_price.html(vars.price + " " + currency_symbol);
-		this.$item_volume.html(vars.volume);							
-		this.$item_volume2.html(vars.volume);
+		this.$item_volume.html(vars.sizeName);							
+		this.$item_volume2.html(vars.sizeName);
 	},
 	is_portrait:function() {
 		return $(window).height() > $(window).width()-1;

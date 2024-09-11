@@ -13,12 +13,9 @@ export var IIKO_ITEM_SIZER = {
 	},
 	reset:function() {
 		this.VARS = {
-			sizeName:"",
-			sizeId:"",
-			sizeCode:"",
 			price:0,
-			volume:0
-		};		
+			sizeName:""			
+		};
 	},
 	get_ui:function() {
 		return [this.$arr_btns['mobile'],this.$arr_btns['desktop']];		
@@ -44,21 +41,19 @@ export var IIKO_ITEM_SIZER = {
 					const s = sizes[i];					
 					const currentClass = s.isDefault=='true'? " active":"";
 					const $btn = $('<div></div>',{class: this.CN+"item-size-btn "+currentClass});
-					const price = s.price || 0;					
-					const volume = s.portionWeightGrams || 0;
+					const price = s.price || 0;										
 					const sizeName = s.sizeName || "";
-					const sizeId = s.sizeId || "";
-					const sizeCode = s.sizeCode || "";					
+
 					$btn.html(sizeName);	
 
-					(function($btn, index, price, volume, sizeName, sizeId, sizeCode) {
+					(function($btn, index, price, sizeName) {
 						$btn.on('touchend click',function(e){														
-							_this.change_current_size({$btn, index, price, volume, sizeName, sizeId, sizeCode});							
+							_this.change_current_size({$btn, index, price, sizeName});							
 							e.originalEvent.cancelable && e.preventDefault();
 						});
-					})($btn, i, price, volume, sizeName, sizeId, sizeCode);
+					})($btn, i, price, sizeName);
 				
-					s.isDefault=='true' && this.set_current_vars({price, volume, sizeName, sizeId, sizeCode});							
+					s.isDefault=='true' && this.set_current_vars({price, sizeName});							
 					$btns.append($btn);
 
 				};							
@@ -77,11 +72,8 @@ export var IIKO_ITEM_SIZER = {
 			}else{				
 				var s = sizes[0];
 				let price = s.price;			
-				let volume = s.portionWeightGrams;		
 				var sizeName = "";
-				var sizeId = "";
-				var sizeCode = "";
-				this.set_current_vars({price, volume, sizeName, sizeId, sizeCode});
+				this.set_current_vars({price, sizeName});
 			};
 		}else{
 			this.reset();

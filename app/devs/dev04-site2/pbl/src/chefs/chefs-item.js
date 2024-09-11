@@ -45,11 +45,10 @@ export const CHEFS_ITEM = {
 		itemId: this.item_data.id,
 			uniq_name: uniq_name,
 			price: total_price,
-			count: count,
-			volume: s.volume,
+			count: count,			
 			item_data: this.item_data,			
-			sizeName: `${s.volume} ${s.units}`
-			// chosen_modifiers:""
+			sizeName: `${s.volume} ${s.units}`,
+			chosen_modifiers:""
 		};			
 		return pre_order;
 	},

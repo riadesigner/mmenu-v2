@@ -14,8 +14,7 @@ export var CHEFS_ITEM_SIZER = {
 	reset:function() {
 		this.VARS = {
 			price:0,
-			volume:0,
-			units:"г"
+			sizeName:""
 		};		
 	},
 	get_ui:function() {
@@ -39,8 +38,8 @@ export var CHEFS_ITEM_SIZER = {
 			create_btns:($btns)=>{
 				for(var i=0; i<sizes.length;i++){
 					
-					const s = sizes[i];					
-					const currentClass = s.isDefault=='true'? " active":"";
+					const s = sizes[i];	
+					const currentClass = i==0? " active":"";
 					const $btn = $('<div></div>',{class: this.CN+"item-size-btn "+currentClass});
 					const price = s.price || 0;					
 					const volume = s.volume || 0;
@@ -48,14 +47,14 @@ export var CHEFS_ITEM_SIZER = {
 					const sizeName = `${volume} ${units}`;
 					$btn.html(sizeName);
 
-					(function($btn,  price, volume, units, sizeName) {
+					(function($btn, index, price, sizeName) {
 						$btn.on('touchend click',function(e){														
-							_this.change_current_size({$btn, index, price, volume, units, sizeName});							
+							_this.change_current_size({$btn, index, price, sizeName});							
 							e.originalEvent.cancelable && e.preventDefault();
 						});
-					})($btn, i, price, volume, units, sizeName);
+					})($btn, i, price, sizeName);
 				
-					s.isDefault=='true' && this.set_current_vars({price, volume, units, sizeName});							
+					i==0 && this.set_current_vars({price, sizeName});							
 					$btns.append($btn);
 
 				};							
@@ -77,7 +76,7 @@ export var CHEFS_ITEM_SIZER = {
 				let volume = s.volume;		
 				let units = s.units;
 				var sizeName = `${volume} ${units}`;
-				this.set_current_vars({price, volume, units, sizeName});
+				this.set_current_vars({price, sizeName});
 			};
 		}else{
 			this.reset();
