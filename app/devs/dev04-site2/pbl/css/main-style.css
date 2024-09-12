@@ -733,8 +733,8 @@ a.mm2-home-link:hover{ color: %[color-home-link-hover]%; }
   font-size: .8rem;
   display: none;
 }
-
-.mm2-show-full-description .mm2-item-volume2{  display:none; }
+.mm2-item.item-sized .mm2-item-volume2{display:none;}
+.mm2-show-full-description .mm2-item-volume2{display:none; }
 
 .mm2-item-btn-more-largescreen{
   position:absolute;bottom:2%;right:0;color: %[color-front]%;

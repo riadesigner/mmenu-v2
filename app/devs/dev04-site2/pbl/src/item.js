@@ -109,8 +109,8 @@ export var ITEM = {
 		});
 
 		// BUILD UI SIZE BUTTONS
-		const [$btns_mobiles,$btns_desktop] = this.CHEFS_ITEM.get_ui_price_buttons();		
-		if($btns_mobiles && $btns_mobiles.size()){
+		if(this.CHEFS_ITEM.has_sizes()){
+			const [$btns_mobiles,$btns_desktop] = this.CHEFS_ITEM.get_ui_price_buttons();		
 			this.$item.addClass('item-sized');
 			this.$iiko_btns_sizes_wrapper_mobile.prepend($btns_mobiles);	
 			this.$iiko_btns_sizes_wrapper_desktop.prepend($btns_desktop);	
@@ -133,8 +133,8 @@ export var ITEM = {
 		});
 
 		// BUILD UI SIZE BUTTONS
-		const [$btns_mobiles,$btns_desktop] = this.IIKO_ITEM.get_ui_price_buttons();		
-		if($btns_mobiles && $btns_mobiles.size()){
+		if(this.IIKO_ITEM.has_sizes()){
+			const [$btns_mobiles,$btns_desktop] = this.IIKO_ITEM.get_ui_price_buttons();		
 			this.$item.addClass('item-sized');
 			this.$iiko_btns_sizes_wrapper_mobile.prepend($btns_mobiles);	
 			this.$iiko_btns_sizes_wrapper_desktop.prepend($btns_desktop);	
