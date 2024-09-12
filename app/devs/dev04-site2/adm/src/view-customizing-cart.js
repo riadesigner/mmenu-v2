@@ -504,26 +504,25 @@ export var VIEW_CUSTOMIZING_CART = {
 		GLB.VIEWS.modalConfirm({
 			title:"Внимание",
 			ask:ask,
-			action:(mode)=>{				
-				if(mode){
-					this.su_update_all_tg_keys_asynq()
-					.then((keys)=>{									
-						this.update_tg_keys_buttons(keys);
-						this.update_tg_users_list(false);
-						this._end_loading();
-					})
-					.catch((vars)=>{					
-						GLB.VIEWS.modalMessage({
-							title:GLB.LNG.get("lng_attention"),
-							message:"Не удалось обновить ключи для телеграма",
-							btn_title:GLB.LNG.get('lng_ok')
-						});
-						console.log(vars);
-						this._end_loading();				
+			action:()=>{				
+				this.su_update_all_tg_keys_asynq()
+				.then((keys)=>{									
+					this.update_tg_keys_buttons(keys);
+					this.update_tg_users_list(false);
+					this._end_loading();
+				})
+				.catch((vars)=>{					
+					GLB.VIEWS.modalMessage({
+						title:GLB.LNG.get("lng_attention"),
+						message:"Не удалось обновить ключи для телеграма",
+						btn_title:GLB.LNG.get('lng_ok')
 					});
-				}else{
-					console.log("CANCELED");
-				}
+					console.log(vars);
+					this._end_loading();				
+				});
+			},
+			cancel:()=>{
+				console.log("CANCELED");
 			},
 			buttons:[GLB.LNG.get("lng_ok"),GLB.LNG.get("lng_cancel")]
 		});	

@@ -45,6 +45,8 @@ export var VIEW_ORDERING = {
 		this.$section_date_time_to = this.$view.find(this._CN+"date-time-to");
 		this.$section_pick_it_up_at = this.$view.find(this._CN+"pick-it-up-at").hide();
 
+		this.$ordering_mode = this.$view.find(this._CN+"ordering-mode");
+
 		this.PICKUPSELF_MODE = false;
 		this.STREETS_LIST = [];
 		
@@ -61,20 +63,21 @@ export var VIEW_ORDERING = {
 		this._update_tabindex();
 		this._show_attention(false,false);
 
-		this.IIKO_MODE = GLB.CAFE.get().iiko_api_key!=="";
+		this.IIKO_MODE = GLB.CAFE.is_iiko_mode();
 
 		if(opt && opt.pickupMode){
 			this.PICKUPSELF_MODE = true;
 			this.$section_user_address.hide();
 			this.$section_date_time_to.hide();
 			this.$section_pick_it_up_at.show();
+			this.$ordering_mode.html('Я заберу заказ сам')
 		}else{
 			this.PICKUPSELF_MODE = false;
 			this.$section_user_address.show();
 			this.$section_date_time_to.show();
 			this.$section_pick_it_up_at.hide();			
+			this.$ordering_mode.html('Заказ на доставку')
 		};
-
 
 		if(opt && opt.clear){
 
@@ -96,7 +99,7 @@ export var VIEW_ORDERING = {
 			
 			// LOAD CITIES FOR IIKO DELIVERY IF NEED
 
-			const IIKO_MODE = GLB.CAFE.get().iiko_api_key!=="";	
+			const IIKO_MODE = GLB.CAFE.is_iiko_mode();	
 			if(!this.STREETS_LIST.length && !this.PICKUPSELF_MODE && IIKO_MODE){
 				console.log("start loading streets");
 				
@@ -214,10 +217,8 @@ export var VIEW_ORDERING = {
 		});
 
 		var fn = {
-			go_back:()=> {
-				const has_delivery = GLB.CAFE.get().has_delivery > 0;
-				console.log("has_delivery",has_delivery,GLB.CAFE.get().has_delivery)
-				if(has_delivery){
+			go_back:()=> {				
+				if(GLB.CAFE.has_delivery()){
 					GLB.UVIEWS.go_back();						
 				}else{
 					GLB.UVIEWS.set_current('the-showcart');

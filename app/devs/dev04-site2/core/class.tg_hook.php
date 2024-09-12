@@ -44,6 +44,8 @@ class Tg_hook {
         $this->tg_user_id = $tg_user_id;
         $this->tg_user_name = $tg_user_name;
 
+        glog('$tg_user_name = '.$tg_user_name);
+
         return $this;
 
     }
@@ -78,6 +80,8 @@ class Tg_hook {
                 }
 
             }else{
+
+                glog("real user sent message");
                 
                 // --------------------------------
                 //  IF REAL TG_USER INPUT «Отмена»
@@ -90,7 +94,7 @@ class Tg_hook {
                 //  IF REAL TG_USER INPUT VALID TG_KEY
                 // -------------------------------------
                 }else if( $NEW_KEY = $this->check_tg_key_string($this->message)){
-
+                     
                     $this->change_user_role($NEW_KEY);
 
                 // --------------------------------
@@ -114,7 +118,9 @@ class Tg_hook {
             // --------------------------------------------
             //  IF UNKNOWN (OR NEW) TG_USER ENTERED TG_KEY
             // --------------------------------------------
-            if($this->TG_KEY = $this->check_tg_key_string($this->message)){                
+
+            if($IS_KEY = $this->check_tg_key_string($this->message)){                
+                $this->TG_KEY = $IS_KEY;
                 if($CAFE = $this->check_cafe_by_tg_key($this->TG_KEY)){
                     // -----------------------
                     //  CREATING NEW TG_USER
@@ -331,7 +337,10 @@ class Tg_hook {
     }
 
     private function check_tg_key_string($key_string=""){ 
-        if(!str_starts_with($key_string, '/start ')) return false;
+        
+        glog("TEST! check_tg_key_string");
+
+        if(!str_starts_with($key_string, '/start ')) return false;        
         $key = explode(" ",$key_string)[1];        
         $arr_keys = new Smart_collect('tg_keys',"WHERE tg_key='{$key}'");
         if($arr_keys&&$arr_keys->full()){            

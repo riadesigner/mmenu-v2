@@ -17,6 +17,9 @@ export var CAFE = {
 	get_status:function(){		
 		return this.OBJ_CAFE.cafe_status;
 	},
+	has_delivery:function(){
+		return this.OBJ_CAFE.has_delivery > 0 ? true : false;
+	},
 	get_currency:function(){		
 		var cur = this.OBJ_CAFE.cafe_currency;
 		var arr = {"RUB":"руб.","USD":"$","EUR":"€","JPY":"¥","GBP":"£","KRW":"₩"};

@@ -327,7 +327,7 @@ export var VIEW_EDIT_MENU = {
 			GLB.VIEWS.modalConfirm({
 				title:"Внимание!",
 				ask:'Некоторые переводы не заполнены. Все равно сохранить?',
-				action:(mode)=>{ mode && fn.save(); },
+				action:()=>{ fn.save(); },
 				buttons:["Да","Нет"]
 			});			
 		}else{

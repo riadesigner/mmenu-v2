@@ -37,7 +37,7 @@ a.mm2-home-link:hover{ color: %[color-home-link-hover]%; }
 }
 
 .mm2-menu-banner__link{text-align: center;margin: 0 auto;font: .7rem arial;}
-.mm2-menu-banner__link:link,.mm2-menu-banner__link:visited{color: %[color-front]%;text-decoration: none;}
+.mm2-menu-banner__link:link,.mm2-menu-banner__link:visited{color: gray;text-decoration: none;}
 .mm2-menu-banner__link:hover{color: %[color-bright]%;}
 
 .menu-iiko-mode .chefsmenu-mode-only{display: none;}
@@ -574,62 +574,6 @@ a.mm2-home-link:hover{ color: %[color-home-link-hover]%; }
 }
 .mm2-item-modifiers__subtitle-section div{position: absolute;top:50%;left:0;transform: translate(0, -50%);}
 
-/* 
-.mm2-item-modifiers__list-section{ height: 69%;padding: 15px 0;overflow:hidden; overflow-y: auto;-webkit-overflow-scrolling: touch; border-bottom:1px solid gray; }
-.mm2-item-modifiers__list-section ul{list-style: none;padding: 0;margin: 0;}
-.mm2-item-modifiers__list-section ul li{
-  display: flex;height: 48px;align-items: center;transition: .3s;border-bottom: 1px dashed #6a6a6a;
-  cursor: pointer;  
-}
-.mm2-item-modifiers__list-section ul li:hover{background-color: rgba(0,0,0,.3);}
-.mm2-item-modifiers__list-section ul li.mobile-active{background-color: rgba(0,0,0,.3);}
-
-.mm2-item-modifiers__list-section ul li .m-check{width: 13%;height: 100%;position: relative;text-align: left;}
-.mm2-item-modifiers__list-section ul li .m-title{width: 57%;font-size: 1.1rem;}
-.mm2-item-modifiers__list-section ul li .m-price{width: 30%;font-size: 1.1rem;text-align: right;}
-
-.mm2-item-modifiers__list-section ul li .m-check span{  
-  position: absolute;display: block;  
-  width: 43px;height: 43px;top:50%;left: 0;
-  transform: translate(0,-50%);
-  background-image: url("%[path-to-skin]%pbl-icons.svg");
-  background-size: auto 1000%;
-  background-repeat: no-repeat;  
-  background-position: 11.2% 88.9%;    
-}
-.mm2-item-modifiers__list-section ul li.chosen .m-check span{background-position: 0% 88.9%; }
-
-.item-hasnot-modifiers .mm2-item-modifiers__list-section ul {visibility: hidden;}
-.item-hasnot-modifiers .mm2-item-modifiers__subtitle-section div {visibility: hidden;}
-.item-hasnot-modifiers .mm2-item-modifiers__subtitle-section{ border-bottom:1px solid transparent;} */
-
-
-
-/* --- VIEW IIKO MODIFIERS --- */
-
-/* .mm2-footer-modifiers__count-buttons{ border:1px solid gray;border-radius: 7px;width: 100%;height:100%; display: flex;}
-.mm2-footer-modifiers__count-buttons>div{text-align: center;height:100%;position: relative;}
-.mm2-footer-modifiers__count-buttons>div>span{position: absolute;top:50%;left:50%;transform: translate(-50%,-50%);}
-.mm2-footer-modifiers__count-buttons_plus{width: 37%;color:#cccccc;font-size: 2rem;border-radius: 7px;cursor: pointer;}
-.mm2-footer-modifiers__count-buttons_minus{width: 37%;color:#cccccc;font-size: 2rem;border-radius: 7px;cursor: pointer;}
-.mm2-footer-modifiers__count-buttons_counter{width: 26%;color:#ffffff;font-size: 1.5rem;color:%[color-bright]%;}
-.mm2-footer-modifiers__count-buttons_plus.mobile-active{background-color: black;}
-.mm2-footer-modifiers__count-buttons_minus.mobile-active{background-color: black;}
-
-.mm2-footer-modifiers__basket{ 
-  border-radius: 7px;width: 100%;height:100%;background: %[color-bright]%;
-  color:black;text-align: center;position: relative;
-  cursor: pointer;
-}
-.mm2-footer-modifiers__basket.mobile-active{opacity: .8;}
-.mm2-footer-modifiers__basket span{position: absolute;top:50%;left:50%;transform: translate(-50%,-50%);}
-.mm2-footer-modifiers__basket div{white-space: nowrap;}
-.mm2-footer-modifiers__basket div:nth-child(1){font-size: 1.1rem;}
-.mm2-footer-modifiers__basket div:nth-child(2){font-size: 1.5rem;} */
-
-
-/* --- / VIEW IIKO MODIFIERS --- */
-
 /* -- SMILE -- */
 .mm2-item-anim {  
   position: absolute;
@@ -713,7 +657,7 @@ a.mm2-home-link:hover{ color: %[color-home-link-hover]%; }
 }
 
 .mm2-item-about {color:%[color-front]%;margin: 0;padding: 0;}
-.mm2-item-volume{color:%[color-front]%;}
+.mm2-item-volume{color:gray;}
 
 .mm2-item-title {
   line-height: 1; 
@@ -767,11 +711,8 @@ a.mm2-home-link:hover{ color: %[color-home-link-hover]%; }
 .mm2-item-btns-sizes-desktop .mm2-item-size-btn:hover{background: #3b3b3b;}
 .mm2-item-btns-sizes-desktop .mm2-item-size-btn:active{transition: 0s;background: #777777;}
 
-
-.mm2-item-btns-sizes-desktop {   
-  position: absolute;  width: 100%; 
-  z-index: 15; transition: .5s;left: 0; bottom:50px;   
-}
+.mm2-item-btns-sizes-desktop { position: absolute;  width: 100%;z-index: 15; transition: .5s;left: 0; bottom:100px;}
+.mm2-item.item-sized .mm2-item-btns-sizes-desktop::after{content: "";border-bottom:1px solid gray;width: 100%;position: absolute;bottom:-20px;left:0;}
 .mm2-item-btns-sizes-desktop .mm2-item-size-btn{float:left;margin:0 6px 0 0 ;}
 
 
@@ -1385,26 +1326,17 @@ a.mm2-home-link:hover{ color: %[color-home-link-hover]%; }
   } 
 
   .mm2-item-descr-group p {margin: 0;padding: 0 20px 0 0;}  
+  .mm2-item-has-flags .mm2-item-flags2{display: block;}
 
   .mm2-item-about {font-size:1em;}
   .mm2-item-volume{font-size:1em;}  
   .mm2-item-title {font-size: 2.1em;}
-  .mm2-item-price {font-size: 1.6em; top:auto;bottom:0;width: 50%;} 
+  .mm2-item-price {font-size: 2.1em; top:auto;bottom:0;width: 50%;} 
   
-  .mm2-item-has-flags .mm2-item-flags2{display: block;}
-  
-  .mm2-item-volume{ 
-    position: absolute;bottom:0; 
-    width: 40%;overflow: hidden; opacity: 1;padding: 0;
-    padding:16px 0 0 0;
-  } 
+  .mm2-item-volume{ position: absolute;bottom:0; width: 40%;overflow: hidden; opacity: 1;padding: 0; padding:16px 0 0 0; } 
+  .mm2-item-volume:after{ content: ""; position: absolute;height: 0px;width: 33%; border-top:%[border-style-1]%; top:0;left:0; }
 
-  .mm2-item-volume:after{
-    content: "";
-    position: absolute;height: 0px;width: 33%;
-    border-top:%[border-style-1]%;
-    top:0;left:0;
-  }
+  .mm2-item.item-sized .mm2-item-volume{display:none;}
 
   .mm2-item-about{padding: 0 8px 8px 8px;}
 
@@ -1679,7 +1611,7 @@ a.mm2-home-link:hover{ color: %[color-home-link-hover]%; }
   .mm2-item-flag-spicy, .mm2-item-flag-hit, .mm2-item-flag-vege{padding: 1vw 3vw 1vw 3vw;font-size: 4.1vw; }
   .mm2-item-title { font-size: 5.8vw;} 
   .mm2-item-about { font-size: 4.5vw;}
-  .mm2-item-volume{ font-size: 5vw;}
+  .mm2-item-volume{ font-size: 4vw;}
   .mm2-item-price { font-size: 5.5vw;}
   .mm2-item-btn-more-largescreen{font-size: .8em;}  
   
@@ -1734,7 +1666,7 @@ a.mm2-home-link:hover{ color: %[color-home-link-hover]%; }
   .mm2-order-ok-notg-message {font-size: 1em;}
   
   .mm2-ordering-mode {font-size: 1rem; margin:5px 0 19px 0;}
-
+  
   .mm2-order-ok-report-main{padding: 0 0 15px 0;margin: 0 0 15px 0;}
   .mm2-order-ok-cart h2 {margin: 0 0 15px 0;}
 

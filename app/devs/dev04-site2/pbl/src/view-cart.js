@@ -91,10 +91,9 @@ export var VIEW_CART = {
 
 	},
 	send_order:function() {
-		const HAS_DELIVERY = GLB.CAFE.get().has_delivery>0; 
-		console.log("send_order, HAS_DELIVERY=",HAS_DELIVERY);
-		if(!HAS_DELIVERY){
-
+		const has_delivery = GLB.CAFE.has_delivery();
+		console.log('!! has_delivery = ', has_delivery)
+		if(!GLB.CAFE.has_delivery()){
 			GLB.VIEW_ORDERING.update({pickupMode:true});
 			GLB.UVIEWS.set_current("the-ordering");						
 		}else{

@@ -87,15 +87,6 @@ export var CHEFSMENU = {
             anim:'animLeft'
         }));
 
-        // GLB.UVIEWS.addview(
-        //     GLB.VIEW_IIKO_MODIFIERS.init({
-        //     name:"the-iiko-modifiers",
-        //     template:PATH_TO_TEMPLATES+" .view-iiko-modifiers",
-        //     chefsmenu:_this,
-        //     noclose:this.NO_CLOSE,
-        //     anim:'zoomOut'
-        // }));  
-
         GLB.UVIEWS.addview(
             GLB.VIEW_TABLE_CHANGE.init({
             name:"view-table-change",
@@ -105,7 +96,6 @@ export var CHEFSMENU = {
             anim:'animLeft'
         }));
 
-        
         GLB.UVIEWS.addview(
             GLB.VIEW_CART.init({
             name:"the-showcart",
@@ -160,8 +150,6 @@ export var CHEFSMENU = {
             anim:'animLeft'
         }));
 
-      
-        
         GLB.TABINDEX.init();
 
         this.onMenuReady && this.onMenuReady();
@@ -260,9 +248,12 @@ export var CHEFSMENU = {
                 GLB.CART.init();
                 GLB.UVIEWS.go_first("fast");
                 
-                const MENU_IIKO_MODE = GLB.CAFE.get().iiko_api_key!=="";
+                const MENU_IIKO_MODE = GLB.CAFE.is_iiko_mode();
                 const MENU_MODE = MENU_IIKO_MODE?_this.CLASS_IIKO_MODE:_this.CLASS_CHEFSMENU_MODE;
                 _this.$menu.addClass(MENU_MODE);
+
+                const HAS_DELIVERY = GLB.CAFE.has_delivery();
+                _this.$menu.addClass('cafe-has-delivery');
 
                 // only for menu page                
                 setTimeout(function() { 
