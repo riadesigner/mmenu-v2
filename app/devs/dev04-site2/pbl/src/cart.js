@@ -35,7 +35,7 @@ export var CART = {
 	 *   uniq_name: string;
 	 *   price: number;
 	 *   count:number;
-	 *   volume:string;
+	 *   sizeName:string;
 	 *   item_data:object;
 	 *	 sizeName: string; / optional (IIKO)
 	 *	 sizeId: string; / optional (IIKO)

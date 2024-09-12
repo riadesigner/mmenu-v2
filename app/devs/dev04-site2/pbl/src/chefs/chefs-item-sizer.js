@@ -33,7 +33,7 @@ export var CHEFS_ITEM_SIZER = {
 	build:function() {
 
 		var _this=this;
-		const sizes =  this.get_all();
+		const sizes =  this.get_all();		
 		const foo = {
 			create_btns:($btns)=>{
 				for(var i=0; i<sizes.length;i++){
@@ -79,8 +79,7 @@ export var CHEFS_ITEM_SIZER = {
 				this.set_current_vars({price, sizeName});
 			};
 		}else{
-			this.reset();
-			console.log("something wrong with sizes",this.ITEM_DATA.id);
+			this.reset();			
 		}
 	
 	},

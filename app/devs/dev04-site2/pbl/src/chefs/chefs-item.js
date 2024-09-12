@@ -1,7 +1,6 @@
 import {GLB} from '../glb.js';
 import $ from 'jquery';
 import {CHEFS_ITEM_SIZER} from './chefs-item-sizer.js';
-import { gain } from 'three/webgpu';
 
 /**
  * @param item_data: Object
@@ -33,7 +32,7 @@ export const CHEFS_ITEM = {
 	},
 	get_preorder:function(count){
 		
-		const s = this.CHEFS_SIZER.get();
+		const s = this.CHEFS_SIZER.get();		
 						
 		const uniq_name = this.calc_order_uniq_name(`chefs-order-${this.item_data.id}`);
 		// const chosen_modifiers = this.IIKO_MODIFIERS.get_selected();
@@ -47,7 +46,7 @@ export const CHEFS_ITEM = {
 			price: total_price,
 			count: count,			
 			item_data: this.item_data,			
-			sizeName: `${s.volume} ${s.units}`,
+			sizeName: s.sizeName,
 			chosen_modifiers:""
 		};			
 		return pre_order;

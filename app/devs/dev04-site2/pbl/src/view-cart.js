@@ -128,103 +128,77 @@ export var VIEW_CART = {
 		
 		this.READY_TO_ORDERING = totalPrice>0?true:false;
 
-		const fn_iiko = {
+		const fn_cart = {
 			buildAll:()=>{
 				this.ALL_ROWS = {};
 				for(let i in ALL_ORDERS){
 					if(ALL_ORDERS.hasOwnProperty(i)){
 						let order = ALL_ORDERS[i]; 												
-						order && fn_iiko.buildRow(order);						
+						order && fn_cart.buildRow(order);						
 					}
-				}
+				};
+				setTimeout(()=>{
+					var counter = 0;
+					for(var i in this.ALL_ROWS){
+						if(this.ALL_ROWS.hasOwnProperty(i)){
+							var delta = counter*.2+.5+"s";
+							this.ALL_ROWS[i].css({opacity:1,transform:"translateX(0)",transition:delta});
+							counter++;
+						}
+					}
+				},300);				
 			},
 			buildRow:(order)=>{				
 				let title = order.item_data.title;
 				let count = order.count;
 				let price = order.price;
-				let uniq_name = order.uniq_name;
+				let uniq_name = order.uniq_name;				
+				let volume = order.sizeName;				
+				
+				// FOR IIKO_MODE ONLY
 				let modifiers = order.chosen_modifiers;
-				let volume = order.volume;
-				if(order.sizeName) {volume = order.sizeName+" / "+volume;}
-				let modifiers_str = "";
-				if(modifiers.length){
+				let modifiers_str = "";				
+				if(IIKO_MODE && modifiers.length){
 					for (let i in modifiers){
 						let mod_str = "+ "+modifiers[i].name+"<br>";
 						modifiers_str += mod_str;
 					}
-				};
+				};				
 
-				let $row = this.$tplItem.clone();
+				let $row = this.$tplItem.clone().css({opacity:0,transform:"translateX(50px)"});
 				$row.find(this._CN+"cart-title__item").html(title);
 				$row.find(this._CN+"cart-title__volume").html(volume);				
-				$row.find(this._CN+"cart-title__modifiers").html(modifiers_str);								
+				IIKO_MODE && $row.find(this._CN+"cart-title__modifiers").html(modifiers_str);
 				$row.find(this._CN+"cart-quantity").html(count+" x "+price+" "+GLB.CAFE.get('cafe_currency').symbol);
 				
 				(function(uniq_name){
-					let $btn1 = $row.find(_this._CN+"cart-more").on("touchend click",()=>{ _this.add_to_cart(uniq_name); return false; });
-					let $btn2 = $row.find(_this._CN+"cart-less").on("touchend click",()=>{ _this.remove_from_cart(uniq_name); return false; });					
+					let $btn1 = $row.find(_this._CN+"cart-more").on("touchend click",function(){ _this.add_to_cart(uniq_name); return false; });
+					let $btn2 = $row.find(_this._CN+"cart-less").on("touchend click",function(){ _this.remove_from_cart(uniq_name); return false; });					
 					$btn1 && $btn2 && GLB.MOBILE_BUTTONS.bhv([$btn1,$btn2]);
 				})(uniq_name);
 
 				this.$itemsContainer.append($row);							
 				this.ALL_ROWS[uniq_name] = $row;				
 
-			}			
-		};	
-
-		var fn = {
-			buildAll:function(){
-				_this.ALL_ROWS = {};
-				for(var i in ALL_ORDERS){
-				  if (ALL_ORDERS.hasOwnProperty(i)) {
-				    fn.buildRow(ALL_ORDERS[i]);
-				  }					
-				};
-				setTimeout(function(){
-					var counter = 0;
-					for(var i in _this.ALL_ROWS){
-						if(_this.ALL_ROWS.hasOwnProperty(i)){
-							var delta = counter*.2+.5+"s";
-							_this.ALL_ROWS[i].css({opacity:1,transform:"translateX(0)",transition:delta});
-							counter++;
-						}
-					}
-				},300);
 			},
-			buildRow:function(order){
-
-				const title = order.item_data.title;
-				const count = order.count;
-				const price = order.price;
-				const uniq_name = order.uniq_name;
-				const volume = order.volume;
-
-				const $row = _this.$tplItem.clone().css({opacity:0,transform:"translateX(50px)"});
-				$row.find(_this._CN+"cart-title").html(title);
-				$row.find(_this._CN+"cart-quantity").html(count+" x "+price+" "+GLB.CAFE.get('cafe_currency').symbol);
-				const $btn1 = $row.find(_this._CN+"cart-more").on("touchend click",function(){ _this.add_to_cart(uniq_name); return false; });
-				const $btn2 = $row.find(_this._CN+"cart-less").on("touchend click",function(){ _this.remove_from_cart(uniq_name); return false; });
-				$btn1 && $btn2 && GLB.MOBILE_BUTTONS.bhv([$btn1,$btn2]);
-				_this.$itemsContainer.append($row);			
-				_this.ALL_ROWS[uniq_name] = $row;				
-			},
-			updateRow:function(uniq_name){
+			updateRow:(uniq_name)=>{
 				const order = ALL_ORDERS[uniq_name];
 				if(!order){
 					if(GLB.CART.is_empty()){
-						_this.update("clear");
+						this.update("clear");
 					}else{
-						_this.ALL_ROWS[uniq_name].css({opacity:0,transform:"translateX(-50px)",transition:"0.3s"});
-						setTimeout(function(){ _this.ALL_ROWS[uniq_name].remove();	},300);
+						this.ALL_ROWS[uniq_name].css({opacity:0,transform:"translateX(-50px)",transition:"0.3s"});
+						setTimeout(()=>{ this.ALL_ROWS[uniq_name].remove();	},300);
 					}
 				}else{
 					const count = order.count;
 					const price = order.price;
 					const str = count+" x "+price+" "+GLB.CAFE.get_currency().symbol;
-					_this.ALL_ROWS[uniq_name].find(_this._CN+"cart-quantity").html(str);
+					this.ALL_ROWS[uniq_name].find(this._CN+"cart-quantity").html(str);
 				}
-			}			
-		};			
+			}						
+		};	
+		
 
 		if(!orderId){
 
@@ -233,11 +207,14 @@ export var VIEW_CART = {
 			// -----------------------------
 
 			this.clear_cart_container();
-			if(IIKO_MODE){
-				fn_iiko.buildAll();
-			}else{
-				fn.buildAll();
-			}			
+			
+			fn_cart.buildAll();
+
+			// if(IIKO_MODE){
+			// 	fn_cart.buildAll();
+			// }else{
+			// 	fn.buildAll();
+			// }			
 
 		}else{
 			if(orderId!=='clear'){
@@ -246,7 +223,7 @@ export var VIEW_CART = {
 				//  UPDATE ONE ROW OF THE ORDER
 				// ----------------------------------				
 				// the same code for CHEFSMENU & IIKO
-				fn.updateRow(orderId);
+				fn_cart.updateRow(orderId);
 
 			}else{
 
