@@ -413,7 +413,7 @@ textarea:focus.length-limit-reached{ animation: ani_limit_reached .3s linear;}
 .std-form ul.std-form__structure{padding:0;list-style:none; }
 .std-form hr{ margin:6vw 0;border:0;border-top:1px solid rgba(0,0,0,.3);}
 .input-title{margin: 0 0 4px 0;}
-
+.std-form__highlight-field{background-color:#fff040 ;border-radius: 8px;padding:10px 15px;}
 
 .std-form__section-description{margin:0 0 8px 0;font-size: 1rem;}
 

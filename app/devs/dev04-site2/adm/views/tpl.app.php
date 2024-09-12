@@ -944,25 +944,33 @@ App&&App();
 					<p><strong><i>Менеджер</i></strong> – будет получать внешние заказы на доставку или самовывоз.</p>
 					<p><strong><i>Администратор</i></strong> – будет получать статистику по всем заказам за день.</p>					
 
-					<p>Выберите нужную роль, чтобы зарегистрироваться в чате.</p >
-					
-					<div class="customizing-cart__all-keylinks">
-						<a href="<?=$CFG->http.$CFG->wwwroot;?>" target="_blank" class="link-waiter"><button class="std-special-single-button">ОФИЦИАНТ</button></a>
-						<a href="<?=$CFG->http.$CFG->wwwroot;?>" target="_blank" class="link-manager"><button class="std-special-single-button">МЕНЕДЖЕР</button></a>
-						<a href="<?=$CFG->http.$CFG->wwwroot;?>" target="_blank" class="link-supervisor"><button class="std-special-single-button">АДМИНИСТРАТОР</button></a>
+					<div class="customizing-cart__tg-links-section-attention std-form__highlight-field">
+						<strong>Не найдено ни одного телеграм ключа!</strong><br>Нажмите ниже «Сбросить телеграм ключи».
 					</div>
 
-					<h2 id="anchor_invitation">Пригласить сотрудника:</h2>
+					<div class="customizing-cart__tg-links-section">
 
-					<p>Чтобы пригласить в специальный телеграм-чат нового сотрудника, 
-						нажмите на соответствующую роль (кнопки ниже). При этом скопируется ссылка-приглашение, 
-						которой вы сможете поделиться:</p>
+						<p>Выберите нужную роль, чтобы зарегистрироваться в чате.</p >
+						
+						<div class="customizing-cart__all-keylinks">
+							<a href="<?=$CFG->http.$CFG->wwwroot;?>" target="_blank" class="link-waiter"><button class="std-special-single-button">ОФИЦИАНТ</button></a>
+							<a href="<?=$CFG->http.$CFG->wwwroot;?>" target="_blank" class="link-manager"><button class="std-special-single-button">МЕНЕДЖЕР</button></a>
+							<a href="<?=$CFG->http.$CFG->wwwroot;?>" target="_blank" class="link-supervisor"><button class="std-special-single-button">АДМИНИСТРАТОР</button></a>
+						</div>
 
-					<div class="customizing-cart__all-invite-links">
-						<button class="std-special-single-button invite-link-waiter">ОФИЦИАНТ</button>
-						<button class="std-special-single-button invite-link-manager">МЕНЕДЖЕР</button>
-						<button class="std-special-single-button invite-link-supervisor">АДМИНИСТРАТОР</button>
-					</div>						
+						<h2 id="anchor_invitation">Пригласить сотрудника:</h2>
+
+						<p>Чтобы пригласить в специальный телеграм-чат нового сотрудника, 
+							нажмите на соответствующую роль (кнопки ниже). При этом скопируется ссылка-приглашение, 
+							которой вы сможете поделиться:</p>
+
+						<div class="customizing-cart__all-invite-links">
+							<button class="std-special-single-button invite-link-waiter">ОФИЦИАНТ</button>
+							<button class="std-special-single-button invite-link-manager">МЕНЕДЖЕР</button>
+							<button class="std-special-single-button invite-link-supervisor">АДМИНИСТРАТОР</button>
+						</div>	
+
+					</div>					
 					
 					<hr>
 

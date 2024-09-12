@@ -18,6 +18,9 @@ export var VIEW_CUSTOMIZING_CART = {
 				
 		this.$iikoSectionOnly = this.$view.find('.iiko-section-only');
 
+		this.$link_tg_section_attention = this.$view.find('.customizing-cart__tg-links-section-attention').hide();
+		this.$link_tg_section = this.$view.find('.customizing-cart__tg-links-section');		
+
 		this.$link_reg_tg_waiter = this.$view.find('.customizing-cart__all-keylinks a.link-waiter'); 
 		this.$link_reg_tg_manager = this.$view.find('.customizing-cart__all-keylinks a.link-manager'); 
 		this.$link_reg_tg_supervisor = this.$view.find('.customizing-cart__all-keylinks a.link-supervisor'); 
@@ -63,6 +66,7 @@ export var VIEW_CUSTOMIZING_CART = {
 		this.load_tg_keys_async()
 		.then((keys)=>{							
 
+			this.show_tg_links_section(true);
 			this.update_tg_keys_buttons(keys);
 
 			this.load_tg_users_async()
@@ -76,10 +80,22 @@ export var VIEW_CUSTOMIZING_CART = {
 		})
 		.catch((vars)=>{
 			console.log('vars',vars)
-			this.end_updating_with_error("Не удалось загрузить ключи для телеграма");
+			this.end_updating_with_error("Не удалось найти ключи для телеграма.", ()=>{
+				this.show_tg_links_section(false);
+				console.log('needs new keys');				
+				this.end_updating();
+			});
 		})
 	},
-
+	show_tg_links_section:function(mode){
+		if(mode){
+			this.$link_tg_section.show();
+			this.$link_tg_section_attention.hide();			
+		}else{
+			this.$link_tg_section.hide();
+			this.$link_tg_section_attention.show();						
+		}
+	},
 	update_tg_users_list:function(tg_users){
 
 		const $waiters = this.$section_tgusers.find('.tgusers-role-waiter span');
@@ -135,7 +151,7 @@ export var VIEW_CUSTOMIZING_CART = {
 			foo.make_string(users.supervisors,$supervisors);
 		}
 	},
-	end_updating_with_error(error_message){
+	end_updating_with_error(error_message, foo){
 		if(error_message){
 			GLB.VIEWS.modalMessage({
 				title:GLB.LNG.get("lng_attention"),
@@ -143,7 +159,7 @@ export var VIEW_CUSTOMIZING_CART = {
 				btn_title:GLB.LNG.get('lng_ok')
 			});
 		};		
-		this.end_updating();
+		foo ? foo() : this.end_updating();
 	},
 
 	end_updating:function(){
@@ -333,56 +349,6 @@ export var VIEW_CUSTOMIZING_CART = {
 		}
 	},
 
-	// create_invitation_link:function(){
-		
-	// 	const link = this.load_tg_link_async("manager")
-	// 		.then((answer)=>{
-	// 			console.log('link = ', answer);
-	// 			this._end_loading();
-	// 		})
-	// 		.catch(e=>{
-	// 			this._end_loading();
-	// 			console.log('error',e);
-	// 		})
-
-	// 	return link;
-	// 	console.log('fired create_invitation_link!');
-		
-	// },
-	
-	// load_tg_link_async:function(user_role){
-	// 	return new Promise((res,rej)=>{
-			
-	// 		var PATH = 'adm/lib/';
-	// 		var url = PATH + 'lib.get_tg_link.php';			
-			
-	// 		this._now_loading();
-
-	// 		var data = {
-	// 			cafe_uniq_name:GLB.THE_CAFE.get().uniq_name,
-	// 			user_role:user_role,
-	// 		};			
-
-	// 		this.AJAX = $.ajax({
-	// 			url: url+"?callback=?",
-	// 			data:data,
-	// 			method:"POST",
-	// 			dataType: "jsonp",
-	// 			success: function (response) {					
-	// 				if(response && !response.error){
-	// 					res(response)						
-	// 				}else{
-	// 					rej(response)						
-	// 				}
-	// 			},
-	// 			error:function(response) {					
-	// 				rej(response)
-	// 			}
-	// 		});			
-
-	// 	});
-	// },
-	
 	load_tg_keys_async:function(){
 		return new Promise((res,rej)=>{
 			
@@ -509,6 +475,7 @@ export var VIEW_CUSTOMIZING_CART = {
 				.then((keys)=>{									
 					this.update_tg_keys_buttons(keys);
 					this.update_tg_users_list(false);
+					this.show_tg_links_section(true);
 					this._end_loading();
 				})
 				.catch((vars)=>{					
@@ -518,6 +485,7 @@ export var VIEW_CUSTOMIZING_CART = {
 						btn_title:GLB.LNG.get('lng_ok')
 					});
 					console.log(vars);
+					this.show_tg_links_section(false);
 					this._end_loading();				
 				});
 			},
