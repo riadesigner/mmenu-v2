@@ -603,7 +603,11 @@ App&&App();
 						<!-- [code] -->	
 					</div> 
 
-					<div class="std-form__section-description" >Выберите иконку раздела:</div>					
+					<div class="std-form__section-description" >Выберите иконку раздела:</div>
+					<div class="std-form-switcher">
+						<div class="std-form-switcher__label">Показывать на сайте</div>
+						<div class="std-form-switcher__button"><span></span></div>
+					</div>
 					<div class="add-menu-icons"></div>
 
 				</div>

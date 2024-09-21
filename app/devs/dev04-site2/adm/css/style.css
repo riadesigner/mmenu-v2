@@ -417,6 +417,13 @@ textarea:focus.length-limit-reached{ animation: ani_limit_reached .3s linear;}
 
 .std-form__section-description{margin:0 0 8px 0;font-size: 1rem;}
 
+.std-form-switcher{font-size: .8rem;display: flex;gap:10px;height:60px;align-items:center;margin:0 0 10px 0;}
+.std-form-switcher__label{width: 70%;}
+.std-form-switcher__button{width: 30%; text-align: right;background-color: #FFF040;border-radius: 50px;position: relative;padding:3px;}
+.std-form-switcher__button span{	
+	display: inline-block;width: 24px;height: 24px;
+	background: white;border:2px solid transparent; border-radius: 50%;
+}
 
 .std-form__wide-button{
 	border:1px solid #969696;font-size:1.6em;padding:26px;border-radius: 6px;
