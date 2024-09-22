@@ -10,8 +10,8 @@ export var VIEW_EDIT_MENU = {
 		this.$btnSave = this.$view.find('.save');		
 
 		this.$langsSections = this.$view.find('.menu-inputs-extra-langs');
+		this.$btn_cat_hide = this.$view.find('.btn-cat-hide');
 		this.MENU_ICON_ID = 0;
-
 		this.$icons  = this.build_icons();
 		
 		this.reset();
@@ -77,6 +77,7 @@ export var VIEW_EDIT_MENU = {
 		this.MENU = options.menu;
 		this.ID_MENU = this.MENU ? this.MENU.id : null;		
 		this.MENU_ICON_ID = this.MENU?this.MENU.id_icon:0;
+		this.NEW_VISIBLE_MODE = this.MENU.visible;
 
 		this.LTABS = $.extend({},LNG_TABS).init(this,this.$page,GLB.THE_CAFE.get());
 		$(this.LTABS).on("change",(e,code)=>{
@@ -84,6 +85,7 @@ export var VIEW_EDIT_MENU = {
 		});
 		
 		this.rebuild_data_sections();
+		this.update_visibility();
 		this.update_title_icon();
 		this.reset();
 
@@ -224,9 +226,30 @@ export var VIEW_EDIT_MENU = {
 				ev.stopPropagation();
 			});
 		});
+		
+		this.$btn_cat_hide.on('touchend',(e)=>{			
+			this.toggle_visibility();			
+			e.originalEvent.cancelable && e.preventDefault();
+		});	
 
 	},
 
+	update_visibility:function(){
+		if(this.NEW_VISIBLE_MODE > 0){
+			this.$btn_cat_hide.removeClass('off');
+		}else{
+			this.$btn_cat_hide.addClass('off');
+		}		
+	},
+	toggle_visibility:function(){		
+		if(this.NEW_VISIBLE_MODE > 0){
+			this.NEW_VISIBLE_MODE = 0;
+		}else{
+			this.NEW_VISIBLE_MODE = 1;
+		};
+		this._need2save(true);
+		this.update_visibility();
+	},
 	reset:function(){
 		this._reset();
 		this._page_to_top();
@@ -234,13 +257,15 @@ export var VIEW_EDIT_MENU = {
 		this._need2save(false);
 		this.change_current_lang('ru');
 		this.$form.find('input,textarea').val("");
+		console.log('this.MENU',this.MENU)
 	},
 	save:function(){
 
 		var _this = this;			
 		var id_cafe = this.ID_CAFE;
 		var id_menu = this.ID_MENU || "";
-		var id_icon = this.MENU_ICON_ID;
+		const id_icon = this.MENU_ICON_ID;
+		const visible = this.NEW_VISIBLE_MODE;
 
 		if(!this.NEED_TO_SAVE && !this.LOADING) {			
 			this._go_back();
@@ -283,7 +308,8 @@ export var VIEW_EDIT_MENU = {
 			id_cafe,
 			id_icon,
 			id_menu,
-			all_inputs
+			all_inputs,
+			visible
 		};
 
 		const errMessage = `<p>Невозможно добавить/сохраниеть раздел.</p>

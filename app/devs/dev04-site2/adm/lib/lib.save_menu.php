@@ -35,6 +35,7 @@
 	if($cafe->id_user !== $user->id) __errorjsonp("Not allowed");	
 	
 	$id_icon = (int) $_POST['id_icon'];
+	$visible = isset($_POST['visible']) ? (int) $_POST['visible'] : 1;
 
 	if(!isset($_POST['all_inputs']) || empty($_POST['all_inputs']))__errorjsonp("--Not found user inputs");
 	$all_inputs = $_POST['all_inputs']; 
@@ -61,6 +62,7 @@
 		if(!$menu || !$menu->valid())__errorjsonp("Unknown menu with id ".$id_menu);
 		$menu->title = $menu_title;
 		$menu->id_icon = $id_icon;
+		$menu->visible = $visible;
 
 	}else{
 
@@ -81,6 +83,7 @@
 		$menu->title = $menu_title;
 		$menu->pos = $pos+1;
 		$menu->id_icon = $id_icon;
+		$menu->visible = $visible;
 
 	}
 

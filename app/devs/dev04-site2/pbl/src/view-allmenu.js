@@ -55,8 +55,9 @@ export var VIEW_ALLMENU = {
 					_this.LIST_SCROLLED = true;					
 				});
 				for (var i=0; i<_this.all_menu.arr.length;i++){
-					var m = _this.all_menu.arr[i];					
-					(function(m_id){
+					var m = _this.all_menu.arr[i];
+					
+						m.visible > 0 && (function(m_id){
 						var $tpl = _this.$tplMenuItem.clone();
 						$tpl.find(_this._CN+"allmenu-row__title span").html(m.title).end();
 						$tpl.find(_this._CN+'allmenu-row__icon').addClass(_this.CN+"icon-"+ GLB.MENU_ICONS.get(m.id_icon));
