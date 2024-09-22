@@ -155,13 +155,16 @@ $.extend({
 				var id_icon = parseInt(menu.id_icon,10);					
 				var iconClassName = _this.getRowIcon ? _this.getRowIcon(id_icon).className:'';
 				var top = _this.get_row_height()*index;
-				var style = "height:"+_this.get_row_height()+"px;top:"+top+"px"; 
+				var style = 'height:'+_this.get_row_height()+'px;top:'+top+'px'; 
+				const classMenuHidden = menu.visible < 1 ? 'menu-hidden':'';				
 				var $row = $([
-					"<div class='"+_this.CLASS_NAME+"__row row-has-icon' row-id='"+id_menu+"' style='"+style+"'>",
-						"<div class='"+_this.CLASS_NAME+"__title'>",
-						"<div class='"+_this.CLASS_NAME+"__title_icon "+iconClassName+"'></div>",
-						"<div class='"+_this.CLASS_NAME+"__title_text'>"+title+"</div></div>",
-					"</div>"].join(""));
+					`<div class="${_this.CLASS_NAME}__row ${classMenuHidden}" row-id="${id_menu}" style="${style}">`,
+						`<div class="${_this.CLASS_NAME}__title">`,
+						`<div class="${_this.CLASS_NAME}__title_icon ${iconClassName}"></div>`,						
+						`<div class="${_this.CLASS_NAME}__title_text">${title}</div></div>`,
+						`<div class="icon-hidden ico-adm-hidden"></div>`,
+					`</div>`].join(""));
+
 				_this.BUTTONS.left && $row.append(bld.bnt_left(id_menu)); 
 				_this.BUTTONS.right && $row.append(bld.bnt_right(id_menu));
 				return $row;
@@ -182,8 +185,9 @@ $.extend({
 				var _this=this;
 				var id_icon = parseInt(menu.id_icon,10);
 				var index = this.get_index_by_id(menu.id);				
-				var $row = $(this.ROWS_LINKS[index]).find('.'+this.CLASS_NAME+'__title');
+				var $row = $(this.ROWS_LINKS[index]);
 				$row.find('.'+this.CLASS_NAME+'__title_text').html(menu.title);
+				if(menu.visible < 1){ $row.addClass('menu-hidden'); }else{ $row.removeClass('menu-hidden'); }
 				if(this.getRowIcon){
 					var $rowIcon = $row.find('.'+this.CLASS_NAME+'__title_icon');
 					var iconClassName = this.getRowIcon(id_icon).className;
