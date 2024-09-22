@@ -77,7 +77,7 @@ export var VIEW_EDIT_MENU = {
 		this.MENU = options.menu;
 		this.ID_MENU = this.MENU ? this.MENU.id : null;		
 		this.MENU_ICON_ID = this.MENU?this.MENU.id_icon:0;
-		this.NEW_VISIBLE_MODE = this.MENU.visible;
+		this.NEW_VISIBLE_MODE = this.MENU ? this.MENU.visible : 1;
 
 		this.LTABS = $.extend({},LNG_TABS).init(this,this.$page,GLB.THE_CAFE.get());
 		$(this.LTABS).on("change",(e,code)=>{
