@@ -110,8 +110,26 @@ export var VIEW_ORDERING = {
 					
 					console.log('streets',streets);
 					
-					
-			        const autoCompleteJS = new autoComplete({
+					const fn ={
+						spelling:function(word, foo, sum=''){
+						  let pos = 0;
+						  let acc = sum;
+						  this.foo=foo;
+						  acc += word.substr(pos,1);
+						  this.say(acc)
+						  const TMR_spell = setTimeout(()=>{
+							if(pos<word.length-1){
+							  pos++;
+							  this.spelling(word.substr(1),foo, acc);
+							}
+						  },10); 
+						},
+						say:function(letters){
+						  this.foo && this.foo(letters)    
+						}
+					  }
+
+					const autoCompleteJS = new autoComplete({
 			        	selector:'input[name=u_street]',
 			            placeHolder: "...",
 			            data: {
@@ -126,10 +144,9 @@ export var VIEW_ORDERING = {
 			                    selection: (event) => {
 			                    	console.log("!!",event)
 			                        const selection = event.detail.selection.value;			                        
-			                        setTimeout(()=>{
-			                        	autoCompleteJS.input.value = selection;	
-			                        },500)
-			                        // autoCompleteJS.input.value = selection;
+									fn.spelling(selection,(l)=>{
+										autoCompleteJS.input.value = l;
+									  });
 			                    }
 			                }
 			            }

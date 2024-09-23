@@ -21,6 +21,7 @@
 	require_once WORK_DIR.APP_DIR.'core/class.smart_collect.php';
 	require_once WORK_DIR.APP_DIR.'core/class.user.php';
 
+	require_once WORK_DIR.APP_DIR.'core/class.qr_tables.php';
 
 	session_start();
 	SQL::connect();
