@@ -43,6 +43,8 @@ $total_price = (float) $order_data['order_total_price'];
 $token = $_POST['token'];
 $orders = $order_data['order_items'];
 
+glog('ORDERS ================== \n'.print_r($orders, 1));
+
 define('PICKUPSELF_MODE',filter_var($_POST['pickupself'], FILTER_VALIDATE_BOOLEAN));
 
 // TODO CHECK USER PHONE (+7 and 8 digits)
@@ -131,7 +133,7 @@ foreach($order_types as $o_type){
 $order_items = [];
 foreach($orders as $order_row){
 	$amount = $order_row['count'];
-	$productSizeId = $order_row['sizeId'];
+	$productSizeId = $order_row['sizeId']; // NEED TO FIX
 	$productId =  $order_row['item_data']['id_external'];
 	$orderItemType = $order_row['item_data']['iiko_order_item_type'];
 	$chosenModifiers = $order_row['chosen_modifiers'] ?? false;
@@ -262,7 +264,7 @@ $str_currency = "₽";
 $order_items_tg = [];
 foreach($orders as $order_row){
 	$amount = $order_row['count'];
-	$productSizeId = $order_row['sizeId'];
+	$productSizeId = $order_row['sizeId']; // NEED TO FIX
 	$productId =  $order_row['item_data']['id_external'];
 	$orderItemType = $order_row['item_data']['iiko_order_item_type'];
 	$chosenModifiers = $order_row['chosen_modifiers'] ?? false;

@@ -14,7 +14,9 @@ export var IIKO_ITEM_SIZER = {
 	reset:function() {
 		this.VARS = {
 			price:0,
-			sizeName:""			
+			sizeName:""	,
+			sizeId:"",
+			sizeCode:""		
 		};
 	},
 	get_ui:function() {
@@ -43,17 +45,19 @@ export var IIKO_ITEM_SIZER = {
 					const $btn = $('<div></div>',{class: this.CN+"item-size-btn "+currentClass});
 					const price = s.price || 0;										
 					const sizeName = s.sizeName || "";
+					const sizeId = s.sizeId || "";
+					const sizeCode = s.sizeCode || "";
 
 					$btn.html(sizeName);	
 
 					(function($btn, index, price, sizeName) {
 						$btn.on('touchend click',function(e){														
-							_this.change_current_size({$btn, index, price, sizeName});							
+							_this.change_current_size({$btn, index, price, sizeName, sizeId, sizeCode});
 							e.originalEvent.cancelable && e.preventDefault();
 						});
-					})($btn, i, price, sizeName);
+					})($btn, i, price, sizeName, sizeId, sizeCode);
 				
-					s.isDefault=='true' && this.set_current_vars({price, sizeName});							
+					s.isDefault=='true' && this.set_current_vars({price, sizeName, sizeId, sizeCode});							
 					$btns.append($btn);
 
 				};							
@@ -73,7 +77,9 @@ export var IIKO_ITEM_SIZER = {
 				var s = sizes[0];
 				let price = s.price;			
 				var sizeName = "";
-				this.set_current_vars({price, sizeName});
+				var sizeId = "";
+				var sizeCode = "";
+				this.set_current_vars({price, sizeName, sizeId, sizeCode});
 			};
 		}else{
 			this.reset();
