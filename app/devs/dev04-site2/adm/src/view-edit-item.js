@@ -150,17 +150,25 @@ export var VIEW_EDIT_ITEM = {
 				};				
 				this.$item_iiko_price.val( arr_price.join(' / ') ).attr({disabled:true});
 
-				// SHOW IIKO MANAGED PRICE
-				var volume_unit = this.ITEM.iiko_measure_unit;
-				this.$item_iiko_volume_title.html("Вес ("+volume_unit+"):");						
+				// SHOW IIKO MANAGED PRICE				
+				this.$item_iiko_volume_title.html("Вес:");
 				var arr_volumes = [];
 				for(var s in iiko_sizes){
+					console.log('s ====== ', iiko_sizes[s] );
+					const unitTypes = {
+						'MILLILITER':'мл',
+						'KILOGRAM':'кг',
+						'LITER':'л',
+						'GRAM':'г',
+					};
+					let unit =  unitTypes[iiko_sizes[s].measureUnitType] || '' ;
 					var param = {
 						sizeCode:iiko_sizes[s].sizeCode,
 						sizeName:iiko_sizes[s].sizeName,
-						weight:iiko_sizes[s].portionWeightGrams
+						weight:iiko_sizes[s].portionWeightGrams,
+						unit:unit
 					};
-					arr_volumes.push(param.sizeName+' '+ param.weight+'г');					
+					arr_volumes.push(`${param.sizeName} ${param.weight} ${param.unit}`);
 				};				
 				this.$item_iiko_volume.val(arr_volumes.join(' / ')).attr({disabled:true});
 

@@ -28,8 +28,7 @@ export var ExtMenuParser = {
 				var item = {
 					id: items[n].itemId,
 					name: items[n].name,
-					description: items[n].description,
-					measureUnit: items[n].measureUnit,
+					description: items[n].description,					
 					sizes:[],
 					imageUrl:"",
 					modifiers:[],
@@ -46,7 +45,8 @@ export var ExtMenuParser = {
 						sizeCode: size.sizeCode,
 						sizeId: size.sizeId,
 						sizeName: size.sizeName,						
-						isDefault: size.isDefault,						
+						isDefault: size.isDefault,	
+						measureUnitType:size.measureUnitType,					
 						portionWeightGrams: size.portionWeightGrams,
 						nutritionPerHundredGrams:size.nutritionPerHundredGrams,
 						price: size.prices[0].price

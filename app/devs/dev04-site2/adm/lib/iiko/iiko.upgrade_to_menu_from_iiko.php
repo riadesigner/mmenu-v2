@@ -184,8 +184,7 @@
 					}else{
 						$iiko_sizes = "";
 					}
-					
-					$new_item->iiko_measure_unit = $iiko_item["measureUnit"];
+										
 					$new_item->iiko_modifiers = $iiko_modifiers;
 					$new_item->iiko_sizes = $iiko_sizes;
 
