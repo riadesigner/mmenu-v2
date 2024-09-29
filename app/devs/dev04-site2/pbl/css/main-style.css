@@ -706,6 +706,7 @@ a.mm2-home-link:hover{ color: %[color-home-link-hover]%; }
   float:right;background:#232627;border-radius: 8px;color:#aeaeae;
   font-size:1rem;border:2px solid transparent;margin:0 0 0 6px;
   padding:5px 10px;transition: .3s;cursor: pointer;
+  text-align: center;
 }
 .mm2-item-size-btn.active {color:#ffffff;border:2px solid %[color-bright]%;}
 .mm2-item-btns-sizes-desktop .mm2-item-size-btn:hover{background: #3b3b3b;}

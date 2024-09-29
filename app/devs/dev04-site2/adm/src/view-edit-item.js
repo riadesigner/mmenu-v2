@@ -161,14 +161,14 @@ export var VIEW_EDIT_ITEM = {
 						'LITER':'л',
 						'GRAM':'г',
 					};
-					let unit =  unitTypes[iiko_sizes[s].measureUnitType] || '' ;
+					let units =  unitTypes[iiko_sizes[s].measureUnitType] || '' ;
 					var param = {
 						sizeCode:iiko_sizes[s].sizeCode,
 						sizeName:iiko_sizes[s].sizeName,
 						weight:iiko_sizes[s].portionWeightGrams,
-						unit:unit
+						units:units
 					};
-					arr_volumes.push(`${param.sizeName} ${param.weight} ${param.unit}`);
+					arr_volumes.push(`${param.sizeName} ${param.weight} ${param.units}`);
 				};				
 				this.$item_iiko_volume.val(arr_volumes.join(' / ')).attr({disabled:true});
 

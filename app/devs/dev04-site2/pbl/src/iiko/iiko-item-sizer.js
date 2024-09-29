@@ -16,7 +16,8 @@ export var IIKO_ITEM_SIZER = {
 			price:0,
 			sizeName:""	,
 			sizeId:"",
-			sizeCode:""		
+			sizeCode:"",
+			units:"",		
 		};
 	},
 	get_ui:function() {
@@ -43,12 +44,21 @@ export var IIKO_ITEM_SIZER = {
 					const s = sizes[i];					
 					const currentClass = s.isDefault=='true'? " active":"";
 					const $btn = $('<div></div>',{class: this.CN+"item-size-btn "+currentClass});
-					const price = s.price || 0;										
-					const sizeName = s.sizeName || "";
+					const price = s.price || 0;															
 					const sizeId = s.sizeId || "";
 					const sizeCode = s.sizeCode || "";
+					let sizeName = s.sizeName || "";
+					const volume = s.portionWeightGrams || 0;					
+					const unitTypes = {
+						'MILLILITER':'мл',
+						'KILOGRAM':'кг',
+						'LITER':'л',
+						'GRAM':'г',
+					};			
+					const units =  unitTypes[s.measureUnitType] || '' ;
+					sizeName += `<br>${volume} ${units}`;
 
-					$btn.html(sizeName);	
+					$btn.html(sizeName);
 
 					(function($btn, index, price, sizeName) {
 						$btn.on('touchend click',function(e){														
