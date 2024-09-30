@@ -192,7 +192,8 @@ class Tg_hook {
         $this->send_message("опция в разработке");
     }
 
-    private function take_the_order($cafe_uniq_name, $order_short_number): void{        
+    private function take_the_order($cafe_uniq_name, $order_short_number): void{     
+        // if($this->REAL_TG_USER->role)   
         if(!$ORDER = $this->valid_order($cafe_uniq_name, $order_short_number)){
             $this->send_error_message("Заказ с номером {$order_short_number} не найден");
             return;

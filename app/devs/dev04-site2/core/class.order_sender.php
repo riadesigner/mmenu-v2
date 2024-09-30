@@ -208,6 +208,12 @@ class Order_sender{
 		@param Smart_object $TG_USER				
     --------------------------------------- **/			
 	static public function do_take_the_order(string $cafe_uniq_name, Smart_object $ORDER, Smart_object $TG_USER ):void{
+		if($TG_USER->role !== 'waiter' || $TG_USER->role !== 'manager'){
+			throw new Exception('Вы не можете взять заказ. Для этого нужно иметь доступ Менеджера или Официанта');				
+		}
+		if($TG_USER->state !== 'active'){
+			throw new Exception('Вы не можете взять заказ сейчас. Откройте смену.');
+		}		
 
 		define('PENDING_MODE', (int) $ORDER->pending_mode===1);
 
