@@ -44,6 +44,7 @@ export const IIKO_ITEM = {
 			price: total_price,
 			count: count,
 			volume: s.volume,
+			units: s.units,
 			item_data: this.item_data,			
 			sizeName: s.sizeName,
 			sizeId: s.sizeId,

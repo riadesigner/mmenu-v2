@@ -238,8 +238,9 @@ export var ITEM = {
 	update_price_and_volume:function(vars) {			
 		var currency_symbol = GLB.CAFE.get('cafe_currency').symbol;
 		this.$item_price.html(vars.price + " " + currency_symbol);
-		this.$item_volume.html(vars.sizeName);							
-		this.$item_volume2.html(vars.sizeName);
+		const str_volume = `${vars.sizeName}<br>${vars.volume} ${vars.units}`;
+		this.$item_volume.html(str_volume);						
+		this.$item_volume2.html(str_volume);
 	},
 	is_portrait:function() {
 		return $(window).height() > $(window).width()-1;

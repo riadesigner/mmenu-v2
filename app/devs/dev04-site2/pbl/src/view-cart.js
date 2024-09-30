@@ -152,7 +152,7 @@ export var VIEW_CART = {
 				let count = order.count;
 				let price = order.price;
 				let uniq_name = order.uniq_name;				
-				let volume = order.sizeName;				
+				let str_volume = `${order.sizeName} / ${order.volume} ${order.units}`;								
 				
 				// FOR IIKO_MODE ONLY
 				let modifiers = order.chosen_modifiers;
@@ -166,7 +166,7 @@ export var VIEW_CART = {
 
 				let $row = this.$tplItem.clone().css({opacity:0,transform:"translateX(50px)"});
 				$row.find(this._CN+"cart-title__item").html(title);
-				$row.find(this._CN+"cart-title__volume").html(volume);				
+				$row.find(this._CN+"cart-title__volume").html(str_volume);				
 				IIKO_MODE && $row.find(this._CN+"cart-title__modifiers").html(modifiers_str);
 				$row.find(this._CN+"cart-quantity").html(count+" x "+price+" "+GLB.CAFE.get('cafe_currency').symbol);
 				

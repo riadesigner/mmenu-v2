@@ -38,6 +38,8 @@ export var CART = {
 	 *   sizeName:string;
 	 *   item_data:object;
 	 *	 sizeName: string; / optional (IIKO)
+	 *	 volume: number
+	 *	 units: string (г|мл|л|кг)
 	 *	 sizeId: string; / optional (IIKO)
 	 *	 sizeCode: string; / optional (IIKO)			
 	 *	 chosen_modifiers: string; / optional (IIKO)
@@ -127,7 +129,6 @@ export var CART = {
 	},
 	the_total:function() {
 		return `${this.get_total_price()} ${GLB.CAFE.get('cafe_currency').symbol}`;
-		// return ""+this.get_total_price()+"&nbsp;"+GLB.CAFE.get('cafe_currency').symbol;
 	},
 	cart_clear:function(argument) {
 		this.ALL_ORDERS = {};		

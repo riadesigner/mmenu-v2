@@ -1,7 +1,7 @@
 import {GLB} from '../glb.js';
 import $ from 'jquery';
 
-export var IIKO_ITEM_SIZER = {
+export const IIKO_ITEM_SIZER = {
 	init:function(item,opt) {
 		this.ITEM_DATA = item;
 		this.onUpdate = opt.onUpdate;
@@ -15,9 +15,10 @@ export var IIKO_ITEM_SIZER = {
 		this.VARS = {
 			price:0,
 			sizeName:""	,
+			volume:"",
+			units:"",			
 			sizeId:"",
-			sizeCode:"",
-			units:"",		
+			sizeCode:""
 		};
 	},
 	get_ui:function() {
@@ -45,9 +46,9 @@ export var IIKO_ITEM_SIZER = {
 					const currentClass = s.isDefault=='true'? " active":"";
 					const $btn = $('<div></div>',{class: this.CN+"item-size-btn "+currentClass});
 					const price = s.price || 0;															
-					const sizeId = s.sizeId || "";
-					const sizeCode = s.sizeCode || "";
-					let sizeName = s.sizeName || "";
+					const sizeId = s.sizeId || ""; // не используется ?
+					const sizeCode = s.sizeCode || ""; // не используется ?
+					const sizeName = s.sizeName || "";
 					const volume = s.portionWeightGrams || 0;					
 					const unitTypes = {
 						'MILLILITER':'мл',
@@ -55,19 +56,18 @@ export var IIKO_ITEM_SIZER = {
 						'LITER':'л',
 						'GRAM':'г',
 					};			
-					const units =  unitTypes[s.measureUnitType] || '' ;
-					sizeName += `<br>${volume} ${units}`;
+					const units =  unitTypes[s.measureUnitType] || '' ;					
 
-					$btn.html(sizeName);
+					$btn.html(`${sizeName}<br>${volume} ${units}`);
 
 					(function($btn, index, price, sizeName) {
 						$btn.on('touchend click',function(e){														
-							_this.change_current_size({$btn, index, price, sizeName, sizeId, sizeCode});
+							_this.change_current_size({$btn, index, price, sizeName, volume, units, sizeId, sizeCode});
 							e.originalEvent.cancelable && e.preventDefault();
 						});
-					})($btn, i, price, sizeName, sizeId, sizeCode);
+					})($btn, i, price, sizeName, volume, units, sizeId, sizeCode);
 				
-					s.isDefault=='true' && this.set_current_vars({price, sizeName, sizeId, sizeCode});							
+					s.isDefault=='true' && this.set_current_vars({price, sizeName, volume, units, sizeId, sizeCode});							
 					$btns.append($btn);
 
 				};							
@@ -84,12 +84,14 @@ export var IIKO_ITEM_SIZER = {
 				foo.create_btns(this.$arr_btns['mobile']);
 				foo.create_btns(this.$arr_btns['desktop']);
 			}else{				
-				var s = sizes[0];
-				let price = s.price;			
-				var sizeName = "";
-				var sizeId = "";
-				var sizeCode = "";
-				this.set_current_vars({price, sizeName, sizeId, sizeCode});
+				const s = sizes[0];
+				const price = s.price;			
+				const sizeName = "";
+				const volume = "";
+				const units = "";
+				const sizeId = "";
+				const sizeCode = "";
+				this.set_current_vars({price, sizeName, volume, units, sizeId, sizeCode});
 			};
 		}else{
 			this.reset();
