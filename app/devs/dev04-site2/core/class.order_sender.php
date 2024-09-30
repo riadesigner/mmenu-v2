@@ -293,11 +293,29 @@ class Order_sender{
     ----------------------------------- **/		
 	static public function send_order_to_iiko(string $cafe_uniq_name, string $order_short_number, Smart_object $TG_USER ):void {
 
+		if($TG_USER->role !== 'waiter' && $TG_USER->role !== 'manager'){
+			$cancel_message = "Вы не можете отпралять заказы. Для этого нужно иметь доступ Менеджера или Официанта";
+			self::send_message_to_tg_users($TG_USER->tg_user_id, $cancel_message);							
+			return;			
+		}
+		if($TG_USER->state !== 'active'){
+			$cancel_message = "Вы не можете отправлять заказы. Сначала откройте смену.";
+			self::send_message_to_tg_users($TG_USER->tg_user_id, $cancel_message);							
+			return;
+		}
+
 		if(!$ORDER = self::get_order_by_params($cafe_uniq_name, $order_short_number)){
 			$warn_message = "О нет! Заказ {$order_short_number} не найден.";
 			self::send_message_to_tg_users($TG_USER->tg_user_id, $warn_message);
 			return;
 		}else{
+
+			if($ORDER->manager!==$TG_USER->id){
+				$cancel_message = "Вы не можете отправить этот заказ. Его взял другой менеджер (или официант).";
+				self::send_message_to_tg_users($TG_USER->tg_user_id, $cancel_message);							
+				return;				
+			}
+
 			if($ORDER->state==='sentout'){
 				$warn_message = "Вы уже отправили заказ {$order_short_number} в iiko.";
 				self::send_message_to_tg_users($TG_USER->tg_user_id, $warn_message);
