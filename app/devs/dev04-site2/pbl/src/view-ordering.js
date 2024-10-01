@@ -466,6 +466,8 @@ export var VIEW_ORDERING = {
 		const order = $.extend(order_params,{order_items});
 		const demo_mode = GLB.CAFE.get_status()!=="2";		
 
+		console.log(`sending order = `,order);
+
 		this.IIKO_SENDER = $.extend({},IIKO_ORDER_SENDER);	
 		this.IIKO_SENDER.send_async(order,this.PICKUPSELF_MODE)
 		.then((vars)=>{		

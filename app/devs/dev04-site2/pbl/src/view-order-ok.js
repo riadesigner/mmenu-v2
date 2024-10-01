@@ -145,66 +145,51 @@ export var VIEW_ORDER_OK = {
 		const currency = GLB.CAFE.get('cafe_currency').symbol;
 		const IIKO_MODE = GLB.CAFE.get().iiko_api_key!=="";
 
-		// IIKO_MODE
+		
 		const fn = {
-			iiko_buildArrRows:(order_items)=>{
+			buildArrRows:(order_items)=>{
 				const $list = $('<ul></ul>');
 				for(let i in order_items){
 					if(order_items.hasOwnProperty(i)){
 						let order = order_items[i]; 												
 						if(order){		
 							let $li = $('<li></li>');
-							$li.append(fn.iiko_buildRow(order));
+							$li.append(fn.buildRow(order));
 							$list.append($li);
 						}						
 					}
 				};
 				return $list;
 			},
-			iiko_buildRow:(order)=>{				
-				let title = order.item_data.title;
-				let count = order.count;
-				let price = order.price;
-				let uniq_name = order.uniq_name;
-				let modifiers = order.chosen_modifiers;
-				let volume = order.volume;
-				if(order.sizeName) {volume = order.sizeName+" / "+volume;}
+			buildRow:(order)=>{
+				
+				// BUILDING ORDER ROW
+				const title_str = order.item_data.title;
+				const count = order.count;
+				const price = order.price;
+				// let uniq_name = order.uniq_name;				
+				const volume_str = `${order.sizeName} / ${order.volume} ${order.units}`;
+				const modifiers = order.chosen_modifiers;
 				let modifiers_str = "";
-				if(modifiers.length){
+				if(IIKO_MODE && modifiers && modifiers.length){
 					for (let i in modifiers){
 						let mod_str = "+ "+modifiers[i].name+"<br>";
 						modifiers_str += mod_str;
 					}
 				};				
-				let $row = this.$tplOrderedItem.clone();
-				$row.find(this._CN+"ordered-title__item").html(title);
-				$row.find(this._CN+"ordered-title__volume").html(volume);				
-				$row.find(this._CN+"ordered-title__modifiers").html(modifiers_str);								
-				$row.find(this._CN+"ordered-quantity").html(count+" x "+price+" "+currency);
+				const price_str = count+" x "+price+" "+currency;
+
+				const $row = this.$tplOrderedItem.clone();
+				$row.find(this._CN+"ordered-title__item").html(title_str);
+				$row.find(this._CN+"ordered-title__volume").html(volume_str);				
+				IIKO_MODE && $row.find(this._CN+"ordered-title__modifiers").html(modifiers_str);								
+				$row.find(this._CN+"ordered-quantity").html(price_str);
 				return $row; 
 			}
 		};			
 
-		// CHEFS_MODE
-		if(!IIKO_MODE){
-			let $list = $('<ul></ul>');			
-			for(let i=0;i<order_items.length;i++){			
-				const $li = $('<li></li>');
-				const $row = this.$tplOrderedItem.clone();	
-				const count = order_items[i].count;
-				const price = order_items[i].price;				
-				$row.find(this._CN+"ordered-title__item").html(`${i+1}.${order_items[i].title}`);
-				$row.find(this._CN+"ordered-title__volume").html("").hide();				
-				$row.find(this._CN+"ordered-title__modifiers").html("").hide();								
-				$row.find(this._CN+"ordered-quantity").html(count+" x "+price+" "+currency);
-				$li.append($row);
-				$list.append($li);	
-			};			
-			this.$msgCartList.html($list);
-		}else{
-			const $list = fn.iiko_buildArrRows(order_items);			
-			this.$msgCartList.html($list);
-		};
+		const $list = fn.buildArrRows(order_items);			
+		this.$msgCartList.html($list);
 
 		const TOTAL_PRICE = "Итого: "+GLB.CART.get_total_price()+" "+ currency;
 		this.$totalCost.html(TOTAL_PRICE);

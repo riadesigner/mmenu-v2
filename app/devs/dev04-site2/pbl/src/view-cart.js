@@ -119,6 +119,7 @@ export var VIEW_CART = {
 
 		const ALL_ORDERS = GLB.CART.get_all();			
 		const IIKO_MODE = GLB.CAFE.get().iiko_api_key!=="";
+		const currency = GLB.CAFE.get('cafe_currency').symbol;				
 
 		let totalPrice = GLB.CART.get_total_price();
 
@@ -147,17 +148,19 @@ export var VIEW_CART = {
 					}
 				},300);				
 			},
-			buildRow:(order)=>{				
-				let title = order.item_data.title;
-				let count = order.count;
-				let price = order.price;
-				let uniq_name = order.uniq_name;				
-				let str_volume = `${order.sizeName} / ${order.volume} ${order.units}`;								
-				
-				// FOR IIKO_MODE ONLY
-				let modifiers = order.chosen_modifiers;
+			buildRow:(order)=>{							
+
+				// BUILDING ORDER ROW	
+				const title_str = order.item_data.title;
+				const count = order.count;
+				const price = order.price;
+				const uniq_name = order.uniq_name;				
+				const volume_str = `${order.sizeName} / ${order.volume} ${order.units}`;
+				const price_str = count+" x "+price+" "+currency;
+								
+				const modifiers = order.chosen_modifiers;
 				let modifiers_str = "";				
-				if(IIKO_MODE && modifiers.length){
+				if(IIKO_MODE && modifiers && modifiers.length){
 					for (let i in modifiers){
 						let mod_str = "+ "+modifiers[i].name+"<br>";
 						modifiers_str += mod_str;
@@ -165,10 +168,10 @@ export var VIEW_CART = {
 				};				
 
 				let $row = this.$tplItem.clone().css({opacity:0,transform:"translateX(50px)"});
-				$row.find(this._CN+"cart-title__item").html(title);
-				$row.find(this._CN+"cart-title__volume").html(str_volume);				
+				$row.find(this._CN+"cart-title__item").html(title_str);
+				$row.find(this._CN+"cart-title__volume").html(volume_str);				
 				IIKO_MODE && $row.find(this._CN+"cart-title__modifiers").html(modifiers_str);
-				$row.find(this._CN+"cart-quantity").html(count+" x "+price+" "+GLB.CAFE.get('cafe_currency').symbol);
+				$row.find(this._CN+"cart-quantity").html(price_str);
 				
 				(function(uniq_name){
 					let $btn1 = $row.find(_this._CN+"cart-more").on("touchend click",function(){ _this.add_to_cart(uniq_name); return false; });
