@@ -118,7 +118,7 @@ class Order_sender{
 			$count = (int) $counter["total"];
 			$count++;			
 
-			$pre = date("y").substr(date("F"),0,1).date("d");
+			$pre = date("y").date("m").date("d");
 			$num = sprintf("%03d", $count);
 			$short_number = $pre."-".$num;		
 			
