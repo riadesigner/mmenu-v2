@@ -124,13 +124,19 @@
 	$count = 0;
 	foreach ($order_items as $row) {		
 		$count++;
+
+		$item_volume = !empty($row["volume"])?$row["volume"] : "";
+		$item_units = !empty($row["units"])?$row["units"] : "";
+		$volume_str = !empty($item_volume)?$item_volume." ".$item_units : "";	
+
 		$item_title = $count.". ".$row["title"];
 		$item_price = $row["count"]."x".$row["price"]." ".$str_currency;
 		$ORDER->text .= "_{$item_title}_\n";
+		$ORDER->text .= "/ {$volume_str}\n";		
 		$ORDER->text .= "{$item_price}\n";
-		$order_items_separate = count($order_items)>$count-1?"---\n":"--- .\n";
+		$order_items_separate = count($order_items)>$count-1?"---------\n":"--------- //\n";
 		$ORDER->text .= $order_items_separate;
-	}
+	}	
 
 	$DEMO_MODE && __answerjsonp(["short_number"=>$short_number,"demo_mode"=>$DEMO_MODE]);
 

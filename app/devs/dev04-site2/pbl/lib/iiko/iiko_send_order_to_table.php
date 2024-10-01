@@ -258,10 +258,15 @@ foreach ($orders as $order_row) {
 
 	$item_modifiers = $order_row['chosen_modifiers'] ?? false;	
 	$item_title = $count.". ".$order_row["item_data"]["title"];	
-	$item_size = !empty($order_row["sizeName"])?"/ ".$order_row["sizeName"] : "";
+	$item_size = !empty($order_row["sizeName"])?$order_row["sizeName"] : "";	
+	$item_volume = !empty($order_row["volume"])?$order_row["volume"] : "";
+	$item_units = !empty($order_row["units"])?$order_row["units"] : "";
+	$volume_str = !empty($item_volume)?$item_volume." ".$item_units : "";
+
 	$item_price = $order_row["count"]."x".$order_row["price"]." ".$str_currency;
 
-	$TG_ORDER->text .= "_{$item_title}_ {$item_size}\n";	
+	$TG_ORDER->text .= "_{$item_title}_\n";
+	$TG_ORDER->text .= "{$item_size} / {$volume_str}\n";
 	$TG_ORDER->text .= "= {$item_price}\n";
 
 	if($item_modifiers){
