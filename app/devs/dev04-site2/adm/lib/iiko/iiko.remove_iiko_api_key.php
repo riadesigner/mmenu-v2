@@ -53,12 +53,12 @@
 	$iiko_items = new Smart_collect('items',"where id_cafe={$cafe->id}");
 	if($iiko_items && $iiko_items->full()){
 		foreach($iiko_items->get() as $item){				
-			$item->iiko_measure_unit="";
+			// $item->iiko_measure_unit="";
 			$item->iiko_modifiers="";
 			$item->iiko_sizes="";
 			$item->iiko_order_item_type="";
 			$item->created_by="";
-			$item->price=100;
+			// $item->price=100;
 			$item->updated_date="now()";
 			$item->save();
 		}

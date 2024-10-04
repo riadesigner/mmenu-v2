@@ -128,8 +128,8 @@ export var VIEW_ALL_MENU = {
 			setTimeout(()=>{ this.end_loading(); this._page_show();},200);
 		};
 
-		const extmenu_id = iiko_extmenus['current_extmenu_id'];				
-		
+		const extmenu_id =  GLB.THE_CAFE.get('iiko_current_extmenu_id');
+
 		const Loader = GLB.IIKO_LOADER.init();
 
 		Loader.load_extmenu_asynq(extmenu_id)

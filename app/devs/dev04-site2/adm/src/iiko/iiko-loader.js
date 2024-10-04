@@ -22,14 +22,7 @@ export var IikoLoader = {
                 return;
             };
             
-            this.NOW_LOADING = true;
-
-            const cafe = GLB.THE_CAFE.get();            
-            let extmenus = cafe.iiko_extmenus;
-            extmenus = extmenus?JSON.parse(extmenus):false;
-            (!extmenus || !extmenus.current_extmenu_id) && rej("--cant find current extmenu id");
-            
-            let extmenus_id = extmenus.current_extmenu_id;
+            this.NOW_LOADING = true;            
 
             // GETTING TOKEN
             this.get_token_asynq()

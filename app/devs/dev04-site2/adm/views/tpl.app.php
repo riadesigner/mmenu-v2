@@ -372,7 +372,8 @@ App&&App();
 					<ul class="iiko-table-sections">
 						<li>Не найдено. Обновите кол-во столов.</li>
 					</ul>					
-					<div class="std-form__wide-button btn-iiko-tables-update">Обновить столы</div>
+					
+					<button class="std-special-single-button btn-iiko-tables-update">Обновить столы</button>					
 
 					<h2>QR-коды</h2>					
 					<p>Вы можете сгенерировать и распечатать QR-коды Меню с выбранным заранее номером столика. 
@@ -391,6 +392,10 @@ App&&App();
 					<p>Чтобы удалить API Login и отвязать сервис iiko от Chefsmenu, введите ниже слово 
 						<strong>delete</strong> нажмите сохранить.</p>					
 					<input class="std-form__input" type="input" placeholder="" name="iiko-del-key" maxlength="20" >
+					
+					<h2>Обновить данные iiko</h2>
+					<p>Если вы поменяли настройки терминалов или добавили внешние меню, здесь можно подгузить обновленные данные. </p>
+					<button class="std-special-single-button btn-iiko-vars-update">Обновить данные iiko</button>					
 
 					<h2>Помощь</h2>
 					<p>Узнать все подробности взаимодействия ChefsMenu и iiko и текущие 

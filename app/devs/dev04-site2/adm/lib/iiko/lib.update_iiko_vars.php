@@ -38,14 +38,10 @@
 
 	if($cafe->id_user!==$user->id)__errorjsonp("Not allowed, ".__LINE__);
 		
-	// SAVE IIKO API KEY	
-	$key =  post_clean($_POST['new_iiko_api_key'], $CFG->inputs_length['iiko-api-key'] );
 
-	$msk = "|^[0-9a-zA-Z].[\-0-9a-zA-Z]*$|i";
-	if(!preg_match($msk,(string) $key)) {		
-		__errorjsonp("--illegal name");		
-	}
-	
+	// GET IIKO API KEY	
+	$key = $cafe->iiko_api_key;
+
 	// --------------------------
 	// CHECK IF IT IS REAL KEY
 	// GETTING TOKEN FROM IIKO
@@ -121,14 +117,41 @@
 	if(!isset($res["externalMenus"]) || !count($res["externalMenus"])){
 		__errorjsonp("--has not menus");	
 	}	
-	$iiko_current_extmenu_id = $res["externalMenus"][0]["id"];
-	$iiko_extmenus = [];
+	
+	
+	$iiko_extmenus = [];	
 	foreach($res["externalMenus"] as $menu){
 		array_push($iiko_extmenus,[
 			"id"=>$menu["id"],			
 			"name"=>$menu["name"]			
 		]);
 	}
+
+	// ----------------------------
+	//  SETTING CURRENT EXTMENU ID
+	// ----------------------------
+	if(count($iiko_extmenus)>0){
+		
+		if(!empty($cafe->iiko_current_extmenu_id)){			
+			$filteredArray = array_filter($iiko_extmenus, function ($m) {
+				global $cafe;
+				return $m['id'] === $cafe->iiko_current_extmenu_id;
+			});
+			if(count($filteredArray)>0){
+				// оставляем как есть 
+				$iiko_current_extmenu_id = $cafe->iiko_current_extmenu_id;
+			}else{
+				// берем первое меню из списка
+				$iiko_current_extmenu_id = $res["externalMenus"][0]["id"];
+			}			
+		}else{
+			// берем первое меню из списка
+			$iiko_current_extmenu_id = $res["externalMenus"][0]["id"];
+		}
+	}else{
+		$iiko_current_extmenu_id = "";
+	}
+	
 
 	// --------------------------
 	// GETTING TERMINAL GROUPS 
@@ -198,20 +221,16 @@
 	$order_types = $res['orderTypes'][0]['items'];	
 
 	// --------------------------
-	// UPDATING CAFE INFO
+	// UPDATING SOME! CAFE INFO
 	// --------------------------	
-	$cafe->iiko_api_key = $key;	
+	
 	$cafe->iiko_organizations = json_encode($iiko_organizations, JSON_UNESCAPED_UNICODE);	
 	$cafe->iiko_extmenus = json_encode($iiko_extmenus, JSON_UNESCAPED_UNICODE);	;	
 	$cafe->iiko_terminal_groups = json_encode($terminalGroups, JSON_UNESCAPED_UNICODE);	
 	$cafe->iiko_tables = json_encode($arr_tables, JSON_UNESCAPED_UNICODE);	
-	$cafe->iiko_order_types = json_encode($order_types, JSON_UNESCAPED_UNICODE);
-	$cafe->iiko_current_extmenu_id = $iiko_current_extmenu_id; 		
-	$cafe->iiko_current_extmenu_hash = ""; 		
-	$cafe->cafe_title = $currentOrganizationName;
-	$cafe->cafe_address = $currentOrganizationAddress;
-	$cafe->chief_cook="";
-	$cafe->cafe_description="Нет описания";
+	$cafe->iiko_order_types = json_encode($order_types, JSON_UNESCAPED_UNICODE);	
+	$cafe->iiko_current_extmenu_id = $iiko_current_extmenu_id;
+
 	$cafe->updated_date = 'now()';
 	$cafe->rev+=1;
 
@@ -227,9 +246,8 @@
 		}			
 		
 	}else{
-		glogError("Can't save cafe iiko api key, ".__FILE__.", ".__LINE__);
-		__errorjsonp("Can't save cafe ".$cafe->id." iiko api key");
+		glogError("Can't update iiko info for cafe, ".__FILE__.", ".__LINE__);
+		__errorjsonp("Can't save cafe ".$cafe->id);
 	}
-
 
 ?>

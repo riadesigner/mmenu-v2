@@ -36,6 +36,7 @@
 
 	$iiko_current_extmenu_id = post_clean($_POST['extmenu_id'],100);	
 
+
 	$cafe->iiko_current_extmenu_id = $iiko_current_extmenu_id;
 	$cafe->updated_date = 'now()';
 	$cafe->rev+=1;

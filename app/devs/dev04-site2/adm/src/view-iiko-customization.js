@@ -13,7 +13,8 @@ export var VIEW_IIKO_CUSTOMIZATION = {
 		this.$btnIikoKey = this.$form.find('button[name=iiko-api-key]');
 		this.$btnIikoTablesUpdate = this.$form.find('.btn-iiko-tables-update');
 		this.$btnIikoGetQrcodes = this.$form.find('.btn-iiko-get-qrcodes');
-
+		this.$btnIikoVarsUpdate = this.$form.find('.btn-iiko-vars-update');
+		
 		this.$linkIikoQRCodeTablesHelp = this.$form.find('a[name=link-iiko-qrcode-tables]');
 
 		this.$general_information = this.$form.find('.iiko-general-information');
@@ -36,8 +37,7 @@ export var VIEW_IIKO_CUSTOMIZATION = {
 
 	},	
 
-	update:function(){
-		var _this=this;
+	update:function(){		
 		
 		this.reset();
 		
@@ -77,10 +77,9 @@ export var VIEW_IIKO_CUSTOMIZATION = {
 
 		// SHOW MENUS INFO (WITH CURRENT)
 		this.$extmenu_list.html("");
-		const iiko_extmenus = CAFE.iiko_extmenus!==""?JSON.parse(CAFE.iiko_extmenus):{};
-		const iiko_arr_extmenus = iiko_extmenus['items'];
 		
-		this.CURRENT_EXTMENU_ID = iiko_extmenus['current_extmenu_id'].toString();		
+		const iiko_arr_extmenus = CAFE.iiko_extmenus!==""?JSON.parse(CAFE.iiko_extmenus):[];				
+		this.CURRENT_EXTMENU_ID = CAFE.iiko_current_extmenu_id.toString();		
 		
 		if(iiko_arr_extmenus.length>0){			
 			for(let m in iiko_arr_extmenus){
@@ -113,8 +112,8 @@ export var VIEW_IIKO_CUSTOMIZATION = {
 		};
 		this.$extmenu_list.find('')
 		
-		setTimeout(function(){							
-			_this._page_show();
+		setTimeout(()=>{							
+			this._page_show();
 		},300);
 		
 	},
@@ -185,6 +184,15 @@ export var VIEW_IIKO_CUSTOMIZATION = {
 			e.originalEvent.cancelable && e.preventDefault();
 		});		
 
+		this.$btnIikoVarsUpdate.bind('touchend',(e)=>{
+			this._blur({onBlur:()=>{
+				if(!this.LOADING && !_this.VIEW_SCROLLED){
+					this.iiko_vars_update();
+				}
+			}});			
+			e.originalEvent.cancelable && e.preventDefault();
+		});		 
+
 		this.$btnIikoGetQrcodes.bind('touchend',(e)=>{
 			this._blur({onBlur:()=>{
 				if(!this.LOADING && !_this.VIEW_SCROLLED){		
@@ -223,6 +231,89 @@ export var VIEW_IIKO_CUSTOMIZATION = {
 			this.$tables_list.html("<li>Не найдено. Обновите столы.</li>");
 		}		
 	},
+	iiko_vars_update:function(){		
+
+        const fn = {
+            okMessage:function(opt){
+                var msg = `<p>Информация из iiko успешно загружена</p>`;
+                GLB.VIEWS.modalMessage({
+                    title:GLB.LNG.get("lng_attention"),
+                    message:msg,
+                    btn_title:GLB.LNG.get('lng_close'),
+                    on_close:function(){
+                        opt && opt.onClose && opt.onClose();
+                    }
+                });
+            }
+        };
+
+		console.log('iiko vars now updating');
+		this._now_loading();
+
+		this.iiko_vars_update_asynq()
+		.then((vars)=>{
+			console.log("vars = ",vars)
+
+        	fn.okMessage({onClose:()=>{
+        		location.reload();
+        	}});
+
+			setTimeout(()=>{				
+				this._end_loading();
+			},300);						
+
+		})
+		.catch((vars)=>{
+			
+			// if (typeof vars === 'string' || vars instanceof String){
+			// 	if(vars.indexOf("has not actual terminals")!==-1){
+			// 		this.show_modal_error('<p>Не найдены зарегистрированные Терминалы. Проверьте настройки Iiko.</p>');
+			// 	}else if(vars.indexOf("cant update cafe info")!==-1){
+			// 		this.show_modal_error('<p>Не удалось сохранить информацию. Проблема на стороне ChefsMenu. Попробуйте позже.</p>');
+			// 	}else{
+			// 		this.show_modal_error();
+			// 	};				
+			// }else{
+			// 	this.show_modal_error();
+			// };
+
+			this.show_modal_error();
+			setTimeout(()=>{
+				this._end_loading();
+			},300);						
+			
+		});
+
+	},
+	iiko_vars_update_asynq:function(){
+		return new Promise((res,rej)=>{
+			let PATH = 'adm/lib/iiko/';
+            let url = PATH + 'lib.update_iiko_vars.php';
+        
+            let data = {
+                id_cafe:GLB.THE_CAFE.get().id
+            };
+
+            this.AJAX = $.ajax({
+                url: url+"?callback=?",
+                dataType:"jsonp",
+                data:data,
+                method:"POST",
+                success:function(result) {             
+                    // console.log('result',result)
+                    if(result && !result.error){                        
+                        res(result); 
+                    }else{
+                        rej(result.error);
+                    }
+                },
+                error:function(result) {         
+                	// console.log('result',result)           
+                    rej(result);                
+                }
+            });   
+		});
+	},
 	iiko_tables_update:function() {		
         
         const fn = {
@@ -235,30 +326,6 @@ export var VIEW_IIKO_CUSTOMIZATION = {
                     on_close:function(){
                         opt && opt.onClose && opt.onClose();
                     }
-                });                 
-            },        	
-        	errHasNotActualTerminals:()=>{
-                let msg = '<p>Не найдены зарегистрированные Терминалы. Проверьте настройки Iiko.</p>';
-                GLB.VIEWS.modalMessage({
-                    title:GLB.LNG.get("lng_error"),
-                    message:msg,
-                    btn_title:GLB.LNG.get('lng_close')
-                });
-        	},
-        	errSaveCafeInfo:()=>{
-                let msg = '<p>Не удалось сохранить информацию. Проблема на стороне ChefsMenu. Попробуйте позже.</p>';
-                GLB.VIEWS.modalMessage({
-                    title:GLB.LNG.get("lng_error"),
-                    message:msg,
-                    btn_title:GLB.LNG.get('lng_close')
-                });
-        	},        	        	
-            errMessage:()=>{
-                let msg = '<p>Что-то пошло не так. Попробуйте позже или обратитесь к Администратору Сервиса</p>';
-                GLB.VIEWS.modalMessage({
-                    title:GLB.LNG.get("lng_error"),
-                    message:msg,
-                    btn_title:GLB.LNG.get('lng_close')
                 });
             }
         };
@@ -277,14 +344,14 @@ export var VIEW_IIKO_CUSTOMIZATION = {
 			
 			if (typeof vars === 'string' || vars instanceof String){
 				if(vars.indexOf("has not actual terminals")!==-1){
-					fn.errHasNotActualTerminals();
+					this.show_modal_error('<p>Не найдены зарегистрированные Терминалы. Проверьте настройки Iiko.</p>');
 				}else if(vars.indexOf("cant update cafe info")!==-1){
-					fn.errSaveCafeInfo();
+					this.show_modal_error('<p>Не удалось сохранить информацию. Проблема на стороне ChefsMenu. Попробуйте позже.</p>');
 				}else{
-					fn.errMessage();
+					this.show_modal_error();
 				};				
 			}else{
-				fn.errMessage();
+				this.show_modal_error();
 			};
 
 			setTimeout(()=>{
@@ -301,8 +368,10 @@ export var VIEW_IIKO_CUSTOMIZATION = {
 		}else{
 			//CHECK THE MENUS ID
 			const CAFE = GLB.THE_CAFE.get();
-			const iiko_current_extmenu_id = CAFE.iiko_current_extmenu_id.toString();				
-			if(this.NEW_IIKO_EXTMENU_ID!=iiko_current_extmenu_id){
+
+			const current_extmenu_id = CAFE.iiko_current_extmenu_id.toString() || "";
+					
+			if(this.NEW_IIKO_EXTMENU_ID!==current_extmenu_id){
 				this.save_new_current_extmenu_id();	
 			}else{
 				return false;
@@ -310,23 +379,7 @@ export var VIEW_IIKO_CUSTOMIZATION = {
 		};
 		return false; 
 	},
-	save_new_current_extmenu_id:function() {
-		
-		const _this = this;
-
-        const fn = {
-            errMessage:function(){
-                let msg = GLB.LNG.get([
-                    '-',
-                    '<p>Что-то пошло не так. Попробуйте позже или обратитесь к Администратору Сервиса</p>'
-                    ]);
-                GLB.VIEWS.modalMessage({
-                    title:GLB.LNG.get("lng_error"),
-                    message:msg,
-                    btn_title:GLB.LNG.get('lng_close')
-                });
-            }
-        };
+	save_new_current_extmenu_id:function() {				
 
 		const new_menu_id = this.NEW_IIKO_EXTMENU_ID.toString();
 
@@ -345,39 +398,37 @@ export var VIEW_IIKO_CUSTOMIZATION = {
             dataType:"jsonp",
             data:data,
             method:"POST",
-            success:function(result) {             
+            success:(result)=> {             
                 // console.log('result',result)
                 if(result && !result.error){
-                	_this._go_back(); 
-					setTimeout(function(){ 
-						_this._end_loading();						
+					GLB.THE_CAFE.set({iiko_current_extmenu_id:new_menu_id});
+                	this._go_back(); 
+					setTimeout(()=>{ 
+						this._end_loading();						
 					},300);
                 }else{
-                    fn.errMessage();
+                    this.show_modal_error();
                     setTimeout(()=>{
-                    	_this._end_loading();	
+                    	this._end_loading();	
                     },300);
                 }
             },
-            error:function(result) {                    
+            error:(result)=> {                    
                 // console.log(result)
-                fn.errMessage();
+                this.show_modal_error();
                 setTimeout(()=>{
-                	_this._end_loading();	
+                	this._end_loading();	
                 },300);
             }
         }); 		
 
 	},
-	remove_iiko_login:function() {
+	remove_iiko_login:function() {		
 
 		const ask = "<p>Вы отправляете специальное слово. Хотите удалить связь с iiko?</p>";
         const fn = {
             okMessage:function(opt){
-                let msg = GLB.LNG.get([
-                '-',
-                '<p>Связь ChefsMenu с платформой iiko успешно удалена.<br>Сейчас Панель управления будет перезагружена.</p>'
-                ]);
+                let msg = '<p>Связь ChefsMenu с платформой iiko успешно удалена.<br>Сейчас Панель управления будет перезагружена.</p>';
                 GLB.VIEWS.modalMessage({
                     title:GLB.LNG.get("lng_attention"),
                     message:msg,
@@ -386,17 +437,6 @@ export var VIEW_IIKO_CUSTOMIZATION = {
                         opt && opt.onClose && opt.onClose();
                     }
                 });                 
-            },
-            errMessage:function(){
-                let msg = GLB.LNG.get([
-                    '-',
-                    '<p>Что-то пошло не так. Попробуйте позже или обратитесь к Администратору Сервиса</p>'
-                    ]);
-                GLB.VIEWS.modalMessage({
-                    title:GLB.LNG.get("lng_error"),
-                    message:msg,
-                    btn_title:GLB.LNG.get('lng_close')
-                });
             }
         };
 
@@ -411,9 +451,8 @@ export var VIEW_IIKO_CUSTOMIZATION = {
                         location.reload();
                     }});
 		    	})
-		    	.catch((result)=>{		    		
-		    		// console.log("result",result)
-		    		fn.errMessage();
+		    	.catch((result)=>{
+		    		this.show_modal_error();
                     setTimeout(()=>{
                         this._end_loading();
                     },300);
@@ -440,7 +479,7 @@ export var VIEW_IIKO_CUSTOMIZATION = {
                 dataType:"jsonp",
                 data:data,
                 method:"POST",
-                success:function(result) {             
+                success:(result)=> {             
                     // console.log('result',result)
                     if(result && !result.error){                        
                         res(result); 
@@ -448,7 +487,7 @@ export var VIEW_IIKO_CUSTOMIZATION = {
                         rej(result.error);
                     }
                 },
-                error:function(result) {         
+                error:(result)=> {         
                 	// console.log('result',result)           
                     rej(result);                
                 }
@@ -482,7 +521,7 @@ export var VIEW_IIKO_CUSTOMIZATION = {
                 dataType:"jsonp",
                 data:data,
                 method:"POST",
-                success:function(result) {             
+                success:(result)=> {             
                     console.log('result',result);
                     if(result && !result.error){
                         res(result); 
@@ -490,13 +529,21 @@ export var VIEW_IIKO_CUSTOMIZATION = {
                         rej(result.error);
                     }
                 },
-                error:function(result) {                    
+                error:(result)=> {                    
                 	console.log('result',result);
                     rej(result);                
                 }
             });  
 
     	});
-    }	
+    },
+	show_modal_error:function(msg=""){
+		const strMsg = msg!=="" ? msg : "<p>Что-то пошло не так. Попробуйте позже или обратитесь к разработчику Сервиса</p>"; 
+		GLB.VIEWS.modalMessage({
+			title:GLB.LNG.get("lng_error"),
+			message:strMsg,
+			btn_title:GLB.LNG.get('lng_close')
+		});
+	}	
 
 };
