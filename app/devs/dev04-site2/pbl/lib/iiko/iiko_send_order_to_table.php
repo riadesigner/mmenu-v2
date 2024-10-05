@@ -92,7 +92,7 @@ function iiko_get_table_id_by_number($iiko_tables,$table_number){
 $menus = $cafe->iiko_extmenus;
 $menus = !empty($menus)?json_decode((string) $menus,true):false;
 if(!$menus) __errorjsonp("--cant find iiko menus for the cafe, ".__LINE__);
-$menu_id = $menus['current_extmenu_id'];
+$menu_id = $cafe->iiko_current_extmenu_id;
 
 // ---------------------------------
 //   GETTTING ID FOR REGULAR ORDER
