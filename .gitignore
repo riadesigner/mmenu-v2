@@ -6,3 +6,4 @@ logs
 db
 .env
 *.env
+db-backup
