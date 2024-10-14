@@ -244,7 +244,7 @@ export var CHEFSMENU = {
             _this.show_win({skin:cafe.skin ,onReady:function(){
                             
                 GLB.CAFE.init(cafe);
-                return ;
+                
                 GLB.VIEW_ALLMENU.update(_this.get_allmenu());
                 GLB.CART.init();
                 GLB.UVIEWS.go_first("fast");
