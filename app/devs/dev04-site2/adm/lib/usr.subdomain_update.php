@@ -57,11 +57,7 @@
 		__errorjsonp("--limited mode");
 	}
 
-	if($user->lang=="ru"){
-		mail_to_confirm_ru($user->email, $cafe);
-	}else{
-		mail_to_confirm_ru($user->email, $cafe);
-	}
+	mail_to_confirm_ru($user->email, $cafe, $new_subdomain);
 
 	function mail_to_confirm_ru($email, $cafe, $subdomain){
 		
