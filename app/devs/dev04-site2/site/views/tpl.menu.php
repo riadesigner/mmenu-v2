@@ -55,6 +55,9 @@ $(function() {
 
 </script>
 
+<style>
+	body{background-color: #232627;}
+</style>
 </head>
 <body class='<?=Site::get_body_classes();?>' <?=Site::get_body_data();?> >
 

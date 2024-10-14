@@ -36,8 +36,8 @@ export var VIEW_ALLMENU = {
 		var _this=this;		
 
 		GLB.MENU_TABLE_MODE.update();		
-		console.log('allmenu',allmenu)
-		
+		console.log('allmenu',allmenu)			
+
 		// -----------------------
 		// MULTILANG BUILDING UI
 		// -----------------------

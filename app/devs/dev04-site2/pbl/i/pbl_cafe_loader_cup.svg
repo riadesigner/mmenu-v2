@@ -4,11 +4,15 @@
       .cls-1 {
         fill: none;
       }
+      .cls-2 {
+        fill: white;
+      }      
+      
     </style>
   </defs>
   <g id="Group_2208" data-name="Group 2208" transform="translate(-3104 -555)">
     <rect id="Rectangle_738" data-name="Rectangle 738" class="cls-1" width="148" height="79" transform="translate(389 495)"/>
-    <g id="Group_2207" data-name="Group 2207" transform="translate(0 -1)">
+    <g id="Group_2207" data-name="Group 2207" transform="translate(0 -1)" class="cls-2">
       <g id="Group_2206" data-name="Group 2206">
         <path id="Path_2537" data-name="Path 2537" d="M62.206,82.489h-.472C42.416,79.066,31.872,68.05,27.977,46.253a2.488,2.488,0,1,1,4.879-.984c3.659,19.672,12.472,29.35,29.862,32.3a2.557,2.557,0,0,1,1.967,2.951,2.4,2.4,0,0,1-2.479,1.967Z" transform="translate(384.5 474.483)"/>
         <path id="Path_2538" data-name="Path 2538" d="M54.475,87.608a2.911,2.911,0,0,1-2.2-1.22,2.636,2.636,0,0,1,0-2.675C60.849,71.477,62.3,54.6,62.541,41.379A2.636,2.636,0,0,1,64.98,38.94h6.374a10.859,10.859,0,0,1,10.78,10.78v6.374A31.908,31.908,0,0,1,54.593,87.569Zm13.219-43.79a85.887,85.887,0,0,1-7.869,37.455A26.832,26.832,0,0,0,77.452,56.055V49.681a5.941,5.941,0,0,0-5.862-5.862Z" transform="translate(454.866 461.77)"/>
