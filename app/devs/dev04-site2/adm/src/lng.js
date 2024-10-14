@@ -105,9 +105,7 @@ export var LNG = {
 
 			lng_view_customizing_cart__view_title:['-','Настройка Корзины'],
 			lng_view_customizing_cart__cart_mode:['-','Выберите режим корзины на сайте'],
-			lng_view_customize_all__change_cart_settings:['-','Здесь вы можете настроить получение заказов от Посетителей'],
-			lng_view_customize_all__change_cart_settings_btn:['-','Настроить Корзину'],
-						
+
 			lng_view_customize_all__code_for_embed:['-','Здесь вы можете получить код для вставки меню на ваш собственный сайт'],
 			lng_view_customize_all__code_for_embed_btn:['-','Код для встраивания'],	
 			

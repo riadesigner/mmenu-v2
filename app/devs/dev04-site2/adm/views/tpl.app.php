@@ -771,10 +771,10 @@ App&&App();
 						<div class="std-form__wide-button bright-btn btn-iiko-customization">Управляется iiko</div>
 						<div class="std-form__section-description">Здесь вы можете добавить названия модификаторов на других языках</div>
 						<div class="std-form__wide-button btn-iiko-modifiers-dictionary">Словарь модификаторов</div>					
-					</div>
+					</div>						
 
-					<div class="std-form__section-description" lang="lng_view_customize_all__change_cart_settings"><!-- Здесь вы можете настроить получение заказов от Посетителей --></div>
-					<div class="std-form__wide-button btn-cart-settings" lang="lng_view_customize_all__change_cart_settings_btn"><!-- Настройка корзины --></div>
+					<div class="std-form__section-description" lang="lng_view_customize_all__change_cart_settings">Здесь вы можете настроить получение заказов</div>
+					<div class="std-form__wide-button btn-cart-settings bright-btn" >Настроить Корзину</div>
 					
 					<div class="std-form__section-description" lang="lng_view_customize_all__menu_link"><!-- Здесь вы можете скачать QR-код и поделиться ссылкой на ваше меню --></div>					
 					<div class="std-form__wide-button btn-menu-link" lang="lng_view_customize_all__menu_link_btn"><!-- Ссылка на QR-код --></div>	
@@ -947,9 +947,9 @@ App&&App();
 					<h2>Получение заказов:</h2>
 
 					<p>Все заказы приходят в специальный телеграм-чат <strong>@<?=$CFG->tg_cart_bot;?></strong></p>					
-					<p>В этом чате у участников есть три роли – каждая со своей спецификой:</p>
+					<p>В этом чате у участников есть три роли:</p>
 
-					<p><strong><i>Официант</i></strong> – будет получать заказы в стол (в кафе).</p>
+					<p><strong><i>Официант</i></strong> – будет получать заказы на стол (в кафе).</p>
 					<p><strong><i>Менеджер</i></strong> – будет получать внешние заказы на доставку или самовывоз.</p>
 					<p><strong><i>Администратор</i></strong> – будет получать статистику по всем заказам за день.</p>					
 
@@ -970,14 +970,21 @@ App&&App();
 						<h2 id="anchor_invitation">Пригласить сотрудника:</h2>
 
 						<p>Чтобы пригласить в специальный телеграм-чат нового сотрудника, 
-							нажмите на соответствующую роль (кнопки ниже). При этом скопируется ссылка-приглашение, 
-							которой вы сможете поделиться:</p>
+							нажмите соответствующую кнопку ниже. Выберите любой из вариантов – ссылку-приглашение или QR-код.</p>
 
+						<h3>Ссылка-приглашение:</h3>
 						<div class="customizing-cart__all-invite-links">
 							<button class="std-special-single-button invite-link-waiter">ОФИЦИАНТ</button>
 							<button class="std-special-single-button invite-link-manager">МЕНЕДЖЕР</button>
 							<button class="std-special-single-button invite-link-supervisor">АДМИНИСТРАТОР</button>
 						</div>	
+
+						<h3>QR-код приглашение:</h3>
+						<div class="customizing-cart__all-invite-qrcodes">
+							<button class="std-single-button-with-icon invite-qrcode-waiter">ОФИЦИАНТ</button>
+							<button class="std-single-button-with-icon invite-qrcode-manager">МЕНЕДЖЕР</button>
+							<button class="std-single-button-with-icon invite-qrcode-supervisor">АДМИНИСТРАТОР</button>
+						</div>		
 
 					</div>					
 					

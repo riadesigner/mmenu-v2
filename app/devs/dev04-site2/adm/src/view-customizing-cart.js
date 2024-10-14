@@ -29,6 +29,10 @@ export var VIEW_CUSTOMIZING_CART = {
 		this.$btn_tg_invite_link_manager =  this.$view.find('button.invite-link-manager');
 		this.$btn_tg_invite_link_supervisor =  this.$view.find('button.invite-link-supervisor');
 
+		this.$btn_tg_invite_qrcode_waiter =  this.$view.find('button.invite-qrcode-waiter');
+		this.$btn_tg_invite_qrcode_manager =  this.$view.find('button.invite-qrcode-manager');
+		this.$btn_tg_invite_qrcode_supervisor =  this.$view.find('button.invite-qrcode-supervisor');		
+
 		this.TG_KEYS = null; // null | {waiter:string, manager:string, supervisor:string}					
 		this.TG_KEY_LINKS = null; // null | {waiter:string, manager:string, supervisor:string} 	
 
@@ -302,9 +306,70 @@ export var VIEW_CUSTOMIZING_CART = {
 			e.originalEvent.cancelable && e.preventDefault();
 		});
 
+		this.$btn_tg_invite_qrcode_waiter.on('touchend',(e)=>{
+			if(!this.VIEW_SCROLLED){
+				const role = 'waiter';				
+				this.tg_link_to_qrcode(this.TG_KEY_LINKS[role], role);
+			} 
+			e.originalEvent.cancelable && e.preventDefault();
+		});
+
+		this.$btn_tg_invite_qrcode_manager.on('touchend',(e)=>{
+			if(!this.VIEW_SCROLLED){
+				const role = 'manager';				
+				this.tg_link_to_qrcode(this.TG_KEY_LINKS[role], role);
+			} 
+			e.originalEvent.cancelable && e.preventDefault();
+		});
+		
+		this.$btn_tg_invite_qrcode_supervisor.on('touchend',(e)=>{
+			if(!this.VIEW_SCROLLED){
+				const role = 'supervisor';				
+				this.tg_link_to_qrcode(this.TG_KEY_LINKS[role], role);
+			} 
+			e.originalEvent.cancelable && e.preventDefault();
+		});		
+
+
 		this.sa_bnt_upd_tg_keys.on('touchend',(e)=>{
 			!_this.VIEW_SCROLLED && this.su_update_all_tg_keys();
 			e.originalEvent.cancelable && e.preventDefault();
+		});
+
+	},
+	
+	tg_link_to_qrcode:function(tg_link, role){
+		
+		this._now_loading();
+
+		this.get_link_to_qrcode_asynq(tg_link)
+		.then((data)=>{					
+			
+			const imgUrl = `data:image/png;base64, ${data.image}`;
+
+			const arr_message = {
+				waiter:`Это код-приглашение <strong>официанта</strong>. <p><img src="${imgUrl}"></p>`,
+				manager:`Это код-приглашение <strong>менеджера</strong>. <p><img src="${imgUrl}"></p>`,
+				supervisor:`Это код-приглашение <strong>администратора</strong>. <p><img src="${imgUrl}"></p>`,
+			};		
+			const msg = arr_message[role];
+			GLB.VIEWS.modalMessage({
+				title:'Супер!',
+				message:msg,
+				btn_title:GLB.LNG.get('lng_ok')
+			});
+
+			this._end_loading();
+		})
+		.catch(()=>{
+			let errorMsg = " QR-код не удалось создать";
+			GLB.VIEWS.modalMessage({
+				title:'Ошибка',
+				message:errorMsg,
+				btn_title:GLB.LNG.get('lng_ok')
+			});
+			
+			this._end_loading();
 		});
 
 	},
@@ -331,6 +396,37 @@ export var VIEW_CUSTOMIZING_CART = {
 			});		  
 		});
 
+	},
+
+	get_link_to_qrcode_asynq:function(str_link){
+		return new Promise((res, rej)=>{
+
+			var PATH = 'adm/lib/';
+			var url = PATH + 'lib.get_qr_image.php';			
+	
+			var data = {
+				str_link:str_link
+			};
+	
+			this.AJAX = $.ajax({
+				url: url+"?callback=?",
+				data:data,
+				method:"POST",
+				dataType: "jsonp",
+				success: function (response) {
+					
+					if(response && !response.error){						
+						res(response)
+					}else{
+						rej(response)						
+					}
+				},
+				error:function(response) {
+					console.log('==err response==',response)
+					rej(response)
+				}
+			});			
+		});
 	},
 
 	check_need_to_save:function(){
@@ -367,7 +463,7 @@ export var VIEW_CUSTOMIZING_CART = {
 				method:"POST",
 				dataType: "jsonp",
 				success: function (response) {
-					console.log('==response==',response)
+					
 					if(response && !response.error){
 						res(response)						
 					}else{
@@ -401,7 +497,7 @@ export var VIEW_CUSTOMIZING_CART = {
 				method:"POST",
 				dataType: "jsonp",
 				success: function (response) {
-					console.log('==response==',response)
+					
 					if(response && !response.error){
 						res(response)						
 					}else{
@@ -449,7 +545,7 @@ export var VIEW_CUSTOMIZING_CART = {
             method:"POST",
             dataType: "jsonp",
             success: function (response) {
-            	console.log('response',response)
+            	
             	if(response && !response.error){
 	            	var cafe = response;
 	            	var cafe_rev = cafe.rev;            	
