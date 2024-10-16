@@ -73,7 +73,7 @@ if(J_ENV_LOCAL){
 
 	$CFG->user_cookie_time = 3600*24*30*3; // 3 mounth		
 
-	$CFG->contract_cost_in_rub = '500';
+	$CFG->contract_cost_in_rub = '2000';
 
 	//     __  ___   ___      ____   __
 	//    /  |/  /  /   |    /  _/  / /

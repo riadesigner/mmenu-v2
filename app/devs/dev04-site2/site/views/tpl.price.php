@@ -110,7 +110,7 @@
 			<div class="page-price-information">
 				<p><span class="price-description">Стоимость обслуживания Меню –</span> <nobr><span class="price-per-year"><?=$price_per_mounth;?> руб. / мес.</span></nobr></p> 
 				<p>Стоимость годового контракта всего – <strong> <?=$price_per_year;?> руб.</strong></p>
-				<p>Тестовый период: <span class="try-free"><nobr>14 дней – бесплатно!</nobr></span></p>
+				<p>Тестовый период: <span class="try-free"><nobr>30 дней</nobr></span></p>
 			</div>
 		</div>		
 
