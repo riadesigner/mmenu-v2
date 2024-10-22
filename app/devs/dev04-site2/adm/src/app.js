@@ -26,6 +26,7 @@ import {VIEW_CUSTOMIZING_CART} from './view-customizing-cart.js';
 import {VIEW_CUSTOMIZE_INTERFACE} from './view-customize-interface.js';
 import {VIEW_CAFE_DESCRIPTION} from './view-cafe-description.js';
 import {VIEW_REPLACING_PARENT_SECTION} from './view-replacing-parent-section.js';
+import {VIEW_CHOOSING_MODIFIERS} from './view-choosing-modifiers.js';
 import {VIEW_CAFE_LINK} from './view-cafe-link.js';
 import {VIEW_CHANGE_PASSWORD} from './view-change-password.js';
 import {VIEW_CHANGE_SUBDOMAIN} from './view-change-subdomain.js';
@@ -72,6 +73,7 @@ GLB.VIEW_CUSTOMIZE_INTERFACE = $.extend( VIEW_CUSTOMIZE_INTERFACE, VIEW_STD);
 GLB.VIEW_CAFE_DESCRIPTION = $.extend( VIEW_CAFE_DESCRIPTION, VIEW_STD);
 GLB.VIEW_MAIN_HELP = $.extend( VIEW_MAIN_HELP, VIEW_STD); // todo Send email to Support
 GLB.VIEW_REPLACING_PARENT_SECTION = $.extend( VIEW_REPLACING_PARENT_SECTION, VIEW_STD);
+GLB.VIEW_CHOOSING_MODIFIERS = $.extend( VIEW_CHOOSING_MODIFIERS, VIEW_STD);
 GLB.VIEW_CAFE_LINK = $.extend( VIEW_CAFE_LINK, VIEW_STD);
 GLB.VIEW_CHANGE_PASSWORD = $.extend( VIEW_CHANGE_PASSWORD, VIEW_STD);
 GLB.VIEW_CHANGE_SUBDOMAIN = $.extend( VIEW_CHANGE_SUBDOMAIN, VIEW_STD);
@@ -238,7 +240,14 @@ export default function(){
 		template:"#templates .view-replacing-parent-section",
 		anim:'animLeft'
 	}));
-	
+
+	VIEWS.addView(
+		VIEW_CHOOSING_MODIFIERS.init({
+		name:"view-choosing-modifiers",
+		template:"#templates .view-choosing-modifiers",
+		anim:'animLeft'
+	}));	
+
 	VIEWS.addView(
 		VIEW_GET_CONTRACT.init({
 		name:"view-get-contract",

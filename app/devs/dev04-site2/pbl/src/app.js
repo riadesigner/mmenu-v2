@@ -26,7 +26,6 @@ import {VIEW_THANK_YOU} from './view-thank-you.js';
 import {VIEW_ORDERING} from './view-ordering.js';
 import {VIEW_ORDER_OK} from './view-order-ok.js';
 import {VIEW_ORDER_CANCEL} from './view-order-cancel.js';
-
 import {VIEW_TABLE_CHANGE} from './view-table-change.js';
 
 GLB.META_VIEWPORT = META_VIEWPORT;

@@ -2,6 +2,7 @@ import {GLB} from './glb.js';
 import $ from 'jquery';
 import {IIKO_ORDER_SENDER} from './iiko/iiko-order-sender.js';
 import {IIKO_STREET_LOADER} from './iiko/iiko-street-loader.js';
+import {CHEFS_ORDER_SENDER} from './chefs/chefs-order-sender.js';
 
 export var VIEW_ORDERING = {
 	init:function(options){
@@ -92,8 +93,7 @@ export var VIEW_ORDERING = {
 
 		}else{
 			
-			var msg = [
-				// "<p>"+GLB.LNG.get("lng_in_your_shopping_cart")+"<br><span>"+GLB.CART.the_items()+"</span></p>",
+			var msg = [				
 				"<p>"+GLB.LNG.get("lng_for_total_cost")+"<br><span>"+GLB.CART.the_total()+"</span></p>"
 			].join("\n");									
 			
@@ -421,21 +421,25 @@ export var VIEW_ORDERING = {
 		const order_user_phone = user_phone;
 		const order_time_need = fn.dateExport(user_time_need);
 		const order_time_sent = fn.dateExport(new Date());
-		const order_user_comment = this.$userComments.val();
-		const order_user_address = user_address;
-		const order_user_iiko_address = user_iiko_address;
+		const order_user_comment = this.$userComments.val();		
 			
+		// GENERAL PART
 		const order_params = {
 			id_cafe,
 			order_currency,
 			order_total_price,
 			order_user_phone,
-			order_user_address,
-			order_user_iiko_address,
 			order_time_need,
 			order_time_sent,
 			order_user_comment
 		};
+
+		// ADDRESS PART
+		if(this.IIKO_MODE){
+			order_params['order_user_iiko_address'] = user_iiko_address;
+		}else{
+			order_params['order_user_address'] = user_address;
+		}
 
 		if(this.IIKO_MODE){			
 			this.iiko_order_send(order_params);
@@ -466,8 +470,6 @@ export var VIEW_ORDERING = {
 		const order = $.extend(order_params,{order_items});
 		const demo_mode = GLB.CAFE.get_status()!=="2";		
 
-		console.log(`sending order = `,order);
-
 		this.IIKO_SENDER = $.extend({},IIKO_ORDER_SENDER);	
 		this.IIKO_SENDER.send_async(order,this.PICKUPSELF_MODE)
 		.then((vars)=>{		
@@ -489,80 +491,30 @@ export var VIEW_ORDERING = {
 		});		
 	},
 	chefsmenu_order_send:function(order_params) {
-		
-		var _this=this;
-
-		var url = GLB_APP_URL+"pbl/lib/chefs/chefs_send_order_for_delivery.php"; 
-		var msg_something_wrong = GLB.LNG.get("lng_something_wrong");		
-		var msg_wrong_phone = GLB.LNG.get("lng_wrong_phone");		
-
-		var all_order_rows = GLB.CART.get_all();
-		var order_items = [];
-
-		// REBUILD ORDER
-		for(var i in all_order_rows){
-			if(all_order_rows.hasOwnProperty(i)){
-				let order_row = all_order_rows[i];
-				order_items.push({				
-					title:order_row.item_data.title,
-					price:order_row.item_data.price,
-					id_item:order_row.item_data.id,
-					id_menu:order_row.item_data.id_menu,
-					count:order_row.count
-				});
-			}
-		};				
-
+	
+		const order_items = GLB.CART.get_all();
 		const order = $.extend(order_params,{order_items});
-		order.pickupself_mode = this.PICKUPSELF_MODE;
+		const demo_mode = GLB.CAFE.get_status()!=="2";		
 
-        var fn = {
-            send:function(url,order) {
-                $.ajax({
-                    url: url+"?callback=?",
-                    jsonpCallback:GLB.CALLBACK_RANDOM.get(),                    
-                    dataType: "jsonp",
-                    method:"POST",
-                    data:{order_data:order},
-                    success: function (response) {
-                    	
-                    	console.log("--response1--",response)
-
-	                    if(response.error){	                    	
-	                    	// && response.error.indexOf('wrong user phone')!==-1
-							fn.showCancelReport(msg_something_wrong);
-	                    }else{	                    	
-	                    	fn.showOrderCheck(response); 
-	                    }
-                    },
-		            error:function(response) {	
-		            	
-		            	console.log("--response2--",response)
-
-		            	_this.chefsmenu.end_loading();
-		            	// console.log("response",response);
-		            	fn.showCancelReport(msg_something_wrong);
-
-		            }
-                });
-            },
-            showCancelReport:function(msg){            	
-				GLB.VIEW_ORDER_CANCEL.update(msg);
-				GLB.UVIEWS.set_current("the-order-cancel");
-            },
-            showOrderCheck:function(response){
-        		order.short_number = response.short_number;
-        		order.demo_mode = response.demo_mode;
-        		order.notg_mode = response.notg_mode;
-        		const pickupself_mode = _this.PICKUPSELF_MODE;
-				GLB.VIEW_ORDER_OK.update(order,{pickupself_mode});
-				GLB.UVIEWS.set_current("the-order-ok");            	
-            }
-        };
-
-        this.chefsmenu.now_loading();
-
-       fn.send(url,order);
+		this.CHEFS_SENDER = $.extend({},CHEFS_ORDER_SENDER);	
+		this.CHEFS_SENDER.send_async(order,this.PICKUPSELF_MODE)		
+		.then((vars)=>{		
+			console.log('--vars--',vars)	
+			order.short_number = vars['short_number'];
+			order.demo_mode = vars['demo_mode'];
+			order.notg_mode = vars['notg_mode']?true:false;
+			const pickupself_mode = this.PICKUPSELF_MODE;
+			GLB.VIEW_ORDER_OK.update(order,{pickupself_mode});
+			GLB.UVIEWS.set_current("the-order-ok");
+		})
+		.catch((vars)=>{
+            this._show_modal_win(`Заказ не получается отправить. 
+            	Обратитесь к администратору кафе.`);
+			console.log('err',vars);
+			setTimeout(()=>{
+				this.chefsmenu.end_loading();
+			},1000);
+		});	
 
 	},
 	load_iiko_cities_async:function() {

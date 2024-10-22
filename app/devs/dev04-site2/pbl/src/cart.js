@@ -52,7 +52,7 @@ export var CART = {
 			order.count+=preorder.count;
 		}else{
 			this.ALL_ORDERS[preorder.uniq_name] = preorder;
-		}
+		}		
 		this.update_btn_cart();
 		return total_in_cart + preorder.count;
 	},

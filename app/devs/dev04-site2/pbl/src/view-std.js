@@ -15,7 +15,7 @@ export var VIEW_STD = {
 		this.CN = "mm2-";
 		this._CN = "."+this.CN;
 		this.$tpl = $("#mm2-templates");
-		this.$tplItem = $("#mm2-templates "+this._CN+"cart-item");
+		this.$tplCartRow = $("#mm2-templates .mm2-cart-row");
 
 		this.$content = this.$view.find(".std-content");
 		

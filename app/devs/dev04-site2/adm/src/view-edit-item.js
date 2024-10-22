@@ -27,8 +27,10 @@ export var VIEW_EDIT_ITEM = {
 		this.$price_list = this.$form.find('.price-list-section .price-list');
 		this.$price_list_row_tpl = $('#templates .tpl-item-edit__price-list-row')
 		this.$btn_price_list_add_row = this.$form.find('.price-list-section .btn-add-price');
-		this.$btn_price_list_del_row = this.$form.find('.price-list-section .btn-del-price');
-
+		this.$btn_price_list_del_row = this.$form.find('.price-list-section .btn-del-price');		
+		// choosing modifiers
+		this.$btnChooseModifiers =  this.$form.find('.edit-item-choose-modifiers__button');
+		
 		// MULTI-LANGUAGE SECTIONS
 		this.$item_edits_container = this.$form.find('.item-edits-container');
 		this.$tpl_item_edit_form = $('#templates .tpl-item-edit__extra-lang');
@@ -362,7 +364,11 @@ export var VIEW_EDIT_ITEM = {
 			open_view_replacing:()=>{
 				GLB.VIEW_REPLACING_PARENT_SECTION.update(this.ITEM);
 				GLB.VIEWS.setCurrent(GLB.VIEW_REPLACING_PARENT_SECTION.name);
-			}
+			},
+			open_view_modifiers:()=>{
+				GLB.VIEW_CHOOSING_MODIFIERS.update(this.ITEM);
+				GLB.VIEWS.setCurrent(GLB.VIEW_CHOOSING_MODIFIERS.name);
+			}			
 		};
 
 		this.$btnChangeSection.on('touchend',()=>{
@@ -377,6 +383,19 @@ export var VIEW_EDIT_ITEM = {
 			}});
 			return false;	
 		});
+
+		this.$btnChooseModifiers.on('touchend',()=>{						
+			this._blur({onBlur:()=>{
+				if(!this.LOADING && !this.VIEW_SCROLLED){
+					if(this.NEED_TO_SAVE){
+						this.save({ onReady:()=>{ fn.open_view_modifiers(); }});
+					}else{
+						fn.open_view_modifiers();
+					}
+				};
+			}});
+			return false;	
+		});	
 
 		// FOR CHESMENU MODE ONLY
 		if(!GLB.THE_CAFE.is_iiko_mode()){						

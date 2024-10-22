@@ -155,7 +155,7 @@ export var VIEW_CART = {
 				const count = order.count;
 				const price = order.price;
 				const uniq_name = order.uniq_name;				
-				const volume_str = `${order.sizeName} / ${order.volume} ${order.units}`;
+				const volume_str = IIKO_MODE ? `${order.sizeName} / ${order.volume} ${order.units}` : order.sizeName;
 				const price_str = count+" x "+price+" "+currency;
 								
 				const modifiers = order.chosen_modifiers;
@@ -167,7 +167,7 @@ export var VIEW_CART = {
 					}
 				};				
 
-				let $row = this.$tplItem.clone().css({opacity:0,transform:"translateX(50px)"});
+				let $row = this.$tplCartRow.clone().css({opacity:0,transform:"translateX(50px)"});
 				$row.find(this._CN+"cart-title__item").html(title_str);
 				$row.find(this._CN+"cart-title__volume").html(volume_str);				
 				IIKO_MODE && $row.find(this._CN+"cart-title__modifiers").html(modifiers_str);

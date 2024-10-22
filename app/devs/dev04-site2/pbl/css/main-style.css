@@ -890,6 +890,8 @@ a.mm2-home-link:hover{ color: %[color-home-link-hover]%; }
 .mm2-cart-item{border-bottom:%[border-style-2]%;padding: 10px 0 5px 0;}
 .mm2-cart-item:after{content: "";display: table;clear: both;}
 
+.mm2-cart-row{position: relative;border-bottom: 2px dotted #505358;margin-bottom:4px;}
+.mm2-cart-row::after{content:"";display: table;clear: both;}
 .mm2-cart-title {float: left;width: 60%;color: %[color-front]%; padding: 10px 10px 10px 0;}
 .mm2-cart-quantity{float: left;width: 20%;color: %[color-bright]%; padding: 10px 10px 10px 0;}
 .mm2-cart-buttons{float: right;width: 20%;text-align: right; }

@@ -43,14 +43,14 @@ $total_price = (float) $order_data['order_total_price'];
 $token = $_POST['token'];
 $orders = $order_data['order_items'];
 
-glog('ORDERS ================== \n'.print_r($orders, 1));
+glog('ORDERS (FROM IIKO MODE) ================== \n'.print_r($orders, 1));
 
 define('PICKUPSELF_MODE',filter_var($_POST['pickupself'], FILTER_VALIDATE_BOOLEAN));
 
-// TODO CHECK USER PHONE (+7 and 8 digits)
-
 $user_phone = $order_data['order_user_phone'];
 if(empty($user_phone))__errorjsonp("--need to know user phone");
+
+// TODO CHECK USER PHONE (+7 and 8 digits)
 
 if(!PICKUPSELF_MODE){
 	$u_address = $order_data['order_user_iiko_address'];
@@ -75,6 +75,7 @@ if(!PICKUPSELF_MODE){
 // order_time_sent,
 // order_user_comment
 
+// CHECK IS REAL CAFE
 $id_cafe = (int) $_POST['id_cafe'];
 $cafe = new Smart_object("cafe",$id_cafe);
 if(!$cafe->valid())__errorjsonp("Unknown cafe, ".__LINE__);

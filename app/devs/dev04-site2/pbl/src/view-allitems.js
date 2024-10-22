@@ -214,8 +214,7 @@ export var VIEW_ALLITEMS = {
             method:"POST",
             data:data,
             success: function (allitems) {        
-            	console.log('allitems',allitems)    	                  	
-            	$(allitems).each(function() { this.price = this.price || 0;	});            	
+            	console.log('allitems',allitems)
             	_this.TOTAL_ITEMS = allitems.length;
                 _this.ALL_ITEMS = fn.arr2obj(allitems);
                 _this.chefsmenu.set_allitems(_this.MENU,_this.ALL_ITEMS);

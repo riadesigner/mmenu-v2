@@ -120,9 +120,7 @@ class Order_sender{
 
 			$pre = date("y").date("m").date("d");
 			$num = sprintf("%03d", $count);
-			$short_number = $pre."-".$num;		
-			
-			$order_data['externalNumber'] = $short_number;
+			$short_number = $pre."-".$num;			
 
 			// SAVE ORDER TO DB
 			$ORDER = new Smart_object("orders");

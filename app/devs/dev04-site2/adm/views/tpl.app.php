@@ -677,9 +677,19 @@ App&&App();
 					</div>					
 							
 					<div class="edit-item-choose-section">
-						<div class="std-form__section-description" lang="lng_view_edit_item__menu_section"><!-- ... --></div> 
+						<div class="std-form__section-description" 
+						lang="lng_view_edit_item__menu_section">
+							Здесь вы можете изменить раздел в котором находится это блюдо:
+						</div> 
 						<div class="std-form__wide-button edit-item-choose-section__button"><!-- ... --></div>
 					</div>
+
+					<div class="edit-item-choose-modifiers chefsmenu-mode-only">
+						<div class="std-form__section-description">
+							Здесь вы можете выбрать опциональные добавки для этого блюда:
+						</div> 
+						<div class="std-form__wide-button edit-item-choose-modifiers__button">Добавки</div>
+					</div>					
 
 				</div>
 			</div>
@@ -737,6 +747,37 @@ App&&App();
 			<div class="button-section"><div class="button save"><span lang="lng_save"><!-- Save --></span></div></div>
 		</div>
 	</div>
+
+<!-- - - - - - - - VIEW CHOOSING MODIFIERS  - - - - - - - - - -->
+	<div class="app-view view-choosing-modifiers">
+		<div class="app-view-header">
+			
+			<div class="view-header-title">
+				<div class="view-header-title_icon ico-adm-customizing"></div>
+				<div class="view-header-title_text" >Выбор опций (добавок)</div>
+			</div>
+
+			<div class="view-header-buttons"></div>
+		</div>
+		<div class="app-view-page">			
+			<div class="app-view-page-container overflow-y">
+				<div class="std-form">
+					<div class="std-form__section-description">
+						Выберите один или несколько разделов с добавками к этому блюду (или напитку)
+					</div>
+					<div class="all-menu-sections">
+						<!-- [code] -->
+					</div>						
+				</div>
+			</div>
+		</div>
+		<div class="app-view-loader"><span></span></div>
+		<div class="app-view-footer">
+			<div class="button-section"><div class="button cancel"><span lang="lng_cancel"><!-- Cancel --></span></div></div>
+			<div class="button-section"></div>
+			<div class="button-section"><div class="button save"><span lang="lng_save"><!-- Save --></span></div></div>
+		</div>
+	</div>	
 
 <!-- - - - - - - - VIEW CUSTOMIZE ALL - - - - - - - -  -->
 
