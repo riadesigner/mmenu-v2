@@ -167,8 +167,9 @@ export var VIEW_ORDER_OK = {
 				const title_str = order.item_data.title;
 				const count = order.count;
 				const price = order.price;
-				// let uniq_name = order.uniq_name;				
-				const volume_str = `${order.sizeName} / ${order.volume} ${order.units}`;
+				
+				const volume_str = `${order.sizeName}`;
+				if(IIKO_MODE) volume_str += `/ ${order.volume} ${order.units}`;
 				const modifiers = order.chosen_modifiers;
 				let modifiers_str = "";
 				if(IIKO_MODE && modifiers && modifiers.length){

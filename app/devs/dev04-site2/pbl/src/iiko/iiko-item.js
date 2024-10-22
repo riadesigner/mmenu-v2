@@ -51,6 +51,9 @@ export const IIKO_ITEM = {
 			sizeCode: s.sizeCode,			
 			chosen_modifiers:chosen_modifiers
 		};			
+		
+		console.log('pre_order',pre_order)
+
 		return pre_order;
 	},
 	

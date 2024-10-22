@@ -25,7 +25,6 @@ SQL::connect();
 // SEND IIKO ORDER TO TABLE 
 
 if(!isset($_POST['id_cafe']) || empty($_POST['id_cafe']) ) __errorjsonp("--it needs to know id_cafe");
-if(!isset($_POST['token'])) __errorjsonp("--it needs to token");
 if(!isset($_POST['orders'])) __errorjsonp("--empty orders");
 if(!isset($_POST['table_number'])) __errorjsonp("--it needs to table_number");
 if(!isset($_POST['total_price'])) __errorjsonp("--it needs to get total_price");
@@ -46,7 +45,6 @@ if(empty($k)) __errorjsonp("Cant find iiko api for the cafe, ".__LINE__);
 define('THE_ORDER_WAY',(int) $cafe->order_way);
 
 $total_price = (float) $_POST['total_price'];
-$token = $_POST['token'];
 $table_number = (int) $_POST['table_number'];
 $orders = $_POST['orders'];
 
