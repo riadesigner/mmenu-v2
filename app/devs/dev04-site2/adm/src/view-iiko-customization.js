@@ -20,7 +20,6 @@ export var VIEW_IIKO_CUSTOMIZATION = {
 		this.$general_information = this.$form.find('.iiko-general-information');
 		this.$extmenu_list = this.$form.find('.iiko-extmenu-list');	
 		this.$tables_list = this.$form.find('.iiko-table-sections');
-		this.$terminals_list = this.$form.find('.iiko-terminals-sections');
 		
 		this.SITE_URL = CFG.base_url;
 		this.USER_EMAIL = CFG.user_email;
@@ -65,11 +64,6 @@ export var VIEW_IIKO_CUSTOMIZATION = {
 				].join('');
 		};
 		this.$general_information.html(str_info);		
-
-		// SHOW TERMINALS INFO
-		let terminal_groups = CAFE.iiko_terminal_groups?JSON.parse(CAFE.iiko_terminal_groups):{};
-		this.CURRENT_TERMINAL_GROUP_ID = terminal_groups['current_terminal_group_id'];
-		this.update_terminal_groups_list(terminal_groups);
 		
 		// SHOW TABLES INFO
 		let table_sections = CAFE.iiko_tables?JSON.parse(CAFE.iiko_tables):[];
@@ -204,19 +198,19 @@ export var VIEW_IIKO_CUSTOMIZATION = {
 		});
 			
 	},
-	update_terminal_groups_list:function(terminal_groups){
-		console.log('terminal_groups',terminal_groups);
-		let str_terminal_groups = '';
-		for(let i in terminal_groups['items']){
-			if(terminal_groups['items'].hasOwnProperty(i)){
-				let group = terminal_groups['items'][i];
-				let group_address = group['address']?group['address']:'не указан';
-				let str = `<li><strong>${group['name']}</strong> (адрес: ${group_address})</li>`;
-				str_terminal_groups+=str;
-			}
-		};		
-		str_terminal_groups && this.$terminals_list.html(str_terminal_groups);
-	},
+	// update_terminal_groups_list:function(terminal_groups){
+	// 	console.log('terminal_groups',terminal_groups);
+	// 	let str_terminal_groups = '';
+	// 	for(let i in terminal_groups['items']){
+	// 		if(terminal_groups['items'].hasOwnProperty(i)){
+	// 			let group = terminal_groups['items'][i];
+	// 			let group_address = group['address']?group['address']:'не указан';
+	// 			let str = `<li><strong>${group['name']}</strong> (адрес: ${group_address})</li>`;
+	// 			str_terminal_groups+=str;
+	// 		}
+	// 	};		
+	// 	str_terminal_groups && this.$terminals_list.html(str_terminal_groups);
+	// },
 	update_tables_list:function(table_sections) {
 		if(table_sections && table_sections.length>0){
 			let str_table_sections = "";

@@ -359,13 +359,7 @@ App&&App();
 					<div class="iiko-extmenu-list">
 						<div label="menu-10101" class="std-form__radio-button ">Меню тест 1</div>	
 						<div label="menu-10344" class="std-form__radio-button checked">Меню тест 2</div>
-					</div>				
-
-					<h2>Терминалы</h2>					
-					<p>Терминальные группы, используемые для отправки заказов: </p>					
-					<ul class="iiko-terminals-sections">
-						<li>Не найдено.</li>
-					</ul>
+					</div>
 					
 					<h2>Столы</h2>					
 					<p>В вашем ресторане есть секции: </p>					
@@ -814,7 +808,7 @@ App&&App();
 						<div class="std-form__wide-button btn-iiko-modifiers-dictionary">Словарь модификаторов</div>					
 					</div>						
 
-					<div class="std-form__section-description" lang="lng_view_customize_all__change_cart_settings">Здесь вы можете настроить получение заказов</div>
+					<div class="std-form__section-description" >Здесь вы можете настроить получение заказов</div>
 					<div class="std-form__wide-button btn-cart-settings bright-btn" >Настроить Корзину</div>
 					
 					<div class="std-form__section-description" lang="lng_view_customize_all__menu_link"><!-- Здесь вы можете скачать QR-код и поделиться ссылкой на ваше меню --></div>					
@@ -978,12 +972,6 @@ App&&App();
 
 					<h2>Доставка:</h2>
 					<div class="customizing-cart__delivery-mode"><!-- [code] --></div>
-
-					<div class="iiko-section-only">
-						<h2>Отправка заказов:</h2>
-						<p>Выберите подходящий вариант отправки заказов. Вариант №2 находится в стадии тестирования.</p>
-						<div class="customizing-cart__order-way"><!-- [code] --></div>
-					</div>
 
 					<h2>Получение заказов:</h2>
 

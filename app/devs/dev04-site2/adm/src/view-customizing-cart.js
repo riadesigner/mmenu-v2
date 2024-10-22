@@ -11,7 +11,6 @@ export var VIEW_CUSTOMIZING_CART = {
 		
 		this.$buttonsCartMode = this.$view.find('.customizing-cart__cart-mode');
 		this.$buttonsDeliveryMode = this.$view.find('.customizing-cart__delivery-mode');
-		this.$buttonsOrderWay = this.$view.find('.customizing-cart__order-way');
 		
 		this.sa_bnt_upd_tg_keys =  this.$view.find('button[name="update_all_tg_keys"]');
 		this.$section_tgusers = this.$view.find('.customizing-cart__all-tgusers');
@@ -233,26 +232,7 @@ export var VIEW_CUSTOMIZING_CART = {
 				e.originalEvent.cancelable && e.preventDefault();
 			});
 			this.$buttonsDeliveryMode.append($btn);
-		};
-
-		this.$buttonsOrderWay.html("");
-		var arrBtns = ["1. Только в TG", "2. В TG, затем в iiko (beta)"];
-		for(let i=0;i<arrBtns.length;i++){
-			let checked = parseInt(GLB.THE_CAFE.get().order_way,10) == i?" checked":"";
-			let $btn = $("<div class='std-form__radio-button "+checked+"' mode='"+i+"'>"+arrBtns[i]+"</div>\n");
-			$btn.on("touchend",function(e){
-				if(!_this.VIEW_SCROLLED){
-					if(!$(this).hasClass('checked')){
-						_this.NEW_ORDER_WAY = parseInt($(this).attr('mode'),10);
-						$(this).addClass('checked');	
-						$(this).siblings().removeClass('checked');
-						_this.check_need_to_save();
-					}
-				};
-				e.originalEvent.cancelable && e.preventDefault();
-			});
-			this.$buttonsOrderWay.append($btn);
-		};				
+		};			
 
 		this.check_need_to_save();											
 
