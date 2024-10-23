@@ -7,69 +7,40 @@ export const VIEW_CAFE_TABLES = {
 		this._init(options);
 		
 		this.$btnBack = this.$footer.find('.back, .close, .cancel');		
-		this.$btnIikoGetQrcodes = this.$form.find('.btn-iiko-get-qrcodes');	
-		this.$inputTablesAmount = this.$form.find('.view-cafe-tables__table-counts-wrapper input');						
+		this.$btnSave = this.$view.find('.save');		
+		this.$btnGetQrCodes = this.$form.find('.btn-iiko-get-qrcodes');
+		this.$inputTablesAmount = this.$form.find('.view-cafe-tables__table-counts-wrapper input');								
+		this.MAXIMUM_TABLES = 50;
 
-		this.USER_EMAIL = CFG.user_email; 		
 		this.behavior();
 		return this;
-
 	},
 
 	update:function(){
-		var _this=this;
-				
-		this._update();		
-
-		this._page_hide();
-
-		this.NEW_NUMBER_OF_TABLES = parseInt(GLB.THE_CAFE.tables_amount,10) || 0;
-		this.$inputTablesAmount.val(this.NEW_NUMBER_OF_TABLES);
-
-		// console.log('this.NEW_NUMBER_OF_TABLES',this.NEW_NUMBER_OF_TABLES)
-
-		// this._now_loading();
-		// this.reset();
-		// this._update_tabindex();
 		
-		// var cafe = GLB.THE_CAFE.get();		
-		// this._end_loading();		
+		this._reset();
+		this._update();				
+		this._page_hide();		
+		this.reset();
 		this._page_show();
-
-		return;
-
-		this.$home_menu_link.html(GLB.THE_CAFE.get_link('name'))
-		.attr({ href : GLB.THE_CAFE.get_link('url') });
-
-		this.$qrCode.html("<img src='"+cafe.qrcode+"'>");			
-
-		var img = new Image();
-		img.onload = function(){
-			_this._end_loading();
-			_this._page_show();
-		};
-		img.src = cafe.qrcode;
 		
 	},
-	reset:function() {		
-		this._reset();
-		this._page_to_top();		
+	reset:function() {
+		this._page_to_top();			
+		this._need2save(false);	
+		
+		this.CURRENT_NUMBERS = parseInt(GLB.THE_CAFE.get('tables_amount'),10) || 0;
+		this.NEW_NUMBER_OF_TABLES = this.CURRENT_NUMBERS;		
+		this.$inputTablesAmount.val(this.CURRENT_NUMBERS);	
+
+		console.log('this.CURRENT_NUMBERS',this.CURRENT_NUMBERS)
+
 	},
 
 	behavior:function()	{
 		var _this = this;
 
 		this._behavior();
-
-		this.$btnIikoGetQrcodes.bind('touchend',(e)=>{
-			this._blur({onBlur:()=>{
-				if(!this.LOADING && !_this.VIEW_SCROLLED){		
-					GLB.VIEW_CAFE_TABLES_QRCODE.update();
-					GLB.VIEWS.setCurrent(GLB.VIEW_CAFE_TABLES_QRCODE.name);
-				}
-			}});			
-			e.originalEvent.cancelable && e.preventDefault();
-		});
 
 		this.$inputTablesAmount.on('keyup paste',(e)=>{
 			this.update_number_of_tables();			
@@ -82,23 +53,62 @@ export const VIEW_CAFE_TABLES = {
 			}});
 			return false;
 		});
+		
+		this.$btnGetQrCodes.bind('touchend',function(e){
+			_this._blur({onBlur:function(){
+				if(!this.LOADING){
+					if(_this.NEED_TO_SAVE){	
+						_this.save({
+							onReady:()=>{								
+								_this.goto_tables_qr_codes();
+							}
+						});
+					}else{						
+						_this.goto_tables_qr_codes();
+					};
+				}
+			}});
+			e.originalEvent.cancelable && e.preventDefault();
+		});			
 
+		this.$btnSave.bind('touchend',function(e){
+			_this._blur({onBlur:function(){
+				if(_this.NEED_TO_SAVE && !_this.LOADING){	
+					_this.save({
+						onReady:()=>{								
+							_this.reset();
+						}
+					});
+				};
+			}});
+			e.originalEvent.cancelable && e.preventDefault();
+		});	
 
-
+	},
+	goto_tables_qr_codes:function(){
+		this.reset();
+		GLB.VIEW_CAFE_TABLES_QRCODE.update();
+		GLB.VIEWS.setCurrent(GLB.VIEW_CAFE_TABLES_QRCODE.name);
 	},
 	update_number_of_tables(){
-		console.log("need to save", this.$inputTablesAmount.val());
+		this.NEW_NUMBER_OF_TABLES = parseInt(this.$inputTablesAmount.val(),10) || this.CURRENT_NUMBERS;
+		if(this.NEW_NUMBER_OF_TABLES > this.MAXIMUM_TABLES){
+			this.NEW_NUMBER_OF_TABLES = this.MAXIMUM_TABLES;
+			this.$inputTablesAmount.val(this.MAXIMUM_TABLES);
+		}		
+		const need = this.NEW_NUMBER_OF_TABLES !== this.CURRENT_NUMBERS;
+		this._need2save(need);
 	},
-	send:function(opt){
-
-		var _this = this;
+	save:function(opt){
+		
 		var PATH = 'adm/lib/';
-		var url = PATH + 'lib.send_qr_code.php';
+		var url = PATH + 'lib.save_tables_amount.php';
 		
 		this._now_loading();
 
 		var data = {
-			id_cafe:GLB.THE_CAFE.get().id
+			id_cafe:GLB.THE_CAFE.get().id,
+			tables_amount:this.NEW_NUMBER_OF_TABLES,
 		};
 
         this.AJAX = $.ajax({
@@ -106,20 +116,19 @@ export const VIEW_CAFE_TABLES = {
             data:data,
             method:"POST",
             dataType: "jsonp",
-            success: function (response) {
+            success: (response) => {
             	console.log("response=",response)
-            	_this._end_loading();
-            	if(!response.error){
-					opt.onReady && opt.onReady();
-            	}else if(response.error && response.error.indexOf('limit message per day') !== -1){
-					opt.onLimit && opt.onLimit();
+            	this._end_loading();
+            	if(!response.error){					
+					GLB.THE_CAFE.set({'tables_amount':this.NEW_NUMBER_OF_TABLES}),			
+					opt && opt.onReady && opt.onReady();
             	}else{
-            		opt.onError && opt.onError();
+            		opt && opt.onError && opt.onError();
             	};
             },
-            error:function(response) {
-            	_this._end_loading();
-				opt.onError && opt.onError();
+            error:(response)=> {
+            	this._end_loading();
+				opt && opt.onError && opt.onError();
 		        console.log("err",response);
 			}
         });

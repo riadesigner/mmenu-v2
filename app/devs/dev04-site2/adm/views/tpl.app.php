@@ -1084,9 +1084,8 @@ App&&App();
 				<h2>Столы</h2>					
 				<p>Укажите количество столов в вашем ресторане (до 50): </p>					
 				<div class="view-cafe-tables__table-counts-wrapper">
-					<input type="text" class="std-form__input w30">					
+					<input type="number" class="std-form__input w30">					
 				</div>
-				<!-- minlength="1" maxlength="2" -->
 
 				<h2>QR-коды и ссылки</h2>					
 				<p>Здесь вы сможете скачать QR-коды всех столов для получения заказов на конкретный стол, а также открыть меню любого столика:</p>					
