@@ -100,9 +100,6 @@ export var LNG = {
 			lng_view_customize_all__get_contract:['-','Чтобы снять все ограничения тестового периода:'],
 			lng_view_customize_all__get_contract_btn:['-','Снять ограничения'],
 
-			lng_view_customize_all__customize_interface:['-','Чтобы изменить валюту, тему и другие настройки интерфейса'],
-			lng_view_customize_all__customize_interface_btn:['-','Настроить интерфейс'],
-
 			lng_view_customizing_cart__view_title:['-','Настройка Корзины'],
 			lng_view_customizing_cart__cart_mode:['-','Выберите режим корзины на сайте'],
 

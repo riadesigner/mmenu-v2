@@ -28,12 +28,14 @@ import {VIEW_CAFE_DESCRIPTION} from './view-cafe-description.js';
 import {VIEW_REPLACING_PARENT_SECTION} from './view-replacing-parent-section.js';
 import {VIEW_CHOOSING_MODIFIERS} from './view-choosing-modifiers.js';
 import {VIEW_CAFE_LINK} from './view-cafe-link.js';
+import {VIEW_CAFE_TABLES} from './view-cafe-tables.js';
+
 import {VIEW_CHANGE_PASSWORD} from './view-change-password.js';
 import {VIEW_CHANGE_SUBDOMAIN} from './view-change-subdomain.js';
 import {VIEW_IIKO_ADDING_API_KEY} from './view-iiko-adding-api-key.js';
 import {VIEW_IIKO_CUSTOMIZATION} from './view-iiko-customization.js';
 import {VIEW_IIKO_MODIF_DICTIONARY} from './view-iiko-modif-dictionary.js';
-import {VIEW_IIKO_QRCODE_WITH_TABLES} from './view-iiko-qrcode-with-tables.js';
+import {VIEW_CAFE_TABLES_QRCODE} from './view-cafe-tables-qrcode.js';
 
 
 import {VIEW_MODAL_MESSAGE} from './view-modal-message.js';
@@ -75,12 +77,13 @@ GLB.VIEW_MAIN_HELP = $.extend( VIEW_MAIN_HELP, VIEW_STD); // todo Send email to 
 GLB.VIEW_REPLACING_PARENT_SECTION = $.extend( VIEW_REPLACING_PARENT_SECTION, VIEW_STD);
 GLB.VIEW_CHOOSING_MODIFIERS = $.extend( VIEW_CHOOSING_MODIFIERS, VIEW_STD);
 GLB.VIEW_CAFE_LINK = $.extend( VIEW_CAFE_LINK, VIEW_STD);
+GLB.VIEW_CAFE_TABLES = $.extend( VIEW_CAFE_TABLES, VIEW_STD);
 GLB.VIEW_CHANGE_PASSWORD = $.extend( VIEW_CHANGE_PASSWORD, VIEW_STD);
 GLB.VIEW_CHANGE_SUBDOMAIN = $.extend( VIEW_CHANGE_SUBDOMAIN, VIEW_STD);
 GLB.VIEW_IIKO_ADDING_API_KEY = $.extend( VIEW_IIKO_ADDING_API_KEY, VIEW_STD);
 GLB.VIEW_IIKO_CUSTOMIZATION = $.extend( VIEW_IIKO_CUSTOMIZATION, VIEW_STD);
 GLB.VIEW_IIKO_MODIF_DICTIONARY = $.extend( VIEW_IIKO_MODIF_DICTIONARY, VIEW_STD);
-GLB.VIEW_IIKO_QRCODE_WITH_TABLES = $.extend( VIEW_IIKO_QRCODE_WITH_TABLES, VIEW_STD);
+GLB.VIEW_CAFE_TABLES_QRCODE = $.extend( VIEW_CAFE_TABLES_QRCODE, VIEW_STD);
 
 GLB.VIEW_MODAL_MESSAGE = VIEW_MODAL_MESSAGE;
 GLB.VIEW_MODAL_CONFIRM = VIEW_MODAL_CONFIRM;
@@ -193,7 +196,7 @@ export default function(){
 	}));
 
 	VIEWS.addView(
-		VIEW_IIKO_QRCODE_WITH_TABLES.init({
+		VIEW_CAFE_TABLES_QRCODE.init({
 		name:"view-iiko-qrcode-with-tables",
 		template:"#templates .view-iiko-qrcode-with-tables",
 		anim:'animLeft'
@@ -203,6 +206,13 @@ export default function(){
 		VIEW_CAFE_LINK.init({
 		name:"view-cafe-link",
 		template:"#templates .view-cafe-link",
+		anim:'animLeft'
+	}));
+
+	VIEWS.addView(
+		VIEW_CAFE_TABLES.init({
+		name:"view-cafe-tables",
+		template:"#templates .view-cafe-tables",
 		anim:'animLeft'
 	}));
 

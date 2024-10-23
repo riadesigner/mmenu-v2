@@ -1,6 +1,6 @@
 import {GLB} from './glb.js';
 
-export var VIEW_IIKO_QRCODE_WITH_TABLES = {
+export var VIEW_CAFE_TABLES_QRCODE = {
 	
 	init:function(options){
 		
@@ -10,12 +10,9 @@ export var VIEW_IIKO_QRCODE_WITH_TABLES = {
 		this.$btnSend = this.$view.find('.send');
 				
 		this.NEED_TO_SAVE = false;
-		this.$list_of_tables = this.$form.find('.iiko-qrcode-list-of-table-sections');				
-		this.$list_of_menulinks = this.$form.find('.iiko-menulinks-for-tables-sections');		
+		this.$list_of_tables = this.$form.find('.wrapper-qrcode-list-of-table-sections');				
+		this.$list_of_menulinks = this.$form.find('.wrapper-menulinks-for-tables-sections');		
 		
-		// this.SITE_URL = CFG.base_url;
-		// this.USER_EMAIL = CFG.user_email;
-
 		this.reset();		
 		this.behavior();
 		return this;

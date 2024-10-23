@@ -360,19 +360,6 @@ App&&App();
 						<div label="menu-10101" class="std-form__radio-button ">Меню тест 1</div>	
 						<div label="menu-10344" class="std-form__radio-button checked">Меню тест 2</div>
 					</div>
-					
-					<h2>Столы</h2>					
-					<p>В вашем ресторане есть секции: </p>					
-					<ul class="iiko-table-sections">
-						<li>Не найдено. Обновите кол-во столов.</li>
-					</ul>					
-					
-					<button class="std-special-single-button btn-iiko-tables-update">Обновить столы</button>					
-
-					<h2>QR-коды</h2>					
-					<p>Вы можете сгенерировать и распечатать QR-коды Меню с выбранным заранее номером столика. 
-						Подробнее <a name="link-iiko-qrcode-tables" href="#">об этом здесь.</a></p>					
-					<div class="std-form__wide-button btn-iiko-get-qrcodes">QR-коды для столов</div>
 
 					<h2>Синхронизация</h2>
 					<p>Здесь вы можете выбрать время автоматической синхронизации ChefsMenu c Внешним Меню iiko.</p>					
@@ -388,7 +375,7 @@ App&&App();
 					<input class="std-form__input" type="input" placeholder="" name="iiko-del-key" maxlength="20" >
 					
 					<h2>Обновить данные iiko</h2>
-					<p>Если вы поменяли настройки терминалов или добавили внешние меню, здесь можно подгузить обновленные данные. </p>
+					<p>Если вы поменяли / добавили внешние меню, здесь можно подгузить обновленные данные. </p>
 					<button class="std-special-single-button btn-iiko-vars-update">Обновить данные iiko</button>					
 
 					<h2>Помощь</h2>
@@ -478,19 +465,16 @@ App&&App();
 		<div class="app-view-page">		
 			<div class="app-view-page-container overflow-y">
 				<div class="std-form">					
-					<h1>Заказы на стол</h1>
-					
-					<p>Здесь вы можете скачать QR-код Меню для конкретного столика. При отправке заказа из такого Меню, в заказе будет указано номер стола, с которого заказ отправлен.</p>
 					
 					<h2>Получить QR-коды:</h2>
 					<p>Выберите нужные столы и нажмите кнопку <strong>Отправить</strong>. QR-коды будут сгенерированы и отправлены на почту администратора.</p>					
-					<div class="iiko-qrcode-list-of-table-sections">
+					<div class="wrapper-qrcode-list-of-table-sections">
 						<!-- btns -->
 					</div>
 
-					<h2>Открыть Меню столика:</h2>
-					<p>Чтобы открыть Меню определенного столика, нажмите на соответствующую кнопку ниже.</p>					
-					<div class="iiko-menulinks-for-tables-sections">
+					<h2>Посмотреть Меню столика:</h2>
+					<p>Чтобы открыть (протестировать) Меню определенного столика, нажмите на соответствующую кнопку ниже.</p>					
+					<div class="wrapper-menulinks-for-tables-sections">
 						<!-- btns -->
 					</div>					
 
@@ -814,8 +798,11 @@ App&&App();
 					<div class="std-form__section-description" lang="lng_view_customize_all__menu_link"><!-- Здесь вы можете скачать QR-код и поделиться ссылкой на ваше меню --></div>					
 					<div class="std-form__wide-button btn-menu-link" lang="lng_view_customize_all__menu_link_btn"><!-- Ссылка на QR-код --></div>	
 
-					<div class="std-form__section-description" lang="lng_view_customize_all__customize_interface"><!-- Чтобы изменить язык, валюту, тему: --></div>
-					<div class="std-form__wide-button btn-change-language" lang="lng_view_customize_all__customize_interface_btn"><!-- Настроить интерфейс --></div>	
+					<div class="std-form__section-description" >Чтобы изменить тему, язык и другие настройки интерфейса</div>
+					<div class="std-form__wide-button btn-change-language">Настроить интерфейс</div>	
+
+					<div class="std-form__section-description" >Получить QR-коды Меню для отправки заказов на стол</div>
+					<div class="std-form__wide-button btn-change-tables">Настройка столов</div>						
 
 					<div class="std-form__section-description" lang="lng_view_customize_all__change_subdomain"><!-- Здесь вы можете поменять поддомен для меню: --></div>
 					<div class="std-form__wide-button btn-change-subdomain" lang="lng_view_customize_all__change_subdomain_btn"><!-- Изменение поддомена --></div>		
@@ -1075,6 +1062,46 @@ App&&App();
 			<div class="button-section"><div class="button save"><span lang="lng_save"><!-- Save --></span></div></div>
 		</div>
 	</div>
+
+<!-- - - - - - - - VIEW CAFE TABLES - - - - - - - - - - - - - -->
+	
+<div class="app-view view-cafe-tables">
+		<div class="app-view-header">
+			
+			<div class="view-header-title">
+				<div class="view-header-title_icon ico-adm-customizing"></div>
+				<div class="view-header-title_text">Управление столами </div>
+			</div>
+
+			<div class="view-header-buttons">
+				<div class="view-header-buttons__button view-header-buttons__button_help"></div>
+			</div>
+		</div>
+		<div class="app-view-page">
+			<div class="app-view-page-container overflow-y">				
+				<div class="std-form">
+
+				<h2>Столы</h2>					
+				<p>Укажите количество столов в вашем ресторане (до 50): </p>					
+				<div class="view-cafe-tables__table-counts-wrapper">
+					<input type="text" class="std-form__input w30">					
+				</div>
+				<!-- minlength="1" maxlength="2" -->
+
+				<h2>QR-коды и ссылки</h2>					
+				<p>Здесь вы сможете скачать QR-коды всех столов для получения заказов на конкретный стол, а также открыть меню любого столика:</p>					
+				<div class="std-form__wide-button btn-iiko-get-qrcodes">QR-коды для столов</div>
+					
+				</div>
+			</div>
+		</div>
+		<div class="app-view-loader"><span></span></div>
+		<div class="app-view-footer">
+			<div class="button-section"><div class="button back"><span lang="lng_back"><!-- Back --></span></div></div>
+			<div class="button-section"></div>
+			<div class="button-section"><div class="button save"><span lang="lng_save"><!-- Save --></span></div></div>
+		</div>
+	</div>	
 
 <!-- - - - - - - - VIEW CAFE LINK - - - - - - - - - - - - - -->
 	

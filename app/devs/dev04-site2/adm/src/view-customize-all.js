@@ -9,6 +9,7 @@ export var VIEW_CUSTOMIZE_ALL = {
 		this.$btnCafeInfo = this.$form.find('.btn-cafe-info');
 		this.$btnMenuLink = this.$form.find('.btn-menu-link');
 		this.$btnChangeLanguage = this.$form.find('.btn-change-language');
+		this.$btnChangeTables = this.$form.find('.btn-change-tables');
 
 		// for cafe-status-test or cafe-status-archive 
 		this.$btnGetContract = this.$form.find('.btn-get-contract');		
@@ -138,11 +139,19 @@ export var VIEW_CUSTOMIZE_ALL = {
 
 		this.$btnChangeLanguage.on('touchend',function(e){			
 			if(!_this.VIEW_SCROLLED){				
-			GLB.VIEW_CUSTOMIZE_INTERFACE.update(_this.USER);
+			// GLB.VIEW_CUSTOMIZE_INTERFACE.update(_this.USER);
 			GLB.VIEWS.setCurrent(GLB.VIEW_CUSTOMIZE_INTERFACE.name);
 			};
 			e.originalEvent.cancelable && e.preventDefault();
 		});
+
+		this.$btnChangeTables.on('touchend',function(e){			
+			if(!_this.VIEW_SCROLLED){				
+			GLB.VIEW_CAFE_TABLES.update(_this.USER);
+			GLB.VIEWS.setCurrent(GLB.VIEW_CAFE_TABLES.name);
+			};
+			e.originalEvent.cancelable && e.preventDefault();
+		});		
 
 		this.$btnChangeCartSettings.on('touchend',function(e){			
 			if(!_this.VIEW_SCROLLED){				
