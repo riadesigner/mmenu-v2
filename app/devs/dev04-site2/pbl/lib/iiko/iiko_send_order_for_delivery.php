@@ -55,11 +55,13 @@ $str_order_mode  = PICKUPSELF_MODE?"Самовывоз":"Доставка";
 
 if(!PICKUPSELF_MODE){
 	$u_address = $order_data['order_user_iiko_address'];
+	$u_address_entrance = isset($u_address['entrance'])? $u_address['entrance']: "";
+	$u_address_floor = isset($u_address['floor']) ? isset($u_address['floor']) : "";
 	if(empty($u_address['u_street']))__errorjsonp("--need to know user street");
 	if(empty($u_address['u_house']))__errorjsonp("--need to know user house");		
 	// for TG
 	$deliv_address = "ул. ".$u_address['u_street'].", д. ".$u_address['u_house'].", 
-	подъезд (".$u_address['entrance']."),  этаж (".$u_address['floor'].")";	
+	подъезд ({$u_address_entrance}),  этаж ({$u_address_floor})";	
 }else{
 	$deliv_address = "";
 }

@@ -45,18 +45,17 @@ export var VIEW_ORDER_OK = {
 		});
 
 	},	
-	update:function(order, opt){	
-
-		console.log('order, short_number',order,order.short_number)
+	update:function(order, opt){		
 
 		this.TABLE_MODE = opt&&opt.table_number?true:false;
 		this.IIKO_MODE = GLB.CAFE.get().iiko_api_key!=="";		
 		this.PICKUPSELF_MODE = opt&&opt.pickupself_mode?true:false;	
+		this.order = order;
 
-		if(order.demo_mode){
+		if(this.order.demo_mode){
 			this.$msgDemo.show();
 			this.$msgManager.hide()
-		}else if(order.notg_mode){
+		}else if(this.order.notg_mode){
 			this.$msgDemo.hide();
 			this.$msgNotFoundTgUsers.show();
 			this.$msgManager.hide()
@@ -92,7 +91,7 @@ export var VIEW_ORDER_OK = {
 
 		var msg = [
 			"<h2>"+GLB.LNG.get("lng_number_of_your_order")+"</h2>",
-			"<h3>"+order.short_number+"</h3>"
+			"<h3>"+this.order.short_number+"</h3>"
 		].join("\n");
 				
 		this.$msgReport.html(msg);
@@ -100,20 +99,20 @@ export var VIEW_ORDER_OK = {
 		
 		if(!this.TABLE_MODE){
 
-			console.log("ORDER-ORDER",order);
+			console.log("ORDER-ORDER",this.order);
 
-			var need_time = order.order_time_need==order.order_time_sent;
-			var need_time_str = need_time ? GLB.LNG.get('lng_near_time') : fn.formatLngTime(order.order_time_need);		
+			var need_time = this.order.order_time_need===this.order.order_time_sent;
+			var need_time_str = need_time ? GLB.LNG.get('lng_near_time') : fn.formatLngTime(this.order.order_time_need);		
 
 			let order_str = "";
 			if(this.IIKO_MODE){
-				const addr = order.order_user_iiko_address;
+				const addr = this.order.order_user_iiko_address;
 				const addr_entrance = addr.u_entrance?`, подъезд ${addr.u_entrance}`:"";
 				const addr_floor = addr.u_floor?`, эт. ${addr.u_floor}`:"";
 				const addr_flat = addr.u_flat?`, кв. ${addr.u_flat}`:"";
 				order_str = `ул. ${addr.u_street}, д. ${addr.u_house}${addr_flat}${addr_floor}${addr_entrance}.`;
 			}else{
-				order_str = order.order_user_address;
+				order_str = this.order.order_user_address;
 			};
 
 			let delivery_str = this.PICKUPSELF_MODE? `<span>Доставка: </span> Заберу сам.<br>`: `<span>${GLB.LNG.get("lng_address")}</span> ${order_str}<br>`;
@@ -122,10 +121,10 @@ export var VIEW_ORDER_OK = {
 				"<p>",
 					"<span>"+GLB.LNG.get("lng_time_from")+"</span> "+ fn.formatLngTime(order.order_time_sent)+"<br>",
 					"<span>"+GLB.LNG.get("lng_time_to")+"</span> "+ need_time_str+"<br>",
-					"<span>"+GLB.LNG.get("lng_amount")+"</span> "+order.order_total_price+" "+currency+"<br>",
-					"<span>"+GLB.LNG.get("lng_tel")+"</span> "+order.order_user_phone+"<br>",
+					"<span>"+GLB.LNG.get("lng_amount")+"</span> "+this.order.order_total_price+" "+currency+"<br>",
+					"<span>"+GLB.LNG.get("lng_tel")+"</span> "+this.order.order_user_phone+"<br>",
 					delivery_str,
-					"<br>"+order.order_user_comment,
+					"<br>"+this.order.order_user_comment,
 				"</p>"
 			].join("\n");
 
@@ -135,7 +134,7 @@ export var VIEW_ORDER_OK = {
 
 		};
 
-		this.build_ordered_list(order.order_items);
+		this.build_ordered_list(this.order.order_items);
 
 		GLB.CART.cart_clear();
 		GLB.VIEW_ORDERING.update({clear:true});
@@ -151,26 +150,26 @@ export var VIEW_ORDER_OK = {
 				const $list = $('<ul></ul>');
 				for(let i in order_items){
 					if(order_items.hasOwnProperty(i)){
-						let order = order_items[i]; 												
-						if(order){		
+						let item = order_items[i]; 												
+						if(item){		
 							let $li = $('<li></li>');
-							$li.append(fn.buildRow(order));
+							$li.append(fn.buildRow(item));
 							$list.append($li);
 						}						
 					}
 				};
 				return $list;
 			},
-			buildRow:(order)=>{
+			buildRow:(row)=>{
 				
 				// BUILDING ORDER ROW
-				const title_str = order.item_data.title;
-				const count = order.count;
-				const price = order.price;
+				const title_str = row.item_data.title;
+				const count = row.count;
+				const price = row.price;
 				
-				const volume_str = `${order.sizeName}`;
-				if(IIKO_MODE) volume_str += `/ ${order.volume} ${order.units}`;
-				const modifiers = order.chosen_modifiers;
+				const volume_str = `${row.sizeName}`;
+				if(IIKO_MODE) volume_str += `/ ${row.volume} ${row.units}`;
+				const modifiers = row.chosen_modifiers;
 				let modifiers_str = "";
 				if(IIKO_MODE && modifiers && modifiers.length){
 					for (let i in modifiers){
