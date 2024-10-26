@@ -41,26 +41,30 @@ class Qr_tables{
 	 *  GENERATING QR-CODES AND LINKS FOR MENU TABLE
 	 * 
 	 *  @param Smart_object $CAFE
-	 * 	@param array $arr_tables // [string id (optional), string name, int number]
+	 * 	@param array $arr_tables // [int number]
 	 *  @return array
 	*/
 	static public function make_qrcodes( Smart_object $CAFE, array $arr_tables): array{
 		global $CFG; 
 		$arr = [];
 		$tables_uniq_names = $CAFE->tables_uniq_names ? json_decode((string) $CAFE->tables_uniq_names, 1) : [];
-		foreach($arr_tables as $table){
-			$name = "table-".$table['number'];
-			if(!isset($tables_uniq_names[$name])) throw new Exception("unknown table uniq_name, ".__FILE__.", ".__LINE__);
-			$uniq = $tables_uniq_names[$name];
-			$link = $CFG->wwwroot."/cafe/".mb_strtolower($CAFE->uniq_name)."/table/".$uniq;
-			$qr_image = rds_qrcode_create_from($link);
-			$arr[] = [
-				"table_number"=>$table['number'],
-				"table_name"=>$table['name'],				
-				"table_link"=>$link,
-				"table_qr_image"=>$qr_image
-			];
-		}
+		if($arr_tables && count($arr_tables)){
+			foreach($arr_tables as $table_number){
+				$num = (int) $table_number;
+				if(isset($tables_uniq_names[$num])){
+					$table_name = "Стол {$num}";
+					$table_uniq_name = $tables_uniq_names[$num];
+					$link = $CFG->wwwroot."/cafe/".mb_strtolower($CAFE->uniq_name)."/table/".$table_uniq_name;
+					$qr_image = rds_qrcode_create_from($link);
+					$arr[] = [
+						"table_number"=>$num,
+						"table_name"=>$table_name,				
+						"table_link"=>$link,
+						"table_qr_image"=>$qr_image
+					];
+				}
+			}
+		}		
 		return $arr;
 	}
 

@@ -450,7 +450,7 @@ App&&App();
 
 <!-- - - - - - - - VIEW IIKO QR-CODES WITH TABLES - - - - - - - - - - - - - -->
 
-	<div class="app-view view-iiko-qrcode-with-tables">
+	<div class="app-view view-qrcode-with-tables">
 		<div class="app-view-header">		
 
 			<div class="view-header-title">
@@ -467,7 +467,7 @@ App&&App();
 				<div class="std-form">					
 					
 					<h2>Получить QR-коды:</h2>
-					<p>Выберите нужные столы и нажмите кнопку <strong>Отправить</strong>. QR-коды будут сгенерированы и отправлены на почту администратора.</p>					
+					<p>Выберите нужные столы и нажмите кнопку <strong>Отправить</strong>. QR-коды будут сгенерированы и отправлены на почту администратора <strong><span class="adm_email"></span></strong>.</p>					
 					<div class="wrapper-qrcode-list-of-table-sections">
 						<!-- btns -->
 					</div>

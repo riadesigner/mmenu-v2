@@ -469,7 +469,7 @@ App&&App();
 
 <!-- - - - - - - - VIEW IIKO QR-CODES WITH TABLES - - - - - - - - - - - - - -->
 
-	<div class="app-view view-iiko-qrcode-with-tables">
+	<div class="app-view view-qrcode-with-tables">
 		<div class="app-view-header">		
 
 			<div class="view-header-title">

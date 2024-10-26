@@ -56,14 +56,29 @@ export const VIEW_CAFE_TABLES = {
 				if(!this.LOADING && !_this.VIEW_SCROLLED){
 					if(_this.NEED_TO_SAVE){	
 						_this.save({
-							onReady:()=>{								
+							onReady:()=>{					
+								_this.reset();			
 								_this.goto_tables_qr_codes();
 							}
 						});
-					}else{						
+					}else{					
+						_this.reset();	
 						_this.goto_tables_qr_codes();
 					};
 				}
+			}});
+			e.originalEvent.cancelable && e.preventDefault();
+		});			
+
+		this.$btnSave.bind('touchend',function(e){
+			_this._blur({onBlur:function(){
+				if(_this.NEED_TO_SAVE && !_this.LOADING){	
+					_this.save({
+						onReady:()=>{								
+							_this.reset();
+						}
+					});
+				};
 			}});
 			e.originalEvent.cancelable && e.preventDefault();
 		});			
@@ -87,19 +102,6 @@ export const VIEW_CAFE_TABLES = {
 								_this._end_loading();
 							});
 						});						
-				};
-			}});
-			e.originalEvent.cancelable && e.preventDefault();
-		});	
-
-		this.$btnSave.bind('touchend',function(e){
-			_this._blur({onBlur:function(){
-				if(_this.NEED_TO_SAVE && !_this.LOADING){	
-					_this.save({
-						onReady:()=>{								
-							_this.reset();
-						}
-					});
 				};
 			}});
 			e.originalEvent.cancelable && e.preventDefault();

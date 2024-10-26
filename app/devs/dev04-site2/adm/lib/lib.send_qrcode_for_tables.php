@@ -50,14 +50,6 @@
 	}	
 		
 	$user_email = post_clean($_POST['user_email']);
-		
-	try{
-		// обновляем в БД имена-ссылки на меню для столиков
-		Qr_tables::update($cafe);		
-	}catch( Exception $e){
-		glogError($e->getMessage());
-		__errorjsonp("--cant update cafe info");
-	}	
 	
 	try{
 		// получаем сслыки и qr-коды для столиков		

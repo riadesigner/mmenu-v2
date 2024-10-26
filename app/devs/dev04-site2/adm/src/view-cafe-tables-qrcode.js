@@ -11,7 +11,8 @@ export var VIEW_CAFE_TABLES_QRCODE = {
 				
 		this.NEED_TO_SAVE = false;
 		this.$list_of_tables = this.$form.find('.wrapper-qrcode-list-of-table-sections');				
-		this.$list_of_menulinks = this.$form.find('.wrapper-menulinks-for-tables-sections');		
+		this.$list_of_menulinks = this.$form.find('.wrapper-menulinks-for-tables-sections');	
+		this.$adm_email = this.$form.find('.adm_email');	
 		
 		this.reset();		
 		this.behavior();
@@ -28,14 +29,13 @@ export var VIEW_CAFE_TABLES_QRCODE = {
 		this._update_tabindex();
 
 		const CAFE = GLB.THE_CAFE.get();		
-		
+		const TOTAL_TABLE = GLB.THE_CAFE.get('tables_amount');
+		this.$adm_email.html(CFG.user_email);
 		this.TABLE_MENU_LINK = `${CFG.http}${CFG.www_url}/cafe/${CAFE.uniq_name}/table/`;		
-
-		const tables_uniq_names = CAFE.tables_uniq_names?JSON.parse(CAFE.tables_uniq_names):[];
-					
-		this.rebuild_menulinks_list(tables_uniq_names);		
-		
+		const tables_uniq_names = CAFE.tables_uniq_names?JSON.parse(CAFE.tables_uniq_names):[];					
+		this.rebuild_menulinks_list(tables_uniq_names, TOTAL_TABLE);				
 		setTimeout(()=>{ this._page_show();},300);
+
 	},
 
 	/**
@@ -45,9 +45,8 @@ export var VIEW_CAFE_TABLES_QRCODE = {
 	rebuild_menulinks_list:function(tables_uniq_names, total_nums=5){	
 		
 		this.$list_of_tables.html("");
-		this.$list_of_menulinks.html("");				
-		const str = this.build_tables_list(tables_uniq_names, total_nums=5);			
-		console.log('str', str)
+		this.$list_of_menulinks.html("");						
+		const str = this.build_tables_list(tables_uniq_names, total_nums);					
 		if(str){			
 			let $btns;
 			// update qr-codes links
@@ -128,10 +127,8 @@ export var VIEW_CAFE_TABLES_QRCODE = {
 		let $btns = this.$list_of_tables.find('li');
 		$btns.each((index,el)=>{						
 			if($(el).hasClass('checked')){
-				let name = $(el).data("table-name");
-				let id = $(el).data("table-id");
 				let number = $(el).data("table-number");				
-				arr_tables.push({id,name,number});
+				arr_tables.push(number);
 			}
 		});		
 		return arr_tables;
@@ -146,23 +143,19 @@ export var VIEW_CAFE_TABLES_QRCODE = {
 				!this.LOADING && this._go_back();
 			}});			
 			e.originalEvent.cancelable && e.preventDefault();
-		});
-
-		// this.$inputDelKey.on('keyup',()=>{
-		// 	this.check_if_need2save();
-		// });		
+		});	
 
 		this.$btnSend.bind('touchend',(e)=>{
 			this._blur({onBlur:()=>{
 				if(this.NEED_TO_SAVE && !this.LOADING){	
-					this.save();
+					this.send();
 				};
 			}});
 			e.originalEvent.cancelable && e.preventDefault();
 		});			
 	},
 
-	save:function() {
+	send:function() {
 
 	   const user_email = CFG.user_email;
 
@@ -187,8 +180,7 @@ export var VIEW_CAFE_TABLES_QRCODE = {
                 });
             }            
         }; 		
-		let arr_tables = this.get_all_checked_tables();
-		console.log('arr_tables = ', arr_tables);
+		let arr_tables = this.get_all_checked_tables();		
 		if(arr_tables.length>0){			
 			this._now_loading();
 			this.send_qr_codes_to_email_asynq(arr_tables)
@@ -215,11 +207,9 @@ export var VIEW_CAFE_TABLES_QRCODE = {
 	send_qr_codes_to_email_asynq:function(arr_tables){
 		return new Promise((res,rej)=>{
 
-            let PATH = 'adm/lib/iiko/';
-            let url = PATH + 'iiko.send_qrcode_for_tables.php';
+            let PATH = 'adm/lib/';
+            let url = PATH + 'lib.send_qrcode_for_tables.php';
         	let CAFE = GLB.THE_CAFE.get();
-
-        	// lib.send_qr_code.php
         	
         	if(!arr_tables.length) {
         		rej("невозможно отправить пустой список");

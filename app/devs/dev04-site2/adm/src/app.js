@@ -197,8 +197,8 @@ export default function(){
 
 	VIEWS.addView(
 		VIEW_CAFE_TABLES_QRCODE.init({
-		name:"view-iiko-qrcode-with-tables",
-		template:"#templates .view-iiko-qrcode-with-tables",
+		name:"view-qrcode-with-tables",
+		template:"#templates .view-qrcode-with-tables",
 		anim:'animLeft'
 	}));			
 
