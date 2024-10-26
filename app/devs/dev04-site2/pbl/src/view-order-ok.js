@@ -78,6 +78,8 @@ export var VIEW_ORDER_OK = {
 
 		var currency = GLB.CAFE.get('cafe_currency').symbol;
 
+		
+
 		var fn = {
 			formatLngTime:function(tm,full){
 				var t = tm.split(" ");
@@ -95,7 +97,6 @@ export var VIEW_ORDER_OK = {
 		].join("\n");
 				
 		this.$msgReport.html(msg);
-
 		
 		if(!this.TABLE_MODE){
 
@@ -144,16 +145,18 @@ export var VIEW_ORDER_OK = {
 		const currency = GLB.CAFE.get('cafe_currency').symbol;
 		const IIKO_MODE = GLB.CAFE.get().iiko_api_key!=="";
 
-		
+		const orders = [...order_items];
+
 		const fn = {
-			buildArrRows:(order_items)=>{
+			buildArrRows:(orders)=>{
 				const $list = $('<ul></ul>');
-				for(let i in order_items){
-					if(order_items.hasOwnProperty(i)){
-						let item = order_items[i]; 												
+				for(let i in orders){
+					if(orders.hasOwnProperty(i)){
+						let item = orders[i]; 												
 						if(item){		
 							let $li = $('<li></li>');
-							$li.append(fn.buildRow(item));
+							let $row = fn.buildRow(item);
+							$li.append($row);
 							$list.append($li);
 						}						
 					}
@@ -162,13 +165,13 @@ export var VIEW_ORDER_OK = {
 			},
 			buildRow:(row)=>{
 				
-				// BUILDING ORDER ROW
 				const title_str = row.item_data.title;
 				const count = row.count;
-				const price = row.price;
+				const price = row.price;				
 				
-				const volume_str = `${row.sizeName}`;
-				if(IIKO_MODE) volume_str += `/ ${row.volume} ${row.units}`;
+				let volume_str = row.sizeName;				
+				if(IIKO_MODE) {volume_str += `/ ${row.volume} ${row.units}`;}
+
 				const modifiers = row.chosen_modifiers;
 				let modifiers_str = "";
 				if(IIKO_MODE && modifiers && modifiers.length){
@@ -178,7 +181,6 @@ export var VIEW_ORDER_OK = {
 					}
 				};				
 				const price_str = count+" x "+price+" "+currency;
-
 				const $row = this.$tplOrderedItem.clone();
 				$row.find(this._CN+"ordered-title__item").html(title_str);
 				$row.find(this._CN+"ordered-title__volume").html(volume_str);				
