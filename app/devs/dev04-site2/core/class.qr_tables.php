@@ -9,31 +9,34 @@ class Qr_tables{
 
 	/**
 	 *  @param Smart_object|int $CAFE // required
-	 *  @param int|null $total_tables // optional (for CHEFSMENU MODE)
-	 *  @param array // $tables_uniq_names
-	*/
-	static public function update(Smart_object|int $CAFE, int|null $total_tables=null): array{
-		
-		if(gettype($CAFE)==='int'){
-			$CAFE = new Smart_object("cafe", $CAFE);			
+	 *  @param $total int|undefined // maximum tables amount (from config)
+	*/	
+	static public function recreate_all_for(Smart_object|int $CAFE, int|undefined $total=50): array{
+		$arr_names = [];
+		for($table_number=0;$table_number<$total;$table_number++){
+			$table_uniq_name = self::generate_name_for($table_number+1);
+			$arr_names[]=$table_uniq_name;
 		}
-
-		if(!$CAFE || !$CAFE->valid()) throw new Exception("unknown cafe, ".__FILE__.", ".__LINE__);
-
-		if($total_tables===null){
-			// ----------------
-			//  FOR IIKO MODE	
-			// ----------------
-			$tables_uniq_names = self::generate_by_iiko_info($CAFE);
-			return $tables_uniq_names;
-		}else{
-			// --------------------------
-			// TODO (FOR CHEFSMENU MODE)
-			// --------------------------
-			throw new Exception("unrealized function, ".__FILE__.", ".__LINE__);
-		}
+		self::update_cafe_info($CAFE, $arr_names);
+		return $arr_names;
 	}
 
+	static private function update_cafe_info(Smart_object|int $CAFE, array $arr_names): bool {
+		if(gettype($CAFE)==='int'){ $CAFE = new Smart_object("cafe", $CAFE); }		
+		if(!$CAFE || !$CAFE->valid()) throw new Exception("unknown cafe, ".__FILE__.", ".__LINE__);
+		$CAFE->tables_uniq_names = json_encode($arr_names, JSON_UNESCAPED_UNICODE);
+		$CAFE->updated_date = 'now()';
+		$CAFE->rev+=1;
+		if(!$CAFE->save()){
+			throw new Exception("can't save information to cafe ".$CAFE->id.", ".__FILE__.", ".__LINE__);
+		}
+		return true;
+	}
+
+	static private function generate_name_for($table_number): string {
+		return $table_number."-".get_random_string(4);
+	}	
+	
 	/**
 	 *  GENERATING QR-CODES AND LINKS FOR MENU TABLE
 	 * 
@@ -60,64 +63,6 @@ class Qr_tables{
 		}
 		return $arr;
 	}
-
-	// PRIVATE
-	static private function generate_by_iiko_info($CAFE): array{
-
-		glog("TEST123 generate_by_iiko_info!!!");
-		// ----------------------------------
-		//  tables info, saved from iiko api	
-		// ----------------------------------
-		$iiko_tables = $CAFE->iiko_tables ? json_decode((string) $CAFE->iiko_tables, 1) : [];
-		if(!count($iiko_tables)) return [];
-		
-		$arr_tables = [];
-		foreach($iiko_tables as $section){ 
-			$tables = $section['tables'];
-			if(count($tables)){
-				foreach($tables as $table){
-					array_push($arr_tables, $table);
-				}				
-			}			
-		}		
-		if(!count($arr_tables)) return [];
-		glog("TEST!!! ".print_r($arr_tables,1));
-
-		$uniqs_was_modified = false;
-		// --------------------------------------
-		//  getting uniq_keys already generated	
-		// --------------------------------------
-		$tables_uniq_names = $CAFE->tables_uniq_names ? json_decode((string) $CAFE->tables_uniq_names, 1) : [];
-	
-		// ------------------------------------------------------
-		//  generating table_uniq_name only for new table-number
-		// ------------------------------------------------------
-		foreach($arr_tables as $table){
-			$table_number = "table-".$table["number"];
-			// if it's new table-number
-			if(!isset($tables_uniq_names[$table_number])){
-				$uniq_name = $table["number"]."-".get_random_string(16);
-				$tables_uniq_names[$table_number] = $uniq_name;
-				// needs update DB
-				$uniqs_was_modified = true;
-			}
-		}	
-		
-		// -------------------------------
-		//  update DB (tables_uniq_names)
-		// -------------------------------
-		if($uniqs_was_modified){
-			$CAFE->tables_uniq_names = json_encode($tables_uniq_names, JSON_UNESCAPED_UNICODE);
-			$CAFE->updated_date = 'now()';
-			$CAFE->rev+=1;
-			if(!$CAFE->save()){
-				throw new Exception("can't save information to cafe ".$CAFE->id.", ".__FILE__.", ".__LINE__);
-			}
-		}
-
-		return $tables_uniq_names;		
-	}
-
 
 }
 

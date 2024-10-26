@@ -10,6 +10,10 @@ export const VIEW_CAFE_TABLES = {
 		this.$btnSave = this.$view.find('.save');		
 		this.$btnGetQrCodes = this.$form.find('.btn-iiko-get-qrcodes');
 		this.$inputTablesAmount = this.$form.find('.view-cafe-tables__table-counts-wrapper input');								
+		
+		// for superadmin only
+		this.$btnResetAllQrCodes = this.$form.find('.btn-reset-tables-qrcodes');
+
 		this.MAXIMUM_TABLES = 50;
 
 		this.behavior();
@@ -45,18 +49,11 @@ export const VIEW_CAFE_TABLES = {
 		this.$inputTablesAmount.on('keyup paste',(e)=>{
 			this.update_number_of_tables();			
 			e.originalEvent.cancelable && e.preventDefault();
-		});				
-
-		this.$btnBack.on('touchend',function(){
-			_this._blur({onBlur:function(){
-				!_this.LOADING && _this._go_back();
-			}});
-			return false;
 		});
 		
 		this.$btnGetQrCodes.bind('touchend',function(e){
 			_this._blur({onBlur:function(){
-				if(!this.LOADING){
+				if(!this.LOADING && !_this.VIEW_SCROLLED){
 					if(_this.NEED_TO_SAVE){	
 						_this.save({
 							onReady:()=>{								
@@ -71,6 +68,30 @@ export const VIEW_CAFE_TABLES = {
 			e.originalEvent.cancelable && e.preventDefault();
 		});			
 
+		this.$btnResetAllQrCodes.on('touchend',function(e){
+			_this._blur({onBlur:function(){
+				if(!_this.LOADING && !_this.VIEW_SCROLLED){
+					_this._show_confirm_async(`Подтвердите, что хотите 
+						пересоздать QR-коды для всех столов!`)
+						.then(()=>{
+							_this._now_loading();
+							_this.sa_reset_all_codes_asynq()					
+							.then((vars)=>{						
+								_this._show_message("Qr-коды всех столов созданы заново");
+								console.log(vars);
+								_this._end_loading();
+							})
+							.catch((vars)=>{						
+								console.log(vars);
+								_this._show_error(`не удалось пересоздать QR-коды`);
+								_this._end_loading();
+							});
+						});						
+				};
+			}});
+			e.originalEvent.cancelable && e.preventDefault();
+		});	
+
 		this.$btnSave.bind('touchend',function(e){
 			_this._blur({onBlur:function(){
 				if(_this.NEED_TO_SAVE && !_this.LOADING){	
@@ -84,9 +105,16 @@ export const VIEW_CAFE_TABLES = {
 			e.originalEvent.cancelable && e.preventDefault();
 		});	
 
+		this.$btnBack.on('touchend',function(){
+			_this._blur({onBlur:function(){
+				!_this.LOADING && _this._go_back();
+			}});
+			return false;
+		});		
+
 	},
 	goto_tables_qr_codes:function(){
-		this.reset();
+		// this.reset();
 		GLB.VIEW_CAFE_TABLES_QRCODE.update();
 		GLB.VIEWS.setCurrent(GLB.VIEW_CAFE_TABLES_QRCODE.name);
 	},
@@ -102,7 +130,7 @@ export const VIEW_CAFE_TABLES = {
 	save:function(opt){
 		
 		var PATH = 'adm/lib/';
-		var url = PATH + 'lib.save_tables_amount.php';
+		var url = PATH + 'lib.save_tables_amount.php';		
 		
 		this._now_loading();
 
@@ -131,8 +159,31 @@ export const VIEW_CAFE_TABLES = {
 				opt && opt.onError && opt.onError();
 		        console.log("err",response);
 			}
-        });
-			
+        });	
+	},
+	sa_reset_all_codes_asynq:function(){
+		return new Promise((res,rej)=>{
+
+			var PATH = 'adm/lib/';
+			var url = PATH + 'lib.update_all_qrcodes_for_tables.php';			
+
+			this.AJAX = $.ajax({
+				url: url+"?callback=?",
+				data:{id_cafe:GLB.THE_CAFE.get().id},
+				method:"POST",
+				dataType: "jsonp",
+				success: (response) => {										
+					if(!response.error){					
+						res(response);
+					}else{
+						rej(response.error);
+					};
+				},
+				error:(response)=> {
+					rej(response);
+				}
+			});	
+		});
 	}
 
 };

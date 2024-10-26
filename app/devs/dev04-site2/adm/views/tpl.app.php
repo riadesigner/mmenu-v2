@@ -1091,6 +1091,12 @@ App&&App();
 				<p>Здесь вы сможете скачать QR-коды всех столов для получения заказов на конкретный стол, а также открыть меню любого столика:</p>					
 				<div class="std-form__wide-button btn-iiko-get-qrcodes">QR-коды для столов</div>
 					
+				<div class="superadmin-only">
+				<h2>Дополнительно</h2>
+					<p>Сбросить и пересоздать заново QR-коды для всех столов. Внимание, только для опытных пользователей:</p>
+					<button class="btn-reset-tables-qrcodes">Сбросить QR-коды</button>
+				</div>
+
 				</div>
 			</div>
 		</div>

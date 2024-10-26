@@ -238,7 +238,32 @@ export var VIEW_STD = {
 				location.reload();
 			}
 		});			
+	},
+	_show_message:function(okMsg){
+		GLB.VIEWS.modalMessage({
+			title:GLB.LNG.get("lng_awesome"),
+			message:okMsg,
+			btn_title:GLB.LNG.get('lng_close')
+		});
+	},
+	_show_error:function(errMsg){
+		GLB.VIEWS.modalMessage({
+			title:GLB.LNG.get("lng_error"),
+			message:errMsg,
+			btn_title:GLB.LNG.get('lng_close')
+		});
+	},
+	_show_confirm_async:function(askMsg){
+		return new Promise((res,rej)=>{
+			GLB.VIEWS.modalConfirm({
+				title:GLB.LNG.get("lng_attention"),
+				ask:askMsg,
+				action:()=>{			
+					res && res();
+				},
+				buttons:[GLB.LNG.get("lng_ok"),GLB.LNG.get("lng_cancel")]
+			});	
+		})
 	}	
-
 
 };

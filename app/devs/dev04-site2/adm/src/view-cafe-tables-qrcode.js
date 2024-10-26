@@ -26,130 +26,95 @@ export var VIEW_CAFE_TABLES_QRCODE = {
 		this._update();
 		this._page_hide();
 		this._update_tabindex();
-		
-		const CAFE = GLB.THE_CAFE.get();		
-		this.TABLE_MENU_LINK = `${CFG.http}${CFG.www_url}/cafe/${CAFE.uniq_name}/table/`;
 
-		// SHOW TABLES INFO
-		const table_sections = CAFE.iiko_tables?JSON.parse(CAFE.iiko_tables):[];
-		const tables_uniq_names = CAFE.tables_uniq_names?JSON.parse(CAFE.tables_uniq_names):[];
-		this.update_tables_list(table_sections);
-		this.update_menulinks_list(table_sections, tables_uniq_names);		
+		const CAFE = GLB.THE_CAFE.get();		
 		
-		setTimeout(function(){							
-			_this._page_show();
-		},300);		
+		this.TABLE_MENU_LINK = `${CFG.http}${CFG.www_url}/cafe/${CAFE.uniq_name}/table/`;		
+
+		const tables_uniq_names = CAFE.tables_uniq_names?JSON.parse(CAFE.tables_uniq_names):[];
+					
+		this.rebuild_menulinks_list(tables_uniq_names);		
+		
+		setTimeout(()=>{ this._page_show();},300);
 	},
 
 	/**
-	* @param table_sections: array
-	* @param tables_uniq_names: object {'tabel-1':'1-uniq-name', ...}
-	* @return void
+	* @param tables_uniq_names: array ['1-swes', '2-dfr3', ...];
+	* @return void;
 	*/
-	update_menulinks_list:function(table_sections, tables_uniq_names){	
-		this.$list_of_menulinks.html("");		
-		const str = this.build_tables_list(table_sections, tables_uniq_names);		
-		if(str){
+	rebuild_menulinks_list:function(tables_uniq_names, total_nums=5){	
+		
+		this.$list_of_tables.html("");
+		this.$list_of_menulinks.html("");				
+		const str = this.build_tables_list(tables_uniq_names, total_nums=5);			
+		console.log('str', str)
+		if(str){			
+			let $btns;
+			// update qr-codes links
+			this.$list_of_tables.html(str);
+			$btns = this.$list_of_tables.find('li');
+			$btns.each((index, el)=>{
+				$(el).on("touchend",(e)=>{
+					if(!this.LOADING && !this.VIEW_SCROLLED){													
+						// -------------------------
+						//  SELECT TABLE
+						// -------------------------
+						$(el).toggleClass("checked");
+						this.check_need_to_save();
+					};
+					e.originalEvent.cancelable && e.preventDefault();
+				});
+			});						
+			// update menu links
 			this.$list_of_menulinks.html(str);
-			let $btns = this.$list_of_menulinks.find('li');
+			$btns = this.$list_of_menulinks.find('li');
 			$btns.each((index, el)=>{
 				$(el).on("touchend",(e)=>{
 					if(!this.LOADING && !this.VIEW_SCROLLED){	
-						$btns.removeClass("checked");					
-						$(el).addClass("checked");
 						// -------------------------
 						//  OPEN THE MENU FOR TABLE
 						// -------------------------
-						const table_uniq_name = $(el).data('table-uniq-name');
-						const url = `${this.TABLE_MENU_LINK}${table_uniq_name}`;
+						const uniq_name = $(el).data('table-uniq-name');
+						const url = `${this.TABLE_MENU_LINK}${uniq_name}`;
 						window.open(url, '_blank').focus();						
 					};
 					e.originalEvent.cancelable && e.preventDefault();
 				});
 			});						
-		}else{			
-			this.$list_of_menulinks.html("<p>Нет зарегистрированных столов. Вернитесь назад и обновите столы.</p>");
+		} else {			
+			this.$list_of_menulinks.html("<p><i><strong>Нет зарегистрированных столов. Вернитесь назад и укажите количество столов.</strong></i></p>");
 		}
 	},
 
+
 	/**
-	* @param table_sections: array
-	* @return void
-	*/	
-	update_tables_list:function(table_sections) {				
-		this.$list_of_tables.html("");
-		const str = this.build_tables_list(table_sections);
-		if(str){
-			this.$list_of_tables.html(str);
-			const $btns = this.$list_of_tables.find('li');
-			$btns.each((index, el)=>{
-				$(el).on("touchend",(e)=>{
-					if(!this.LOADING && !this.VIEW_SCROLLED){						
-						$(el).toggleClass("checked");						
-						this.check_need_to_save();
-					};
-					e.originalEvent.cancelable && e.preventDefault();
-				});
-			});
-		}else{			
-			this.$list_of_tables.html("<p>Нет зарегистрированных столов. Вернитесь назад и обновите столы.</p>");
-		}
-	},
-	/**
-	* @param table_sections: array
-	* @param tables_uniq_names: object|null
+	* @param tables_uniq_names: array|null
 	* @return string|null
 	*/	
-	build_tables_list:function(table_sections, tables_uniq_names=null){
-		if(table_sections && table_sections.length>0){
-			let str_table_sections = "";
-			for(let i in table_sections){
-				if(table_sections.hasOwnProperty(i)){					
-					let section = table_sections[i];
-					let section_name = section['section_name'];
-					let section_id = section['section_id'];
-					let tables = section['tables'];						
-					if(tables.length){												
-						str_table_sections += `<h2>${section_name}</h2>`;
-						let str_tables = "";
-						for (let t in tables){
-							if(tables.hasOwnProperty(t)){
-								let tbl = tables[t];
-								let str_table_name = section_name+": "+ tbl['name'];								
-								// LINK TO TABLE MENU
-								const table_index = `table-${tbl['number']}`;
-								let str_uniq_name = "";
-								let str_uniq_name_data = "";
-								if(tables_uniq_names!==null && tables_uniq_names[table_index]){									
-									str_uniq_name = tables_uniq_names[table_index];
-									str_uniq_name_data = `data-table-uniq-name="${str_uniq_name}"`;
-								};	
-								let str_btn = `<li class="std-form__radio-button mini" 
-										${str_uniq_name_data}
-										data-table-name="${str_table_name}" 
-										data-table-number="${tbl['number']}" 
-										data-table-id="${tbl['id']}">
-										${str_table_name}</li>`;
-								str_tables += str_btn;
-							}
-						};
-						str_table_sections += `<ul class="std-form__structure" 
-								data-section-id="${section_id}" 
-								data-section-name="${section_name}">${str_tables}</ul>`;
-					}
-				}
+	build_tables_list:function( tables_uniq_names = null, total_nums = 5){		
+		
+		const total = Math.min(total_nums,tables_uniq_names.length);	
+		if( total > 0){
+
+			const str_all_tbls = [];
+			for(let n = 0; n< total; n++){
+				let tbl = tables_uniq_names[n];
+				let num = n+1;
+				let str_tbl = `<li class="std-form__radio-button mini" 
+					data-table-name="Стол ${num}" 
+					data-table-number="${num}" 
+					data-table-uniq-name="${tbl}">Стол ${num}</li>`;
+				str_all_tbls.push(str_tbl);
 			};
-			return str_table_sections;
-		}else{
+			return `<ul class="std-form__structure">${str_all_tbls.join('')}</ul>`;			
+		} else {
 			return null;
 		}
 	},
 	reset:function(){		
 		this._reset();
 		this._need2save(false);
-		this._page_to_top();		
-		// this.$inputDelKey.val("");
-		// this.NEW_IIKO_EXTMENU_ID = "";
+		this._page_to_top();
 	},
 	check_need_to_save:function(){
 		let arr_tables = this.get_all_checked_tables();
