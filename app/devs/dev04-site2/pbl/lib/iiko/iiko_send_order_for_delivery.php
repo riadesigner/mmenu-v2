@@ -42,8 +42,10 @@ $params = [
 	"order_data"=>$order_data,
 	"pickupself_mode"=>PICKUPSELF_MODE,
 ];
+
 try{
 	$the_order = new Order_parser($params);
+	$ORDER_TXT = $the_order->build_tg_txt();
 	
 }catch( Exception $e){
 	glogError($e->getMessage());
@@ -52,97 +54,97 @@ try{
 
 
 
-$time_sent = post_clean($order_data['order_time_sent'],100);
-if(empty($time_sent)) __errorjsonp("--wrong order data, ".__LINE__);
+// $time_sent = post_clean($order_data['order_time_sent'],100);
+// if(empty($time_sent)) __errorjsonp("--wrong order data, ".__LINE__);
 
-$time_need = post_clean($order_data['order_time_need'],100);
-if(empty($time_need)) $time_need = $time_sent;
+// $time_need = post_clean($order_data['order_time_need'],100);
+// if(empty($time_need)) $time_need = $time_sent;
 
-define('NEARTIME_MODE',$time_need==$time_sent);
+// define('NEARTIME_MODE',$time_need==$time_sent);
 
-$total_price = (float) $order_data['order_total_price'];
-$orders = $order_data['order_items'];
+// $total_price = (float) $order_data['order_total_price'];
+// $orders = $order_data['order_items'];
 
 
 
-$user_phone = post_clean($order_data["order_user_phone"], 50);
-$user_phone = preg_replace("/[^+0-9 ()\-,.]/", "", (string) $user_phone);
-if(empty($user_phone))__errorjsonp("--need to know user phone");
+// $user_phone = post_clean($order_data["order_user_phone"], 50);
+// $user_phone = preg_replace("/[^+0-9 ()\-,.]/", "", (string) $user_phone);
+// if(empty($user_phone))__errorjsonp("--need to know user phone");
 
-$str_order_mode  = PICKUPSELF_MODE?"Самовывоз":"Доставка";
+// $str_order_mode  = PICKUPSELF_MODE?"Самовывоз":"Доставка";
 
-if(!PICKUPSELF_MODE){
-	$u_address = $order_data['order_user_full_address'];
-	$u_address_entrance = isset($u_address['entrance'])? $u_address['entrance']: "";
-	$u_address_floor = isset($u_address['floor']) ? isset($u_address['floor']) : "";
-	if(empty($u_address['u_street']))__errorjsonp("--need to know user street");
-	if(empty($u_address['u_house']))__errorjsonp("--need to know user house");		
-	// for TG
-	$deliv_address = "ул. ".$u_address['u_street'].", д. ".$u_address['u_house'].", 
-	подъезд ({$u_address_entrance}),  этаж ({$u_address_floor})";	
-}else{
-	$deliv_address = "";
-}
+// if(!PICKUPSELF_MODE){
+// 	$u_address = $order_data['order_user_full_address'];
+// 	$u_address_entrance = isset($u_address['entrance'])? $u_address['entrance']: "";
+// 	$u_address_floor = isset($u_address['floor']) ? isset($u_address['floor']) : "";
+// 	if(empty($u_address['u_street']))__errorjsonp("--need to know user street");
+// 	if(empty($u_address['u_house']))__errorjsonp("--need to know user house");		
+// 	// for TG
+// 	$deliv_address = "ул. ".$u_address['u_street'].", д. ".$u_address['u_house'].", 
+// 	подъезд ({$u_address_entrance}),  этаж ({$u_address_floor})";	
+// }else{
+// 	$deliv_address = "";
+// }
 
-$user_comment = post_clean($order_data["order_user_comment"], 250);
+// $user_comment = post_clean($order_data["order_user_comment"], 250);
 
 // ----------------------------------------
 //   BUILDING ORDER STRING (FOR TELEGRAM)
 // ----------------------------------------
 
-$time_format = 24;
-$str_currency = "₽";
+// $time_format = 24;
+// $str_currency = "₽";
 
-if($time_need==$time_sent){
-	$order_time_to = "Заказ на ближайшее время";
-}else{
-	$order_time_to =  "Приготовить к: ".glb_russian_datetime($time_need,$time_format);	
-}
+// if($time_need==$time_sent){
+// 	$order_time_to = "Заказ на ближайшее время";
+// }else{
+// 	$order_time_to =  "Приготовить к: ".glb_russian_datetime($time_need,$time_format);	
+// }
 
-$ORDER_TXT = "";
-$ORDER_TXT .= "   ------------\n";
-$ORDER_TXT .= "   {$str_order_mode}\n";
-if(!PICKUPSELF_MODE){
-$ORDER_TXT .= "   {$deliv_address}\n";	
-}
-$ORDER_TXT .= "   тел: {$user_phone}\n";
-$ORDER_TXT .= "   ------------\n";
-$ORDER_TXT .= "   Создан: ".glb_russian_datetime($time_sent,$time_format)."\n";
-$ORDER_TXT .= "   Сумма: {$total_price} {$str_currency}.\n";
-$ORDER_TXT .= "   ------------\n";
+// $ORDER_TXT = "";
+// $ORDER_TXT .= "   ------------\n";
+// $ORDER_TXT .= "   {$str_order_mode}\n";
+// if(!PICKUPSELF_MODE){
+// $ORDER_TXT .= "   {$deliv_address}\n";	
+// }
+// $ORDER_TXT .= "   тел: {$user_phone}\n";
+// $ORDER_TXT .= "   ------------\n";
+// $ORDER_TXT .= "   Создан: ".glb_russian_datetime($time_sent,$time_format)."\n";
+// $ORDER_TXT .= "   Сумма: {$total_price} {$str_currency}.\n";
+// $ORDER_TXT .= "   ------------\n";
 
-if(!empty($user_comment)){
-	$ORDER_TXT .= "  Комментарий: {$user_comment}\n";	
-	$ORDER_TXT .= "  ------------\n";	
-}
+// if(!empty($user_comment)){
+// 	$ORDER_TXT .= "  Комментарий: {$user_comment}\n";	
+// 	$ORDER_TXT .= "  ------------\n";	
+// }
 
-$count = 0;
-foreach ($orders as $row) {		
-	$count++;
+// $count = 0;
+// foreach ($orders as $row) {		
+// 	$count++;
 
-	$item_modifiers = $row['chosen_modifiers'] ?? false;	
-	$item_title = $count.". ".$row["item_data"]["title"];	
-	$item_size = !empty($row["sizeName"])?$row["sizeName"] : "";
-	$item_volume = !empty($row["volume"])?$row["volume"] : "";
-	$item_units = !empty($row["units"])?$row["units"] : "";
-	$volume_str = !empty($item_volume)?$item_volume." ".$item_units : "";
+// 	$item_modifiers = $row['chosen_modifiers'] ?? false;	
+// 	$item_title = $count.". ".$row["item_data"]["title"];	
+// 	$item_size = !empty($row["sizeName"])?$row["sizeName"] : "";
+// 	$item_volume = !empty($row["volume"])?$row["volume"] : "";
+// 	$item_units = !empty($row["units"])?$row["units"] : "";
+// 	$volume_str = !empty($item_volume)?$item_volume." ".$item_units : "";
 
-	$item_price = $row["count"]."x".$row["price"]." ".$str_currency;
+// 	$item_price = $row["count"]."x".$row["price"]." ".$str_currency;
 
-	$ORDER_TXT .= "_{$item_title}_\n";
-	$ORDER_TXT .= "{$item_size} / {$volume_str}\n";	
+// 	$ORDER_TXT .= "_{$item_title}_\n";
+// 	$ORDER_TXT .= "{$item_size} / {$volume_str}\n";	
 
-	if($item_modifiers){
-		foreach($item_modifiers as $m){
-			$mod_title = $m["name"];
-			$mod_price = "1x".$m["price"]." ".$str_currency;
-			$ORDER_TXT .= "+ {$mod_title}, {$mod_price}\n";
-		}
-	}
-	$ORDER_TXT .= "= {$item_price}\n";
-	$separator = $count < count($orders) ?"---------\n":"--------- //\n";
-	$ORDER_TXT .= $separator;
-}
+// 	if($item_modifiers){
+// 		foreach($item_modifiers as $m){
+// 			$mod_title = $m["name"];
+// 			$mod_price = "1x".$m["price"]." ".$str_currency;
+// 			$ORDER_TXT .= "+ {$mod_title}, {$mod_price}\n";
+// 		}
+// 	}
+// 	$ORDER_TXT .= "= {$item_price}\n";
+// 	$separator = $count < count($orders) ?"---------\n":"--------- //\n";
+// 	$ORDER_TXT .= $separator;
+// }
 
 // ----------------------------------------
 //  - SAVE ORDER IN DB

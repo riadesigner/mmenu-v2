@@ -10,13 +10,80 @@ class Order_parser{
     protected string $time_need;  
     protected string $user_phone; 
     protected string $deliv_address;
+    protected string $user_comment;
     protected int $total_price;           
     protected bool $NEARTIME_MODE;   
     protected bool $PICKUPSELF_MODE;    
+    protected bool $READY_FOR_BUILD;    
 
     public function __construct($params){
-        $this->verify($params);
+        $this->READY_FOR_BUILD = $this->verify($params);
         return $this;
+    }
+
+    // ----------------------------------------
+    //   BUILDING ORDER STRING (FOR TELEGRAM)
+    // ----------------------------------------
+    public function build_tg_txt(): string{
+        if (!$this->READY_FOR_BUILD) throw new Exception("--not found the order params"); 
+
+        $time_format = 24;
+        $str_currency = "₽";
+        $str_time = glb_russian_datetime($this->time_need, $time_format);
+        
+        if($this->time_need==$this->time_sent){
+            $order_time_to = "Заказ на ближайшее время";
+        }else{
+            $order_time_to =  "Приготовить к: {$str_time}";	
+        }
+        $str_order_mode  = $this->PICKUPSELF_MODE?"Самовывоз":"Доставка";
+        
+        $order_txt = "";
+        $order_txt .= "   ------------\n";
+        $order_txt .= "   {$str_order_mode}\n";
+        if(!$this->PICKUPSELF_MODE){
+        $order_txt .= "   {$this->deliv_address}\n";	
+        }
+        $order_txt .= "   тел: {$this->user_phone}\n";
+        $order_txt .= "   ------------\n";
+        $order_txt .= "   Создан: {$str_time}\n";
+        $order_txt .= "   Сумма: {$this->total_price} {$str_currency}.\n";
+        $order_txt .= "   ------------\n";
+        
+        if(!empty($this->user_comment)){
+            $order_txt .= "  Комментарий: {$this->user_comment}\n";	
+            $order_txt .= "  ------------\n";	
+        }        
+        
+        $count = 0;
+        foreach ($this->order_items as $row) {		
+            $count++;
+        
+            $item_modifiers = $row['chosen_modifiers'] ?? false;	
+            $item_title = $count.". ".$row["item_data"]["title"];	
+            $item_size = !empty($row["sizeName"])?$row["sizeName"] : "";
+            $item_volume = !empty($row["volume"])?$row["volume"] : "";
+            $item_units = !empty($row["units"])?$row["units"] : "";
+            $volume_str = !empty($item_volume)?$item_volume." ".$item_units : "";
+        
+            $item_price = $row["count"]."x".$row["price"]." ".$str_currency;
+        
+            $order_txt .= "_{$item_title}_\n";
+            $order_txt .= "{$item_size} / {$volume_str}\n";	
+        
+            if($item_modifiers){
+                foreach($item_modifiers as $m){
+                    $mod_title = $m["name"];
+                    $mod_price = "1x".$m["price"]." ".$str_currency;
+                    $order_txt .= "+ {$mod_title}, {$mod_price}\n";
+                }
+            }
+            $order_txt .= "= {$item_price}\n";
+            $separator = $count < count($this->order_items) ?"---------\n":"--------- //\n";
+            $order_txt .= $separator;
+        }
+
+        return $order_txt;
     }
 
     private function verify($params): bool{
@@ -67,6 +134,8 @@ class Order_parser{
         }else{
             $this->deliv_address = "";
         }
+
+        $this->user_comment = post_clean($this->order_data["order_user_comment"], 250);
 
         return true;
     }
