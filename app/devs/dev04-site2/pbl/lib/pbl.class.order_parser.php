@@ -49,13 +49,13 @@ class Order_parser{
         
         if(!isset($this->order_data['order_user_phone'])){ 
             $this->user_phone = "";
-         }else{
+        }else{
             $this->user_phone = post_clean($this->order_data["order_user_phone"], 50);
             $this->user_phone = preg_replace("/[^+0-9 ()\-,.]/", "", $this->user_phone);
             if(empty($this->user_phone)) {throw new Exception('--need to know user phone');};
-         }
+        }
 
-         if(!$this->PICKUPSELF_MODE){
+        if(!$this->PICKUPSELF_MODE){
             $u_address = $this->order_data['order_user_full_address'];
             $u_address_entrance = isset($u_address['entrance'])? $u_address['entrance']: "";
             $u_address_floor = isset($u_address['floor']) ? isset($u_address['floor']) : "";
@@ -63,8 +63,7 @@ class Order_parser{
             if(empty($u_address['u_house'])) throw new Exception("--need to know user house");		            
             
             $this->deliv_address = "ул. ".$u_address['u_street'].", д. ".$u_address['u_house'].",
-            подъезд ({$u_address_entrance}),  этаж ({$u_address_floor})";	
-
+            подъезд ({$u_address_entrance}),  этаж ({$u_address_floor})";
         }else{
             $this->deliv_address = "";
         }
