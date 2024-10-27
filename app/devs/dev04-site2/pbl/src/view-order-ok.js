@@ -107,7 +107,7 @@ export var VIEW_ORDER_OK = {
 
 			let order_str = "";
 			if(this.IIKO_MODE){
-				const addr = this.order.order_user_iiko_address;
+				const addr = this.order.order_user_full_address;
 				const addr_entrance = addr.u_entrance?`, подъезд ${addr.u_entrance}`:"";
 				const addr_floor = addr.u_floor?`, эт. ${addr.u_floor}`:"";
 				const addr_flat = addr.u_flat?`, кв. ${addr.u_flat}`:"";

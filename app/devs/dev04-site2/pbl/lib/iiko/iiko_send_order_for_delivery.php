@@ -14,6 +14,8 @@ require_once WORK_DIR.APP_DIR.'core/class.smart_collect.php';
 require_once WORK_DIR.APP_DIR.'core/class.user.php';
 require_once WORK_DIR.APP_DIR.'core/class.order_sender.php';
 
+require_once WORK_DIR.APP_DIR.'pbl/lib/pbl.class.order_parser.php';
+
 session_start();
 SQL::connect();
 
@@ -32,7 +34,23 @@ if(!$cafe->valid())__errorjsonp("Unknown cafe, ".__LINE__);
 
 define('DEMO_MODE', (int) $cafe->cafe_status !== 2);
 
+define('PICKUPSELF_MODE',filter_var($_POST['pickupself'], FILTER_VALIDATE_BOOLEAN));
+
 $order_data = $_POST['order'];
+
+$params = [
+	"order_data"=>$order_data,
+	"pickupself_mode"=>PICKUPSELF_MODE,
+];
+try{
+	$the_order = new Order_parser($params);
+	
+}catch( Exception $e){
+	glogError($e->getMessage());
+	__errorjsonp("--fail parsing the order params");	
+}
+
+
 
 $time_sent = post_clean($order_data['order_time_sent'],100);
 if(empty($time_sent)) __errorjsonp("--wrong order data, ".__LINE__);
@@ -45,7 +63,7 @@ define('NEARTIME_MODE',$time_need==$time_sent);
 $total_price = (float) $order_data['order_total_price'];
 $orders = $order_data['order_items'];
 
-define('PICKUPSELF_MODE',filter_var($_POST['pickupself'], FILTER_VALIDATE_BOOLEAN));
+
 
 $user_phone = post_clean($order_data["order_user_phone"], 50);
 $user_phone = preg_replace("/[^+0-9 ()\-,.]/", "", (string) $user_phone);
@@ -54,7 +72,7 @@ if(empty($user_phone))__errorjsonp("--need to know user phone");
 $str_order_mode  = PICKUPSELF_MODE?"Самовывоз":"Доставка";
 
 if(!PICKUPSELF_MODE){
-	$u_address = $order_data['order_user_iiko_address'];
+	$u_address = $order_data['order_user_full_address'];
 	$u_address_entrance = isset($u_address['entrance'])? $u_address['entrance']: "";
 	$u_address_floor = isset($u_address['floor']) ? isset($u_address['floor']) : "";
 	if(empty($u_address['u_street']))__errorjsonp("--need to know user street");

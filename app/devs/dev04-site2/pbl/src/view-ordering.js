@@ -318,7 +318,7 @@ export var VIEW_ORDERING = {
 		};
 
 		// IIKO MODE
-		let user_iiko_address = {
+		let user_full_address = {
 			u_street:this.$allParams.find("[name=u_street]").val(),
 			u_house:this.$allParams.find("[name=u_house]").val(),
 			u_flat:this.$allParams.find("[name=u_flat]").val(),
@@ -338,8 +338,8 @@ export var VIEW_ORDERING = {
 				}					
 			}else{
 				// DELIVERY MODE
-				if(!user_phone || !user_iiko_address.u_street || !user_iiko_address.u_house){ 
-					this._show_attention(!user_phone,(!user_iiko_address.u_street || !user_iiko_address.u_house));
+				if(!user_phone || !user_full_address.u_street || !user_full_address.u_house){ 
+					this._show_attention(!user_phone,(!user_full_address.u_street || !user_full_address.u_house));
 					this.flash_inputs_errors();
 					setTimeout(()=>{this.chefsmenu.end_loading();},500);
 					return;
@@ -436,7 +436,7 @@ export var VIEW_ORDERING = {
 
 		// ADDRESS PART
 		if(this.IIKO_MODE){
-			order_params['order_user_iiko_address'] = user_iiko_address;
+			order_params['order_user_full_address'] = user_full_address;
 		}else{
 			order_params['order_user_address'] = user_address;
 		}
