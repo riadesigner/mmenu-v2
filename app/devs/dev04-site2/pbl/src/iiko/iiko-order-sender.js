@@ -37,7 +37,7 @@ export var IIKO_ORDER_SENDER = {
 
         });
     },
-    send_to_table_async: function(orders, table_number ) {
+    send_to_table_async: function(order, table_number ) {
          // ORDER TO TABLE
          return new Promise((res,rej)=>{            
             
@@ -49,17 +49,12 @@ export var IIKO_ORDER_SENDER = {
                             
             const PATH = 'pbl/lib/iiko/';
             const url = GLB_APP_URL + PATH + 'iiko_send_order_to_table.php';
-
             const id_cafe = GLB.CAFE.get().id;
-            const total_price = GLB.CART.get_total_price();                
-            const order_time_sent = fn.dateExport(new Date());
 
             const data = {
                 id_cafe,
-                orders,
-                table_number,
-                total_price,
-                order_time_sent                
+                order,
+                table_number,        
             };
 
             console.log('data',data);            

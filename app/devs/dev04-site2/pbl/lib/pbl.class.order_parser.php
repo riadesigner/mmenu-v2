@@ -6,31 +6,61 @@ class Order_parser{
     
     protected array $order_data;
     protected array $order_items;
+    protected string $order_target;    
     protected string $time_sent;    
     protected string $time_need;  
     protected string $user_phone; 
     protected string $deliv_address;
-    protected string $user_comment;
+    protected string $user_comment;    
+    protected string $order_text;
+    protected string $str_currency;
     protected int $total_price;
-    protected string $order_txt;
+    protected int $time_format;
     protected bool $NEARTIME_MODE;   
     protected bool $PICKUPSELF_MODE;    
     protected bool $READY_FOR_BUILD;
 
     public function __construct($params){
+        $this->time_format = 24;
+        $this->str_currency = "₽";                
         $this->READY_FOR_BUILD = $this->verify($params);
         return $this;
     }
 
-    // ----------------------------------------
-    //   BUILDING ORDER STRING (FOR TELEGRAM)
-    // ----------------------------------------
-    public function build_tg_txt(): Order_parser{
+    // -------------------------------------
+    //  BUILDING ORDER STRING FOR TELEGRAM
+    // -------------------------------------
+    public function build_tg_txt(): Order_parser{    
         if (!$this->READY_FOR_BUILD) throw new Exception("--not found the order params"); 
 
-        $time_format = 24;
-        $str_currency = "₽";
-        $str_time = glb_russian_datetime($this->time_need, $time_format);
+        return $this;
+        
+        switch ($this->order_target){ 
+            case Order_sender::IIKO_DELIVERY:
+                $this->order_text =  $this->build_for_iiko_delivery();    
+            break; 
+            case Order_sender::IIKO_TABLE:
+                $this->order_text =  $this->build_for_iiko_table();    
+            break;             
+            case Order_sender::CHEFSMENU_ORDER:
+                $this->order_text =  $this->build_for_chefsmenu();    
+            break;                    
+            default:
+                throw new Exception("--wrong order_target param");
+            break;     
+        }
+        return $this;
+    }
+
+    public function get(): string{
+        return !empty($this->order_text)?$this->order_text:"";
+    }
+    
+    // PRIVATE
+
+    private function build_for_iiko_delivery():string {
+
+        $str_time = glb_russian_datetime($this->time_need, $this->time_format);
         
         if($this->time_need==$this->time_sent){
             $order_time_to = "Заказ на ближайшее время";
@@ -39,27 +69,48 @@ class Order_parser{
         }
         $str_order_mode  = $this->PICKUPSELF_MODE?"Самовывоз":"Доставка";
         
-        $order_txt = "";
-        $order_txt .= "   ------------\n";
-        $order_txt .= "   {$str_order_mode}\n";
+        $str = "";
+        $str .= "   ------------\n";
+        $str .= "   {$str_order_mode}\n";
         if(!$this->PICKUPSELF_MODE){
-        $order_txt .= "   {$this->deliv_address}\n";	
+        $str .= "   {$this->deliv_address}\n";	
         }
-        $order_txt .= "   тел: {$this->user_phone}\n";
-        $order_txt .= "   ------------\n";
-        $order_txt .= "   Создан: {$str_time}\n";
-        $order_txt .= "   Сумма: {$this->total_price} {$str_currency}.\n";
-        $order_txt .= "   ------------\n";
+        $str .= "   тел: {$this->user_phone}\n";
+        $str .= "   ------------\n";
+        $str .= "   Создан: {$str_time}\n";
+        $str .= "   Сумма: {$this->total_price} {$this->str_currency}.\n";
+        $str .= "   ------------\n";
         
         if(!empty($this->user_comment)){
-            $order_txt .= "  Комментарий: {$this->user_comment}\n";	
-            $order_txt .= "  ------------\n";	
+            $str .= "  Комментарий: {$this->user_comment}\n";	
+            $str .= "  ------------\n";	
         }        
         
+        $str .= $this->build_str_items();
+        return $str;
+    }
+
+    private function build_for_iiko_table():string {
+
+        $str_time = glb_russian_datetime($this->time_need, $this->time_format);
+                
+        $str = "";
+        $str .= "   ------------\n";
+        $str .= "   на стол №: {$table_number}\n";
+        $str .= "   ------------\n";
+        $str .= "   Создан: {$str_time}\n";
+        $str .= "   Сумма: {$this->total_price} {$this->str_currency}.\n";
+        $str .= "   ------------\n";
+        
+        $str .= $this->build_str_items();          
+        return $str;
+    }    
+
+    private function build_str_items(): string{        
+        $str = "";
         $count = 0;
         foreach ($this->order_items as $row) {		
-            $count++;
-        
+            $count++;        
             $item_modifiers = $row['chosen_modifiers'] ?? false;	
             $item_title = $count.". ".$row["item_data"]["title"];	
             $item_size = !empty($row["sizeName"])?$row["sizeName"] : "";
@@ -67,35 +118,34 @@ class Order_parser{
             $item_units = !empty($row["units"])?$row["units"] : "";
             $volume_str = !empty($item_volume)?$item_volume." ".$item_units : "";
         
-            $item_price = $row["count"]."x".$row["price"]." ".$str_currency;
+            $item_price = $row["count"]."x".$row["price"]." ".$this->str_currency;
         
-            $order_txt .= "_{$item_title}_\n";
-            $order_txt .= "{$item_size} / {$volume_str}\n";	
+            $str .= "_{$item_title}_\n";
+            $str .= "{$item_size} / {$volume_str}\n";	
         
             if($item_modifiers){
                 foreach($item_modifiers as $m){
                     $mod_title = $m["name"];
-                    $mod_price = "1x".$m["price"]." ".$str_currency;
-                    $order_txt .= "+ {$mod_title}, {$mod_price}\n";
+                    $mod_price = "1x".$m["price"]." ".$this->str_currency;
+                    $str .= "+ {$mod_title}, {$mod_price}\n";
                 }
             }
-            $order_txt .= "= {$item_price}\n";
+            $str .= "= {$item_price}\n";
             $separator = $count < count($this->order_items) ?"---------\n":"--------- //\n";
-            $order_txt .= $separator;
-        }
-        $this->order_txt = $order_txt;
-        return $this;
-    }
-
-    public function get(): string{
-        return $this->order_txt;
-    }
+            $str .= $separator;
+        }       
+        return  $str;   
+    }    
 
     private function verify($params): bool{
+
+        if(!isset($params["order_target"])){ throw new Exception('order_target param required'); }
+        $this->order_target = $params["order_target"];
+
         if(!isset($params["order_data"])){ throw new Exception('order_data param required'); }
         $this->order_data = $params["order_data"];
         if(!is_array($this->order_data)||!count($this->order_data)) {throw new Exception('order_data param is wrong');}
-
+        
         if(!isset($this->order_data["order_time_sent"])){ throw new Exception('order_time_sent param is wrong'); }
         $this->time_sent = post_clean($this->order_data['order_time_sent'],100);
         if(empty($this->time_sent)) { throw new Exception('--wrong order data'); }

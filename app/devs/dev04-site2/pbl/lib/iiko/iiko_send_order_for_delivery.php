@@ -40,6 +40,7 @@ $order_data = $_POST['order'];
 
 $params = [
 	"order_data"=>$order_data,
+	"order_target"=>ORDER_TARGET,
 	"pickupself_mode"=>PICKUPSELF_MODE,
 ];
 
@@ -57,7 +58,6 @@ try{
 //  - SAVE ORDER IN DB
 //	- GETTING ORDER_SHORT_NUMBER
 // ----------------------------------------
-
 
 $pending_mode = false;
 $short_number = Order_sender::save_order_to_db(
@@ -88,6 +88,5 @@ try{
 	glogError($e->getMessage().", ".__FILE__.", ".__LINE__);
 	__errorjsonp("--fail sending delivery tg-order");	
 }
-
 
 ?>

@@ -56,7 +56,7 @@ export var VIEW_CART = {
 					this.chefsmenu.now_loading();
 					this.iiko_send_order_to_table();
 				}else{
-					this.send_order();
+					this.send_order_to_delivery();
 				}
 			};
 			e.originalEvent.cancelable && e.preventDefault();
@@ -65,17 +65,34 @@ export var VIEW_CART = {
 	},
 	iiko_send_order_to_table:function(){
 
-		let orders = GLB.CART.get_all();
+		const fn = {
+			dateExport:function(_date){
+				return _date.getDate()+"-"+(_date.getMonth()+1)+"-"+_date.getFullYear()+" "+_date.getHours()+":"+_date.getMinutes();;
+			}
+		}
+
+		const this_time = fn.dateExport(new Date()); 
+		const order_total_price = GLB.CART.get_total_price();
+
+		const order_params = {
+			id_cafe: GLB.CAFE.get('id'),
+			order_time_sent: this_time,
+			order_time_need: this_time,
+			order_total_price: order_total_price,
+			order_user_comment:"",
+		}
+
+		const order_items = GLB.CART.get_all();
+		const order = $.extend(order_params,{order_items});		
 		const table_number = GLB.MENU_TABLE_MODE.get_table_number();		
 		
 		this.IIKO_TBL_SENDER = $.extend({},IIKO_ORDER_SENDER);	
-		this.IIKO_TBL_SENDER.send_to_table_async(orders,table_number)
+		this.IIKO_TBL_SENDER.send_to_table_async(order,table_number)
 		.then((vars)=>{
-			const short_number = vars['short_number'];
-			const demo_mode = vars['demo_mode'];
-			const notg_mode = vars['notg_mode'];			
-			const order_items = orders;
-			const order = { short_number,demo_mode,order_items};
+			console.log('--vars--',vars)	
+			order.short_number = vars['short_number'];
+			order.demo_mode = vars['demo_mode'];
+			order.notg_mode = vars['notg_mode']?true:false;
 			this.chefsmenu.end_loading();			
 			GLB.VIEW_ORDER_OK.update(order,{table_number});
 			GLB.UVIEWS.set_current("the-order-ok");
@@ -90,7 +107,7 @@ export var VIEW_CART = {
 		});
 
 	},
-	send_order:function() {
+	send_order_to_delivery:function() {
 		const has_delivery = GLB.CAFE.has_delivery();
 		console.log('!! has_delivery = ', has_delivery)
 		if(!GLB.CAFE.has_delivery()){
