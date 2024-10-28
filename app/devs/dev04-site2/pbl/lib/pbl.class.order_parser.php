@@ -11,10 +11,11 @@ class Order_parser{
     protected string $user_phone; 
     protected string $deliv_address;
     protected string $user_comment;
-    protected int $total_price;           
+    protected int $total_price;
+    protected string $order_txt;
     protected bool $NEARTIME_MODE;   
     protected bool $PICKUPSELF_MODE;    
-    protected bool $READY_FOR_BUILD;    
+    protected bool $READY_FOR_BUILD;
 
     public function __construct($params){
         $this->READY_FOR_BUILD = $this->verify($params);
@@ -24,7 +25,7 @@ class Order_parser{
     // ----------------------------------------
     //   BUILDING ORDER STRING (FOR TELEGRAM)
     // ----------------------------------------
-    public function build_tg_txt(): string{
+    public function build_tg_txt(): Order_parser{
         if (!$this->READY_FOR_BUILD) throw new Exception("--not found the order params"); 
 
         $time_format = 24;
@@ -82,8 +83,12 @@ class Order_parser{
             $separator = $count < count($this->order_items) ?"---------\n":"--------- //\n";
             $order_txt .= $separator;
         }
+        $this->order_txt = $order_txt;
+        return $this;
+    }
 
-        return $order_txt;
+    public function get(): string{
+        return $this->order_txt;
     }
 
     private function verify($params): bool{
