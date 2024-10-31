@@ -120,37 +120,46 @@ export const IIKO_ITEM_MODIFIERS = {
 			build_group:(g)=>{			
 
 				if(!g.items || !g.items.length) return null;							
-
-				let $m_group_wrapper = $('<div class="modif-group-wrapper"></div>')
-				let $m_list_group = $('<ul></ul>');				
+				
 				let groupId = g['modifierGroupId']??"";
 				let groupName = g['name']??"–";				
 				let radioMode = false;
 				if(g['restrictions']){					
-					radioMode = g['restrictions']['maxQuantity']==1 && g['restrictions']['minQuantity'] == 1;
+					radioMode = g['restrictions']['maxQuantity']==1 
+					&& g['restrictions']['minQuantity'] == 1;
 				}
-				for(let m in g.items ){
+				let params = `data-group-id="${groupId}" data-group-name="${groupName}" data-radio-mode="${radioMode}"`;
+				let strGroupName=`<div class="modifiers-group-name">${groupName}</div>`;
+				let $m_group_wrapper = $(`<div class="modif-group-wrapper" ${params}>${strGroupName}</div>`);
+				
+				let $m_list_group = $('<ul></ul>');				
+				const type_radio = radioMode?'type-radio':'';
+				const mode_radio = radioMode?'mode-radio':'';
+				let byDefault = g['restrictions']['byDefault'] || 0;
+				byDefault = parseInt(byDefault,10);
+				let m_counter = 0; 
+				for(let m in g.items ){					
+					let modifier = g.items[m];
+					const chosen = m_counter===byDefault ? 'chosen' : '';
 					$m_list_group.append([
-						`<li class="btn-modifier" data-group-id="${groupId}" data-group-name="${groupName}" data-radioMode="${radioMode}">`,
-							`<div class="m-check"><span></span></div>`,
-							`<div class="m-title">${g.items[m].name}</div>`,
-							`<div class="m-price">${g.items[m].price} руб.</div>`,
+						`<li class="btn-modifier ${mode_radio} ${chosen}" data-modifier-id="${modifier.modifierId}">`,
+							`<div class="m-check ${type_radio}"><span></span></div>`,
+							`<div class="m-title">${modifier.name}</div>`,
+							`<div class="m-price">+ ${modifier.price} руб.</div>`,
 						`</li>`
 						].join(''));
-				}
+					m_counter++;
+				}				
 				$m_group_wrapper.append($m_list_group);
 				return $m_group_wrapper;
 			}
 		};
 
 		const $m_list_all = $('<div class="all-modifs-wrapper"></div>');
-		for(let i=0;i<arr.length;i++){			
-			for(let g in arr){				
-				const $group = fn.build_group(arr[g]);				
-				$group && $m_list_all.append($group);
-			}
+		for(let i=0;i<arr.length;i++){
+			const $group = fn.build_group(arr[i]);
+			$group && $m_list_all.prepend($group);
 		}
-
 		this.$MODIFIERS_ROWS = $m_list_all.find('li');
 		this.UI = $m_list_all;		
 	},

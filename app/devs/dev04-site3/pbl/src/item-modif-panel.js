@@ -62,12 +62,23 @@ export var ITEM_MODIF_PANEL = {
 		this.$item.addClass(this.CLASS_SHOWED_MODIFIERS);		
 		this.opt && this.opt.on_open && this.opt.on_open();
 	},
-	insert:function($modifiers_list){		
+	insert:function($modifiers_list){					
+		const fn = {
+			toggleCheckbox:($el)=>{
+				$el.toggleClass('chosen');
+			},
+			toggleRadioButton:($el)=>{				
+				$el.siblings().removeClass('chosen');
+				$el.addClass('chosen');				
+			}			
+		}
 		this.$modif_panel_list.append($modifiers_list);		
 		this.$modif_rows = $modifiers_list.find('.btn-modifier');
 		this.$modif_rows.on('touchend click',(e)=>{
-			if(!this.MODIF_SCROLLED){				
-				$(e.currentTarget).toggleClass('chosen');
+			if(!this.MODIF_SCROLLED){
+				const $el = $(e.currentTarget);
+				const radio  = $el.hasClass('mode-radio');
+				radio ? fn.toggleRadioButton($el) : fn.toggleCheckbox($el);
 				this.on_press_modif && this.on_press_modif();
 			};				
 			e.originalEvent.cancelable && e.preventDefault();
@@ -91,7 +102,10 @@ export var ITEM_MODIF_PANEL = {
 		return arr;
 	},
 	reset:function(){
-		this.$modif_rows && this.$modif_rows.removeClass('chosen');
+		if(this.$modif_rows){
+			// this.$modif_rows.removeClass('chosen')
+		}
+		// this.$modif_rows && this.$modif_rows.removeClass('chosen');
 	},
 	on_press_modif:function(foo){
 		this.on_press_modif = foo;
