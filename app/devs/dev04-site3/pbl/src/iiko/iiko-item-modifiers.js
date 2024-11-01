@@ -12,19 +12,16 @@ export const IIKO_ITEM_MODIFIERS = {
 		this.arr_usr_chosen = [];
 		this.total_modif_price = 0;
 		
-		//TODO ... update for chefsmenu 
+		this.MODIF_SCROLLED = false;
+
+		
 		this.HAS_GROUPS_MODE = true;
 		
-		if(this.HAS_GROUPS_MODE){
-			// for IIKO
-			this._collect_with_groups();
-			this._build_list_ui_with_groups();
-		}else{
-			// for CHEFSMENU
-			this._collect();
-			this._build_list_ui();			
-		}		
+		this.$m_list_all = $('<div class="all-modifs-list"></div>');
 
+		this._collect_with_groups();
+		this._build_list_ui_with_groups();		
+		this.behavior();
 		return this;
 	},
 
@@ -38,9 +35,10 @@ export const IIKO_ITEM_MODIFIERS = {
 		}
 	},
 
+	// REQUIRED PUBLIC METHODS
 	// @return jQueryElement (list of modifiers)	
 	get_ui:function(){
-		return this.UI;
+		return this.$m_list_all;
 	},
 
 	// @return number
@@ -53,21 +51,41 @@ export const IIKO_ITEM_MODIFIERS = {
 		return this.arr_usr_chosen;
 	},
 
+	reset:function(){
+		const $rows = this.$MODIFIERS_ROWS;
+		$rows && $rows.length && $rows.each((i, el)=>{
+			if(!$(el).hasClass('chosen-by-default')){
+				$(el).removeClass('chosen');
+			}else{
+				$(el).addClass('chosen');
+			}
+		})
+	},
+
 	// @return { 
 	//   arr_usr_chosen: array; 
 	//   total_modif_price: integer;
 	// }
-	recalc:function() {	
-		if(this.HAS_GROUPS_MODE){
-			return this._do_recalc_with_groups();
-		}else{
-			return this._do_recalc();
-		}
+	recalc:function() {		
+		return this._do_recalc_with_groups();
+	},
+
+	on_change:function(foo){
+		this.on_change = foo;
 	},
 
 	// ----------
 	//  private	
 	// ----------
+
+	behavior:function(){
+		this.$m_list_all.on("touchstart",(e)=>{
+			this.MODIF_SCROLLED = false;
+		});
+		this.$m_list_all.on("touchmove",(e)=> {
+			this.MODIF_SCROLLED = true;
+		});	
+	},
 
 	// @return { 
 	//   arr_usr_chosen: array; 
@@ -104,13 +122,36 @@ export const IIKO_ITEM_MODIFIERS = {
 	//   total_modif_price: integer;
 	// }	
 	_do_recalc_with_groups:function(){
+		let total_modif_price = 0;
+		const arr_usr_chosen = [];		
+		
+		console.log('-------- get = ',this.get());
+		console.log('-------- this.$MODIFIERS_ROWS = ', this.$MODIFIERS_ROWS);
+
+		const fn = {
+			calc_price:()=>{
+				const arr = [];
+				if(!this.get() || !this.$MODIFIERS_ROWS.length){return};
+				this.$MODIFIERS_ROWS.each((i,el)=>{
+					if($(el).hasClass('chosen')){
+
+					}
+				})
+			}
+		}
+
+		fn.calc_price();
+	
+
+		this.arr_usr_chosen = arr_usr_chosen;	
+		this.total_modif_price = parseInt(total_modif_price,10);	
 		return {
-			arr_usr_chosen:[],
-			total_modif_price:0,
-		}		
+			arr_usr_chosen:this.arr_usr_chosen,
+			total_modif_price:this.total_modif_price,
+		}
 	},	
 
-	// @return jQueryObject
+	// @return void
 	_build_list_ui_with_groups:function(){
 		let arr = this.get();
 		console.log('arr = ', arr);
@@ -136,13 +177,15 @@ export const IIKO_ITEM_MODIFIERS = {
 				const type_radio = radioMode?'type-radio':'';
 				const mode_radio = radioMode?'mode-radio':'';
 				let byDefault = g['restrictions']['byDefault'] || 0;
-				byDefault = parseInt(byDefault,10);
+				byDefault = parseInt(byDefault,10);				
 				let m_counter = 0; 
 				for(let m in g.items ){					
 					let modifier = g.items[m];
-					const chosen = m_counter===byDefault ? 'chosen' : '';
+					let chosen = '';
+					let chosenByDefault = ''
+					if(radioMode && m_counter===byDefault){  chosen = 'chosen'; chosenByDefault = 'chosen-by-default'}
 					$m_list_group.append([
-						`<li class="btn-modifier ${mode_radio} ${chosen}" data-modifier-id="${modifier.modifierId}">`,
+						`<li class="btn-modifier ${mode_radio} ${chosen} ${chosenByDefault}" data-modifier-id="${modifier.modifierId}">`,
 							`<div class="m-check ${type_radio}"><span></span></div>`,
 							`<div class="m-title">${modifier.name}</div>`,
 							`<div class="m-price">+ ${modifier.price} руб.</div>`,
@@ -152,39 +195,40 @@ export const IIKO_ITEM_MODIFIERS = {
 				}				
 				$m_group_wrapper.append($m_list_group);
 				return $m_group_wrapper;
-			}
+			},
+			behaviors:($rows)=>{
+				const fn = {
+					toggleCheckbox:($el)=>{
+						$el.toggleClass('chosen');
+					},
+					toggleRadioButton:($el)=>{				
+						$el.siblings().removeClass('chosen');
+						$el.addClass('chosen');				
+					}			
+				};
+						
+				$rows.on('touchend click',(e)=>{
+					if(!this.MODIF_SCROLLED){
+						const $el = $(e.currentTarget);
+						const radio  = $el.hasClass('mode-radio');
+						radio ? fn.toggleRadioButton($el) : fn.toggleCheckbox($el);
+						this.on_change && this.on_change();
+					};				
+					e.originalEvent.cancelable && e.preventDefault();
+				});		
+				GLB.MOBILE_BUTTONS.bhv([$rows]);
+			}		
 		};
-
-		const $m_list_all = $('<div class="all-modifs-wrapper"></div>');
+		
 		for(let i=0;i<arr.length;i++){
 			const $group = fn.build_group(arr[i]);
-			$group && $m_list_all.prepend($group);
+			$group && this.$m_list_all.prepend($group);
 		}
-		this.$MODIFIERS_ROWS = $m_list_all.find('li');
-		this.UI = $m_list_all;		
-	},
 
-	// @return jQueryObject
-	_build_list_ui:function(){		
-		const _this=this;
-		let arr = this.get();		
-		if(arr.length){
-			const $m_list = $('<ul></ul>');  
-			for(let m in arr){
-				let m_name = arr[m].name;
-				let m_price = arr[m].price;
-				$m_list.append([
-					'<li class="btn-modifier">',
-						'<div class="m-check"><span></span></div>',
-						'<div class="m-title">'+m_name+'</div>',
-						'<div class="m-price">+'+m_price+' руб.</div>',
-					'</li>'
-					].join(''));								
-			}											
-			this.$MODIFIERS_ROWS = $m_list.find('li');
-			this.UI = $m_list;	
-		}
-	},	
+		this.$MODIFIERS_ROWS = this.$m_list_all.find('li');		
+		fn.behaviors(this.$MODIFIERS_ROWS);
+		
+	},
 
 	// @return void
 	_collect_with_groups:function(){

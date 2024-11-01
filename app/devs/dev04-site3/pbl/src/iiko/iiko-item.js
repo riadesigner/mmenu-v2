@@ -85,15 +85,11 @@ export const IIKO_ITEM = {
 		// BUILDING IIKO MODIFIERS UI
 		this.IIKO_MODIFIERS = $.extend({},IIKO_ITEM_MODIFIERS);	
 		this.IIKO_MODIFIERS.init(this.item_data);
+		this.IIKO_MODIFIERS.on_change(()=>{	this.update_modif_panel_ui(); });		
 
 		// SETUP MODIFIERS PANEL
 		if(this.has_modifiers() && this.MODIF_PANEL){
-			// build ui list of midifiers
-			const $modifiers_list = this.IIKO_MODIFIERS.get_ui();
-			this.MODIF_PANEL.insert($modifiers_list);
-			this.MODIF_PANEL.on_press_modif(()=>{
-				this.update_modifiers_ui();
-			});
+			this.MODIF_PANEL.add(this.IIKO_MODIFIERS);
 			// update behaviors
 			this.MODIF_PANEL.on_pressed_cart(()=>{ 				
 				const preorder = this.get_preorder(this.TOTAL_ADD_TO_CART);
@@ -103,25 +99,18 @@ export const IIKO_ITEM = {
 			});
 			this.MODIF_PANEL.on_pressed_plus(()=>{ 				
 				this.TOTAL_ADD_TO_CART++;
-				this.update_modifiers_ui();
+				this.update_modif_panel_ui();;
 			});
 			this.MODIF_PANEL.on_pressed_minus(()=>{
 				if(this.TOTAL_ADD_TO_CART-1 > 0){
 					this.TOTAL_ADD_TO_CART--;
-					this.update_modifiers_ui();									
+					this.update_modif_panel_ui();;									
 				}else{
 					this.MODIF_PANEL.close();					
 				}
 			});
-			this.update_modifiers_ui();
+			this.update_modif_panel_ui();;
 		}
-	},
-	update_modifiers_ui:function(){
-		const {arr_usr_chosen, total_modif_price} = this.IIKO_MODIFIERS.recalc();
-		const with_options = arr_usr_chosen.length > 0;
-		let price = this.get_price(); 
-		if(with_options){ price += total_modif_price;}				
-		this.MODIF_PANEL.show_price(price, this.TOTAL_ADD_TO_CART);
 	},
 	calc_order_uniq_name:function(prefix){		
 		// if item has sizes more than one
@@ -137,5 +126,12 @@ export const IIKO_ITEM = {
 		}else{			
 			return prefix;
 		}
+	},
+	update_modif_panel_ui(){				
+		const price = this.get_price();
+		const {arr_usr_chosen, total_modif_price} = this.IIKO_MODIFIERS.recalc();
+		const with_options = arr_usr_chosen.length > 0;		
+		if(with_options){ price += total_modif_price;}				
+		this.MODIF_PANEL.show_price(price, this.TOTAL_ADD_TO_CART);		
 	}
 };
