@@ -24,14 +24,15 @@ export const IIKO_ITEM_MODIFIERS = {
 		return this;
 	},
 
-	// @param index: number
+	// @param id: string
+	// @return object|null
+	get_by_id:function(id=null){
+		return id ? this.OBJ_MODIFIERS[id] : null;
+	},
+	
 	// @return array
-	get:function(index=null){
-		if(index!==null){
-			return this.MODIFIERS[index];	
-		}else{
-			return this.MODIFIERS;
-		}
+	get:function(id=null){
+		return this.MODIFIERS;
 	},
 
 	// REQUIRED PUBLIC METHODS
@@ -114,57 +115,29 @@ export const IIKO_ITEM_MODIFIERS = {
 	//   arr_usr_chosen: array; 
 	//   total_modif_price: integer;
 	// }	
-	_do_recalc:function(){
-		let _this = this;		
-		let total_modif_price = 0;
-		let arr_usr_chosen = [];
-			this.get().length 
-			&& this.$MODIFIERS_ROWS 
-			&& this.$MODIFIERS_ROWS.each(function(index){
-			if($(this).hasClass('chosen')){
-				const mod = _this.get(index);
-				const id = mod.modifierId;
-				const price = mod.price;
-				const name = mod.name
-				const modifierGroupId = mod.modifierGroupId;
-				const modifierGroupName = mod.modifierGroupName;								
-				arr_usr_chosen.push({id, name, price, modifierGroupId, modifierGroupName });
-				total_modif_price += parseInt(price,10);
-			}
-		});
-		this.arr_usr_chosen = arr_usr_chosen;
-		this.total_modif_price = parseInt(total_modif_price,10);
-		return {
-			arr_usr_chosen: this.arr_usr_chosen,
-			total_modif_price: this.total_modif_price 
-		};		
-	},
-
-	// @return { 
-	//   arr_usr_chosen: array; 
-	//   total_modif_price: integer;
-	// }	
-	_do_recalc_with_groups:function(){		
-		
-		console.log('-------- get = ',this.get());
-		console.log('-------- this.$MODIFIERS_ROWS = ', this.$MODIFIERS_ROWS);
+	_do_recalc_with_groups:function(){
 
 		const fn = {
 			// @return integer
 			calc_price:()=>{
 				const arr = [];
+				let total_price = 0;
 				if(!this.get() || !this.$MODIFIERS_ROWS.length){return};
 				this.$MODIFIERS_ROWS.each((i,el)=>{
 					if($(el).hasClass('chosen')){
 						const id = $(el).data('modifier-id');
-						// const modif =  
+						const m = this.get_by_id(id);
+						if(m){
+							arr.push(m);
+							total_price += parseInt(m.price, 10);
+						}						 						
 					}
-				})
+				});
+				return [arr, total_price]; 
 			}
 		}
 		
-		const arr_usr_chosen = [];		
-		const total_modif_price = fn.calc_price();	
+		let [arr_usr_chosen, total_modif_price] = fn.calc_price();		
 
 		this.arr_usr_chosen = arr_usr_chosen;	
 		this.total_modif_price = parseInt(total_modif_price,10);	
@@ -176,8 +149,8 @@ export const IIKO_ITEM_MODIFIERS = {
 
 	// @return void
 	_build_list_ui_with_groups:function(){
+		
 		let arr = this.get();
-		console.log('arr = ', arr);
 		if(!arr.length){ return; }
 
 		const fn = {

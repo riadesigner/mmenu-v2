@@ -52,7 +52,7 @@ export const IIKO_ITEM = {
 			chosen_modifiers:chosen_modifiers
 		};			
 		
-		console.log('pre_order',pre_order)
+		// console.log('pre_order',pre_order)
 
 		return pre_order;
 	},
@@ -128,7 +128,7 @@ export const IIKO_ITEM = {
 		}
 	},
 	update_modif_panel_ui(){				
-		const price = this.get_price();
+		let price = this.get_price();
 		const {arr_usr_chosen, total_modif_price} = this.IIKO_MODIFIERS.recalc();
 		const with_options = arr_usr_chosen.length > 0;		
 		if(with_options){ price += total_modif_price;}				
