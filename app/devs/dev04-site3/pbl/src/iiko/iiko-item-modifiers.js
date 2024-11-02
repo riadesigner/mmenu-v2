@@ -8,18 +8,17 @@ import $ from 'jquery';
 export const IIKO_ITEM_MODIFIERS = {
 	init:function(item_data) {
 		this.item_data = item_data;
-		this.ARR_MODIFIERS = [];
+		this.MODIFIERS = [];
+		this.OBJ_MODIFIERS = {};
 		this.arr_usr_chosen = [];
 		this.total_modif_price = 0;
 		
-		this.MODIF_SCROLLED = false;
-
-		
+		this.MODIF_SCROLLED = false;		
 		this.HAS_GROUPS_MODE = true;
 		
 		this.$m_list_all = $('<div class="all-modifs-list"></div>');
 
-		this._collect_with_groups();
+		this._init_modif_with_groups();
 		this._build_list_ui_with_groups();		
 		this.behavior();
 		return this;
@@ -29,9 +28,9 @@ export const IIKO_ITEM_MODIFIERS = {
 	// @return array
 	get:function(index=null){
 		if(index!==null){
-			return this.ARR_MODIFIERS[index];	
+			return this.MODIFIERS[index];	
 		}else{
-			return this.ARR_MODIFIERS;
+			return this.MODIFIERS;
 		}
 	},
 
@@ -87,6 +86,30 @@ export const IIKO_ITEM_MODIFIERS = {
 		});	
 	},
 
+	// @return void
+	_init_modif_with_groups:function(){
+		// the parsed modifier groups
+		this.MODIFIERS = [...this.item_data.iiko_modifiers_parsed];		
+
+		const fn = {
+			make_object:(modifs)=>{
+				const obj = {};
+				for(let g in modifs){
+					let items = modifs[g].items;
+					if(items && items.length){
+						for(let i in items){
+							let m = items[i];
+							obj[m.modifierId] = m;
+						}					
+					}
+				}
+				return obj;
+			}
+		};
+		this.OBJ_MODIFIERS = fn.make_object(this.MODIFIERS);		
+
+	},
+
 	// @return { 
 	//   arr_usr_chosen: array; 
 	//   total_modif_price: integer;
@@ -121,27 +144,27 @@ export const IIKO_ITEM_MODIFIERS = {
 	//   arr_usr_chosen: array; 
 	//   total_modif_price: integer;
 	// }	
-	_do_recalc_with_groups:function(){
-		let total_modif_price = 0;
-		const arr_usr_chosen = [];		
+	_do_recalc_with_groups:function(){		
 		
 		console.log('-------- get = ',this.get());
 		console.log('-------- this.$MODIFIERS_ROWS = ', this.$MODIFIERS_ROWS);
 
 		const fn = {
+			// @return integer
 			calc_price:()=>{
 				const arr = [];
 				if(!this.get() || !this.$MODIFIERS_ROWS.length){return};
 				this.$MODIFIERS_ROWS.each((i,el)=>{
 					if($(el).hasClass('chosen')){
-
+						const id = $(el).data('modifier-id');
+						// const modif =  
 					}
 				})
 			}
 		}
-
-		fn.calc_price();
-	
+		
+		const arr_usr_chosen = [];		
+		const total_modif_price = fn.calc_price();	
 
 		this.arr_usr_chosen = arr_usr_chosen;	
 		this.total_modif_price = parseInt(total_modif_price,10);	
@@ -158,6 +181,8 @@ export const IIKO_ITEM_MODIFIERS = {
 		if(!arr.length){ return; }
 
 		const fn = {
+			// @param g object
+			// @return jQueryObject			
 			build_group:(g)=>{			
 
 				if(!g.items || !g.items.length) return null;							
@@ -221,43 +246,13 @@ export const IIKO_ITEM_MODIFIERS = {
 		};
 		
 		for(let i=0;i<arr.length;i++){
-			const $group = fn.build_group(arr[i]);
-			$group && this.$m_list_all.prepend($group);
+			const $group_el = fn.build_group(arr[i]);
+			$group_el && this.$m_list_all.prepend($group_el);
 		}
 
 		this.$MODIFIERS_ROWS = this.$m_list_all.find('li');		
 		fn.behaviors(this.$MODIFIERS_ROWS);
 		
-	},
-
-	// @return void
-	_collect_with_groups:function(){
-		this.ARR_MODIFIERS = [...this.item_data.iiko_modifiers_parsed];
-	},
-	
-	// @return void	
-	_collect:function(){
-		let modifiers = this.item_data.iiko_modifiers_parsed;				
-		// flatting array of modifiers and their groups,
-		// collecting all modifiers from groups to one list ( one level array)		
-		if(modifiers && modifiers.length){
-			for(let groups in modifiers){
-				let group =  modifiers[groups];
-				let arr_m = group.items;
-				let modifierGroupId = group.modifierGroupId?group.modifierGroupId:"";
-				let modifierGroupName = group.name?group.name:"";
-				// console.log('modifierGroupId,modifierGroupName',modifierGroupId,modifierGroupName)
-				if(arr_m && arr_m.length){
-					for(let m in arr_m){
-						let mod = arr_m[m];
-						// copy modifiersGroup properties 
-						// to every modifiers (if it enables)
-						mod.modifierGroupId = modifierGroupId;
-						mod.modifierGroupName = modifierGroupName;
-						this.ARR_MODIFIERS.push(mod);
-					}
-				}
-			}			
-		};
 	}
+
 };
