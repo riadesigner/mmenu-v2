@@ -50,13 +50,8 @@ export const IIKO_ITEM_SIZER = {
 					const sizeCode = s.sizeCode || ""; // не используется ?
 					const sizeName = s.sizeName || "";
 					const volume = s.portionWeightGrams || 0;					
-					const unitTypes = {
-						'MILLILITER':'мл',
-						'KILOGRAM':'кг',
-						'LITER':'л',
-						'GRAM':'г',
-					};			
-					const units =  unitTypes[s.measureUnitType] || '' ;					
+		
+					const units = foo.units_to_strings(s.measureUnitType);					
 
 					$btn.html(`${sizeName}<br>${volume} ${units}`);
 
@@ -71,7 +66,18 @@ export const IIKO_ITEM_SIZER = {
 					$btns.append($btn);
 
 				};							
-			}
+			},
+			// @pram unit_type_name string
+			// @return string
+			units_to_strings:(unit_type_name)=>{
+				const unitTypes = {
+					'MILLILITER':'мл',
+					'KILOGRAM':'кг',
+					'LITER':'л',
+					'GRAM':'г',
+				};	
+				return unitTypes[unit_type_name] || '';
+			}			
 		};
 
 		this.$arr_btns = {
@@ -83,14 +89,15 @@ export const IIKO_ITEM_SIZER = {
 			if(sizes.length>1){								
 				foo.create_btns(this.$arr_btns['mobile']);
 				foo.create_btns(this.$arr_btns['desktop']);
-			}else{				
-				const s = sizes[0];
+			}else{								
+				const s = sizes[0];				
 				const price = s.price;			
 				const sizeName = "";
-				const volume = "";
-				const units = "";
+				const volume = s.portionWeightGrams;
+				const units = foo.units_to_strings(s.measureUnitType);
 				const sizeId = "";
 				const sizeCode = "";
+				
 				this.set_current_vars({price, sizeName, volume, units, sizeId, sizeCode});
 			};
 		}else{
