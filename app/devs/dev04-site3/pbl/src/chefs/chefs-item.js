@@ -1,6 +1,7 @@
 import {GLB} from '../glb.js';
-import $ from 'jquery';
+// import $ from 'jquery';
 import {CHEFS_ITEM_SIZER} from './chefs-item-sizer.js';
+
 
 /**
  * @param item_data: Object

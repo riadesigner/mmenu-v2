@@ -1,5 +1,5 @@
 import {GLB} from '../glb.js';
-import $ from 'jquery';
+// import $ from 'jquery';
 
 export var CHEFS_ITEM_SIZER = {
 	init:function(item,opt) {

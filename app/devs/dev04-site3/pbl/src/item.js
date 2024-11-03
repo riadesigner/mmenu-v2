@@ -56,7 +56,7 @@ export var ITEM = {
 		this.$item_btns_sizes_wrapper_mobile = this.$item.find(this._CN+"item-btns-sizes-mobile");		
 		this.$item_btns_sizes_wrapper_desktop = this.$item.find(this._CN+"item-btns-sizes-desktop");
 
-		// UNIVERSAL MODIFIERS PANEL (ONLY FOR IIKO_MODE NOW)		
+		// UNIVERSAL MODIFIERS PANEL (ONLY FOR IIKO_MODE UNTIL NOW)		
 		this.MODIF_PANEL = $.extend({},ITEM_MODIF_PANEL);
 		this.MODIF_PANEL.init(this.$item, {
 			on_open:()=>{this.objParent.hide_bhv_btns(true);},
@@ -65,12 +65,14 @@ export var ITEM = {
 
 		this.behavior();
 
-		this.$elParent.append(this.$item);		
+		this.$elParent.append(this.$item);	
+		
+		this.IIKO_MODE = GLB.CAFE.is_iiko_mode();		
 
-		if(this.item_data.created_by=="iiko"){
-			this.init_iiko_item();									
+		if(this.IIKO_MODE){
+			this.init_model_item(IIKO_ITEM);									
 		}else{
-			this.init_chefs_item();
+			this.init_model_item(CHEFS_ITEM);
 		}
 
 		this.insert_data();
@@ -92,36 +94,13 @@ export var ITEM = {
 	},
 	get_element:function() {
 		return this.$item;
-	},
-	init_chefs_item:function(){
-		
-		// INIT CHEFS ITEM
-		this.CHEFS_ITEM = $.extend({},CHEFS_ITEM);	
-		this.CHEFS_ITEM.init(this.item_data, {
-			modifiers_panel:false,
-			on_update_size:(vars)=>{
-				this.update_price_and_volume(vars);
-			},
-			on_update_total_in_cart:(total_in_cart)=>{
-				this.update_cart_btn(total_in_cart);
-				this.play_smile_animation();
-			}						
-		});
-
-		// BUILD UI SIZE BUTTONS
-		if(this.CHEFS_ITEM.has_sizes()){
-			const [$btns_mobiles,$btns_desktop] = this.CHEFS_ITEM.get_ui_price_buttons();		
-			this.$item.addClass('item-sized');
-			this.$item_btns_sizes_wrapper_mobile.prepend($btns_mobiles);	
-			this.$item_btns_sizes_wrapper_desktop.prepend($btns_desktop);	
-		}
-
 	},	
-	init_iiko_item:function(){
-		
-		// INIT IIKO ITEM
-		this.IIKO_ITEM = $.extend({},IIKO_ITEM);	
-		this.IIKO_ITEM.init(this.item_data, {
+	// @param model object (CHEFS_ITEM|IIKO_ITEM)
+	init_model_item:function(model){
+
+		// INITIATION MODEL FOR ITEM
+		this.MODEL_ITEM = $.extend({},model);	
+		this.MODEL_ITEM.init(this.item_data, {
 			modifiers_panel:this.MODIF_PANEL,
 			on_update_size:(vars)=>{
 				this.update_price_and_volume(vars);
@@ -133,47 +112,29 @@ export var ITEM = {
 		});
 
 		// BUILD UI SIZE BUTTONS
-		if(this.IIKO_ITEM.has_sizes()){
-			const [$btns_mobiles,$btns_desktop] = this.IIKO_ITEM.get_ui_price_buttons();		
+		if(this.MODEL_ITEM.has_sizes()){
+			const [$btns_mobiles,$btns_desktop] = this.MODEL_ITEM.get_ui_price_buttons();		
 			this.$item.addClass('item-sized');
 			this.$item_btns_sizes_wrapper_mobile.prepend($btns_mobiles);	
 			this.$item_btns_sizes_wrapper_desktop.prepend($btns_desktop);	
 		}
 
 	},
-	add_item_to_cart:function() {						
-		const IIKO_MODE = GLB.CAFE.is_iiko_mode();		
-		const item_data = this.get(); // Object
-		const menu = this.objParent.get_menu_data();				
+	add_item_to_cart:function() {		
 
-		if(GLB.CART){		
-			// ----------------
-			//  IIKO MODE MENU
-			// ----------------		
-			if(IIKO_MODE && this.IIKO_ITEM){
-
-				if(this.IIKO_ITEM.has_modifiers()){
-					// SHOW MODAL WINDOW WITH MODIFIERS OPTIONS		
-					this.MODIF_PANEL.reset();
-					this.MODIF_PANEL.show_price(this.IIKO_ITEM.get_price(), 1);
-					this.MODIF_PANEL.open();
-				}else{
-					// JUST ADDING TO CART THE ONE
-					const preorder = this.IIKO_ITEM.get_preorder(1);
-					let total_in_cart = GLB.CART.add_preorder(preorder);
-					this.update_cart_btn(total_in_cart);	
-					this.play_smile_animation();	
-				}			
-			}else{		
-			// --------------------	
-			// CHEFSMENU MODE MENU
-			// --------------------
-			const preorder = this.CHEFS_ITEM.get_preorder(1);				
-				let total_in_cart = GLB.CART.add_preorder(preorder);
-				this.update_cart_btn(total_in_cart);
-				this.play_smile_animation();
-			}
+		if(this.MODEL_ITEM.has_modifiers()){
+			// SHOW MODAL WINDOW WITH MODIFIERS OPTIONS		
+			this.MODIF_PANEL.reset();
+			this.MODIF_PANEL.show_price(this.MODEL_ITEM.get_price(), 1);
+			this.MODIF_PANEL.open();
+		}else{
+			// JUST ADDING TO CART THE ONE
+			const preorder = this.MODEL_ITEM.get_preorder(1);
+			let total_in_cart = GLB.CART.add_preorder(preorder);
+			this.update_cart_btn(total_in_cart);	
+			this.play_smile_animation();	
 		}
+
 	},
 	play_smile_animation:function() {
 		this.$item.removeClass(this.CLASS_PLAY_ADDTOCART);				
@@ -181,9 +142,6 @@ export var ITEM = {
 	},
 
 	insert_data:function() {
-		var _this=this;
-		
-		const IIKO_MODE = GLB.CAFE.get().iiko_api_key!=="";
 
 		var item = this.item_data;
 		this.$item.attr({id:item.id});
@@ -218,12 +176,7 @@ export var ITEM = {
 		this.$item.find(this._CN+"item-title").html(item.title);
 		this.$item.find(this._CN+"item-about").html(item.description);
 		
-		if(IIKO_MODE){
-			this.update_price_and_volume(this.IIKO_ITEM.sizer_get_vars());
-		}else{			
-			this.update_price_and_volume(this.CHEFS_ITEM.sizer_get_vars());
-		}
-
+		this.update_price_and_volume(this.MODEL_ITEM.sizer_get_vars());
 		this.update_item_data_container();		
 
 	},

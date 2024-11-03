@@ -1,5 +1,5 @@
 import {GLB} from '../glb.js';
-import $ from 'jquery';
+// import $ from 'jquery';
 
 export const CHEFS_ORDER_SENDER = {
     send_async:function(order,pickupself) {

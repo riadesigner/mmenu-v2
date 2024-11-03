@@ -1,5 +1,5 @@
 import {GLB} from '../glb.js';
-import $ from 'jquery';
+// import $ from 'jquery';
 
 export const IIKO_ITEM_SIZER = {
 	init:function(item,opt) {

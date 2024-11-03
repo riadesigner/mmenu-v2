@@ -1,5 +1,5 @@
 import {GLB} from '../glb.js';
-import $ from 'jquery';
+// import $ from 'jquery';
 import {IIKO_ITEM_SIZER} from './iiko-item-sizer.js';
 import {IIKO_ITEM_MODIFIERS} from './iiko-item-modifiers.js';
 

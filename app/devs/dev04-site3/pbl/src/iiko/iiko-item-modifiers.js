@@ -1,5 +1,5 @@
 import {GLB} from '../glb.js';
-import $ from 'jquery';
+// import $ from 'jquery';
 
 /**
  * @param item_data: Object
