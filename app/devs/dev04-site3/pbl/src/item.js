@@ -53,8 +53,8 @@ export var ITEM = {
 		this.$item_price = this.$item.find(this._CN+"item-price span");
 		this.$item_volume = this.$item.find(this._CN+"item-volume");
 		this.$item_volume2 = this.$item.find(this._CN+"item-volume2");				
-		this.$iiko_btns_sizes_wrapper_mobile = this.$item.find(this._CN+"item-btns-sizes-mobile");		
-		this.$iiko_btns_sizes_wrapper_desktop = this.$item.find(this._CN+"item-btns-sizes-desktop");
+		this.$item_btns_sizes_wrapper_mobile = this.$item.find(this._CN+"item-btns-sizes-mobile");		
+		this.$item_btns_sizes_wrapper_desktop = this.$item.find(this._CN+"item-btns-sizes-desktop");
 
 		// UNIVERSAL MODIFIERS PANEL (ONLY FOR IIKO_MODE NOW)		
 		this.MODIF_PANEL = $.extend({},ITEM_MODIF_PANEL);
@@ -112,8 +112,8 @@ export var ITEM = {
 		if(this.CHEFS_ITEM.has_sizes()){
 			const [$btns_mobiles,$btns_desktop] = this.CHEFS_ITEM.get_ui_price_buttons();		
 			this.$item.addClass('item-sized');
-			this.$iiko_btns_sizes_wrapper_mobile.prepend($btns_mobiles);	
-			this.$iiko_btns_sizes_wrapper_desktop.prepend($btns_desktop);	
+			this.$item_btns_sizes_wrapper_mobile.prepend($btns_mobiles);	
+			this.$item_btns_sizes_wrapper_desktop.prepend($btns_desktop);	
 		}
 
 	},	
@@ -136,8 +136,8 @@ export var ITEM = {
 		if(this.IIKO_ITEM.has_sizes()){
 			const [$btns_mobiles,$btns_desktop] = this.IIKO_ITEM.get_ui_price_buttons();		
 			this.$item.addClass('item-sized');
-			this.$iiko_btns_sizes_wrapper_mobile.prepend($btns_mobiles);	
-			this.$iiko_btns_sizes_wrapper_desktop.prepend($btns_desktop);	
+			this.$item_btns_sizes_wrapper_mobile.prepend($btns_mobiles);	
+			this.$item_btns_sizes_wrapper_desktop.prepend($btns_desktop);	
 		}
 
 	},
@@ -237,8 +237,7 @@ export var ITEM = {
 	},
 	update_price_and_volume:function(vars) {			
 		var currency_symbol = GLB.CAFE.get('cafe_currency').symbol;
-		this.$item_price.html(vars.price + " " + currency_symbol);
-		console.log('vars --------', vars)
+		this.$item_price.html(vars.price + " " + currency_symbol);		
 		const str_volume = `${vars.sizeName}<br>${vars.volume} ${vars.units}`;
 		this.$item_volume.html(str_volume);						
 		this.$item_volume2.html(str_volume);
@@ -277,7 +276,7 @@ export var ITEM = {
 		var offsetSizeBtns = this.calc_offset_size_btns(offset);
 		this.$descr.scrollTop(0);
 		this.$itemDataContainer.css({ transform:"translate("+offset.left+"px,"+offset.top+"px)"});
-		this.$iiko_btns_sizes_wrapper_mobile.css({ transform:"translate(0, "+offsetSizeBtns.posY+"px)"});
+		this.$item_btns_sizes_wrapper_mobile.css({ transform:"translate(0, "+offsetSizeBtns.posY+"px)"});
 	},
 	image_now_loading:function() {
 		this.$item.addClass("mm2-image-loading");
