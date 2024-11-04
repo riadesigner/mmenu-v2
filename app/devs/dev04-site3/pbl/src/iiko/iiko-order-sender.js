@@ -1,7 +1,6 @@
 import {GLB} from '../glb.js';
-import $ from 'jquery';
 
-export var IIKO_ORDER_SENDER = {
+export const IIKO_ORDER_SENDER = {
     send_async:function(order,pickupself) {
         // ORDER FOR DELIVERY OR PICKUPSELF
         return new Promise((res,rej)=>{
@@ -16,13 +15,12 @@ export var IIKO_ORDER_SENDER = {
                 pickupself
             };
 
-            console.log("data",data)
-
             const AJAX = $.ajax({
                 url: url+"?callback=?",
-                data:data,
+                jsonpCallback:GLB.CALLBACK_RANDOM.get(),                
                 dataType: "jsonp",
                 method:"POST",
+                data:data,
                 error:(result)=> {
                     rej(result);
                 }

@@ -1,5 +1,4 @@
 import {GLB} from '../glb.js';
-// import $ from 'jquery';
 
 export const IIKO_ITEM_SIZER = {
 	init:function(item,opt) {
@@ -16,9 +15,7 @@ export const IIKO_ITEM_SIZER = {
 			price:0,
 			sizeName:""	,
 			volume:"",
-			units:"",			
-			sizeId:"",
-			sizeCode:""
+			units:""
 		};
 	},
 	get_ui:function() {
@@ -45,9 +42,7 @@ export const IIKO_ITEM_SIZER = {
 					const s = sizes[i];					
 					const currentClass = s.isDefault=='true'? " active":"";
 					const $btn = $('<div></div>',{class: this.CN+"item-size-btn "+currentClass});
-					const price = s.price || 0;															
-					const sizeId = s.sizeId || ""; // не используется ?
-					const sizeCode = s.sizeCode || ""; // не используется ?
+					const price = s.price || 0;
 					const sizeName = s.sizeName || "";
 					const volume = s.portionWeightGrams || 0;					
 		
@@ -57,12 +52,12 @@ export const IIKO_ITEM_SIZER = {
 
 					(function($btn, index, price, sizeName) {
 						$btn.on('touchend click',function(e){														
-							_this.change_current_size({$btn, index, price, sizeName, volume, units, sizeId, sizeCode});
+							_this.change_current_size({$btn, index, price, sizeName, volume, units});
 							e.originalEvent.cancelable && e.preventDefault();
 						});
-					})($btn, i, price, sizeName, volume, units, sizeId, sizeCode);
+					})($btn, i, price, sizeName, volume, units);
 				
-					s.isDefault=='true' && this.set_current_vars({price, sizeName, volume, units, sizeId, sizeCode});							
+					s.isDefault=='true' && this.set_current_vars({price, sizeName, volume, units});							
 					$btns.append($btn);
 
 				};							
@@ -92,17 +87,13 @@ export const IIKO_ITEM_SIZER = {
 			}else{								
 				const s = sizes[0];				
 				const price = s.price;			
-				const sizeName = "";
+				const sizeName = s.sizeName;
 				const volume = s.portionWeightGrams;
-				const units = foo.units_to_strings(s.measureUnitType);
-				const sizeId = "";
-				const sizeCode = "";
-				
-				this.set_current_vars({price, sizeName, volume, units, sizeId, sizeCode});
+				const units = foo.units_to_strings(s.measureUnitType);				
+				this.set_current_vars({price, sizeName, volume, units});
 			};
 		}else{
 			this.reset();
-			console.log("something wrong with iiko sizes",this.ITEM_DATA.id);
 		}
 	
 	},

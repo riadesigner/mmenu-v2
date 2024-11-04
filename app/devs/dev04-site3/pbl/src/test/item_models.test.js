@@ -19,9 +19,9 @@ describe('ITEM MODELS HAS THE PUBLIC METHODS', ()=>{
         }
       });
     test('CHEFS_ITEM has the public methods', () => {
-    for(let i in methods){
-        expect(CHEFS_ITEM).toHaveProperty(methods[i]);    
-    }
+        for(let i in methods){
+            expect(CHEFS_ITEM).toHaveProperty(methods[i]);    
+        }
     });      
 
 });

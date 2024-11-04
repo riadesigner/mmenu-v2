@@ -1,5 +1,4 @@
 import {GLB} from '../glb.js';
-// import $ from 'jquery';
 
 export var CHEFS_ITEM_SIZER = {
 	init:function(item,opt) {
@@ -14,13 +13,15 @@ export var CHEFS_ITEM_SIZER = {
 	reset:function() {
 		this.VARS = {
 			price:0,
-			sizeName:""
-		};		
+			sizeName:"",
+			volume:"",
+			units:""			
+		};
 	},
 	get_ui:function() {
 		return [this.$arr_btns['mobile'],this.$arr_btns['desktop']];		
 	},
-	get:function() {		
+	get:function() {
 		return this.VARS;
 	},
 	get_all:function(){
@@ -47,14 +48,14 @@ export var CHEFS_ITEM_SIZER = {
 					const sizeName = `${volume} ${units}`;
 					$btn.html(sizeName);
 
-					(function($btn, index, price, sizeName) {
+					(function($btn, index, price, sizeName, volume, units) {
 						$btn.on('touchend click',function(e){														
-							_this.change_current_size({$btn, index, price, sizeName});							
+							_this.change_current_size({$btn, index, price, sizeName, volume, units});							
 							e.originalEvent.cancelable && e.preventDefault();
 						});
-					})($btn, i, price, sizeName);
+					})($btn, i, price, sizeName, volume, units);
 				
-					i==0 && this.set_current_vars({price, sizeName});							
+					i==0 && this.set_current_vars({price, sizeName, volume, units});							
 					$btns.append($btn);
 
 				};							
@@ -71,12 +72,12 @@ export var CHEFS_ITEM_SIZER = {
 				foo.create_btns(this.$arr_btns['mobile']);
 				foo.create_btns(this.$arr_btns['desktop']);
 			}else{				
-				var s = sizes[0];
-				let price = s.price;			
-				let volume = s.volume;		
-				let units = s.units;
-				var sizeName = `${volume} ${units}`;
-				this.set_current_vars({price, sizeName});
+				const s = sizes[0];
+				const price = s.price;
+				const sizeName = `${volume} ${units}`;			
+				const volume = s.volume;		
+				const units = s.units;				
+				this.set_current_vars({price, sizeName, volume, units});
 			};
 		}else{
 			this.reset();			

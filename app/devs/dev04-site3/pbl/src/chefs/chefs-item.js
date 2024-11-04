@@ -1,5 +1,4 @@
 import {GLB} from '../glb.js';
-// import $ from 'jquery';
 import {CHEFS_ITEM_SIZER} from './chefs-item-sizer.js';
 
 
@@ -46,7 +45,11 @@ export const CHEFS_ITEM = {
 			uniq_name: uniq_name,
 			price: total_price,
 			count: count,			
-			item_data: this.item_data,			
+			
+			volume: s.volume,
+			units: s.units,
+			item_data: this.item_data,	
+
 			sizeName: s.sizeName,
 			chosen_modifiers:""
 		};			

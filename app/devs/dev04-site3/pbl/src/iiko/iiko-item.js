@@ -1,5 +1,4 @@
 import {GLB} from '../glb.js';
-// import $ from 'jquery';
 import {IIKO_ITEM_SIZER} from './iiko-item-sizer.js';
 import {IIKO_ITEM_MODIFIERS} from './iiko-item-modifiers.js';
 
@@ -43,12 +42,15 @@ export const IIKO_ITEM = {
 			uniq_name: uniq_name,
 			price: total_price,
 			count: count,
+
 			volume: s.volume,
 			units: s.units,
 			item_data: this.item_data,			
+			
 			sizeName: s.sizeName,
-			sizeId: s.sizeId,
-			sizeCode: s.sizeCode,			
+			sizeId: s.sizeId||'',
+			sizeCode: s.sizeCode||'',
+
 			chosen_modifiers:chosen_modifiers
 		};			
 		
