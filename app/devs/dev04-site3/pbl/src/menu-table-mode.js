@@ -61,11 +61,11 @@ export var MENU_TABLE_MODE = {
     is_table_mode:function() {
         return this.ORDER_TO_TABLE_MODE;
     },
-    behavior:function() {
-        this.btnTableNumber.on("touchend",(e)=>{            
-            GLB.VIEW_TABLE_CHANGE.update(this.TABLE_NUMBER);                                
-            GLB.UVIEWS.set_current("view-table-change");            
-        });
+    behavior:function() {        
+        // this.btnTableNumber.on("touchend",(e)=>{            
+        //     GLB.VIEW_TABLE_CHANGE.update(this.TABLE_NUMBER);                                
+        //     GLB.UVIEWS.set_current("view-table-change");            
+        // });
     }
  
 };

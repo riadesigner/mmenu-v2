@@ -1,0 +1,12 @@
+CREATE USER IF NOT EXISTS root@localhost IDENTIFIED BY 'pass1';
+SET PASSWORD FOR root@localhost = PASSWORD('pass1');
+GRANT ALL ON *.* TO root@localhost WITH GRANT OPTION;
+GRANT PROXY ON ''@'%' ON root@localhost WITH GRANT OPTION;
+CREATE USER IF NOT EXISTS root@'%' IDENTIFIED BY 'pass1';
+SET PASSWORD FOR root@'%' = PASSWORD('pass1');
+GRANT ALL ON *.* TO root@'%' WITH GRANT OPTION;
+GRANT PROXY ON ''@'%' ON root@'%' WITH GRANT OPTION;
+CREATE USER IF NOT EXISTS webuser@'%' IDENTIFIED BY 'pass2';
+SET PASSWORD FOR webuser@'%' = PASSWORD('pass2');
+CREATE DATABASE IF NOT EXISTS databasename;
+GRANT ALL ON databasename.* TO webuser@'%';
