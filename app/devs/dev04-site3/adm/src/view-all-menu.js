@@ -116,18 +116,21 @@ export var VIEW_ALL_MENU = {
 		});
 
 	},
-	do_reload_iiko_menu:function(){		
-
-		const cafe = GLB.THE_CAFE.get();
-
-		let iiko_extmenus = cafe.iiko_extmenus;
+	// @return array|bool [ {id: string, name: string }, ... ,] 
+	get_iiko_extmenus_array:function(){		
+		let iiko_extmenus = cafe.iiko_extmenus; // string json
 		iiko_extmenus = iiko_extmenus?JSON.parse(iiko_extmenus):false;
-
-		if(!iiko_extmenus){					
+		return iiko_extmenus;
+	},
+	do_reload_iiko_menu:function(){		
+		
+		// checking if is exist iiko menus
+		if(!this.get_iiko_extmenus_array()){
 			this.error_message();
 			setTimeout(()=>{ this.end_loading(); this._page_show();},200);
 		};
 
+		const cafe = GLB.THE_CAFE.get();
 		const extmenu_id =  GLB.THE_CAFE.get('iiko_current_extmenu_id');
 
 		const Loader = GLB.IIKO_LOADER.init();

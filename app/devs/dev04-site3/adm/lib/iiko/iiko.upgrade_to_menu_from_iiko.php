@@ -40,65 +40,71 @@
 	$rough_menu_hash = post_clean($_POST['rough_menu_hash']);
 	
 
-	// SAVE JSON BACKUP
-	$all_menu = new Smart_collect("menu","where id_cafe = {$id_cafe}", "ORDER BY pos");
-	$all_items = new Smart_collect("items","where id_cafe = {$id_cafe}");
-	$menu_saved = new Smart_object('menu_saved');
-	$menu_saved->id_cafe = $id_cafe;
-	$menu_saved->updated_date = 'now()';
+	// --------------- NO NEEDS SO FAR -----------------------
+	
+	// SAVE JSON BACKUP	
+	// $menu_saved = new Smart_object('menu_saved');
+	// $menu_saved->id_cafe = $id_cafe;
+	// $menu_saved->updated_date = 'now()';
+	// $menu_saved->menu_json = json_encode($all_menu->export(), JSON_UNESCAPED_UNICODE);
 
-
-	// ----------------------
-	// BACKUP MENU INFO
-	// ----------------------
-	$menu_saved->menu_json = json_encode($all_menu->export(), JSON_UNESCAPED_UNICODE);
-
-	// ----------------------
-	// BACKUP ITEMS INFO
-	// ----------------------
-	// protect json from quoters
+	// PROTECT JSON FROM QUOTERS
 	// then, before use, its need to strip slashes
 	// json_decode(stripslashes($item['iiko_modifiers']));	
-	$arr_items_backup = $all_items->export();
-	if(count($arr_items_backup)){
-		foreach($arr_items_backup as $item){
-			if($item['created_by']=="iiko"){				
-				$item['iiko_modifiers'] = str_replace(["'", '"'], ["\'", '\"'], (string) $item['iiko_modifiers']);
-				$item['iiko_sizes'] = str_replace(["'", '"'], ["\'", '\"'], (string) $item['iiko_sizes']);
-			}
-		}
-	}		
-	$menu_saved->items_json =  mysqli_real_escape_string(SQL::get(),json_encode($arr_items_backup, JSON_UNESCAPED_UNICODE));
-
+	// $arr_items_backup = $all_items->export();
+	// if(count($arr_items_backup)){
+	// 	foreach($arr_items_backup as $item){
+	// 		if($item['created_by']=="iiko"){				
+	// 			$item['iiko_modifiers'] = str_replace(["'", '"'], ["\'", '\"'], (string) $item['iiko_modifiers']);
+	// 			$item['iiko_sizes'] = str_replace(["'", '"'], ["\'", '\"'], (string) $item['iiko_sizes']);
+	// 		}
+	// 	}
+	// }		
+	// $menu_saved->items_json =  mysqli_real_escape_string(SQL::get(),json_encode($arr_items_backup, JSON_UNESCAPED_UNICODE));
 	
-	if(!$menu_saved->save()){
-		__errorjsonp("Something wrong. Cant make backup the menu, ".__LINE__);
-	}
+	// if(!$menu_saved->save()){
+	// 	__errorjsonp("Something wrong. Cant make backup the menu, ".__LINE__);
+	// }
 
+
+	// ============================================
+	// COLLECCTING ALL MENUS AND ITEMS FOR THE CAFE
+	// ============================================
+	$all_menu = new Smart_collect("menu","where id_cafe = {$id_cafe}", "ORDER BY pos");
+	$all_items = new Smart_collect("items","where id_cafe = {$id_cafe}");
+	
 	$all_menu_prepared = [];
 	if($all_menu->full()){
-		foreach($all_menu->export() as $menu){
-			$all_menu_prepared[$menu['id_external']] = $menu;
+		foreach($all_menu->export() as $menu){			
+			if(!empty($menu['id_external'])){
+				$all_menu_prepared[$menu['id_external']] = $menu;
+			}			
 		}
 	}
 
 	$all_items_prepared = [];
 	if($all_items->full()){
 		foreach($all_items->export() as $item){
-			$all_items_prepared[$item['id_external']] = $item;
+			if(!empty($item['id_external'])){
+				$all_items_prepared[$item['id_external']] = $item;
+			}
 		}
-	}	
+	}
 
-	// ADD ARCHIVE MENU & PUT IN THE ARCHIVE ALL ITEMS
+	// =======================
+	// ADDING ARCHIVE CATEGORY
+	// =======================
 	$arch_menu = new Smart_object('menu');
 	$arch_menu->id_cafe = $id_cafe;
 	$arch_menu->title = "Архив";	
 	if(!$arch_menu->save())__errorjsonp("Something wrong. Cant add archive menu");
 
-
 	$id_archive	= $arch_menu->id;
 	$items_replaced = 0;
 	
+	// ==============================
+	// REPLACING ALL ITEMS TO ARCHIVE
+	// ==============================
 	$q = "SELECT count(id) as total FROM items WHERE id_cafe={$id_cafe}";              
     $res = SQL::query($q);
     if($res && $res->num_rows){
@@ -114,7 +120,9 @@
     	$items_replaced = $res||0;
     }
 
-    // REMOVING OLD CATEGORIES
+	// =======================
+    // DELETING OLD CATEGORIES	
+	// =======================
     $q = "DELETE FROM menu WHERE id_cafe={$id_cafe} AND id!={$id_archive}";  
     $del = SQL::delete($q);
 
@@ -124,7 +132,9 @@
     $arr_items_to_remove = [];
 
 
-    //ADDING NEW CATEGORIES
+	// =====================
+    // ADDING NEW CATEGORIES
+	// =====================
 	$q = "SELECT MAX(pos) AS pos FROM menu WHERE id_cafe={$id_cafe}";
 	$pos = SQL::first($q);
 	$pos = (int) $pos['pos'];
@@ -141,18 +151,22 @@
 			$menu->title = $cat['name'];
 			$menu->pos = $pos+1;			
 
+			// ====================================
+			// COPY SOME PROPERTIES TO NEW CATEGORY
+			// ====================================
 	    	if(count($all_menu_prepared)){
 	    		if(isset($all_menu_prepared[$id_menu_external])){
 	    			$old_menu = $all_menu_prepared[$id_menu_external];	
 	    			$menu->pos = $old_menu['pos'];
 	    			$menu->title = $old_menu['title'];
-	    			$menu->id_icon = $old_menu['id_icon'];	    			
+	    			$menu->id_icon = $old_menu['id_icon'];   			
 	    		}	    		
 	    	}			
-			
 			if(!$menu->save()) break;
 
-			//ADDING NEW ITEMS		
+			// ================
+			// ADDING NEW ITEMS
+			// ================		
 			$items = $cat['items'];
 			if(count($items)){
 				foreach($items as $iiko_item){					
@@ -188,6 +202,9 @@
 					$new_item->iiko_modifiers = $iiko_modifiers;
 					$new_item->iiko_sizes = $iiko_sizes;
 
+					// ================================
+					// COPY SOME PROPERTIES TO NEW ITEM
+					// ================================					
 			    	if(count($all_items_prepared)){
 			    		if(isset($all_items_prepared[$id_item_external])){
 			    			$old_item = $all_items_prepared[$id_item_external];	
@@ -212,14 +229,18 @@
 	    }    	
     }
 
+	// ===========================================
 	// DELETE ITEMS FROM ARCHIVE IF IT'S DUPLICATE
+	// ===========================================
     if(count($arr_items_to_remove)){
     	$str = implode("','", $arr_items_to_remove);
     	$q = "DELETE FROM items WHERE id_cafe={$id_cafe} AND id_menu={$id_archive} AND id_external IN ('".$str."')";
  		$del = SQL::delete($q);
     }
 
+	// =================================
     // DELETE ARCHIVE MENU IF IT'S EMPTY
+	// =================================
     $remaining_items = new Smart_collect("items","where id_menu = {$id_archive}");
     if($remaining_items){
     	if(!$remaining_items->full()){
