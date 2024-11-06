@@ -1,8 +1,7 @@
 <?php
 define("BASEPATH",__file__);
 
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
+ini_set('display_errors', 0);
               
 require_once 'config.php';
 
