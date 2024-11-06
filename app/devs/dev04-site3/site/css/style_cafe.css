@@ -10,7 +10,7 @@ body{
 * {box-sizing: border-box; -moz-box-sizing: border-box;}
 a{color:#ffffff;}
 .menupage-logo{
-	text-align: center;padding: 15vw 0 0 0;
+	text-align: center;padding: 10vh 0 0 0;
 	font-size: 8vw;
 	text-transform: uppercase;	
 	letter-spacing: 2px;;
