@@ -181,6 +181,9 @@ export var VIEW_CAFE_TABLES_QRCODE = {
             }            
         }; 		
 		let arr_tables = this.get_all_checked_tables();		
+		
+		console.log('arr_tables ==== ', arr_tables);
+
 		if(arr_tables.length>0){			
 			this._now_loading();
 			this.send_qr_codes_to_email_asynq(arr_tables)

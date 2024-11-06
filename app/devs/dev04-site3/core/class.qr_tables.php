@@ -46,14 +46,15 @@ class Qr_tables{
 	*/
 	static public function make_qrcodes( Smart_object $CAFE, array $arr_tables): array{
 		global $CFG; 
-		$arr = [];
+		$arr = [];				
+
 		$tables_uniq_names = $CAFE->tables_uniq_names ? json_decode((string) $CAFE->tables_uniq_names, 1) : [];
 		if($arr_tables && count($arr_tables)){
 			foreach($arr_tables as $table_number){
 				$num = (int) $table_number;
-				if(isset($tables_uniq_names[$num])){
+				if(isset($tables_uniq_names[$num-1])){
 					$table_name = "Стол {$num}";
-					$table_uniq_name = $tables_uniq_names[$num];
+					$table_uniq_name = $tables_uniq_names[$num-1];
 					$link = $CFG->wwwroot."/cafe/".mb_strtolower($CAFE->uniq_name)."/table/".$table_uniq_name;
 					$qr_image = rds_qrcode_create_from($link);
 					$arr[] = [
@@ -65,6 +66,9 @@ class Qr_tables{
 				}
 			}
 		}		
+
+		glog("\$arr=============\n ".print_r ($arr,true));
+
 		return $arr;
 	}
 
