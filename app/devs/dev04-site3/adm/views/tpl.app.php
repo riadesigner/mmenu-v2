@@ -645,12 +645,15 @@ App&&App();
 
 					<div class="iiko-mode-only ">
 						<div class="std-form__title-special-1"><span>Управляется Iiko</span></div>
-						<div class="std-form__title-section iiko-modifiers-title" >Модификаторы:</div>	
-						<div class="iiko-modifiers"><!-- code --></div>
+
 						<div class="std-form__title-section item-volume-title__iiko"><!-- Volume --></div>		
 						<input class="std-form__input item-volume__iiko" type="text" name="item-volume__iiko" maxlength="555">
 						<div class="std-form__title-section item-price-title__iiko"><!-- Price --></div>		
 						<input class="std-form__input item-price__iiko" type="text" name="item-price__iiko" maxlength="555">
+
+						<div class="std-form__title-section iiko-modifiers-title" >Модификаторы:</div>	
+						<div class="iiko-modifiers"><!-- code --></div>						
+						
 						<div class="std-form__title-special-1-footer"></div>
 					</div>					
 							

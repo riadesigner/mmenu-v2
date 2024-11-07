@@ -70,6 +70,8 @@ export var VIEW_EDIT_ITEM = {
 		const MODE_CLASS = GLB.THE_CAFE.is_iiko_mode()?'iiko-mode-only':'chefsmenu-mode-only';
 		this.$view.addClass(MODE_CLASS);
 
+		console.log('=== this.ITEM ====', this.ITEM)
+
 		if(!this.ITEM){	
 
 			// -------------------------------------
@@ -105,82 +107,13 @@ export var VIEW_EDIT_ITEM = {
 					}
 				}
 			};			
-
+			
 			if(GLB.THE_CAFE.is_iiko_mode()){
-				
-				// ---------------------------
-				// IIKO MODE / EDITITING ITEM
-				// ---------------------------				
-
-				// SHOW IIKO MODIFIERS
-				var arr_modifiers = [];
-				if(this.ITEM.iiko_modifiers!==""){
-					var iiko_modifiers = JSON.parse(this.ITEM.iiko_modifiers);
-					if(iiko_modifiers.length>0){
-						for(var m in iiko_modifiers){
-							var mod_group_title = iiko_modifiers[m].name;
-							var modifiers = iiko_modifiers[m].items;
-							if(modifiers.length>0){
-								var arr_tags = [];
-								for(var nm in modifiers){
-									arr_tags.push(modifiers[nm].name);
-								};
-								var arr_tags_str = '<ul class="std-form__ui_tags"><li>'+arr_tags.join('</li><li>')+'</li></ul>';
-								var str = '<div class="std-form__ul_tags_title">– '+mod_group_title+'</div>'+arr_tags_str;
-								arr_modifiers.push(str);
-							}
-						};
-						this.$item_iiko_modifiers.html( arr_modifiers.join('') );
-						this.$item_iiko_modifiers_title.show();						
-					}else{						
-						this.$item_iiko_modifiers.html('').hide();
-						this.$item_iiko_modifiers_title.hide();
-					};
-					
-				}else{
-						this.$item_iiko_modifiers.html('').hide();
-						this.$item_iiko_modifiers_title.hide();					
-				}
-
-				// SHOW IIKO MANAGED PRICE
-				var price_title = "Стоимость("+GLB.CURRENCY.get_current()+"):";
-				this.$item_iiko_price_title.html(price_title);				
-				var arr_price = [];
-				var iiko_sizes = this.ITEM.iiko_sizes ? JSON.parse(this.ITEM.iiko_sizes):[];
-				for(var s in iiko_sizes){
-					arr_price.push(iiko_sizes[s].price);					
-				};				
-				this.$item_iiko_price.val( arr_price.join(' / ') ).attr({disabled:true});
-
-				// SHOW IIKO MANAGED PRICE				
-				this.$item_iiko_volume_title.html("Вес:");
-				var arr_volumes = [];
-				for(var s in iiko_sizes){
-					console.log('s ====== ', iiko_sizes[s] );
-					const unitTypes = {
-						'MILLILITER':'мл',
-						'KILOGRAM':'кг',
-						'LITER':'л',
-						'GRAM':'г',
-					};
-					let units =  unitTypes[iiko_sizes[s].measureUnitType] || '' ;
-					var param = {
-						sizeCode:iiko_sizes[s].sizeCode,
-						sizeName:iiko_sizes[s].sizeName,
-						weight:iiko_sizes[s].portionWeightGrams,
-						units:units
-					};
-					arr_volumes.push(`${param.sizeName} ${param.weight} ${param.units}`);
-				};				
-				this.$item_iiko_volume.val(arr_volumes.join(' / ')).attr({disabled:true});
-
+				this.update_part_iiko_modifiers();
+				this.update_part_iiko_sizes();
 			}else{
-
-				// ------------------------------
-				// CHEFSMENU MODE / EDITITING ITEM
-				// ------------------------------
-				this.sizes_rebuild();
-			};
+				this.update_part_chefs_sizes();
+			}
 
 			this.$btnChangeSection.html(this.CURRENT_MENU.title);
 
@@ -191,6 +124,84 @@ export var VIEW_EDIT_ITEM = {
 		},350);
 		
 	},	
+
+	// SHOWING IIKO MODIFIERS
+	// @return void;
+	update_part_iiko_modifiers:function(){		
+
+		var arr_modifiers = [];
+
+		if(this.ITEM.iiko_modifiers=="") {
+			this.$item_iiko_modifiers.html('').hide();
+			this.$item_iiko_modifiers_title.show().html('Модификаторов нет');
+			return ;
+		}
+
+		var iiko_modifiers = JSON.parse(this.ITEM.iiko_modifiers);
+		if(!iiko_modifiers || !iiko_modifiers.length > 0 ){
+			this.$item_iiko_modifiers.html('').hide();
+			this.$item_iiko_modifiers_title.html('Модификаторов нет');
+			return ;			
+		}		
+
+		for(var m in iiko_modifiers){							
+			
+			var mod_group_title = iiko_modifiers[m].name;
+			
+			console.log(`${m} . ${mod_group_title}`)
+
+			var modifiers = iiko_modifiers[m].items;
+			if(modifiers.length>0){
+				var arr_tags = [];
+				for(var nm in modifiers){
+					arr_tags.push(modifiers[nm].name);
+				};
+				var arr_tags_str = '<ul class="std-form__ui_tags"><li>'+arr_tags.join('</li><li>')+'</li></ul>';
+				var str = '<div class="std-form__ul_tags_title">– '+mod_group_title+'</div>'+arr_tags_str;
+				arr_modifiers.push(str);
+			}
+		};
+		this.$item_iiko_modifiers_title.html("Модификаторы");
+		this.$item_iiko_modifiers.html( arr_modifiers.join('') ).show();		
+		
+	},
+	update_part_iiko_sizes:function(){			
+		// SHOW IIKO MANAGED PRICE
+		var price_title = "Стоимость("+GLB.CURRENCY.get_current()+"):";
+		this.$item_iiko_price_title.html(price_title);				
+		var arr_price = [];
+		var iiko_sizes = this.ITEM.iiko_sizes ? JSON.parse(this.ITEM.iiko_sizes):[];
+		for(var s in iiko_sizes){
+			arr_price.push(iiko_sizes[s].price);					
+		};				
+		this.$item_iiko_price.val( arr_price.join(' / ') ).attr({disabled:true});
+
+		// SHOW IIKO MANAGED PRICE				
+		this.$item_iiko_volume_title.html("Вес:");
+		var arr_volumes = [];
+		for(var s in iiko_sizes){
+			const unitTypes = {
+				'MILLILITER':'мл',
+				'KILOGRAM':'кг',
+				'LITER':'л',
+				'GRAM':'г',
+			};
+			let units =  unitTypes[iiko_sizes[s].measureUnitType] || '' ;
+			var param = {
+				sizeCode:iiko_sizes[s].sizeCode,
+				sizeName:iiko_sizes[s].sizeName,
+				weight:iiko_sizes[s].portionWeightGrams,
+				units:units
+			};
+			arr_volumes.push(`${param.sizeName} ${param.weight} ${param.units}`);
+		};				
+		this.$item_iiko_volume.val(arr_volumes.join(' / ')).attr({disabled:true});
+		
+	},
+
+	update_part_chefs_sizes:function(){
+		this.sizes_rebuild();
+	},
 
 	// SIZES PART FOR CHEFSMENU MODE
 	// @return array [{price:number, volume:number, units:string}];

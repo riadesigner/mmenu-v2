@@ -1061,7 +1061,7 @@ textarea:focus.length-limit-reached{ animation: ani_limit_reached .3s linear;}
 	.std-form__wide-button{padding: 10px;}
 	.std-form__wide-bright-button{padding: 10px;}
 	.std-form__help-button{padding: 10px 21px 10px 10px;}
-	.std-form__title-section{font-size: 1.2em;}
+	.std-form__title-section{font-size: 1.2em;font-weight: bold;margin:10px 0 5px 0}
 	.std-form p {font-size: 1.2em;margin:0 0 11px 0; }
 	.std-form__subtitle{font-size: 1.2em;margin:20px 0 11px 0;}
 
