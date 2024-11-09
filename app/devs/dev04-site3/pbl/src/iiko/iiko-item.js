@@ -78,7 +78,9 @@ export const IIKO_ITEM = {
 		};				
 		if(this.item_data.iiko_modifiers){
 			this.item_data.iiko_modifiers_parsed = JSON.parse(this.item_data.iiko_modifiers);				
-		};		
+		}else{
+			this.item_data.iiko_modifiers_parsed = [];
+		}
 
 		// BUILDING SIZES UI
 		this.IIKO_SIZER = $.extend({},IIKO_ITEM_SIZER);			

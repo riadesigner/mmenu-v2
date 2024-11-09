@@ -72,48 +72,12 @@ export const CHEFS_ITEM = {
 
 		if(this.item_data.sizes!==""){
 			this.item_data.sizes_parsed = JSON.parse(this.item_data.sizes);				
-		};				
-		// if(this.item_data.iiko_modifiers){
-		// 	this.item_data.iiko_modifiers_parsed = JSON.parse(this.item_data.iiko_modifiers);				
-		// };		
+		};	
 
 		// BUILDING SIZES UI
 		this.CHEFS_SIZER = $.extend({},CHEFS_ITEM_SIZER);			
 		this.CHEFS_SIZER.init(this.item_data,{onUpdate:this.on_update_size});
 
-		// BUILDING IIKO MODIFIERS UI
-		// this.IIKO_MODIFIERS = $.extend({},CHEFS_ITEM_MODIFIERS);	
-		// this.IIKO_MODIFIERS.init(this.item_data);
-
-		// SETUP MODIFIERS PANEL
-		// if(this.has_modifiers() && this.MODIF_PANEL){
-		// 	// build ui list of midifiers
-		// 	const $modifiers_list = this.IIKO_MODIFIERS.get_ui();
-		// 	this.MODIF_PANEL.insert($modifiers_list);
-		// 	this.MODIF_PANEL.on_press_modif(()=>{
-		// 		this.update_modifiers_ui();
-		// 	});
-		// 	// update behaviors
-		// 	this.MODIF_PANEL.on_pressed_cart(()=>{ 				
-		// 		const preorder = this.get_preorder(this.TOTAL_ADD_TO_CART);
-		// 		let total_in_cart = GLB.CART.add_preorder(preorder);		
-		// 		this.on_update_total_in_cart && this.on_update_total_in_cart(total_in_cart);									
-		// 		this.MODIF_PANEL.close();
-		// 	});
-		// 	this.MODIF_PANEL.on_pressed_plus(()=>{ 				
-		// 		this.TOTAL_ADD_TO_CART++;
-		// 		this.update_modifiers_ui();
-		// 	});
-		// 	this.MODIF_PANEL.on_pressed_minus(()=>{
-		// 		if(this.TOTAL_ADD_TO_CART-1 > 0){
-		// 			this.TOTAL_ADD_TO_CART--;
-		// 			this.update_modifiers_ui();									
-		// 		}else{
-		// 			this.MODIF_PANEL.close();					
-		// 		}
-		// 	});
-		// 	this.update_modifiers_ui();
-		// }
 	},
 	// update_modifiers_ui:function(){
 	// 	const {arr_usr_chosen, total_modif_price} = this.IIKO_MODIFIERS.recalc();
