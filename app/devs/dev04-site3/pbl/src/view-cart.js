@@ -1,6 +1,6 @@
 import {GLB} from './glb.js';
 import $ from 'jquery';
-import {IIKO_ORDER_SENDER} from './iiko/iiko-order-sender.js';
+import {THE_ORDER_SENDER} from './the-order-sender.js';
 
 export var VIEW_CART = {
 	init:function(options) {
@@ -54,7 +54,7 @@ export var VIEW_CART = {
 			if(this.READY_TO_ORDERING && !this.chefsmenu.is_loading_now()){				
 				if(IIKO_MODE && GLB.MENU_TABLE_MODE.is_table_mode()){
 					this.chefsmenu.now_loading();
-					this.iiko_send_order_to_table();
+					this.send_order_to_table();
 				}else{
 					this.send_order_to_delivery();
 				}
@@ -63,7 +63,7 @@ export var VIEW_CART = {
 		});		
 
 	},
-	iiko_send_order_to_table:function(){
+	send_order_to_table:function(){
 
 		const fn = {
 			dateExport:function(_date){
@@ -86,8 +86,8 @@ export var VIEW_CART = {
 		const order = $.extend(order_params,{order_items});		
 		const table_number = GLB.MENU_TABLE_MODE.get_table_number();		
 		
-		this.IIKO_TBL_SENDER = $.extend({},IIKO_ORDER_SENDER);	
-		this.IIKO_TBL_SENDER.send_to_table_async(order,table_number)
+		this.ORDER_SENDER = $.extend({},THE_ORDER_SENDER);	
+		this.ORDER_SENDER.send_to_table_async(order,table_number)
 		.then((vars)=>{
 			console.log('--vars--',vars)	
 			order.short_number = vars['short_number'];

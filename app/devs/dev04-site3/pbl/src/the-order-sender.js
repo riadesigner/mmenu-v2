@@ -1,12 +1,12 @@
-import {GLB} from '../glb.js';
+import {GLB} from './glb.js';
 
-export const IIKO_ORDER_SENDER = {
+export const THE_ORDER_SENDER = {
     send_async:function(order,pickupself) {
         // ORDER FOR DELIVERY OR PICKUPSELF
         return new Promise((res,rej)=>{
             
-            const PATH = 'pbl/lib/iiko/';
-            const url = GLB_APP_URL + PATH + 'iiko_send_order_for_delivery.php';
+            const PATH = 'pbl/lib/';
+            const url = GLB_APP_URL + PATH + 'pbl.send_order_for_delivery.php';
 
             const id_cafe = order.id_cafe;
             const data = {
@@ -45,8 +45,8 @@ export const IIKO_ORDER_SENDER = {
                 }
             };
                             
-            const PATH = 'pbl/lib/iiko/';
-            const url = GLB_APP_URL + PATH + 'iiko_send_order_to_table.php';
+            const PATH = 'pbl/lib/';
+            const url = GLB_APP_URL + PATH + 'pbl.send_order_to_table.php';
             const id_cafe = GLB.CAFE.get().id;
 
             const data = {
