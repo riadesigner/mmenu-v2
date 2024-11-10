@@ -1,8 +1,7 @@
 import {GLB} from './glb.js';
 import $ from 'jquery';
-import {IIKO_ORDER_SENDER} from './iiko/iiko-order-sender.js';
+import {THE_ORDER_SENDER} from './the-order-sender.js';
 import {IIKO_STREET_LOADER} from './iiko/iiko-street-loader.js';
-import {CHEFS_ORDER_SENDER} from './chefs/chefs-order-sender.js';
 
 export var VIEW_ORDERING = {
 	init:function(options){
@@ -469,8 +468,8 @@ export var VIEW_ORDERING = {
 		const order_items = GLB.CART.get_all();
 		const order = $.extend(order_params,{order_items});
 
-		this.IIKO_SENDER = $.extend({},IIKO_ORDER_SENDER);	
-		this.IIKO_SENDER.send_async(order,this.PICKUPSELF_MODE)
+		this.ORDER_SENDER = $.extend({},THE_ORDER_SENDER);	
+		this.ORDER_SENDER.send_async(order,this.PICKUPSELF_MODE)
 		.then((vars)=>{		
 			console.log('--vars--',vars)	
 			order.short_number = vars['short_number'];
