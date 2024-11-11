@@ -1498,9 +1498,9 @@ a.mm2-home-link:hover{ color: %[color-home-link-hover]%; }
     border-top:1px solid %[color-front]%; top:0;left:0;
   }
 
-  .mm2-item-btn-addtocart__label{display: none;}
+  /* .mm2-item-btn-addtocart__label{} */
   .mm2-item-btn-addtocart{width: auto;height: 43px;padding:0 16px 0 10px;}
-  .mm2-item-btn-addtocart__icon{width: 50%;}
+  .mm2-item-btn-addtocart__icon{width: 50%;display: none;}
   .mm2-item-btn-addtocart__count{width: 50%;font-size: 1rem;}
   .mm2-item-btn-addtocart__icon span{width: 35px;height:35px;}
 
