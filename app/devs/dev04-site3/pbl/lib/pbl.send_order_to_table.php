@@ -33,7 +33,7 @@ $cafe = new Smart_object("cafe",$id_cafe);
 if(!$cafe->valid())__errorjsonp("Unknown cafe, ".__LINE__);
 
 define('DEMO_MODE', (int) $cafe->cafe_status !== 2);
-define("ORDER_TARGET", Order_sender::IIKO_TABLE);
+define("ORDER_TARGET", Order_sender::ORDER_TABLE);
 
 $order_data = $_POST['order'];
 $table_number = (int) $_POST['table_number'];
@@ -60,10 +60,8 @@ try{
 //	- GETTING ORDER_SHORT_NUMBER
 // ----------------------------------------
  
-$pending_mode = false;
 $short_number = Order_sender::save_order_to_db(
-	ORDER_TARGET, 
-	$pending_mode, 
+	ORDER_TARGET,
 	$cafe, 
 	["ORDER_TEXT"=>$ORDER_TXT], 
 	$table_number, 

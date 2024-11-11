@@ -34,7 +34,7 @@ if(!$cafe->valid())__errorjsonp("Unknown cafe, ".__LINE__);
 
 define('DEMO_MODE', (int) $cafe->cafe_status !== 2);
 define('PICKUPSELF_MODE',filter_var($_POST['pickupself'], FILTER_VALIDATE_BOOLEAN));
-define("ORDER_TARGET", Order_sender::IIKO_DELIVERY);
+define("ORDER_TARGET", Order_sender::ORDER_DELIVERY);
 
 $order_data = $_POST['order'];
 
@@ -59,10 +59,8 @@ try{
 //	- GETTING ORDER_SHORT_NUMBER
 // ----------------------------------------
 
-$pending_mode = false;
 $short_number = Order_sender::save_order_to_db(
-	ORDER_TARGET, 
-	$pending_mode, 
+	ORDER_TARGET,
 	$cafe, 
 	["ORDER_TEXT"=>$ORDER_TXT], 
 	null, 

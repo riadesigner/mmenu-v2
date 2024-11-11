@@ -167,11 +167,11 @@ class Tg_hook {
                 $order_short_number= $params[2];                
                 $this->take_the_order($cafe_uniq_name,$order_short_number);
             break;            
-            case 'send_to_iiko':
-                $cafe_uniq_name = $params[1];
-                $order_short_number = $params[2];
-                Order_sender::send_order_to_iiko($cafe_uniq_name, $order_short_number, $this->REAL_TG_USER);
-            break;
+            // case 'send_to_iiko':
+            //     $cafe_uniq_name = $params[1];
+            //     $order_short_number = $params[2];
+            //     Order_sender::send_order_to_iiko($cafe_uniq_name, $order_short_number, $this->REAL_TG_USER);
+            // break;
             case 'change_state':
 
                 $this->change_tg_user_state_to($params[1]);

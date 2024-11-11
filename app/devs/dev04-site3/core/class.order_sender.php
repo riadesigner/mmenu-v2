@@ -6,7 +6,6 @@ if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 	
 	depended on: 
 	common.php -> send_telegram()
-	common.php -> iiko_get_info()
 	core/class.Smart_collect()
 	core/class.smart_object()
 
@@ -14,9 +13,8 @@ if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 class Order_sender{	
 
-	public const CHEFSMENU_ORDER = "chefsmenu_order";
-	public const IIKO_TABLE = "iiko_table_order";
-	public const IIKO_DELIVERY = "iiko_delivery_order";
+	public const ORDER_TABLE = "table_order";
+	public const ORDER_DELIVERY = "delivery_order";
 
     /*
     	GET COUNT OF RELEVANT TG-USERS
@@ -42,53 +40,10 @@ class Order_sender{
 	}
 
     /*
-    	SEND IIKO-ORDER FOR DELIVERY
-    ----------------------------------- **/
-	static public function send_iiko_order_for_delivery($token, $organization_id, $terminal_group_id, $order){	
-		$url     = 'api/1/deliveries/create';
-		$headers = [
-		    "Content-Type"=>"application/json",
-		    "Authorization" => 'Bearer '.$token
-		]; 	 	
-		$params  = ['organizationId' => $organization_id, 'terminalGroupId' => $terminal_group_id, 'order' => $order]; 	
-
-		glog("order = ".print_r($order,1));
-
-		$res = iiko_get_info($url,$headers,$params);
-		return $res;
-	}
-
-    /*
-    	SEND IIKO-ORDER TO TABLE
-    -------------------------------- **/
-	static public function send_iiko_order_to_table($token, $organization_id, $terminal_group_id, $order){	
-
-		glog("send iiko order to table, args: ".print_r([
-			'token'=>$token, 
-			'organization_id'=>$organization_id, 
-			'terminal_group_id'=>$terminal_group_id, 
-			'order'=>$order
-		],1));
-
-		$url     = 'api/1/order/create';
-		$headers = [
-		    "Content-Type"=>"application/json",
-		    "Authorization" => 'Bearer '.$token
-		]; 	 	
-		$params  = ['organizationId' => $organization_id, 'terminalGroupId' => $terminal_group_id, 'order' => $order]; 			
-
-		$res = iiko_get_info($url,$headers,$params);		
-		glog("iiko answer: ".print_r($res,1));
-
-		return $res;
-	}
-
-    /*
     	SAVE ORDER TO DB
 		CREATE & RETURN SHORT NUMBER
 
-		@param string $order_target // self::CHEFSMENU_ORDER | self::IIKO-TABLE | self::IIKO-DELIVERY 
-		@param int $pending_mode // 0|1, IF NEEDS RESENT TO IIKO AFTER TAKING THE ORDER
+		@param string $order_target // self::ORDER_DELIVERY | self::IIKO-TABLE | self::IIKO-DELIVERY 
 		@param Smart_object $cafe
 		@param array $order_data // order params
 		@param int|null $table_number
@@ -97,8 +52,7 @@ class Order_sender{
 		@return string $short_number
     ----------------------------------------------------- **/	
 	static public function save_order_to_db(
-		string $order_target, 
-		int $pending_mode, 
+		string $order_target,
 		Smart_object $cafe, 
 		array $order_data, 
 		int|null $table_number=null, 
@@ -127,7 +81,6 @@ class Order_sender{
 			$ORDER->cafe_uniq_name = $cafe_uniq_name;		
 			$ORDER->order_target = $order_target;
 			$ORDER->table_number = $table_number;
-			$ORDER->pending_mode = $pending_mode;
 			$ORDER->short_number = $short_number;			
 			$ORDER->date = "now()";
 			$ORDER->updated = "now()";
@@ -160,14 +113,18 @@ class Order_sender{
 		TEAM-TG-USERS AND SUPERVISORS
 
 		@param string $cafe_uniq_name
-		@param string $order_target // self::CHEFSMENU_ORDER | self::IIKO-TABLE | self::IIKO-DELIVERY 
+		@param string $order_target // self::ORDER_DELIVERY | self::IIKO-TABLE | self::IIKO-DELIVERY 
 		@param string $order_short_number
-		@param string $tg_order_text		
-		@param int $pending_mode // 0|1, IF NEEDS RESENT TO IIKO AFTER TAKING THE ORDER
+		@param string $tg_order_text				
     ---------------------------------------------------------------------------------- **/	
-	static public function send_tg_order($cafe_uniq_name, $order_target, $order_short_number, $tg_order_text, int $pending_mode=0): void {	 		
+	static public function send_tg_order(
+		$cafe_uniq_name, 
+		$order_target, 
+		$order_short_number, 
+		$tg_order_text
+		): void {
 		
-		$waiter_mode = $order_target===self::IIKO_TABLE;
+		$waiter_mode = $order_target===self::ORDER_TABLE;
 
 		// $button_take_title = $waiter_mode?"Я беру":"Взять заказ";
 		$button_take_title = "Взять заказ";
@@ -217,8 +174,6 @@ class Order_sender{
 			return;
 		}
 
-		define('PENDING_MODE', (int) $ORDER->pending_mode===1);
-
 		$order_short_number = $ORDER->short_number;
 		$USER_NAME = !empty($TG_USER->nickname)?$TG_USER->nickname:$TG_USER->name;		
 		
@@ -245,21 +200,6 @@ class Order_sender{
 			
 				$keyboard = "";
 
-				if(PENDING_MODE){
-					$button_send_to_iiko_title = "Отправить в iiko";
-					$button_send_to_iiko = "send_to_iiko:{$cafe_uniq_name}:{$order_short_number}";
-					$keyboard = json_encode([
-						"inline_keyboard" => [
-							[
-								[
-									"text" => $button_send_to_iiko_title,
-									"callback_data" => $button_send_to_iiko
-								]
-							]
-						]
-					], JSON_UNESCAPED_UNICODE);						
-				}
-
 				// send answer to user
 				$personal_message = "Ок, ".$USER_NAME."! Вы взяли заказ {$order_short_number}.";				
 				self::send_message_to_tg_users($TG_USER->tg_user_id, $personal_message, $keyboard);
@@ -282,150 +222,10 @@ class Order_sender{
 	}
 
     /*
-    	SEND ORDER TO IIKO
-		(FOR PENDING MODE)
-
-		@param string $cafe_uniq_name
-		@param string $order_short_number
-		@param Smart_object $TG_USER
-    ----------------------------------- **/		
-	static public function send_order_to_iiko(string $cafe_uniq_name, string $order_short_number, Smart_object $TG_USER ):void {
-
-		if($TG_USER->role !== 'waiter' && $TG_USER->role !== 'manager'){
-			$cancel_message = "Вы не можете отпралять заказы. Для этого нужно иметь доступ Менеджера или Официанта";
-			self::send_message_to_tg_users($TG_USER->tg_user_id, $cancel_message);							
-			return;			
-		}
-		if($TG_USER->state !== 'active'){
-			$cancel_message = "Вы не можете отправлять заказы. Сначала откройте смену.";
-			self::send_message_to_tg_users($TG_USER->tg_user_id, $cancel_message);							
-			return;
-		}
-
-		if(!$ORDER = self::get_order_by_params($cafe_uniq_name, $order_short_number)){
-			$warn_message = "О нет! Заказ {$order_short_number} не найден.";
-			self::send_message_to_tg_users($TG_USER->tg_user_id, $warn_message);
-			return;
-		}else{
-
-			if($ORDER->manager!==$TG_USER->id){
-				$cancel_message = "Вы не можете отправить этот заказ. Его взял другой менеджер (или официант).";
-				self::send_message_to_tg_users($TG_USER->tg_user_id, $cancel_message);							
-				return;				
-			}
-
-			if($ORDER->state==='sentout'){
-				$warn_message = "Вы уже отправили заказ {$order_short_number} в iiko.";
-				self::send_message_to_tg_users($TG_USER->tg_user_id, $warn_message);
-				return;				
-			}else{
-				// -------------------------
-				//   SENDING ORDER TO IIKO
-				// -------------------------
-				if(!$CAFE = self::get_cafe_by_uniq_name($cafe_uniq_name)){
-					glogError("не найдено кафе $cafe_uniq_name, ".__FILE__.", ".__LINE__);
-					$err_message = "О нет! Заказ не найден или устарел.";
-					self::send_message_to_tg_users($TG_USER->tg_user_id, $err_message);
-					return;					
-				}
-				$k = $CAFE->iiko_api_key;	
-
-				if(empty($k)){
-					glogError("не найден iiko_api_key для кафе $cafe_uniq_name, ".__FILE__.", ".__LINE__);
-					$err_message = "О нет! Заказ не найден или устарел.";
-					self::send_message_to_tg_users($TG_USER->tg_user_id, $err_message);
-					return;
-				}					
-
-				// getting token 
-				$url     = 'api/1/access_token';
-				$headers = ["Content-Type"=>"application/json"];
-				$params  = ["apiLogin" => $k];
-				$res = iiko_get_info($url,$headers,$params);
-				if(!isset($res["token"]) || empty($res["token"])){
-					glogError("Не походит token (iiko) для кафе $cafe_uniq_name, ".__FILE__.", ".__LINE__);
-					$err_message = "О нет! Ошибка настройки. Если она повторится, обратитесь к разработчику ChefsMenu";
-					self::send_message_to_tg_users($TG_USER->tg_user_id, $err_message);
-				}				
-				$token = $res["token"];
-
-				// getting organization 
-				$orgs = $CAFE->iiko_organizations;
-				$orgs = !empty($orgs)?json_decode((string) $orgs,true):false;
-				if(!$orgs) {
-					glogError("Не найдена организация (iiko) для кафе $cafe_uniq_name, ".__FILE__.", ".__LINE__);
-					$err_message = "О нет! Ошибка настройки. Если она повторится, обратитесь к разработчику ChefsMenu";
-					self::send_message_to_tg_users($TG_USER->tg_user_id, $err_message);
-					return;
-				}
-				$organization_id = $orgs['current_organization_id'];
-	
-				// getting terminals 
-				$terminal_groups = $CAFE->iiko_terminal_groups;
-				$terminal_groups = !empty($terminal_groups)?json_decode((string) $terminal_groups,true):false;
-				if(!$terminal_groups){
-					glogError("Не найдена терминальная группа (iiko) для кафе $cafe_uniq_name, ".__FILE__.", ".__LINE__);
-					$err_message = "О нет! Ошибка настройки. Если она повторится, обратитесь к разработчику ChefsMenu";
-					self::send_message_to_tg_users($TG_USER->tg_user_id, $err_message);
-					return;					
-				}
-				$terminal_group_id = $terminal_groups['current_terminal_group_id'];		
-				
-				$MANAGER_NAME = self::get_tg_user_public_name($TG_USER);
-
-				$comment_addition = $TG_USER->role === "waiter"? "Официант: ".$MANAGER_NAME : "Менеджер: ".$MANAGER_NAME;
-				$comment = "Отправлен через телеграм. ".$comment_addition;
-				$order_data = json_decode((string) $ORDER->description, 1); 
-				$order_data["comment"] = $comment;
-
-				try{
-					// ---------------------------------------------
-					//      SEND PENDING IIKO-ORDER TO DELIVERY
-					// ---------------------------------------------							
-					if($ORDER->order_target===self::IIKO_DELIVERY){
-						self::send_iiko_order_for_delivery($token, $organization_id, $terminal_group_id, $order_data);
-					// ---------------------------------------------
-					//      SEND PENDING IIKO-ORDER TO TABLE
-					// ---------------------------------------------					
-					}else if($ORDER->order_target===self::IIKO_TABLE){
-						self::send_iiko_order_to_table($token, $organization_id, $terminal_group_id, $order_data);
-					}else{
-						throw new Exception("Не найден ORDER_TARGET для кафе $cafe_uniq_name");
-					}					
-				}catch( Exception $e){
-					glogError($e->getMessage().", ".__FILE__.", ".__LINE__);
-					$err_message = "О нет! Ошибка настройки. Если она повторится, обратитесь к разработчику ChefsMenu";
-					self::send_message_to_tg_users($TG_USER->tg_user_id, $err_message);					
-					return;					
-				}
-
-				$ORDER->state = 'sentout';				
-				$ORDER->updated = 'now()';
-
-				if(!$ORDER->save()){
-					glogError("Cant save the order {$order_short_number} for cafe {$cafe_uniq_name}, ".__FILE__.", ".__LINE__);
-					$err_message = "Заказ отправлен, но его статус не обновлен. Если ошибка повторится, обратитесь к разработчику ChefsMenu";
-					self::send_message_to_tg_users($TG_USER->tg_user_id, $err_message);					
-					return;					
-				}
-
-				// ----------------------
-				//      OK MESSAGE
-				// ----------------------
-				$ok_message = "Заказ {$order_short_number} отправлен в iiko";
-				self::send_message_to_tg_users($TG_USER->tg_user_id, $ok_message);
-				return;			
-
-			}
-		}
-
-	}
-
-    /*
     	GET TEAM (the relevant MANAGERS or WAITERS for the order)
 
 		@param string $cafe_uniq_name
-		@param string $order_target // self::CHEFSMENU_ORDER|self::IIKO_TABLE|self::IIKO_DELIVERY
+		@param string $order_target // self::ORDER_DELIVERY|self::ORDER_TABLE|self::ORDER_DELIVERY
 		@param int|null $except_user_id
 
 		@return array // string[]
@@ -434,9 +234,9 @@ class Order_sender{
 		$ACTIVE_ONLY=" AND state='active'";
 		$EXCEPT_USER = $except_user_id!==null? " AND id != $except_user_id" : "";
 		$COND = match ($order_target) {
-			self::CHEFSMENU_ORDER => " AND role='manager'",
-			self::IIKO_TABLE => " AND role='waiter'",
-			self::IIKO_DELIVERY => " AND role='manager'",
+			self::ORDER_DELIVERY => " AND role='manager'",
+			self::ORDER_TABLE => " AND role='waiter'",
+			self::ORDER_DELIVERY => " AND role='manager'",
 			default => "",
 		};
 		$q = "WHERE cafe_uniq_name='{$cafe_uniq_name}' ".$COND.$ACTIVE_ONLY.$EXCEPT_USER;		

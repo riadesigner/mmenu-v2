@@ -23,8 +23,7 @@ class Order_parser{
 
     public function __construct($params){
         $this->time_format = 24;
-        $this->str_currency = "₽";      
-        glog('------------- $params --------------\n',print_r($params,1));          
+        $this->str_currency = "₽";
         $this->READY_FOR_BUILD = $this->verify($params);
         return $this;
     }
@@ -36,15 +35,12 @@ class Order_parser{
         if (!$this->READY_FOR_BUILD) throw new Exception("--not found the order params");        
         
         switch ($this->ORDER_TARGET){ 
-            case Order_sender::IIKO_DELIVERY:
+            case Order_sender::ORDER_DELIVERY:
                 $this->order_text =  $this->build_for_delivery();    
             break; 
-            case Order_sender::IIKO_TABLE:
+            case Order_sender::ORDER_TABLE:
                 $this->order_text =  $this->build_for_table();
-            break;             
-            case Order_sender::CHEFSMENU_ORDER:
-                $this->order_text =  $this->build_for_delivery();    
-            break;                    
+            break;
             default:
                 throw new Exception("--wrong order_target param");
             break;     
@@ -165,7 +161,7 @@ class Order_parser{
         $this->NEARTIME_MODE = $this->time_need===$this->time_sent;  
 
         // ORDER TO TABLE MODE
-        if($this->ORDER_TARGET === Order_sender::IIKO_TABLE){
+        if($this->ORDER_TARGET === Order_sender::ORDER_TABLE){
             if(!isset($params["table_number"])){ throw new Exception('table_number param required'); }
             $this->table_number = $params["table_number"];
 
@@ -191,7 +187,7 @@ class Order_parser{
             // delivery part
             if(!$this->PICKUPSELF_MODE){
                 // IIKO MODE
-                if($this->ORDER_TARGET===Order_sender::IIKO_DELIVERY){
+                if($this->ORDER_TARGET===Order_sender::ORDER_DELIVERY){
                     $u_address = $this->order_data['order_user_full_address'];
                     $u_address_entrance = isset($u_address['entrance'])? $u_address['entrance']: "";
                     $u_address_floor = isset($u_address['floor']) ? isset($u_address['floor']) : "";
