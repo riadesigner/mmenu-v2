@@ -6,7 +6,7 @@ class Order_parser{
     
     protected array $order_data;
     protected array $order_items;
-    protected string $order_target;    
+    protected string $ORDER_TARGET;    
     protected string $time_sent;    
     protected string $time_need;  
     protected string $user_phone; 
@@ -15,6 +15,7 @@ class Order_parser{
     protected string $order_text;
     protected string $str_currency;
     protected int $total_price;
+    protected $table_number = null;
     protected int $time_format;
     protected bool $NEARTIME_MODE;   
     protected bool $PICKUPSELF_MODE;    
@@ -22,7 +23,8 @@ class Order_parser{
 
     public function __construct($params){
         $this->time_format = 24;
-        $this->str_currency = "₽";                
+        $this->str_currency = "₽";      
+        glog('------------- $params --------------\n',print_r($params,1));          
         $this->READY_FOR_BUILD = $this->verify($params);
         return $this;
     }
@@ -31,19 +33,17 @@ class Order_parser{
     //  BUILDING ORDER STRING FOR TELEGRAM
     // -------------------------------------
     public function build_tg_txt(): Order_parser{    
-        if (!$this->READY_FOR_BUILD) throw new Exception("--not found the order params"); 
-
-        return $this;
+        if (!$this->READY_FOR_BUILD) throw new Exception("--not found the order params");        
         
-        switch ($this->order_target){ 
+        switch ($this->ORDER_TARGET){ 
             case Order_sender::IIKO_DELIVERY:
-                $this->order_text =  $this->build_for_iiko_delivery();    
+                $this->order_text =  $this->build_for_delivery();    
             break; 
             case Order_sender::IIKO_TABLE:
-                $this->order_text =  $this->build_for_iiko_table();    
+                $this->order_text =  $this->build_for_table();
             break;             
             case Order_sender::CHEFSMENU_ORDER:
-                $this->order_text =  $this->build_for_chefsmenu();    
+                $this->order_text =  $this->build_for_delivery();    
             break;                    
             default:
                 throw new Exception("--wrong order_target param");
@@ -58,7 +58,7 @@ class Order_parser{
     
     // PRIVATE
 
-    private function build_for_iiko_delivery():string {
+    private function build_for_delivery():string {
 
         $str_time = glb_russian_datetime($this->time_need, $this->time_format);
         
@@ -90,19 +90,20 @@ class Order_parser{
         return $str;
     }
 
-    private function build_for_iiko_table():string {
+    private function build_for_table():string {
 
         $str_time = glb_russian_datetime($this->time_need, $this->time_format);
                 
         $str = "";
         $str .= "   ------------\n";
-        $str .= "   на стол №: {$table_number}\n";
+        $str .= "   на стол №: {$this->table_number}\n";
         $str .= "   ------------\n";
         $str .= "   Создан: {$str_time}\n";
         $str .= "   Сумма: {$this->total_price} {$this->str_currency}.\n";
         $str .= "   ------------\n";
         
-        $str .= $this->build_str_items();          
+        $str .= $this->build_str_items();
+        
         return $str;
     }    
 
@@ -140,7 +141,7 @@ class Order_parser{
     private function verify($params): bool{
 
         if(!isset($params["order_target"])){ throw new Exception('order_target param required'); }
-        $this->order_target = $params["order_target"];
+        $this->ORDER_TARGET = $params["order_target"];
 
         if(!isset($params["order_data"])){ throw new Exception('order_data param required'); }
         $this->order_data = $params["order_data"];
@@ -150,12 +151,6 @@ class Order_parser{
         $this->time_sent = post_clean($this->order_data['order_time_sent'],100);
         if(empty($this->time_sent)) { throw new Exception('--wrong order data'); }
 
-        if(!isset($this->order_data["order_time_need"])){ throw new Exception('order_time_need param is wrong'); }
-        $this->time_need = post_clean($this->order_data['order_time_need'],100);        
-        if(empty($this->time_need)) $this->time_need = $this->time_sent;
-
-        $this->NEARTIME_MODE = $this->time_need===$this->time_sent;        
-
         if(!isset($this->order_data['order_total_price'])){ throw new Exception('order_total_price param is wrong'); }
         $this->total_price = (int) $this->order_data['order_total_price'];
         
@@ -163,38 +158,60 @@ class Order_parser{
         if(!is_array($this->order_data['order_items'])){ throw new Exception('order_items param is wrong'); }
         $this->order_items = $this->order_data['order_items'];
 
-        if(!isset($params['pickupself_mode'])){
-            $this->PICKUPSELF_MODE = true;            
-        }else{
-            $this->PICKUPSELF_MODE = $params['pickupself_mode'];            
-        }
-        
-        if(!isset($this->order_data['order_user_phone'])){ 
-            $this->user_phone = "";
-        }else{
-            $this->user_phone = post_clean($this->order_data["order_user_phone"], 50);
-            $this->user_phone = preg_replace("/[^+0-9 ()\-,.]/", "", $this->user_phone);
-            if(empty($this->user_phone)) {throw new Exception('--need to know user phone');};
-        }
+        // time part
+        if(!isset($this->order_data["order_time_need"])){ throw new Exception('order_time_need param is wrong'); }
+        $this->time_need = post_clean($this->order_data['order_time_need'],100);        
+        if(empty($this->time_need)) $this->time_need = $this->time_sent;    
+        $this->NEARTIME_MODE = $this->time_need===$this->time_sent;  
 
-        if(!$this->PICKUPSELF_MODE){
-            $u_address = $this->order_data['order_user_full_address'];
-            $u_address_entrance = isset($u_address['entrance'])? $u_address['entrance']: "";
-            $u_address_floor = isset($u_address['floor']) ? isset($u_address['floor']) : "";
-            if(empty($u_address['u_street'])) throw new Exception('--need to know user street');
-            if(empty($u_address['u_house'])) throw new Exception("--need to know user house");		            
-            
-            $this->deliv_address = "ул. ".$u_address['u_street'].", д. ".$u_address['u_house'].",
-            подъезд ({$u_address_entrance}),  этаж ({$u_address_floor})";
-        }else{
-            $this->deliv_address = "";
-        }
+        // ORDER TO TABLE MODE
+        if($this->ORDER_TARGET === Order_sender::IIKO_TABLE){
+            if(!isset($params["table_number"])){ throw new Exception('table_number param required'); }
+            $this->table_number = $params["table_number"];
 
+        // ORDER TO DELIVERY OR PICKUPSELF
+        }else{
+
+            // pickupself part
+            if(!isset($params['pickupself_mode'])){
+                $this->PICKUPSELF_MODE = true;            
+            }else{
+                $this->PICKUPSELF_MODE = $params['pickupself_mode'];            
+            }
+                        
+            // userphone part
+            if(!isset($this->order_data['order_user_phone'])){ 
+                $this->user_phone = "";
+            }else{
+                $this->user_phone = post_clean($this->order_data["order_user_phone"], 50);
+                $this->user_phone = preg_replace("/[^+0-9 ()\-,.]/", "", $this->user_phone);
+                if(empty($this->user_phone)) {throw new Exception('--need to know user phone');};
+            }
+
+            // delivery part
+            if(!$this->PICKUPSELF_MODE){
+                // IIKO MODE
+                if($this->ORDER_TARGET===Order_sender::IIKO_DELIVERY){
+                    $u_address = $this->order_data['order_user_full_address'];
+                    $u_address_entrance = isset($u_address['entrance'])? $u_address['entrance']: "";
+                    $u_address_floor = isset($u_address['floor']) ? isset($u_address['floor']) : "";
+                    if(empty($u_address['u_street'])) throw new Exception('--need to know user street');
+                    if(empty($u_address['u_house'])) throw new Exception("--need to know user house");            
+                    $this->deliv_address = "ул. ".$u_address['u_street'].", д. ".$u_address['u_house'].",
+                    подъезд ({$u_address_entrance}),  этаж ({$u_address_floor})";                
+                }else{
+                    // CHEFSMENU MODE
+                    $this->deliv_address = $this->order_data['order_user_full_address'];
+                }
+            }else{
+                $this->deliv_address = "";
+            }
+
+        }
+                
         $this->user_comment = post_clean($this->order_data["order_user_comment"], 250);
 
         return true;
     }
-
-
 
 }

@@ -20,7 +20,7 @@ session_start();
 SQL::connect();
 
 // --------------------------------
-// SEND IIKO ORDER TO TABLE 
+// SEND ORDER TO TABLE 
 // --------------------------------
 
 if(!isset($_POST['id_cafe']) || empty($_POST['id_cafe']) ) __errorjsonp("--it needs to know id_cafe");
@@ -48,6 +48,8 @@ try{
 	$ORDER_TXT = (new Order_parser($params))
 	->build_tg_txt()->get();	
 	
+	glog("-------ORDER FOR TABLE------- \n".print_r($ORDER_TXT,1));
+
 }catch( Exception $e){
 	glogError($e->getMessage());
 	__errorjsonp("--fail parsing the order params");	
