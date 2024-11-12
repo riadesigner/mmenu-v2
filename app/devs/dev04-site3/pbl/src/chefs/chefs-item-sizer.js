@@ -73,10 +73,10 @@ export var CHEFS_ITEM_SIZER = {
 				foo.create_btns(this.$arr_btns['desktop']);
 			}else{				
 				const s = sizes[0];
-				const price = s.price;
-				const sizeName = `${volume} ${units}`;			
+				const price = s.price;				
 				const volume = s.volume;		
-				const units = s.units;				
+				const units = s.units;
+				const sizeName = `${volume} ${units}`;				
 				this.set_current_vars({price, sizeName, volume, units});
 			};
 		}else{

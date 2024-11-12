@@ -86,10 +86,10 @@ export const IIKO_ITEM_SIZER = {
 				foo.create_btns(this.$arr_btns['desktop']);
 			}else{								
 				const s = sizes[0];				
-				const price = s.price;			
-				const sizeName = s.sizeName;
+				const price = s.price;							
 				const volume = s.portionWeightGrams;
 				const units = foo.units_to_strings(s.measureUnitType);				
+				const sizeName = s.sizeName;
 				this.set_current_vars({price, sizeName, volume, units});
 			};
 		}else{
