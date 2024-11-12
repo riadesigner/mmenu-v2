@@ -139,7 +139,7 @@ export var VIEW_CUSTOMIZE_ALL = {
 
 		this.$btnChangeLanguage.on('touchend',function(e){			
 			if(!_this.VIEW_SCROLLED){				
-			// GLB.VIEW_CUSTOMIZE_INTERFACE.update(_this.USER);
+			GLB.VIEW_CUSTOMIZE_INTERFACE.update(_this.USER);
 			GLB.VIEWS.setCurrent(GLB.VIEW_CUSTOMIZE_INTERFACE.name);
 			};
 			e.originalEvent.cancelable && e.preventDefault();

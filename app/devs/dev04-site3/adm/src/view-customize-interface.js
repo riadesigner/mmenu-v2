@@ -105,7 +105,8 @@ export var VIEW_CUSTOMIZE_INTERFACE = {
 		var _this=this;
 		this.$buttonsSkin.html("");
 		
-		
+		console.log('this.SKINS= ',this.SKINS);
+
 		var defaultSkin = 'light-lemon';
 		var allSkins = this.SKINS['all-skins'];
 		var skinGroups = this.SKINS['skin-groups']

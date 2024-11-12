@@ -778,7 +778,7 @@ a.mm2-home-link:hover{ color: %[color-home-link-hover]%; }
 
 .mm2-item-btn-addtocart__icon {width:30%;}
 .mm2-item-btn-addtocart__label{font-size: .9em;line-height: 1;width:50%;text-align: left;}
-.mm2-item-btn-addtocart__count{font-size: 1.3em;width:20%;text-align: right;}
+.mm2-item-btn-addtocart__count{font-size: 1.3em;width:20%;text-align: right;display: none;}
 .mm2-item-btn-addtocart__icon span{
   width: 40px;height: 40px; display: block; 
   background-image:url("%[path-to-skin]%pbl-icons.svg");
@@ -791,6 +791,7 @@ a.mm2-home-link:hover{ color: %[color-home-link-hover]%; }
 .mm2-item-btn-addtocart.active{ %[btn-addtocart-active]%; }
 .mm2-item-btn-addtocart.mobile-active{ %[btn-addtocart-mobile-active]%; }
 .mm2-item-btn-addtocart.this-cart-full{%[btn-addtocart-full]%;}
+.mm2-item-btn-addtocart.this-cart-full .mm2-item-btn-addtocart__count {display: block;}
 
 .mm2-item-btn-addtocart.this-cart-full { %[btn-addtocart-full-hover]%; }
 .mm2-item-btn-addtocart.this-cart-full.hover{ %[btn-addtocart-full-hover]%; }
@@ -1498,11 +1499,15 @@ a.mm2-home-link:hover{ color: %[color-home-link-hover]%; }
     border-top:1px solid %[color-front]%; top:0;left:0;
   }
 
-  /* .mm2-item-btn-addtocart__label{} */
+
   .mm2-item-btn-addtocart{width: auto;height: 43px;padding:0 16px 0 10px;}
-  .mm2-item-btn-addtocart__icon{width: 50%;display: none;}
-  .mm2-item-btn-addtocart__count{width: 50%;font-size: 1rem;}
+  .mm2-item-btn-addtocart__label {width: 100%;}  
+  .mm2-item-btn-addtocart__count{display: none;font-size: 1rem;}
+  .mm2-item-btn-addtocart.this-cart-full .mm2-item-btn-addtocart__count {display: block;width: 50%;}
+  .mm2-item-btn-addtocart.this-cart-full .mm2-item-btn-addtocart__label {width: 50%;}
+  .mm2-item-btn-addtocart__icon{display: none;}
   .mm2-item-btn-addtocart__icon span{width: 35px;height:35px;}
+
 
   .mm2-item-about,.mm2-item-volume {opacity: 0;}
   .mm2-show-full-description .mm2-item-about,
@@ -1629,12 +1634,7 @@ a.mm2-home-link:hover{ color: %[color-home-link-hover]%; }
   .mm2-item-about { font-size: 4.5vw;}
   .mm2-item-volume{ font-size: 4vw;}
   .mm2-item-price { font-size: 5.5vw;}
-  .mm2-item-btn-more-largescreen{font-size: .8em;}  
-  
-  /* .mm2-item-btn-addtocart{padding: 8px 14px;}
-  .mm2-item-btn-addtocart__label{display: none;}
-  .mm2-item-btn-addtocart__icon{left: 6px;width: 34px;height: 34px;}
-  .mm2-item-btn-addtocart__count{ font-size: 1.3rem; padding: 0 0 0 38px;} */
+  .mm2-item-btn-more-largescreen{font-size: .8em;} 
 
   .mm2-item-volume{position: relative; padding:3vw 0 0 0; margin: 4vw 0 0 0; }
   .mm2-item-volume:after{ 
