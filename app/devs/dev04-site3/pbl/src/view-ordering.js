@@ -440,11 +440,7 @@ export var VIEW_ORDERING = {
 			order_params['order_user_address'] = user_address;
 		}
 
-		if(this.IIKO_MODE){			
-			this.iiko_order_send(order_params);
-		}else{			
-			this.chefsmenu_order_send(order_params);
-		};		
+		this.do_order_send(order_params);
 
 	},
 
@@ -463,7 +459,7 @@ export var VIEW_ORDERING = {
 		var is_phone = nums && nums.length == 11? true:false;
 		return is_phone;
 	},
-	iiko_order_send:function(order_params) {
+	do_order_send:function(order_params) {
 
 		const order_items = GLB.CART.get_all();
 		const order = $.extend(order_params,{order_items});
@@ -487,33 +483,6 @@ export var VIEW_ORDERING = {
 				this.chefsmenu.end_loading();
 			},1000);
 		});		
-	},
-	chefsmenu_order_send:function(order_params) {
-	
-		const order_items = GLB.CART.get_all();
-		const order = $.extend(order_params,{order_items});
-		const demo_mode = GLB.CAFE.get_status()!=="2";		
-
-		this.CHEFS_SENDER = $.extend({},CHEFS_ORDER_SENDER);	
-		this.CHEFS_SENDER.send_async(order,this.PICKUPSELF_MODE)		
-		.then((vars)=>{		
-			console.log('--vars--',vars)	
-			order.short_number = vars['short_number'];
-			order.demo_mode = vars['demo_mode'];
-			order.notg_mode = vars['notg_mode']?true:false;
-			const pickupself_mode = this.PICKUPSELF_MODE;
-			GLB.VIEW_ORDER_OK.update(order,{pickupself_mode});
-			GLB.UVIEWS.set_current("the-order-ok");
-		})
-		.catch((vars)=>{
-            this._show_modal_win(`Заказ не получается отправить. 
-            	Обратитесь к администратору кафе.`);
-			console.log('err',vars);
-			setTimeout(()=>{
-				this.chefsmenu.end_loading();
-			},1000);
-		});	
-
 	},
 	load_iiko_cities_async:function() {
 		return new Promise((res,rej)=>{
