@@ -678,7 +678,7 @@ a.mm2-home-link:hover{ color: %[color-home-link-hover]%; }
   white-space: nowrap;text-align: right;transition:.3s;opacity: 1;
 }
 .mm2-item-volume2 {
-  position: absolute;top:39px;right:0; color:%[color-front]%;
+  position: absolute;top:50px;right:0; color:%[color-front]%;
   white-space: nowrap;text-align: right;transition:.3s;opacity: .5;
   font-size: .8rem;
   display: none;

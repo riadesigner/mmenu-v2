@@ -45,8 +45,8 @@ export var CHEFS_ITEM_SIZER = {
 					const price = s.price || 0;					
 					const volume = s.volume || 0;
 					const units = s.units || "г";
-					const sizeName = `${volume} ${units}`;
-					$btn.html(sizeName);
+					const sizeName = "";					
+					$btn.html(`${volume} ${units}`);
 
 					(function($btn, index, price, sizeName, volume, units) {
 						$btn.on('touchend click',function(e){														
@@ -76,7 +76,7 @@ export var CHEFS_ITEM_SIZER = {
 				const price = s.price;				
 				const volume = s.volume;		
 				const units = s.units;
-				const sizeName = `${volume} ${units}`;				
+				const sizeName = "";
 				this.set_current_vars({price, sizeName, volume, units});
 			};
 		}else{

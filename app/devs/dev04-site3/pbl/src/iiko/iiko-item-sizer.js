@@ -44,8 +44,7 @@ export const IIKO_ITEM_SIZER = {
 					const $btn = $('<div></div>',{class: this.CN+"item-size-btn "+currentClass});
 					const price = s.price || 0;
 					const sizeName = s.sizeName || "";
-					const volume = s.portionWeightGrams || 0;					
-		
+					const volume = s.portionWeightGrams || 0;
 					const units = foo.units_to_strings(s.measureUnitType);					
 
 					$btn.html(`${sizeName}<br>${volume} ${units}`);
