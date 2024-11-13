@@ -186,18 +186,21 @@ class Order_parser{
 
             // delivery part
             if(!$this->PICKUPSELF_MODE){
-                // IIKO MODE
+                // DELIVERY MODE
                 if($this->ORDER_TARGET===Order_sender::ORDER_DELIVERY){
                     $u_address = $this->order_data['order_user_full_address'];
-                    $u_address_entrance = isset($u_address['entrance'])? $u_address['entrance']: "";
-                    $u_address_floor = isset($u_address['floor']) ? isset($u_address['floor']) : "";
-                    if(empty($u_address['u_street'])) throw new Exception('--need to know user street');
-                    if(empty($u_address['u_house'])) throw new Exception("--need to know user house");            
-                    $this->deliv_address = "ул. ".$u_address['u_street'].", д. ".$u_address['u_house'].",
-                    подъезд ({$u_address_entrance}),  этаж ({$u_address_floor})";                
-                }else{
-                    // CHEFSMENU MODE
-                    $this->deliv_address = $this->order_data['order_user_full_address'];
+                    if(!empty($u_address['description'])){
+                        // CHEFSMENU MODE
+                        $this->deliv_address = $u_address['description'];
+                    }else{
+                        // IIKO MODE
+                        $u_address_entrance = isset($u_address['entrance'])? $u_address['entrance']: "";
+                        $u_address_floor = isset($u_address['floor']) ? isset($u_address['floor']) : "";
+                        if(empty($u_address['u_street'])) throw new Exception('--need to know user street');
+                        if(empty($u_address['u_house'])) throw new Exception("--need to know user house");            
+                        $this->deliv_address = "ул. ".$u_address['u_street'].", д. ".$u_address['u_house'].",
+                        подъезд ({$u_address_entrance}),  этаж ({$u_address_floor})";                
+                    }                    
                 }
             }else{
                 $this->deliv_address = "";

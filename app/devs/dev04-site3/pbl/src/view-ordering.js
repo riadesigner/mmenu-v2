@@ -303,67 +303,93 @@ export var VIEW_ORDERING = {
 		mode2 ? this.errMessage2.addClass(this.CLASS_INPUT_ERROR) : this.errMessage2.removeClass(this.CLASS_INPUT_ERROR);
 	},
 	checkup_user_inputs:function() {
-		var _this=this;		
 		
 		this._show_attention(false,false);
-		var user_phone = this.$allParams.find("[name=u_phone]").val();
+		
+		const order_user_phone = this.$allParams.find("[name=u_phone]").val();			
+		const order_user_full_address = this.get_user_address();		
+		if(!this.checkup_user_address_and_phone(order_user_phone, order_user_full_address)) return;		
 
-		// CHEFSMENU MODE
-		let user_address="";
+		const id_cafe = GLB.CAFE.get('id');
+		const order_currency = GLB.CAFE.get('cafe_currency');
+		const order_total_price = GLB.CART.get_total_price();
+		const [order_time_sent, order_time_need]  = this.get_user_time_info();
+		const order_user_comment = this.$userComments.val();
+			
+		// GENERAL PART
+		const order_params = {
+			id_cafe,
+			order_currency,
+			order_total_price,
+			order_user_phone,
+			order_time_need,
+			order_time_sent,
+			order_user_full_address,
+			order_user_comment
+		};
+
+		console.log('order_params = ', order_params)
+
+		this.do_order_send(order_params);
+
+	},
+
+	flash_inputs_errors:function() {
+		this.$allParams.animate({ scrollTop: 0 }, 300);
+		this.errMessage1.addClass('flashed');
+		this.errMessage2.addClass('flashed');
+		setTimeout(()=>{
+			this.errMessage1.removeClass('flashed');
+			this.errMessage2.removeClass('flashed');			
+		},300);
+	},	
+	// @return bool 
+	checkup_user_address_and_phone:function(user_phone, address){
+
 		if(this.PICKUPSELF_MODE){
-			user_address = "Заберу заказ сам.";
+			if(!user_phone){ 
+				this._show_attention(!user_phone,false);
+				this.flash_inputs_errors();
+				setTimeout(()=>{this.chefsmenu.end_loading();},500);
+				return false;
+			}					
 		}else{
-			user_address = this.$allParams.find("[name=u_address]").val();
-		};
-
-		// IIKO MODE
-		let user_full_address = {
-			u_street:this.$allParams.find("[name=u_street]").val(),
-			u_house:this.$allParams.find("[name=u_house]").val(),
-			u_flat:this.$allParams.find("[name=u_flat]").val(),
-			u_entrance:this.$allParams.find("[name=u_entrance]").val(),
-			u_floor:this.$allParams.find("[name=u_floor]").val()			
-		};
-
+			// DELIVERY MODE
+			let needs_address = this.IIKO_MODE ? !address.u_street || !address.u_house : !address.description;			
+			if(!user_phone || needs_address){ 
+				this._show_attention(!user_phone, needs_address);
+				this.flash_inputs_errors();
+				setTimeout(()=>{this.chefsmenu.end_loading();},500);
+				return false;
+			}
+		}
+		return true;
+	},
+	// @return object { description:"", u_street:"", u_house:"", u_flat:"", u_entrance:"", u_floor:"" }
+	get_user_address:function(){
 		if(this.IIKO_MODE){
-			// IIKO MODE
-			if(this.PICKUPSELF_MODE){
-				// PICKUPSELF MODE
-				if(!user_phone){ 
-					this._show_attention(!user_phone,false);
-					this.flash_inputs_errors();
-					setTimeout(()=>{this.chefsmenu.end_loading();},500);
-					return;
-				}					
-			}else{
-				// DELIVERY MODE
-				if(!user_phone || !user_full_address.u_street || !user_full_address.u_house){ 
-					this._show_attention(!user_phone,(!user_full_address.u_street || !user_full_address.u_house));
-					this.flash_inputs_errors();
-					setTimeout(()=>{this.chefsmenu.end_loading();},500);
-					return;
-				}
+			return {
+				description:"",
+				u_street:this.$allParams.find("[name=u_street]").val(),
+				u_house:this.$allParams.find("[name=u_house]").val(),
+				u_flat:this.$allParams.find("[name=u_flat]").val(),
+				u_entrance:this.$allParams.find("[name=u_entrance]").val(),
+				u_floor:this.$allParams.find("[name=u_floor]").val(),				
 			}
 		}else{
-			// CHEFSMENU MODE
-			if(this.PICKUPSELF_MODE){
-				// PICKUPSELF MODE
-				if(!user_phone){ 
-					this._show_attention(!user_phone,false);
-					this.flash_inputs_errors();
-					setTimeout(()=>{this.chefsmenu.end_loading();},500);
-					return;
-				}
-			}else{
-				// DELIVERY MODE
-				if(!user_phone || !user_address){ 
-					this._show_attention(!user_phone,!user_address);
-					this.flash_inputs_errors();
-					setTimeout(()=>{this.chefsmenu.end_loading();},500);
-					return;
-				}
-			}
-		};
+			return {
+				description:this.$allParams.find("[name=u_address]").val(),
+				u_street:"",
+				u_house:"",
+				u_flat:"",
+				u_entrance:"",
+				u_floor:"",				
+			}			
+		}
+	},
+	// @return string
+	get_user_time_info:function(){
+		const _this=this;
 
 		var fn = {
 			getTimeto:function() {
@@ -412,48 +438,12 @@ export var VIEW_ORDERING = {
 			}
 		};	
 
-		var user_time_need = fn.getDateAndTimeto(fn.getTimeto());  
-
-		const id_cafe = GLB.CAFE.get('id');
-		const order_currency = GLB.CAFE.get('cafe_currency');
-		const order_total_price = GLB.CART.get_total_price();
-		const order_user_phone = user_phone;
-		const order_time_need = fn.dateExport(user_time_need);
-		const order_time_sent = fn.dateExport(new Date());
-		const order_user_comment = this.$userComments.val();		
-			
-		// GENERAL PART
-		const order_params = {
-			id_cafe,
-			order_currency,
-			order_total_price,
-			order_user_phone,
-			order_time_need,
-			order_time_sent,
-			order_user_comment
-		};
-
-		// ADDRESS PART
-		if(this.IIKO_MODE){
-			order_params['order_user_full_address'] = user_full_address;
-		}else{
-			order_params['order_user_address'] = user_address;
-		}
-
-		this.do_order_send(order_params);
+		const user_time_need = fn.getDateAndTimeto(fn.getTimeto());  
+		const export_time_need = fn.dateExport(user_time_need);
+		const export_time_sent = fn.dateExport(new Date());		
+		return [export_time_sent, export_time_need];
 
 	},
-
-	flash_inputs_errors:function() {
-		this.$allParams.animate({ scrollTop: 0 }, 300);
-		this.errMessage1.addClass('flashed');
-		this.errMessage2.addClass('flashed');
-		setTimeout(()=>{
-			this.errMessage1.removeClass('flashed');
-			this.errMessage2.removeClass('flashed');			
-		},300);
-	},
-
 	is_phone_number:function(phone_number){
 		var nums = phone_number.match(/\d/g);
 		var is_phone = nums && nums.length == 11? true:false;

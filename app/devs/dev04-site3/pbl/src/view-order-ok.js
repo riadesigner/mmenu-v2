@@ -106,14 +106,15 @@ export var VIEW_ORDER_OK = {
 			var need_time_str = need_time ? GLB.LNG.get('lng_near_time') : fn.formatLngTime(this.order.order_time_need);		
 
 			let order_str = "";
-			if(this.IIKO_MODE){
-				const addr = this.order.order_user_full_address;
+			const addr = this.order.order_user_full_address;
+			if(this.IIKO_MODE){				
 				const addr_entrance = addr.u_entrance?`, подъезд ${addr.u_entrance}`:"";
 				const addr_floor = addr.u_floor?`, эт. ${addr.u_floor}`:"";
 				const addr_flat = addr.u_flat?`, кв. ${addr.u_flat}`:"";
 				order_str = `ул. ${addr.u_street}, д. ${addr.u_house}${addr_flat}${addr_floor}${addr_entrance}.`;
 			}else{
-				order_str = this.order.order_user_address;
+				// chefsmenu mode
+				order_str = addr.description;
 			};
 
 			let delivery_str = this.PICKUPSELF_MODE? `<span>Доставка: </span> Заберу сам.<br>`: `<span>${GLB.LNG.get("lng_address")}</span> ${order_str}<br>`;
