@@ -746,6 +746,9 @@ App&&App();
 					<div class="std-form__section-description">
 						Выберите один или несколько разделов с добавками к этому блюду (или напитку)
 					</div>
+					<div class="all-menu-sections-header">
+						<div></div><div></div><div></div>
+					</div>
 					<div class="all-menu-sections">
 						<!-- [code] -->
 					</div>						

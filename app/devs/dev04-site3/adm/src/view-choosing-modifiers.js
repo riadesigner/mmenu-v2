@@ -47,8 +47,11 @@ export var VIEW_CHOOSING_MODIFIERS = {
 		for(var i=0;i<arrMenus.length;i++){			
 			const itemId = arrMenus[i].id;			
 			const checked = modifiers.length && modifiers.includes(itemId) ? 'checked':'';						
-			var $btnMenu = $('<div class="std-form__radio-button '+checked+'" id="'+arrMenus[i].id+'">'+arrMenus[i].title+'</div>\n');
-			$btnMenu.on("touchend",function(){
+			const btnTitleStr = `<div class="btn-title ${checked}">${arrMenus[i].title}</div>`;
+			const btnsMinModeStr = `<div class="btns-min-mode"><div class="btn-min">0</div><div class="btn-mode">и</div></div>`;			
+			const btnRowStr = `<div class="btn-modifier" id="${arrMenus[i].id}">${btnTitleStr} ${btnsMinModeStr}</div>`;
+			var $btnRow = $(btnRowStr);
+			$btnRow.on("touchend",function(){
 				if(!_this.VIEW_SCROLLED){
 					if($(this).hasClass('checked')){
 						$(this).removeClass('checked')
@@ -60,7 +63,7 @@ export var VIEW_CHOOSING_MODIFIERS = {
 				};
 				return false;
 			});
-			this.$allMenuSection.append($btnMenu);
+			this.$allMenuSection.append($btnRow);
 		};
 		setTimeout(function(){
 			_this._page_show();
