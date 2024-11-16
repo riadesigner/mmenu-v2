@@ -50,19 +50,22 @@ export var VIEW_CHOOSING_MODIFIERS = {
 			const btnTitleStr = `<div class="btn-title ${checked}">${arrMenus[i].title}</div>`;
 			const btnsMinModeStr = `<div class="btns-min-mode"><div class="btn-min">0</div><div class="btn-mode">и</div></div>`;			
 			const btnRowStr = `<div class="btn-modifier" id="${arrMenus[i].id}">${btnTitleStr} ${btnsMinModeStr}</div>`;
-			var $btnRow = $(btnRowStr);
-			$btnRow.on("touchend",function(){
+			const $btnRow = $(btnRowStr);			
+			$btnRow.find('.btn-title').on("touchend",function(){				
 				if(!_this.VIEW_SCROLLED){
-					if($(this).hasClass('checked')){
-						$(this).removeClass('checked')
-						_this.remove_modifier($(this).attr('id'));
+					const $parent = $(this).parent();
+					if($parent.hasClass('checked')){
+						$parent.removeClass('checked')
+						_this.remove_modifier($parent.attr('id'));
 					}else{
-						$(this).addClass('checked')
-						_this.add_modifier($(this).attr('id'));
+						$parent.addClass('checked')
+						_this.add_modifier($parent.attr('id'));
 					}					
 				};
 				return false;
 			});
+			$btnRow.find('.btn-min').on('touchend',()=>{console.log('min')})
+			$btnRow.find('.btn-mode').on('touchend',()=>{console.log('mode')});
 			this.$allMenuSection.append($btnRow);
 		};
 		setTimeout(function(){
