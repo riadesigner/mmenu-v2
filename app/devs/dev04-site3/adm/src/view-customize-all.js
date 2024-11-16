@@ -162,7 +162,7 @@ export var VIEW_CUSTOMIZE_ALL = {
 		});		
 
 		this.$btnMenuLink.on('touchend',function(e){			
-			if(!_this.VIEW_SCROLLED){
+			if(!_this.VIEW_SCROLLED){				
 			GLB.VIEW_CAFE_LINK.update();
 			GLB.VIEWS.setCurrent(GLB.VIEW_CAFE_LINK.name);
 			};

@@ -68,6 +68,25 @@ class Account{
 		}
 	}	
 
+	/**
+	 * @param Smart_object $CAFE
+	 * @return array / [string $error, string $QrCodeUrl ]
+	 */
+	static public function recreate_qrcode_image_for(Smart_object $CAFE):array {
+		if(!$CAFE || !$CAFE->valid()) return ["unknown cafe", null];
+		
+		$newImageQrCodeUrl = self::generate_qrcode($CAFE->id, $CAFE->uniq_name);
+		if($newImageQrCodeUrl){
+			$CAFE->qrcode = $newImageQrCodeUrl;
+			$CAFE->updated_date = 'now()';
+			$CAFE->save();
+			return [null, $newImageQrCodeUrl];
+		}else{
+			return ["cant create qrcode image", null];
+		}
+
+	}
+
 	/* private */
 
 	static private function create_cafe_for($id_user,$lang){
@@ -288,7 +307,7 @@ class Account{
     	return $id_cafe.$uname;
 	}
 
-	static private function generate_qrcode($id_cafe,$uniq_name){
+	static private function generate_qrcode($id_cafe,$uniq_name):string|bool{
 		global $CFG;
 		
 		$prefix = $uniq_name.'/'.$uniq_name;		

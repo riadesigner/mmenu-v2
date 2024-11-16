@@ -20,26 +20,57 @@ export var VIEW_CAFE_LINK = {
 	},
 
 	update:function(){
-		var _this=this;
-				
-		this._update();
+		var _this=this;						
+
+		this._update();		
 		this._page_hide();
 		this._now_loading();
 		this.reset();
 		this._update_tabindex();
 		
 		var cafe = GLB.THE_CAFE.get();
-		
+				
 		this.$home_menu_link.html(GLB.THE_CAFE.get_link('name'))
 		.attr({ href : GLB.THE_CAFE.get_link('url') });
 
 		this.$qrCode.html("<img src='"+cafe.qrcode+"'>");			
+
+		console.log('cafe.qrcode ===', cafe.qrcode );
+
 
 		var img = new Image();
 		img.onload = function(){
 			_this._end_loading();
 			_this._page_show();
 		};
+		img.onerror = function(err){
+			_this._end_loading();			
+			_this.ask_to_recreate_qrcode({
+				on_action:()=>{					
+					_this.do_recreating_qrcode_async()
+					.then((vars)=>{
+						_this._end_loading();
+						_this._page_show();
+						console.log('vars',vars)
+						const qrcode = vars['qrcode_image_url'];
+						GLB.THE_CAFE.set({qrcode:qrcode});
+						_this.update();						
+					})
+					.catch((err)=>{
+						_this._end_loading();
+						const errMessage = [
+							"<p>Не удалось пересоздать qr-code.</p>",
+							"<p>Попробуйте позже или обратитесь к разработчику сервиса.</p>"
+						].join('');
+						_this.show_err_message_and_back(errMessage);
+						console.log('err = ',err);
+					})
+				},
+				on_cancel:()=>{
+					_this._go_back();
+				}
+			});
+		};		
 		img.src = cafe.qrcode;
 		
 	},
@@ -150,7 +181,65 @@ export var VIEW_CAFE_LINK = {
 		});
 
 	},
+	ask_to_recreate_qrcode:function(opt){
+		const ask = [
+			`</p>Не получилось загрузить (найти) qr-code.</p>`,
+			`</p>Пересоздать его?</p>`,
+		].join(' ');
+		GLB.VIEWS.modalConfirm({
+			title:"Отправка сообщения",
+			ask:ask,
+			action:function(){
+				opt.on_action && opt.on_action();
+			},
+			cancel:function(){
+				opt.on_cancel && opt.on_cancel();
+			},
+			buttons:[GLB.LNG.get("lng_yes"),GLB.LNG.get("lng_no")]
+		});	
+	},
+	show_err_message_and_back(errMessage){			
+		GLB.VIEWS.modalMessage({
+			title:GLB.LNG.get("lng_error"),
+			message: errMessage,
+			btn_title:GLB.LNG.get('lng_close'),
+			on_close:()=>{
+				this._blur({onBlur:()=>{
+					this._go_back();
+				}});
+			}
+		});				
+	},
+	do_recreating_qrcode_async:function(){
+		return new Promise((res,rej)=>{
 
+			this._now_loading();
+			
+			const PATH = 'adm/lib/';
+			const url = PATH + 'lib.recreate_qrcodeimg.php';
+
+			const data = {
+				id_cafe:GLB.THE_CAFE.get().id
+			};
+	
+			this.AJAX = $.ajax({
+				url: url+"?callback=?",
+				data:data,
+				method:"POST",
+				dataType: "jsonp",
+				success: function (response) {					
+					if(!response.error){
+						res(response);
+					}else{
+						rej(response.error);
+					};
+				},
+				error:function(response) {					
+					rej(response);					
+				}
+			});
+		})		
+	},
 	send:function(opt){
 
 		var _this = this;

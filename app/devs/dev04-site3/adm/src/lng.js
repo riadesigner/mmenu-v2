@@ -26,6 +26,8 @@ export var LNG = {
 			lng_attention:['-','Внимание!'],
 			lng_close:['-','Закрыть'],
 			lng_ok:['-','ОК'],
+			lng_yes:['-','Да'],
+			lng_no:['-','нет'],
 			lng_awesome:['-','Отлично'],
 			lng_cancel:['-','Отмена'],
 			lng_edit:['-','Редактировать'],
