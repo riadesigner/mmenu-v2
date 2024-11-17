@@ -141,15 +141,6 @@ export var CHEFSMENU = {
             anim:'animLeft'
         }));        
 
-        GLB.UVIEWS.addview(
-            GLB.VIEW_THANK_YOU.init({
-            name:"the-thank-you",
-            template:PATH_TO_TEMPLATES+" .view-thank-you",
-            chefsmenu:_this,
-            noclose:this.NO_CLOSE,
-            anim:'animLeft'
-        }));
-
         GLB.TABINDEX.init();
 
         this.onMenuReady && this.onMenuReady();

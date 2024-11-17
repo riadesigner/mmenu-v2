@@ -48,7 +48,7 @@ export var VIEW_ORDER_OK = {
 	update:function(order, opt){		
 
 		this.TABLE_MODE = opt&&opt.table_number?true:false;
-		this.IIKO_MODE = GLB.CAFE.get().iiko_api_key!=="";		
+		this.IIKO_MODE = GLB.CAFE.is_iiko_mode();		
 		this.PICKUPSELF_MODE = opt&&opt.pickupself_mode?true:false;	
 		this.order = order;
 
@@ -144,7 +144,7 @@ export var VIEW_ORDER_OK = {
 	},
 	build_ordered_list:function(order_items) {
 		const currency = GLB.CAFE.get('cafe_currency').symbol;
-		const IIKO_MODE = GLB.CAFE.get().iiko_api_key!=="";
+		const IIKO_MODE = GLB.CAFE.is_iiko_mode();
 
 		const orders = [...order_items];
 
@@ -169,9 +169,9 @@ export var VIEW_ORDER_OK = {
 				const title_str = row.item_data.title;
 				const count = row.count;
 				const price = row.price;				
-				
-				let volume_str = row.sizeName;				
-				if(IIKO_MODE) {volume_str += `/ ${row.volume} ${row.units}`;}
+
+				const weight = `${row.volume} ${row.units}`;
+				const volume_str = IIKO_MODE ? `${row.sizeName} / ${weight}` : weight;
 
 				const modifiers = row.chosen_modifiers;
 				let modifiers_str = "";

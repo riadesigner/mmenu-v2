@@ -21,7 +21,6 @@ import {VIEW_ALLMENU} from './view-allmenu.js';
 import {VIEW_ALLITEMS} from './view-allitems.js';
 import {VIEW_CART} from './view-cart.js';
 import {VIEW_CHOOSING_MODE} from './view-choosing-mode.js';
-import {VIEW_THANK_YOU} from './view-thank-you.js';
 
 import {VIEW_ORDERING} from './view-ordering.js';
 import {VIEW_ORDER_OK} from './view-order-ok.js';
@@ -47,7 +46,6 @@ GLB.VIEW_ALLITEMS = $.extend( VIEW_ALLITEMS, VIEW_STD );
 GLB.VIEW_CART = $.extend( VIEW_CART, VIEW_STD );
 GLB.VIEW_ORDERING = $.extend( VIEW_ORDERING, VIEW_STD );
 GLB.VIEW_CHOOSING_MODE = $.extend( VIEW_CHOOSING_MODE, VIEW_STD );
-GLB.VIEW_THANK_YOU = $.extend( VIEW_THANK_YOU, VIEW_STD );
 GLB.VIEW_ORDER_OK = $.extend( VIEW_ORDER_OK, VIEW_STD );
 GLB.VIEW_ORDER_CANCEL = $.extend( VIEW_ORDER_CANCEL, VIEW_STD );
 

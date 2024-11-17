@@ -64,10 +64,6 @@ export var LNG = {init:function(lang){
 			lng_pick_up_the_order_myself:['I`ll pick it up<br> myself', 'Заберу сам'],
 			lng_choosing_delivering:['Choose time and <br>place of delivery', 'Выбрать время<br>и место доставки'],
 
-			//VIEW_THANK_YOU
-			lng_your_order:['Your order','Ваш заказ'],
-			lng_thank_you:['Thank you','Спасибо'],
-
 			//VIEW_ORDERING
 			lng_your_phone:[ 'My phone:', 'Мой телефон:'],
 			lng_need_user_phone:[

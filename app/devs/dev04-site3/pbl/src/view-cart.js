@@ -135,7 +135,7 @@ export var VIEW_CART = {
 		var _this=this;
 
 		const ALL_ORDERS = GLB.CART.get_all();			
-		const IIKO_MODE = GLB.CAFE.get().iiko_api_key!=="";
+		const IIKO_MODE = GLB.CAFE.is_iiko_mode();
 		const currency = GLB.CAFE.get('cafe_currency').symbol;				
 
 		let totalPrice = GLB.CART.get_total_price();
@@ -171,8 +171,9 @@ export var VIEW_CART = {
 				const title_str = order.item_data.title;
 				const count = order.count;
 				const price = order.price;
-				const uniq_name = order.uniq_name;				
-				const volume_str = IIKO_MODE ? `${order.sizeName} / ${order.volume} ${order.units}` : order.sizeName;
+				const uniq_name = order.uniq_name;
+				const weight = `${order.volume} ${order.units}`;
+				const volume_str = IIKO_MODE ? `${order.sizeName} / ${weight}` : weight;
 				const price_str = count+" x "+price+" "+currency;
 								
 				const modifiers = order.chosen_modifiers;
