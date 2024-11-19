@@ -656,21 +656,21 @@ App&&App();
 						
 						<div class="std-form__title-special-1-footer"></div>
 					</div>					
-							
+						
+					<div class="edit-item-choose-modifiers chefsmenu-mode-only">
+						<div class="std-form__section-description">
+							Здесь вы можете выбрать опциональные добавки для этого блюда:
+						</div> 
+						<div class="std-form__wide-button edit-item-choose-modifiers__button">Добавки</div>
+					</div>	
+
 					<div class="edit-item-choose-section">
 						<div class="std-form__section-description" 
 						lang="lng_view_edit_item__menu_section">
 							Здесь вы можете изменить раздел в котором находится это блюдо:
 						</div> 
 						<div class="std-form__wide-button edit-item-choose-section__button"><!-- ... --></div>
-					</div>
-
-					<div class="edit-item-choose-modifiers chefsmenu-mode-only">
-						<div class="std-form__section-description">
-							Здесь вы можете выбрать опциональные добавки для этого блюда:
-						</div> 
-						<div class="std-form__wide-button edit-item-choose-modifiers__button">Добавки</div>
-					</div>					
+					</div>				
 
 				</div>
 			</div>

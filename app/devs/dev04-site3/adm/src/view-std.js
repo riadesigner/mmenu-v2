@@ -116,7 +116,7 @@ export var VIEW_STD = {
 	},
 	_go_back:function(){
 		GLB.VIEWS.goBack();
-		this._page_hide();
+		//this._page_hide();
 	},
 	_update_lng:function($tpl){		
 		var _this=this;

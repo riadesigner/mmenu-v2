@@ -85,6 +85,9 @@ export var VIEW_EDIT_ITEM = {
 
 		}else{		
 
+			// -----------------------------------------
+			// EDITING ITEM (BOTH CHEFSMENU & IIKO MODE)
+			// -----------------------------------------			
 			this.ACTION_MODE = 'edit';	
 			this._update_title(GLB.LNG.get("lng_item_edit"));
 			this.$sectionChooseMenu.show();		
@@ -121,7 +124,7 @@ export var VIEW_EDIT_ITEM = {
 
 		setTimeout(()=>{ 
 			this._page_show();
-		},350);
+		},350);		
 		
 	},	
 

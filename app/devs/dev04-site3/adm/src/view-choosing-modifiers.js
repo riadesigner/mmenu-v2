@@ -22,63 +22,104 @@ export var VIEW_CHOOSING_MODIFIERS = {
 		this._update();
 		this._page_hide();
 		this.ITEM = item;		
+		this.NEW_MODIFIERS = this.get_modifiers_from_item();
 		this.rebuild();
-		setTimeout(function(){ _this._page_show(); },300);
+		setTimeout(function(){ _this._page_show(); },200);
 	},
 
 	reset:function(){
 		this._reset();
 		this._page_to_top();
-		this._need2save(false);
-		this.NEW_MODIFIERS = [];				
+		this._need2save(false);		
 	},
 	rebuild:function(){
 		var _this=this;
 		this.$allMenuSection.html("");		
 		
-		const currentItemId = parseInt(this.ITEM.id_menu,10);
+		const currentMenuId = this.ITEM.id_menu; // string		
 		let arrMenus = GLB.VIEW_ALL_MENU.get();
-		arrMenus = arrMenus.filter((m)=>parseInt(m.id,10)!==currentItemId);
+		arrMenus = arrMenus.filter((m)=>parseInt(m.id,10)!==currentMenuId);
 		
-		const modifiers = this.ITEM.modifiers || [];
+		const modifiers = this.NEW_MODIFIERS;
+		console.log('modifiers = ',modifiers)
 
-		console.log('modifiers',modifiers)
-
+		const fn = {
+			modif_toggle_min:(modif_id)=>{							
+				this.NEW_MODIFIERS.map((m)=>{
+					console.log(`m.id===modif_id ${m.id===modif_id}, ${m.id}`)
+					if(m.id===modif_id){
+						m.min = m.min==='0'?'1':'0';						
+					}
+				});				
+				console.log('this.NEW_MODIFIERS',this.NEW_MODIFIERS)
+				this.rebuild();
+				this.on_change();
+			},
+			modif_toggle_mode:(modif_id)=>{				
+				this.NEW_MODIFIERS.map((m)=>{
+					if(m.id===modif_id){
+						m.mode = m.mode==='AND'?'OR':'AND';							
+					}
+				});	
+				console.log('this.NEW_MODIFIERS',this.NEW_MODIFIERS)			
+				this.rebuild();
+				this.on_change();
+			}
+		};
 		for(var i=0;i<arrMenus.length;i++){			
-			const itemId = arrMenus[i].id;			
-			const checked = modifiers.length && modifiers.includes(itemId) ? 'checked':'';						
-			const btnTitleStr = `<div class="btn-title ${checked}">${arrMenus[i].title}</div>`;
-			const btnsMinModeStr = `<div class="btns-min-mode"><div class="btn-min">0</div><div class="btn-mode">и</div></div>`;			
-			const btnRowStr = `<div class="btn-modifier" id="${arrMenus[i].id}">${btnTitleStr} ${btnsMinModeStr}</div>`;
-			const $btnRow = $(btnRowStr);			
+			const id_menu = arrMenus[i].id;			
+			let arr = modifiers.filter((m)=>{ return m['id']===id_menu; });
+			const currentModif = arr.length?arr[0]:null;
+			const checked = currentModif ? 'checked':'';						
+			const btnTitleStr = `<div class="btn-title">${arrMenus[i].title}</div>`;			
+			const minStr = currentModif?currentModif.min:'0';
+			const modeStr = currentModif?currentModif.mode:'AND';
+			const btnsMinModeStr = `<div class="btns-min-mode"><div class="btn-min">${minStr}</div><div class="btn-mode">${modeStr}</div></div>`;			
+			const btnRowStr = `<div class="btn-modifier ${checked}" id="${id_menu}">${btnTitleStr} ${btnsMinModeStr}</div>`;
+			const $btnRow = $(btnRowStr);						
 			$btnRow.find('.btn-title').on("touchend",function(){				
 				if(!_this.VIEW_SCROLLED){
 					const $parent = $(this).parent();
 					if($parent.hasClass('checked')){
 						$parent.removeClass('checked')
 						_this.remove_modifier($parent.attr('id'));
-					}else{
-						$parent.addClass('checked')
+					}else{						
+						// set default values
+						$parent.find('.btn-min').html('0');
+						$parent.find('.btn-mode').html('AND');
+						$parent.addClass('checked');									
 						_this.add_modifier($parent.attr('id'));
 					}					
 				};
 				return false;
 			});
-			$btnRow.find('.btn-min').on('touchend',()=>{console.log('min')})
-			$btnRow.find('.btn-mode').on('touchend',()=>{console.log('mode')});
+			$btnRow.find('.btn-min').on('touchend',()=>{fn.modif_toggle_min($btnRow.attr('id'));})
+			$btnRow.find('.btn-mode').on('touchend',()=>{fn.modif_toggle_mode($btnRow.attr('id'));});
 			this.$allMenuSection.append($btnRow);
 		};
 		setTimeout(function(){
 			_this._page_show();
 		},600);
 	},
+	get_modifiers_from_item:function(){
+		return this.ITEM.modifiers ? JSON.parse(this.ITEM.modifiers): [];
+	},
 	remove_modifier:function(id_menu){
-		this.NEW_MODIFIERS = this.NEW_MODIFIERS.filter((id)=>id!==id_menu);
+		this.NEW_MODIFIERS = this.NEW_MODIFIERS.filter((m)=>m['id']!==id_menu);
 		this.on_change();
 	},
-	add_modifier:function(id_menu){
-		if(!this.NEW_MODIFIERS.includes(id_menu)){
-			this.NEW_MODIFIERS = [...this.NEW_MODIFIERS, id_menu];
+	/**
+	 * @param {string} id_menu 
+	 * @param {string} name 
+	 * @return {void}
+	 */
+	add_modifier:function(id_menu){		
+		let menu = GLB.VIEW_ALL_MENU.get(id_menu);
+		let name = menu['title'];
+		let arr = this.NEW_MODIFIERS.filter((m)=>{ return m['id']===id_menu; });		
+		if(!arr.length){
+			const modifier = {'id':id_menu,'name':name,min:'0',mode:'AND'};
+			this.NEW_MODIFIERS = [...this.NEW_MODIFIERS, modifier];			
 		}
 		this.on_change();
 	},	
@@ -97,12 +138,11 @@ export var VIEW_CHOOSING_MODIFIERS = {
 				if(!_this.LOADING){
 					if(!_this.NEED_TO_SAVE){					
 						_this._go_back();
-					}else{
-						var menu = GLB.VIEW_ALL_MENU.get(_this.NEW_MODIFIERS);					
+					}else{						
 						_this.save({
-							onReady:function(item){						
-								// GLB.VIEW_ALL_ITEMS.update(menu,{move2end:true});
-								// GLB.VIEWS.jumpTo(GLB.VIEW_ALL_ITEMS.name);						
+							onReady:function(){																		
+								// GLB.VIEW_ALL_ITEMS.update(menu);
+								GLB.VIEWS.jumpTo(GLB.VIEW_ALL_ITEMS.name);				
 								_this._go_back();
 							}
 						});
@@ -134,18 +174,14 @@ export var VIEW_CHOOSING_MODIFIERS = {
             dataType:"jsonp",
             data:data,
             method:"POST",
-            success:function(response) {
-            	console.log('response',response)
+            success:function(response) {            	
             	if(!response.error){
-            		var cafe_rev = response['cafe-rev'];
-            		var item = response['item'];
-					_this.ITEM.modifiers = _this.NEW_MODIFIERS;
+					_this.ITEM.modifiers = JSON.stringify(_this.NEW_MODIFIERS);
             		setTimeout(function(){
 	            		_this._end_loading();
-		            	opt&&opt.onReady&&opt.onReady(item);
+		            	opt&&opt.onReady&&opt.onReady();
             		},300);
-            	}else{
-					console.log(response.error);
+            	}else{					
 					_this._end_loading();
 					_this.errMessage();			        
             	}

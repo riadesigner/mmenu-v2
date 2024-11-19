@@ -31,7 +31,7 @@ var VIEWS = {
 		this.addMiddleLayer();
 		this.CURRENT_VIEW = '';
 
-		this.DBLTAP_DELAY = 600;
+		this.DBLTAP_DELAY = 800;
 		this.DBLTAP = false; // too fast request go back
 		this.PAUSE_BEFORE_ANIM_CURRENT = 50; // while lift up zIndex 
 		this.ANI = {
