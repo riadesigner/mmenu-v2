@@ -236,14 +236,16 @@
 
 	if($cafe->save()){	
 
-		try{
-			// обновляем в БД имена-ссылки на меню для столиков
-			Qr_tables::update($cafe);
-			__answerjsonp($cafe->export());			
-		}catch( Exception $e){
-			glogError($e->getMessage());
-			__errorjsonp("--cant update cafe info");
-		}			
+		__answerjsonp($cafe->export());			
+		
+		// try{
+		// 	// обновляем в БД имена-ссылки на меню для столиков
+		// 	Qr_tables::update($cafe);
+		// 	__answerjsonp($cafe->export());			
+		// }catch( Exception $e){
+		// 	glogError($e->getMessage());
+		// 	__errorjsonp("--cant update cafe info");
+		// }			
 		
 	}else{
 		glogError("Can't update iiko info for cafe, ".__FILE__.", ".__LINE__);
