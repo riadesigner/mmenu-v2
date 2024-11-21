@@ -54,6 +54,7 @@ export var VIEW_ALLITEMS = {
 				setTimeout(function(){ 
 					_this.chefsmenu.end_loading(); 
 					setTimeout(function(){ 
+						/// TODO loading only current image and nears
 						_this.start_load_images();
 					},300);
 				},100);				
@@ -67,7 +68,7 @@ export var VIEW_ALLITEMS = {
 				_this.build({onReady:function(){
 						fn.on_built();
 					}
-				});				
+				});
 			},600);
 		}else{
 			setTimeout(function(){

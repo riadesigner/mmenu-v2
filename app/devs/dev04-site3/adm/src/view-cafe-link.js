@@ -33,10 +33,9 @@ export var VIEW_CAFE_LINK = {
 		this.$home_menu_link.html(GLB.THE_CAFE.get_link('name'))
 		.attr({ href : GLB.THE_CAFE.get_link('url') });
 
-		this.$qrCode.html("<img src='"+cafe.qrcode+"'>");			
-
-		console.log('cafe.qrcode ===', cafe.qrcode );
-
+		const qrcodeStr = `${cafe.qrcode}?r=${Math.random()}`;
+		
+		this.$qrCode.html(`<img src='${qrcodeStr}'>`);
 
 		var img = new Image();
 		img.onload = function(){
@@ -71,7 +70,7 @@ export var VIEW_CAFE_LINK = {
 				}
 			});
 		};		
-		img.src = cafe.qrcode;
+		img.src = qrcodeStr;
 		
 	},
 	reset:function() {		
