@@ -25,35 +25,14 @@ export var VIEW_ALL_ITEMS = {
 		var _this=this;
 
 		this._behavior();
-
-
-		var fn = {
-			blur_and_go_back:function(){
-			_this._blur({onBlur:function(){
-				if(!_this.LOADING){
-					if(_this.NEED_TO_SAVE || _this.NEED_POS_TO_SAVE){
-						_this.AJAX && _this.AJAX.abort();
-						_this.PAGES && _this.PAGES.stopLoadingImages();					
-						_this.save({onReady:function(){
-							_this.PAGELIST && _this.PAGELIST.hide(150,'del tail');						
-							setTimeout(function(){ _this._go_back(); },150);
-						}});
-					}else{
-						_this.PAGELIST && _this.PAGELIST.hide(150,'del tail');					
-						setTimeout(function(){ _this._go_back(); },150);
-					}
-				};
-			}});
-			}
-		};
 		
 		this.$viewTitle.on('touchend',function(){			
-			fn.blur_and_go_back();
+			_this.save_and_go_back();
 			return false;	
 		});
 
 		this.$btnBack.on('touchend',function(){			
-			fn.blur_and_go_back();
+			_this.save_and_go_back();
 			return false;	
 		});
 
@@ -134,8 +113,14 @@ export var VIEW_ALL_ITEMS = {
    
 		this.PAGES = $.menuItems({
 			arr:ARR,
-			tpl:$tpl,			
-			need2Save:function(item){_this._need2save(item);},
+			tpl:$tpl,						
+			need2Save:function(item){ 				
+				// TODO 
+				// needs to make ARR_NEEDTOSAVE_ITEMS
+				// if(item), then add to list, overwise remove from list 
+				// so, for a while – we are setting TRUE here   				
+				_this._need2save(true); 
+			}, 
 			need2SavePos:function(){ _this.need_pos_to_save(); },
 			saveItem:function(item){ },
 			saveItemsPos:function(){ },
@@ -174,6 +159,7 @@ export var VIEW_ALL_ITEMS = {
 		}
 	},
 	need_pos_to_save:function(){
+		console.log('func need_pos_to_save fired')
 		this.NEED_POS_TO_SAVE = true;
 		this.$view.addClass('need-to-save');		
 	},
@@ -346,28 +332,62 @@ export var VIEW_ALL_ITEMS = {
 		},300);
 
 	},	
-	save:function(opt){
-		var _this=this;
+
+	save_and_go_back:function(){		
+		this._blur({onBlur:()=>{
+			if(!this.LOADING){
+				if(this.NEED_TO_SAVE || this.NEED_POS_TO_SAVE){
+					this.AJAX && this.AJAX.abort();
+					this.PAGES && this.PAGES.stopLoadingImages();					
+					this.save({onReady:()=>{
+						this.PAGELIST && this.PAGELIST.hide(150,'del tail');						
+						setTimeout(()=>{ this._go_back(); },150);
+					}});
+				}else{
+					this.PAGELIST && this.PAGELIST.hide(150,'del tail');					
+					setTimeout(()=>{ this._go_back(); },150);
+				}
+			};
+		}});		
+	},
+
+	save:function(opt){		
 		
 		var fn = {
-			do_save:function(){
-				if(_this.NEED_TO_SAVE){
-					_this.save_item_flags(_this.NEED_TO_SAVE,opt);	
-				}else if(_this.NEED_POS_TO_SAVE){
-					_this.save_items_pos(opt);
+			do_save:()=>{
+				console.log('do_save')
+				if(this.NEED_TO_SAVE || this.NEED_POS_TO_SAVE){					
+					console.log('start saving flags params')
+					this.save_flags_and_pos_async()
+					.then((vars)=>{
+						this.reset(); 
+						console.log('now saved items flags', vars);
+						opt && opt.onReady && opt.onReady();						
+					})
+					.catch((vars)=>{
+						console.log('не удалось сохранить');
+						console.log(vars);
+						GLB.VIEWS.modalMessage({
+							title:GLB.LNG.get("lng_attention"),
+							message:"Не удалось сохранить. Попробуйте позже или обратитесь в поддержку.",
+							btn_title:GLB.LNG.get('lng_ok')
+						});						
+					})
 				}else{
+					console.log('no need to save')
 					opt.onReady && opt.onReady();
 				}
 			}
 		};
 
-		if(!_this.LOADING && _this.PAGELIST){
-			_this.PAGELIST.reset({onReady:function(){
-				fn.do_save();	
+		if(!this.LOADING && this.PAGELIST){
+			this.PAGELIST.reset({onReady:()=>{
+				fn.do_save();
 			}});
 		}
 
 	},
+
 	save_items_pos:function(options,noEndLoading){
 
 		var _this = this;
@@ -394,8 +414,6 @@ export var VIEW_ALL_ITEMS = {
             success: function (response) {
         		_this.reset();        		
             	if(!response.error){
-            		var cafe_rev = response['cafe-rev'];
-            		var arr_items = response['arr_items'];
             		setTimeout(function(){
 						!noEndLoading && _this._end_loading();
 	 					options.onReady && options.onReady();
@@ -412,75 +430,62 @@ export var VIEW_ALL_ITEMS = {
         });
 
 	},
-	save_item_flags:function(item, options){
+	save_flags_and_pos_async:function(options){
+		return new Promise((res,rej)=>{
 
-		var _this = this;
+			this._now_loading();
+			const PATH = 'adm/lib/';
+			const url = PATH + 'lib.save_items_flags_and_pos.php';						
 
-		if(this.LOADING){ return false; }		
-
-		this._now_loading();	
-		
-		var PATH = 'adm/lib/';
-		var url = PATH + 'lib.save_item_flags.php';
-
-		var itemFlags = {
-				flag_spicy:item.mode_spicy,
-				flag_hit:item.mode_hit,
-				flag_vege:item.mode_vege
+			const id_menu = this.CURRENT_MENU.id;
+			const arrItemsFlags = [];
+			const arr_items = GLB.ITEMS.get(id_menu);
+			for(let i in arr_items){
+				const item = arr_items[i];
+				arrItemsFlags.push({					
+					id_item:item.id,
+					flag_spicy:item.mode_spicy,
+					flag_hit:item.mode_hit,
+					flag_vege:item.mode_vege					
+				})
 			};
-		
-		var fn = {
-			saveFlags:function(opt){
+			
+			console.log('this.NEED_POS_TO_SAVE = ', this.NEED_POS_TO_SAVE)
 
-		        _this.AJAX = $.ajax({
-		            url: url+"?callback=?",
-		            dataType: "jsonp",
-		            data:{id_item:item.id,itemFlags:itemFlags},
-		            method:"POST",
-		            success: function (response) {
-		            	setTimeout(function(){
-			            	_this._end_loading();
-			            	if(!response.error){
-			            		var cafe_rev = response['cafe-rev'];
-			            		var message = response['message'];
-								opt.onReady && opt.onReady();
-			            	}else{
-								console.log("err:",response.error);
-			            	}
-		            	},1000)
-		            },
-		            error:function(response) {
-						_this._end_loading();
-				        console.log("err save flags",response);
-					}
-		        });				
+			const arrItemsPos = []; 
+			if(this.NEED_POS_TO_SAVE){
+				for(let i=0;i<arr_items.length;i++){
+					const item = arr_items[i];
+					arrItemsPos.push({					
+						id_item:item.id,
+						pos:i,
+					})
+				};				
+			};
+			
+			const data = {id_menu:id_menu, arrItemsFlags:arrItemsFlags, arrItemsPos:arrItemsPos};
+			console.log('data',data)
 
-			}
-		};
-
-		if(item){			
-			fn.saveFlags({
-				onReady:function(){
-					if(_this.NEED_POS_TO_SAVE){
-						// flag saved, goto save pos
-						_this.save_items_pos(options);
+			this.AJAX = $.ajax({
+				url: url+"?callback=?",
+				dataType: "jsonp",
+				data:data,
+				method:"POST",
+				success: (response)=> {
+					this._end_loading();
+					if(!response.error){
+						res(response);
 					}else{
-						_this.reset();						
-						setTimeout(function(){
-							_this._end_loading();
-							options.onReady && options.onReady();	
-						},300);
-						
+						rej(response.error);						
 					}
+				},
+				error:(response)=>{
+					this._end_loading();
+					rej(response);					
+					console.log("error of saving flags",response);
 				}
-			});			
-		}else{
-			setTimeout(function(){				
-				_this.reset();
-				_this._end_loading(); 
-			},300);
-		}
-
+			});	
+		})
 	},
 	get:function(){		
 		return GLB.ITEMS.get(this.CURRENT_MENU.id);
@@ -547,6 +552,6 @@ export var VIEW_ALL_ITEMS = {
 				btn_title:GLB.LNG.get('lng_close')
 			});
 		}
-	}	
+	}
 		
 };

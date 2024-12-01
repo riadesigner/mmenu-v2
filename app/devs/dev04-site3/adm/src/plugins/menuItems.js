@@ -11,8 +11,7 @@ export default $.extend({
 			var saveItemsPos = opt.saveItemsPos;
 			var itemEdit = opt.itemEdit;
 			var itemImageEdit = opt.itemImageEdit;
-			var itemDelete =  opt.itemDelete;
-			var currency =  opt.currency;
+			var itemDelete =  opt.itemDelete;			
 			var currencySign =  opt.currencySign;			
 			var itemReplace =  opt.itemReplace;
 			var managedByIiko = opt.itemReplace;
