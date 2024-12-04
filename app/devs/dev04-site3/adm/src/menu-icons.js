@@ -33,7 +33,22 @@ export var MENU_ICONS = {
 			{title:"juice_and_water"},
 			{title:"cocktails"},
 			{title:"beer"},
-			{title:"alcohol"}
+			{title:"alcohol"},
+			// new icons
+			{title:"khachapuri_1"},
+			{title:"khachapuri_2"},
+			{title:"khinkali"},
+			{title:"chebureki"},
+			{title:"pita_1"},
+			{title:"pita_2"},
+			{title:"pita_3"},
+			{title:"salade_1"},
+			{title:"risotto_1"},
+			{title:"risotto_2"},
+			{title:"fastfood_1"},
+			{title:"fastfood_2"},
+			{title:"fastfood_3"},
+			{title:"fastfood_4"}
 			];
 
 			this.arrData = [];

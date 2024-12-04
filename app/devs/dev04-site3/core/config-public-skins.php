@@ -9,6 +9,7 @@ if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 
 $path_to_images = $CFG->base_app_url."pbl/i/";
+$path_to_skins = "skins-2/";
 
 $CFG->public_skins = [
     'ver' => '0.12', 
@@ -81,7 +82,7 @@ $CFG->public_skins = [
                 'footer-mobile'=>'border-top:1px solid #6f737a',
                 'footer-decoration'=>'border-top: 1px solid #6f737a',
                 'footer-decoration-mobile'=>'border-top: 1px solid #ffffff',
-                'path-to-skin' => $path_to_images.'dark-classical/',
+                'path-to-skin' => $path_to_images.$path_to_skins.'dark-classical/',
         ]], [
             'label'=>'dark-bronze', 
             'name'=>['ru'=>'Темный Бронза', 'en'=>'Dark Bronze'], 
@@ -149,7 +150,7 @@ $CFG->public_skins = [
                 'footer-mobile'=>'border-top:1px solid #6f737a',
                 'footer-decoration'=>'border-top: 1px solid #6f737a',
                 'footer-decoration-mobile'=>'border-top: 1px solid #ffffff',
-                'path-to-skin' => $path_to_images.'dark-bronze/',
+                'path-to-skin' => $path_to_images.$path_to_skins.'dark-bronze/',
         ]]]];
 
 ?>

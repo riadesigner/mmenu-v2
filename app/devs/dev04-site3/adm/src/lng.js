@@ -76,6 +76,21 @@ export var LNG = {
 			ico_cocktails:['Cocktails','Коктейли'],
 			ico_beer:['Beer','Пиво'],
 			ico_alcohol:['Alcohol','Алкоголь'],
+			//new icons
+			ico_khachapuri_1:['Khachapuri-1','Хачапури-1'],			
+			ico_khachapuri_2:['Khachapuri-2','Хачапури-2'],			
+			ico_khinkali:['Khinkali','Хинкали'],
+			ico_chebureki:['Chebureki','Чебуреки'],
+			ico_pita_1:['Pita-1','Пита-1'],
+			ico_pita_2:['Pita-2','Пита-1'],
+			ico_pita_3:['Pita-3','Пита-1'],
+			ico_salade_1:['Salade-1','Салат-1'],
+			ico_risotto_1:['Risotto-1','Ризотто-1'],
+			ico_risotto_2:['Risotto-2','Ризотто-2'],
+			ico_fastfood_1:['Fastfood-1','Фастфуд-1'],
+			ico_fastfood_2:['Fastfood-2','Фастфуд-2'],
+			ico_fastfood_3:['Fastfood-3','Фастфуд-3'],
+			ico_fastfood_4:['Fastfood-4','Фастфуд-4'],
 
 			//VIEW USER CUSTOMIZE PAGE
 

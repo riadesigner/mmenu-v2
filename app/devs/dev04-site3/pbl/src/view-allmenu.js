@@ -38,6 +38,8 @@ export var VIEW_ALLMENU = {
 		GLB.MENU_TABLE_MODE.update();		
 		console.log('allmenu',allmenu)			
 
+		console.log('GLB.MENU_ICONS', GLB.MENU_ICONS)
+
 		// -----------------------
 		// MULTILANG BUILDING UI
 		// -----------------------

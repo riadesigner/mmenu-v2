@@ -1,6 +1,6 @@
 
 /*
-  CHEFSMENU, PBL / MAIN STYLE
+  CHEFSMENU, PBL / MAIN STYLE (updated)
   Skin: %[skin-label]%;
 */
 
@@ -436,6 +436,22 @@ a.mm2-home-link:hover{ color: %[color-home-link-hover]%; }
 .mm2-icon-cocktails{background-position: 77.8% 44%;}
 .mm2-icon-beer{background-position: 88.9% 44%;}
 .mm2-icon-alcohol{background-position: 100% 44%;}
+
+.mm2-icon-khachapuri_1 {background-position: 0% 55.6%  ;}
+.mm2-icon-khachapuri_2 {background-position: 11.2% 55.6%  ;}
+.mm2-icon-khinkali {background-position: 22.3% 55.6%  ;}
+.mm2-icon-chebureki {background-position: 33.4% 55.6% ;}
+.mm2-icon-pita_1 {background-position: 44.5% 55.6%  ;}
+.mm2-icon-pita_2 {background-position: 55.6% 55.6%  ;}
+.mm2-icon-pita_3 {background-position: 66.7% 55.6%  ;}
+.mm2-icon-salade_1 {background-position: 77.8% 55.6%  ;}
+.mm2-icon-risotto_1 {background-position: 88.9% 55.6%  ;}
+.mm2-icon-risotto_2 {background-position: 100% 55.6%  ;}
+.mm2-icon-fastfood_1 {background-position: 0% 66.7%  ;}
+.mm2-icon-fastfood_2 {background-position: 11.2% 66.7%  ;}
+.mm2-icon-fastfood_3 {background-position: 22.3% 66.7%  ;}
+.mm2-icon-fastfood_4 {background-position: 33.4% 66.7%  ;}
+
 
 .mm2-allmenu-footer-btns-section-about {display: none;}
 

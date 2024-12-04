@@ -9,8 +9,10 @@ export var MENU_ICONS = {
 			"dumpling","asian_food","sandwiches","slicing","canapes",
 			"fast_food","ice_cream","fruits","pancakes","bakery","cakes",
 			"childrens_menu","tea","coffee","juice_and_water","cocktails",
-			"beer","alcohol"
-			];
+			"beer","alcohol", "khachapuri_1", "khachapuri_2", "khinkali", "chebureki", "pita_1", 
+ 			"pita_2", "pita_3", "salade_1", "risotto_1", "risotto_2", "fastfood_1", 
+			"fastfood_2", "fastfood_3", "fastfood_4"
+		];
 	},
 	get:function(index){
 		if(index){
