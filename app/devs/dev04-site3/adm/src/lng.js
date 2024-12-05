@@ -119,7 +119,6 @@ export var LNG = {
 			lng_view_customize_all__get_contract_btn:['-','Снять ограничения'],
 
 			lng_view_customizing_cart__view_title:['-','Настройка Корзины'],
-			lng_view_customizing_cart__cart_mode:['-','Выберите режим корзины на сайте'],
 
 			lng_view_customize_all__code_for_embed:['-','Здесь вы можете получить код для вставки меню на ваш собственный сайт'],
 			lng_view_customize_all__code_for_embed_btn:['-','Код для встраивания'],	

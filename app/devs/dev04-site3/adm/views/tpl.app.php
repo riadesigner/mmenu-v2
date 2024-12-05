@@ -959,12 +959,18 @@ App&&App();
 			<div class="app-view-page-container overflow-y">
 				<div class="std-form">
 					 
-					<p lang="lng_view_customizing_cart__cart_mode"></p>
+					<p>Выберите режим корзины и способ приема заказов:</p>					
 
+					<h2>Корзина:</h2>
 					<div class="customizing-cart__cart-mode"><!-- [code] --></div>
 
 					<h2>Доставка:</h2>
 					<div class="customizing-cart__delivery-mode"><!-- [code] --></div>
+
+					<div class="iiko-mode-only">
+						<h2>Отправка заказа:</h2>
+						<div class="customizing-cart__order-way-mode"><!-- [code] --></div>
+					</div>					
 
 					<h2>Получение заказов:</h2>
 

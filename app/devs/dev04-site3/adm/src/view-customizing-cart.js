@@ -10,7 +10,8 @@ export var VIEW_CUSTOMIZING_CART = {
 		this.$btnBack = this.$footer.find('.back, .close, .cancel');
 		
 		this.$buttonsCartMode = this.$view.find('.customizing-cart__cart-mode');
-		this.$buttonsDeliveryMode = this.$view.find('.customizing-cart__delivery-mode');
+		this.$buttonsDeliveryMode = this.$view.find('.customizing-cart__delivery-mode');		
+		this.$buttonsOrderWayMode = this.$view.find('.customizing-cart__order-way-mode');		
 		
 		this.sa_bnt_upd_tg_keys =  this.$view.find('button[name="update_all_tg_keys"]');
 		this.$section_tgusers = this.$view.find('.customizing-cart__all-tgusers');
@@ -232,7 +233,26 @@ export var VIEW_CUSTOMIZING_CART = {
 				e.originalEvent.cancelable && e.preventDefault();
 			});
 			this.$buttonsDeliveryMode.append($btn);
-		};			
+		};
+		
+		this.$buttonsOrderWayMode.html("");	
+		var arrBtns = ["Только в TG","В ТG, затем в IIKO"];
+		for(let i=0;i<arrBtns.length;i++){
+			let checked = parseInt(GLB.THE_CAFE.get().order_way,10) == i?" checked":"";
+			let $btn = $("<div class='std-form__radio-button "+checked+"' mode='"+i+"'>"+arrBtns[i]+"</div>\n");
+			$btn.on("touchend",function(e){
+				if(!_this.VIEW_SCROLLED){
+					if(!$(this).hasClass('checked')){
+						_this.NEW_ORDER_WAY = parseInt($(this).attr('mode'),10);
+						$(this).addClass('checked');	
+						$(this).siblings().removeClass('checked');
+						_this.check_need_to_save();
+					}
+				};
+				e.originalEvent.cancelable && e.preventDefault();
+			});
+			this.$buttonsOrderWayMode.append($btn);
+		};
 
 		this.check_need_to_save();											
 
@@ -417,6 +437,7 @@ export var VIEW_CUSTOMIZING_CART = {
 			parseInt(GLB.THE_CAFE.get().has_delivery,10)!==this.NEW_DELIVERY_MODE){
 				this._need2save(true);
 			}
+
 		}else{
 			if(parseInt(GLB.THE_CAFE.get().cart_mode,10)!==this.NEW_CART_MODE ||
 				parseInt(GLB.THE_CAFE.get().has_delivery,10)!==this.NEW_DELIVERY_MODE){
