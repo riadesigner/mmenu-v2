@@ -52,7 +52,7 @@ export var VIEW_CART = {
 		this.$btnOrdering.on("touchend click",(e)=>{
 			const IIKO_MODE = GLB.CAFE.iiko_api_key!=="";
 			if(this.READY_TO_ORDERING && !this.chefsmenu.is_loading_now()){				
-				if(IIKO_MODE && GLB.MENU_TABLE_MODE.is_table_mode()){
+				if(GLB.MENU_TABLE_MODE.is_table_mode()){
 					this.chefsmenu.now_loading();
 					this.send_order_to_table();
 				}else{
