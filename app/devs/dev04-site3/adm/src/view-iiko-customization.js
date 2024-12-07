@@ -48,9 +48,11 @@ export var VIEW_IIKO_CUSTOMIZATION = {
 		const iiko_api_key = CAFE.iiko_api_key;
 		this.$btnIikoKey.html(iiko_api_key);		
 
+		const iiko_params = GLB.THE_CAFE.get("params");
+
 		// SHOW ORGANIZATIONS INFO (WITH CURRENT)
 		let str_info = "";	
-		let orgs = CAFE.iiko_organizations!==""?JSON.parse(CAFE.iiko_organizations):{};		
+		let orgs = iiko_params['iiko_organizations']!==''?JSON.parse(iiko_params['iiko_organizations']):{};		
 		this.CURRENT_ORGANIZATION_ID = orgs['current_organization_id'];
 		for(let i in orgs['items']){
 			let org = orgs['items'][i];
@@ -64,14 +66,14 @@ export var VIEW_IIKO_CUSTOMIZATION = {
 		this.$general_information.html(str_info);		
 		
 		// SHOW TABLES INFO
-		let table_sections = CAFE.iiko_tables?JSON.parse(CAFE.iiko_tables):[];
+		let table_sections = iiko_params['iiko_tables']?JSON.parse(iiko_params['iiko_tables']):[];
 		this.update_tables_list(table_sections);
 
 		// SHOW MENUS INFO (WITH CURRENT)
 		this.$extmenu_list.html("");
 		
-		const iiko_arr_extmenus = CAFE.iiko_extmenus!==""?JSON.parse(CAFE.iiko_extmenus):[];				
-		this.CURRENT_EXTMENU_ID = CAFE.iiko_current_extmenu_id.toString();		
+		const iiko_arr_extmenus = iiko_params['iiko_extmenus']!==""?JSON.parse(iiko_params['iiko_extmenus']):[];				
+		this.CURRENT_EXTMENU_ID = iiko_params['iiko_current_extmenu_id'].toString();		
 		
 		if(iiko_arr_extmenus.length>0){			
 			for(let m in iiko_arr_extmenus){

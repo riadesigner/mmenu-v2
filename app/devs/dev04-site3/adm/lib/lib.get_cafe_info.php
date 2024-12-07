@@ -21,8 +21,8 @@
 	require_once WORK_DIR.APP_DIR.'core/class.smart_object.php';
 	require_once WORK_DIR.APP_DIR.'core/class.smart_collect.php';
 	require_once WORK_DIR.APP_DIR.'core/class.user.php';
-
-
+	require_once WORK_DIR.APP_DIR.'core/class.iiko_params.php';
+	
 	session_start();
 	SQL::connect();
 
@@ -34,7 +34,21 @@
 	if($all_cafe && $all_cafe->full()){
 		
 		$cafe = $all_cafe->get(0);		
-		__answerjsonp(["cafe"=>$cafe->export()]);
+
+		if(!empty($cafe->iiko_api_key)){
+			$iiko_params = new iiko_params($cafe);
+			if(!$iiko_params->found()){
+				$arr_iiko_params = $iiko_params->get_empty();
+			}else{
+				$arr_iiko_params = $iiko_params->get();
+			}						 
+		}else{
+			$arr_iiko_params = [];
+		}
+
+		__answerjsonp( [
+			"cafe"=>[...$cafe->export(), ...["iiko_params"=>$arr_iiko_params]]
+		]);		
 
 	}else{
 		__errorjsonp("Unknown cafe");

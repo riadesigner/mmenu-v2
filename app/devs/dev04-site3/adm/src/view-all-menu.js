@@ -89,6 +89,8 @@ export var VIEW_ALL_MENU = {
 
 		this.$btnIikoReload.on("touchend",()=>{
 			if(!this.LOADING){
+				this.now_loading();
+				this._page_hide();				
 				this.ask_to_reload_iiko_menu();
 			}else{
 				console.log("try later, please")
@@ -104,9 +106,7 @@ export var VIEW_ALL_MENU = {
 			ask:`<p>Меню из iiko заменит текущее меню в ChefsMenu. 
 			При этом, поля, заполненные вами здесь, 
 			сохранятся в новом меню.</p>`,
-			action:()=>{			
-				this.now_loading();
-				this._page_hide();						
+			action:()=>{									
 				this.do_reload_iiko_menu();
 			},
 			cancel:()=>{
@@ -118,21 +118,53 @@ export var VIEW_ALL_MENU = {
 	},
 	// @return array|bool [ {id: string, name: string }, ... ,] 
 	get_iiko_extmenus_array:function(){		
-		const cafe = GLB.THE_CAFE.get();
-		let iiko_extmenus = cafe.iiko_extmenus; // string json
+		const iiko_params = GLB.THE_CAFE.get('iiko_params');
+		let iiko_extmenus = iiko_params['extmenus']; // string json
 		iiko_extmenus = iiko_extmenus?JSON.parse(iiko_extmenus):false;
 		return iiko_extmenus;
 	},
+	get_extmenu_current_id:function(){		
+		const iiko_params = GLB.THE_CAFE.get('iiko_params');
+		let current_id = iiko_params['extmenu_current_id']; // string
+		current_id = current_id?current_id:false;
+		return current_id;
+	},	
 	do_reload_iiko_menu:function(){				
+				
 
-		// checking if is exist iiko menus
-		if(!this.get_iiko_extmenus_array()){
-			this.error_message();
-			setTimeout(()=>{ this.end_loading(); this._page_show();},200);
+
+		console.log("starting reload iiko menu")
+
+		this.ask_to_reconnect_to_iiko();
+
+
+		return;
+
+
+
+		// checking if exist iiko menus
+		const iiko_extmenus = this.get_iiko_extmenus_array();
+		if(!iiko_extmenus){
+			// this.ask_to_reconnect_to_iiko();
+			
+			// setTimeout(()=>{ this.end_loading(); console.log('iiko_extmenus1 = ',iiko_extmenus); },3000);
+			// setTimeout(()=>{ this._page_show(); console.log('iiko_extmenus2 = ',iiko_extmenus); },6000);
+			
+			return;
 		};
-		
-		const cafe = GLB.THE_CAFE.get();
-		const extmenu_id =  GLB.THE_CAFE.get('iiko_current_extmenu_id');
+
+		// checking if exist extmenu_current_id
+		const extmenu_id = this.get_extmenu_current_id();
+		if(!extmenu_id){
+			// this.ask_to_reconnect_to_iiko();
+			console.log('extmenu_id = ',extmenu_id);
+			// setTimeout(()=>{ this.end_loading(); this._page_show();},5200);
+			return;
+		};
+
+		console.log("STOP1!!")
+		return;
+
 		const Loader = GLB.IIKO_LOADER.init();
 
 		Loader.load_extmenu_asynq(extmenu_id)
@@ -678,6 +710,28 @@ export var VIEW_ALL_MENU = {
 			on_close:function(){}
 		});		
 		console.log('err:' + msg);
-	}
+	},
+	ask_to_reconnect_to_iiko:function(){
+
+		const msg = [
+			`<p>Не найдены настройки iiko для вашего меню.</p>`,
+			`<p>Хотите переподключиться к iiko?</p>`,
+		].join('');
+
+		GLB.VIEWS.modalConfirm({
+			title:GLB.LNG.get("lng_attention"),
+			ask:msg,
+			action:function(){			
+				console.log("OK!")						
+				// fn.reconnect_to_iiko();
+				// setTimeout(()=>{ this.end_loading(); this._page_show();},200);			
+			},
+			cancel:function(){
+				console.log("CANCEL")
+			},
+			buttons:[GLB.LNG.get("lng_ok"),GLB.LNG.get("lng_cancel")]
+		});
+
+	}	
 
 };

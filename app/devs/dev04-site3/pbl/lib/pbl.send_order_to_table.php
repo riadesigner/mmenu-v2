@@ -13,8 +13,11 @@ require_once WORK_DIR.APP_DIR.'core/class.smart_object.php';
 require_once WORK_DIR.APP_DIR.'core/class.smart_collect.php';
 require_once WORK_DIR.APP_DIR.'core/class.user.php';
 require_once WORK_DIR.APP_DIR.'core/class.order_sender.php';
+require_once WORK_DIR.APP_DIR.'core/class.iiko_order.php';
 
 require_once WORK_DIR.APP_DIR.'pbl/lib/pbl.class.order_parser.php';
+
+
 
 session_start();
 SQL::connect();
@@ -55,6 +58,28 @@ try{
 	__errorjsonp("--fail parsing the order params");	
 }
 
+
+define('IIKO_MODE', !empty($cafe->iiko_api_key)); // bool
+define('PENDING_MODE', (int) $cafe->order_way ); // int
+
+
+if(IIKO_MODE){
+
+	$ORDER_IIKO = "";
+
+	try{
+		$Iiko_order = new Iiko_order($cafe);
+		$ORDER_IIKO = $Iiko_order->prepare_order_for_table( $table_number, $order_data['order_items'] );
+	}catch( Exception $e){
+		glogError($e->getMessage());
+		__errorjsonp("--fail preparing order for table");
+	}
+
+} else {
+	$ORDER_IIKO = "";
+}
+
+
 // ----------------------------------------
 //  - SAVE ORDER IN DB
 //	- GETTING ORDER_SHORT_NUMBER
@@ -63,8 +88,12 @@ try{
 $short_number = Order_sender::save_order_to_db(
 	ORDER_TARGET,
 	$cafe, 
-	["ORDER_TEXT"=>$ORDER_TXT], 
-	$table_number, 
+	[
+		"ORDER_TEXT"=>$ORDER_TXT,
+		"ORDER_IIKO"=>$ORDER_IIKO,
+	], 
+	$table_number,
+	PENDING_MODE,
 	DEMO_MODE
 );
 if(!$short_number)__errorjsonp("--cant save order");

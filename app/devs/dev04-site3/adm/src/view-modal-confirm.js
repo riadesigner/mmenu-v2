@@ -48,7 +48,9 @@ export var VIEW_MODAL_CONFIRM = {
 		var _this=this;
 		this.$view.find('.ok').on('touchend',function(e){
 			GLB.VIEWS.hideModalConfirm();
-			_this.CONFIRM_ACTION();
+			setTimeout(()=>{
+				_this.CONFIRM_ACTION();
+			},500);
 			return false;
 		});
 		this.$view.find('.cancel').on('touchend',function(e){			

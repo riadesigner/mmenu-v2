@@ -47,6 +47,7 @@ class Order_sender{
 		@param Smart_object $cafe
 		@param array $order_data // order params
 		@param int|null $table_number
+		@param int $pending_mode=0 // 0|1
 		@param bool $demo_mode // !==2
 
 		@return string $short_number
@@ -56,7 +57,10 @@ class Order_sender{
 		Smart_object $cafe, 
 		array $order_data, 
 		int|null $table_number=null, 
+		int $pending_mode=0,
 		bool $demo_mode=false): string{		
+
+		glog("========= pending_mode ===========". $pending_mode);
 
 		$cafe_uniq_name = $cafe->uniq_name;
 		$id_cafe = $cafe->id;
@@ -82,6 +86,7 @@ class Order_sender{
 			$ORDER->order_target = $order_target;
 			$ORDER->table_number = $table_number;
 			$ORDER->short_number = $short_number;			
+			$ORDER->pending_mode = $pending_mode;
 			$ORDER->date = "now()";
 			$ORDER->updated = "now()";
 			$ORDER->description = json_encode($order_data, JSON_UNESCAPED_UNICODE);

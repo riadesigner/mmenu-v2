@@ -15,7 +15,7 @@ require_once WORK_DIR.APP_DIR.'core/class.sql.php';
 require_once WORK_DIR.APP_DIR.'core/class.smart_object.php';
 require_once WORK_DIR.APP_DIR.'core/class.smart_collect.php';
 require_once WORK_DIR.APP_DIR.'core/class.user.php';
-
+require_once WORK_DIR.APP_DIR.'core/class.iiko_params.php';
 
 session_start();
 SQL::connect();
@@ -46,7 +46,10 @@ $id_cafe = (int) $_POST['id_cafe'];
 $cafe = new Smart_object("cafe",$id_cafe);
 if(!$cafe->valid())__errorjsonp("Unknown cafe, ".__LINE__);
 
-$orgs = $cafe->iiko_organizations;
+$iiko_params = new Iiko_params($cafe);
+if(!$iiko_params->found()) __errorjsonp("--cant find iiko params, ".__LINE__);
+
+$orgs = $iiko_params->get("organizations");
 $orgs = !empty($orgs)?json_decode((string) $orgs):false;
 if(!$orgs) __errorjsonp("--cant find iiko organization_id for the cafe, ".__LINE__);
 $organization_id = $orgs->current_organization_id;
