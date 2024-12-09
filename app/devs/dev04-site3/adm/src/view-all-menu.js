@@ -110,6 +110,8 @@ export var VIEW_ALL_MENU = {
 				this.do_reload_iiko_menu();
 			},
 			cancel:()=>{
+				this.end_loading();
+				this._page_show();				
 				console.log("cancel reloading")
 			},
 			buttons:[GLB.LNG.get("lng_ok"),GLB.LNG.get("lng_cancel")]
@@ -714,22 +716,18 @@ export var VIEW_ALL_MENU = {
 	ask_to_reconnect_to_iiko:function(){
 
 		const msg = [
-			`<p>Не найдены настройки iiko для вашего меню.</p>`,
-			`<p>Хотите переподключиться к iiko?</p>`,
+			`<p>Не найдены параметры iiko для вашего меню.</p>`,
+			`<p>Зайдите в Настроки и загрузите параметры iiko заново.</p>`,
 		].join('');
 
-		GLB.VIEWS.modalConfirm({
-			title:GLB.LNG.get("lng_attention"),
-			ask:msg,
-			action:function(){			
-				console.log("OK!")						
-				// fn.reconnect_to_iiko();
-				// setTimeout(()=>{ this.end_loading(); this._page_show();},200);			
-			},
-			cancel:function(){
-				console.log("CANCEL")
-			},
-			buttons:[GLB.LNG.get("lng_ok"),GLB.LNG.get("lng_cancel")]
+		GLB.VIEWS.modalMessage({
+			title:GLB.LNG.get("lng_error"),
+			message:msg,
+			btn_title:GLB.LNG.get('lng_close'),
+			on_close:()=>{
+				this.end_loading();		
+				this._page_show();				
+			}
 		});
 
 	}	

@@ -34,15 +34,17 @@
 
 	if($cafe->id_user !== $user->id) __errorjsonp("Not allowed, ".__LINE__);
 
-	$iiko_current_extmenu_id = post_clean($_POST['extmenu_id'],100);	
+	$current_extmenu_id = post_clean($_POST['extmenu_id'],100);	
 
-
-	$cafe->iiko_current_extmenu_id = $iiko_current_extmenu_id;
-	$cafe->updated_date = 'now()';
-	$cafe->rev+=1;
+	$iiko_params_collect = new Smart_collect("iiko_params", "where id_cafe='".$id_cafe."'");
+	if(!$iiko_params_collect || !$iiko_params_collect->full()) __errorjsonp("Not found iiko params for cafe {$id_cafe}");
 	
-	if(!$cafe->save()){
-		__errorjsonp("cant save new iiko extmenu id");
+	$iiko_params = $iiko_params_collect->get(0);
+	$iiko_params->current_extmenu_id = $current_extmenu_id;
+	$iiko_params->updated_date = 'now()';	
+	
+	if(!$iiko_params->save()){
+		__errorjsonp("can`t save a new iiko_extmenu_id");
 	}else{
 		__answerjsonp("ok");	
 	}

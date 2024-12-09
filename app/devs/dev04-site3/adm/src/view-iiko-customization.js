@@ -48,11 +48,11 @@ export var VIEW_IIKO_CUSTOMIZATION = {
 		const iiko_api_key = CAFE.iiko_api_key;
 		this.$btnIikoKey.html(iiko_api_key);		
 
-		const iiko_params = GLB.THE_CAFE.get("params");
+		const iiko_params = GLB.THE_CAFE.get("iiko_params");
 
 		// SHOW ORGANIZATIONS INFO (WITH CURRENT)
 		let str_info = "";	
-		let orgs = iiko_params['iiko_organizations']!==''?JSON.parse(iiko_params['iiko_organizations']):{};		
+		let orgs = iiko_params['organizations']!==''?JSON.parse(iiko_params['organizations']):{};		
 		this.CURRENT_ORGANIZATION_ID = orgs['current_organization_id'];
 		for(let i in orgs['items']){
 			let org = orgs['items'][i];
@@ -66,14 +66,16 @@ export var VIEW_IIKO_CUSTOMIZATION = {
 		this.$general_information.html(str_info);		
 		
 		// SHOW TABLES INFO
-		let table_sections = iiko_params['iiko_tables']?JSON.parse(iiko_params['iiko_tables']):[];
+		let table_sections = iiko_params['tables']?JSON.parse(iiko_params['tables']):[];
 		this.update_tables_list(table_sections);
 
 		// SHOW MENUS INFO (WITH CURRENT)
 		this.$extmenu_list.html("");
 		
-		const iiko_arr_extmenus = iiko_params['iiko_extmenus']!==""?JSON.parse(iiko_params['iiko_extmenus']):[];				
-		this.CURRENT_EXTMENU_ID = iiko_params['iiko_current_extmenu_id'].toString();		
+		const iiko_arr_extmenus = iiko_params['extmenus']!==""?JSON.parse(iiko_params['extmenus']):[];				
+		this.CURRENT_EXTMENU_ID = iiko_params['current_extmenu_id'].toString();		
+
+		console.log("this.CURRENT_EXTMENU_ID = ", this.CURRENT_EXTMENU_ID);
 		
 		if(iiko_arr_extmenus.length>0){			
 			for(let m in iiko_arr_extmenus){
@@ -111,7 +113,7 @@ export var VIEW_IIKO_CUSTOMIZATION = {
 		},300);
 		
 	},
-	new_current_exmenu_id:function(new_menu_id) {
+	new_current_exmenu_id:function(new_menu_id) {		
 		this.NEW_IIKO_EXTMENU_ID = new_menu_id.toString();
 		this.check_if_need2save();		
 	},
@@ -119,9 +121,7 @@ export var VIEW_IIKO_CUSTOMIZATION = {
 		
 		let need2save = false;
 		
-		//CHECK THE MENUS ID
-		const CAFE = GLB.THE_CAFE.get();
-				
+		//CHECK THE MENUS ID				
 		if(this.NEW_IIKO_EXTMENU_ID!=this.CURRENT_EXTMENU_ID){
 			need2save = true;
 		}
@@ -328,10 +328,9 @@ export var VIEW_IIKO_CUSTOMIZATION = {
 		if(this.$inputDelKey.val()=="delete"){
 			this.remove_iiko_login()	
 		}else{
-			//CHECK THE MENUS ID
-			const CAFE = GLB.THE_CAFE.get();
-
-			const current_extmenu_id = CAFE.iiko_current_extmenu_id.toString() || "";
+			//CHECK THE MENUS ID			
+			const iiko_params = GLB.THE_CAFE.get('iiko_params');
+			const current_extmenu_id = iiko_params['current_extmenu_id'].toString() || "";
 					
 			if(this.NEW_IIKO_EXTMENU_ID!==current_extmenu_id){
 				this.save_new_current_extmenu_id();	
@@ -363,7 +362,8 @@ export var VIEW_IIKO_CUSTOMIZATION = {
             success:(result)=> {             
                 // console.log('result',result)
                 if(result && !result.error){
-					GLB.THE_CAFE.set({iiko_current_extmenu_id:new_menu_id});
+					const iiko_params = GLB.THE_CAFE.get('iiko_params');
+					iiko_params['current_extmenu_id'] = new_menu_id;
                 	this._go_back(); 
 					setTimeout(()=>{ 
 						this._end_loading();						

@@ -46,7 +46,7 @@ class Iiko_params{
 		$cafe = $this->cafe;
 		$iiko_params_collect = new Smart_collect("iiko_params","where id_cafe='".$cafe->id."'");
 		if($iiko_params_collect->full()){
-			$this->$params = ($iiko_params_collect->get(0))->export();
+			$this->params = ($iiko_params_collect->get(0))->export();
 			$this->found = true;
 		}		
 	}
