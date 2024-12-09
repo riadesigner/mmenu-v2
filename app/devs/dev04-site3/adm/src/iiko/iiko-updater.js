@@ -18,12 +18,15 @@ export var IikoUpdater = {
 
         var PATH = 'adm/lib/iiko/';
         var url = PATH + 'iiko.upgrade_to_menu_from_iiko.php';
-
+        
         var data ={
             id_cafe:this.ID_CAFE,
             new_menu:this.NEW_MENU,
             rough_menu_hash: this.roughMenuHash
         };
+
+        console.log('starting update with opt',opt);
+        console.log('data = ',data);
 
         var errMsg = "cant upgrading to menu from iiko"; 
 
@@ -32,7 +35,8 @@ export var IikoUpdater = {
             dataType: "jsonp",
             data:data,
             method:"POST",
-            success: function (result) {                
+            success: function (result) {    
+                console.log("success result upgrading menu = ",result);
                 if(!result.error){
                     opt.onReady&&opt.onReady(result);
                 }else{
@@ -41,7 +45,7 @@ export var IikoUpdater = {
                 }
             },
             error:function(result) {
-                console.log(result);                
+                console.log("failed result of upgrading menu = ",result);
                 console.log(errMsg);
                 opt.onError&&opt.onError(errMsg);
             }

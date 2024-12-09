@@ -37,13 +37,15 @@
 
 	if($cafe->id_user !== $user->id) __errorjsonp("Not allowed, ".__LINE__);
 
-	$modif_dict = new Smart_collect("iiko_params", "where id_cafe={$id_cafe}");
-	if($modif_dict->found()){
-		$arr = json_decode((string) $modif_dict->get(),1); 
-	}else{
-		$arr = [];
-	}
-	__answerjsonp($arr);
+	__answerjsonp([]);
+
+	// $modif_dict = new Smart_collect("iiko_params", "where id_cafe={$id_cafe}");
+	// if($modif_dict->found()){
+	// 	$arr = json_decode((string) $modif_dict->get(),1); 
+	// }else{
+	// 	$arr = [];
+	// }
+	// __answerjsonp($arr);
 
 
 ?>

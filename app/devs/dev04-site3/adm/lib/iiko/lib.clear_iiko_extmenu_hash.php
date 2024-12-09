@@ -34,11 +34,13 @@
 
 	if($cafe->id_user !== $user->id) __errorjsonp("Not allowed, ".__LINE__);	
 
-	$cafe->iiko_current_extmenu_hash = "";
-	$cafe->updated_date = 'now()';
-	$cafe->rev+=1;
+	$iiko_params_collect = new Smart_collect("iiko_params","where id_cafe='".$cafe->id."'");
+	if(!$iiko_params_collect || !$iiko_params_collect->full()) __errorjsonp("Can`t read the iiko params for the cafe, ".$cafe->id);
+	$iiko_params = $iiko_params_collect->get(0);
+	$iiko_params->current_extmenu_hash = "";
+	$iiko_params->updated_date = 'now()';
 	
-	if(!$cafe->save()){
+	if(!$iiko_params->save()){
 		__errorjsonp("cant clear iiko extmenu hash");
 	}else{
 		__answerjsonp("ok");	

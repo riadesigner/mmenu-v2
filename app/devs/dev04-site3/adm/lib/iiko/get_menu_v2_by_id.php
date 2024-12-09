@@ -61,7 +61,12 @@ $headers = [
     "Authorization" => 'Bearer '.$token
 ]; 
 
-$params  = ['externalMenuId' => $externalMenuId, 'organizationIds'      => [$organization_id], 'priceCategoryId'      => null, 'version' => 2];
+$params  = [
+    'externalMenuId' => $externalMenuId,
+    'organizationIds' => [$organization_id], 
+    'priceCategoryId' => null, 
+    'version' => 2
+];
 
 $res = iiko_get_info($url,$headers,$params);
 $newExtmenuHash = md5(json_encode($res, JSON_UNESCAPED_UNICODE));

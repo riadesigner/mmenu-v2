@@ -120,12 +120,13 @@ export var IikoLoader = {
             const PATH = "./adm/lib/iiko/";    
             const url = PATH + "get_menu_v2_by_id.php";
             const cafe = GLB.THE_CAFE.get();
+            const iiko_params = GLB.THE_CAFE.get('iiko_params');
 
             const data = {
                 token:this.TOKEN,
                 id_cafe:cafe.id,
                 externalMenuId: menu_id,
-                currentExtmenuHash: cafe.iiko_current_extmenu_hash
+                currentExtmenuHash: iiko_params['current_extmenu_hash'],
             };            
 
             const AJAX = $.ajax({
@@ -138,7 +139,7 @@ export var IikoLoader = {
                 }
             });
 
-            AJAX.then((result)=>{
+            AJAX.then((result)=>{                            
                 if(res(result) && !result['error']){
                     res[result];
                 }else{

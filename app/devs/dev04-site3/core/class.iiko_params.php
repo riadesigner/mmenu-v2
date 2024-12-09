@@ -15,6 +15,7 @@ class Iiko_params{
 	function __construct(Smart_object $cafe){
 		$this->cafe = $cafe;		
 		$this->load_params();
+		glog("params for cafe {$cafe->id} = ".print_r($this->params,1));
 		return $this;
 	}
 
@@ -44,6 +45,7 @@ class Iiko_params{
 	
 	private function load_params(): void{
 		$cafe = $this->cafe;
+		glog("load params for {$cafe->id}");
 		$iiko_params_collect = new Smart_collect("iiko_params","where id_cafe='".$cafe->id."'");
 		if($iiko_params_collect->full()){
 			$this->params = ($iiko_params_collect->get(0))->export();

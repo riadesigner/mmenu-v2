@@ -125,47 +125,36 @@ export var VIEW_ALL_MENU = {
 		iiko_extmenus = iiko_extmenus?JSON.parse(iiko_extmenus):false;
 		return iiko_extmenus;
 	},
-	get_extmenu_current_id:function(){		
+	get_current_extmenu_id:function(){		
 		const iiko_params = GLB.THE_CAFE.get('iiko_params');
-		let current_id = iiko_params['extmenu_current_id']; // string
+		let current_id = iiko_params['current_extmenu_id']; // string
 		current_id = current_id?current_id:false;
 		return current_id;
 	},	
 	do_reload_iiko_menu:function(){				
 				
-
+		const cafe = GLB.THE_CAFE.get();
 
 		console.log("starting reload iiko menu")
 
-		this.ask_to_reconnect_to_iiko();
-
-
-		return;
-
-
-
 		// checking if exist iiko menus
 		const iiko_extmenus = this.get_iiko_extmenus_array();
+		console.log('iiko_extmenus = ', iiko_extmenus);
+
 		if(!iiko_extmenus){
-			// this.ask_to_reconnect_to_iiko();
-			
-			// setTimeout(()=>{ this.end_loading(); console.log('iiko_extmenus1 = ',iiko_extmenus); },3000);
-			// setTimeout(()=>{ this._page_show(); console.log('iiko_extmenus2 = ',iiko_extmenus); },6000);
-			
+			this.ask_to_reconnect_to_iiko();			
+			setTimeout(()=>{ this.end_loading(); this._page_show(); },300);			
 			return;
 		};
 
-		// checking if exist extmenu_current_id
-		const extmenu_id = this.get_extmenu_current_id();
+		// checking if exist current_extmenu_id
+		const extmenu_id = this.get_current_extmenu_id();
 		if(!extmenu_id){
-			// this.ask_to_reconnect_to_iiko();
+			this.ask_to_reconnect_to_iiko();
 			console.log('extmenu_id = ',extmenu_id);
-			// setTimeout(()=>{ this.end_loading(); this._page_show();},5200);
+			setTimeout(()=>{ this.end_loading(); this._page_show();},300);
 			return;
 		};
-
-		console.log("STOP1!!")
-		return;
 
 		const Loader = GLB.IIKO_LOADER.init();
 
@@ -191,6 +180,7 @@ export var VIEW_ALL_MENU = {
 				// --------------
 				const newMenu = GLB.IIKO_EXT_MENU_PARSER.parse(roughMenu);					
 				console.log('newMenu',newMenu)
+							
 				this.do_update_iiko_menu(cafe, newMenu, roughMenuHash);
 
 			}else{
@@ -236,7 +226,8 @@ export var VIEW_ALL_MENU = {
 		this.clear_menu_hash_async()
 		.then((vars)=>{					
 			console.log('ok clearing hash')
-			GLB.THE_CAFE.set({iiko_current_extmenu_hash:''});			
+			const iiko_params = GLB.THE_CAFE.get('iiko_params');
+			iiko_params['current_extmenu_hash'] = '';
 			this.do_reload_iiko_menu();
 		})
 		.catch((err)=>{
@@ -249,6 +240,9 @@ export var VIEW_ALL_MENU = {
 	},
 	do_update_iiko_menu:function(cafe, newMenu,roughMenuHash){
 		const _this=this;
+		
+		console.log('cafe, newMenu,roughMenuHash = ', cafe, newMenu,roughMenuHash);;
+
 		const opt = {
 			id_cafe:cafe.id,
 			newMenu:newMenu,
@@ -266,7 +260,7 @@ export var VIEW_ALL_MENU = {
 				_this.error_message(msg);
 				_this.end_loading();
 				_this._page_show();
-			}};								
+			}};											
 		GLB.IIKO_UPDATER.init(opt);		
 	},		
 	clear_menu_hash_async:function(){

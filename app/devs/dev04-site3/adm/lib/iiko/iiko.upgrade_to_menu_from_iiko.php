@@ -248,11 +248,14 @@
     	}
     }
 
-	$cafe->iiko_current_extmenu_hash = $rough_menu_hash;
-	$cafe->updated_date = 'now()';
-	$cafe->rev+=1;
+	$iiko_params_collect = new Smart_collect("iiko_params","where id_cafe='".$cafe->id."'");
+	if(!$iiko_params_collect || !$iiko_params_collect->full()) __errorjsonp("Not found iiko_params for cafe {$cafe->id}.");
+	$iiko_params = $iiko_params_collect->get(0);
 
-	if($cafe->save()){			
+	$iiko_params->current_extmenu_hash = $rough_menu_hash;	
+	$iiko_params->updated_date = 'now()';	
+
+	if($iiko_params->save()){
 		__answerjsonp(["re-created"=>$categories,"items-updated"=>$arr_items_to_remove]);
 	}else{
 		__errorjsonp("Can not save new rough_menu_hash, ".__LINE__);
