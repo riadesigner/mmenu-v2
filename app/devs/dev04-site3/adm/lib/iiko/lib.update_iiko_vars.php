@@ -208,6 +208,8 @@
 		__errorjsonp('--cant getting tables info');	
 	}	
 	
+	glog("SECTIONS = \n".print_r($res,1));
+
 	$arr_tables = iiko_tables_res_parse($res);
 
 	// --------------------------
@@ -242,18 +244,7 @@
 	$iiko_params->updated_date = 'now()';	
 
 	if($iiko_params->save()){	
-
-		__answerjsonp($iiko_params->export());			
-		
-		// try{
-		// 	// обновляем в БД имена-ссылки на меню для столиков
-		// 	Qr_tables::update($iiko_params);
-		// 	__answerjsonp($iiko_params->export());			
-		// }catch( Exception $e){
-		// 	glogError($e->getMessage());
-		// 	__errorjsonp("--cant update cafe info");
-		// }			
-		
+		__answerjsonp($iiko_params->export());
 	}else{
 		glogError("Can't update iiko info for cafe, ".__FILE__.", ".__LINE__);
 		__errorjsonp("Can't save iiko_params for ".$iiko_params->id_cafe);

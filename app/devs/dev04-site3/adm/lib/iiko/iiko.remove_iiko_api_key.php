@@ -37,16 +37,15 @@
 
 	if($cafe->id_user!==$user->id)__errorjsonp("Not allowed, ".__LINE__);
 		
+	// REMOVE IIKO PARAMS	
+	$iiko_params_collect = new Smart_collect("iiko_params", "where id_cafe='".$id_cafe."'");
+	if($iiko_params_collect && $iiko_params_collect->full()){
+		$iiko_params = $iiko_params_collect->get(0);		
+		$iiko_params->delete();	
+	}
+
 	// REMOVE IIKO API KEY	
 	$cafe->iiko_api_key = "";
-	$cafe->iiko_organizations = "";
-	$cafe->iiko_extmenus = "";
-	$cafe->iiko_tables = "";	
-	$cafe->iiko_terminal_groups = "";
-	$cafe->iiko_current_extmenu_hash = "";	
-	$cafe->iiko_order_types = "";		
-
-	$cafe->tables_uniq_names = "";	
 	$cafe->updated_date = 'now()';
 	$cafe->rev+=1;
 

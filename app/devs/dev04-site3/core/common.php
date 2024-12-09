@@ -108,6 +108,7 @@ function iiko_tables_res_parse($res){
 			array_push($arr,[
 				'section_name'=>$section['name'],
 				'section_id'=>$section['id'],
+				'terminalGroupId'=>$section['terminalGroupId'],
 				'tables'=>$section['tables']
 			]);			
 		}

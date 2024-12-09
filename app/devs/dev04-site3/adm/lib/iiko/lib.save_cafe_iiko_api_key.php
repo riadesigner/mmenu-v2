@@ -197,17 +197,24 @@
 
 	$order_types = $res['orderTypes'][0]['items'];	
 
+	// CREATE IIKO PARAMS	
+	$iiko_params = new Smart_object("iiko_params");
+	$iiko_params->id_cafe = $cafe->id;
+	$iiko_params->updated_date = "now()";
+	
+	$iiko_params->organizations = json_encode($iiko_organizations, JSON_UNESCAPED_UNICODE);	
+	$iiko_params->extmenus = json_encode($iiko_extmenus, JSON_UNESCAPED_UNICODE);	;	
+	$iiko_params->terminal_groups = json_encode($terminalGroups, JSON_UNESCAPED_UNICODE);	
+	$iiko_params->tables = json_encode($arr_tables, JSON_UNESCAPED_UNICODE);	
+	$iiko_params->order_types = json_encode($order_types, JSON_UNESCAPED_UNICODE);
+	$iiko_params->current_extmenu_id = $iiko_current_extmenu_id; 		
+	$iiko_params->current_extmenu_hash = "";
+	$iiko_params->save();
+
 	// --------------------------
 	// UPDATING CAFE INFO
 	// --------------------------	
 	$cafe->iiko_api_key = $key;	
-	$cafe->iiko_organizations = json_encode($iiko_organizations, JSON_UNESCAPED_UNICODE);	
-	$cafe->iiko_extmenus = json_encode($iiko_extmenus, JSON_UNESCAPED_UNICODE);	;	
-	$cafe->iiko_terminal_groups = json_encode($terminalGroups, JSON_UNESCAPED_UNICODE);	
-	$cafe->iiko_tables = json_encode($arr_tables, JSON_UNESCAPED_UNICODE);	
-	$cafe->iiko_order_types = json_encode($order_types, JSON_UNESCAPED_UNICODE);
-	$cafe->iiko_current_extmenu_id = $iiko_current_extmenu_id; 		
-	$cafe->iiko_current_extmenu_hash = ""; 		
 	$cafe->cafe_title = $currentOrganizationName;
 	$cafe->cafe_address = $currentOrganizationAddress;
 	$cafe->chief_cook="";
@@ -216,16 +223,7 @@
 	$cafe->rev+=1;
 
 	if($cafe->save()){	
-
-		try{
-			// обновляем в БД имена-ссылки на меню для столиков
-			Qr_tables::update($cafe);
-			__answerjsonp($cafe->export());			
-		}catch( Exception $e){
-			glogError($e->getMessage());
-			__errorjsonp("--cant update cafe info");
-		}			
-		
+		__answerjsonp($cafe->export());		
 	}else{
 		glogError("Can't save cafe iiko api key, ".__FILE__.", ".__LINE__);
 		__errorjsonp("Can't save cafe ".$cafe->id." iiko api key");
