@@ -53,13 +53,13 @@ export var VIEW_IIKO_CUSTOMIZATION = {
 		// SHOW ORGANIZATIONS INFO (WITH CURRENT)
 		let str_info = "";	
 		let orgs = iiko_params['organizations']!==''?JSON.parse(iiko_params['organizations']):{};		
-		this.CURRENT_ORGANIZATION_ID = orgs['current_organization_id'];
-		for(let i in orgs['items']){
-			let org = orgs['items'][i];
+		this.CURRENT_ORGANIZATION_ID = iiko_params['current_organization_id'];
+		for(let i in orgs){
+			let org = orgs[i];
 			str_info+=[
 				"<p data-organization-id='"+org.id+"'>",
 				"<strong>"+org.name+"</strong><br>",
-				org.address,
+				org.restaurantAddress,
 				"</p>"
 				].join('');
 		};
@@ -180,12 +180,22 @@ export var VIEW_IIKO_CUSTOMIZATION = {
 			
 	},
 	update_tables_list:function(table_sections) {
+		console.log('table_sections = ', table_sections);
 		if(table_sections && table_sections.length>0){
 			let str_table_sections = "";
 			for(let i in table_sections){
 				if(table_sections.hasOwnProperty(i)){
 					let section = table_sections[i];
-					str_table_sections += "<li>"+section['section_name']+": "+section['tables'].length+" столов</li>";					
+
+					"<li>"+section['section_name']+": "+section['tables'].length+" столов</li>";					
+					const termGroupId = section['terminalGroupId'];
+					const html = [
+						`<li>`,
+						`<strong>${section['section_name']}: ${section['tables'].length} столов</strong> <br>`,
+						`терминальная группа: <br> ${termGroupId}`,
+						`</li>`
+					].join('');
+					str_table_sections += html;
 				}
 			};
 			this.$tables_list.html(str_table_sections);
@@ -457,48 +467,48 @@ export var VIEW_IIKO_CUSTOMIZATION = {
 
         });     
     },
-    iiko_tables_update_asynq:function() {
-    	return new Promise((res,rej)=>{
+    // iiko_tables_update_asynq:function() {
+    // 	return new Promise((res,rej)=>{
 
-            let PATH = 'adm/lib/iiko/';
-            let url = PATH + 'iiko.tables_update.php';        	
-        	let CAFE = GLB.THE_CAFE.get();            
+    //         let PATH = 'adm/lib/iiko/';
+    //         let url = PATH + 'iiko.tables_update.php';        	
+    //     	let CAFE = GLB.THE_CAFE.get();            
             
-            let organizationId = this.CURRENT_ORGANIZATION_ID;
+    //         let organizationId = this.CURRENT_ORGANIZATION_ID;
 
-        	if(!organizationId) {
-        		rej("неизвестный id организации");
-        		return false;
-        	};
+    //     	if(!organizationId) {
+    //     		rej("неизвестный id организации");
+    //     		return false;
+    //     	};
 
-            let data = {
-                id_cafe:CAFE.id,
-                api_login:CAFE.iiko_api_key,
-                organizationId:organizationId,
-                terminalGroupId: this.CURRENT_TERMINAL_GROUP_ID
-            };
+    //         let data = {
+    //             id_cafe:CAFE.id,
+    //             api_login:CAFE.iiko_api_key,
+    //             organizationId:organizationId,
+    //             terminalGroupId: this.CURRENT_TERMINAL_GROUP_ID
+    //         };
 
-            this.AJAX = $.ajax({
-                url: url+"?callback=?",
-                dataType:"jsonp",
-                data:data,
-                method:"POST",
-                success:(result)=> {             
-                    console.log('result',result);
-                    if(result && !result.error){
-                        res(result); 
-                    }else{
-                        rej(result.error);
-                    }
-                },
-                error:(result)=> {                    
-                	console.log('result',result);
-                    rej(result);                
-                }
-            });  
+    //         this.AJAX = $.ajax({
+    //             url: url+"?callback=?",
+    //             dataType:"jsonp",
+    //             data:data,
+    //             method:"POST",
+    //             success:(result)=> {             
+    //                 console.log('result',result);
+    //                 if(result && !result.error){
+    //                     res(result); 
+    //                 }else{
+    //                     rej(result.error);
+    //                 }
+    //             },
+    //             error:(result)=> {                    
+    //             	console.log('result',result);
+    //                 rej(result);                
+    //             }
+    //         });  
 
-    	});
-    },
+    // 	});
+    // },
 	show_modal_error:function(msg=""){
 		const strMsg = msg!=="" ? msg : "<p>Что-то пошло не так. Попробуйте позже или обратитесь к разработчику Сервиса</p>"; 
 		GLB.VIEWS.modalMessage({

@@ -144,8 +144,7 @@
 
 	if(!isset($res['terminalGroups'])){
 		__errorjsonp("--has not terminal groups");		
-	}	
-
+	}
 	
 	$currentTerminalGroups = $res['terminalGroups'][0]['items'];
 	if(!count($currentTerminalGroups)) __errorjsonp("--has not actual terminals");
@@ -176,7 +175,7 @@
 		__errorjsonp('--cant getting tables info');	
 	}	
 	
-	$arr_tables = iiko_tables_res_parse($res);
+	$arr_tables = iiko_tables_res_parse($res['restaurantSections']);
 
 	// --------------------------
 	// GETTING ORDER_TYPES

@@ -361,6 +361,19 @@ App&&App();
 						<div label="menu-10344" class="std-form__radio-button checked">Меню тест 2</div>
 					</div>
 
+
+					<h2>Терминалы</h2>					
+					<p>Терминальные группы, используемые для отправки заказов: </p>					
+					<ul class="iiko-terminals-sections">
+						<li>Не найдено.</li>
+					</ul>
+					
+					<h2>Столы</h2>					
+					<p>В вашем ресторане есть секции: </p>					
+					<ul class="iiko-table-sections">
+						<li>Не найдено.</li>
+					</ul>					
+
 					<h2>Синхронизация</h2>
 					<p>Здесь вы можете выбрать время автоматической синхронизации ChefsMenu c Внешним Меню iiko.</p>					
 					<div>

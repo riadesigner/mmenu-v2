@@ -51,17 +51,16 @@
 	// GET IIKO API KEY	
 	$key = $cafe->iiko_api_key;
 
+	$ROUGH_DATA = [];
+	
 	// --------------------------
 	// CHECK IF IT IS REAL KEY
 	// GETTING TOKEN FROM IIKO
 	// --------------------------
-
 	$url     = 'api/1/access_token';
 	$headers = ["Content-Type"=>"application/json"];
 	$params  = ["apiLogin" => $key];
-
 	$res = iiko_get_info($url,$headers,$params);
-
 	if( isset($res["errorDescription"]) ) {
 		if(str_contains((string) $res["errorDescription"], "is not authorized")){
 			__errorjsonp("--unknown login");	
@@ -76,172 +75,75 @@
 		$token = $res["token"];	
 	}
 
-	// --------------------------
-	// GETTING ORGANIZATION INFO
-	// --------------------------	
-
-	$url     = 'api/1/organizations';
-	$headers = [
-	    "Content-Type"=>"application/json",
-	    "Authorization" => 'Bearer '.$token
-	]; 
-	$params  = ['organizationIds'      => null, 'returnAdditionalInfo' => true, 'includeDisabled'      => true];
-
-	$res = iiko_get_info($url,$headers,$params);
-
-	if(!isset($res["organizations"])){
-		__errorjsonp("--unknown organization");	
-	}
-
+	// ---------------------------
+	// GETTING ORGANIZATIONS INFO
+	// ---------------------------	
+	$arr_organizations = iiko_get_organizations_info($token);
+	if(!count($arr_organizations))__errorjsonp("--unknown organization");
+	$currentOrganizationId = $arr_organizations[0]["id"];	
+	$ROUGH_DATA["ORGANIZATIONS"] = $arr_organizations;	
 	
-	$currentOrganizationId = $res["organizations"][0]["id"];
-	$currentOrganizationName = post_clean($res["organizations"][0]["name"]);
-	$currentOrganizationAddress = post_clean($res["organizations"][0]["restaurantAddress"]);		
-
-	$iiko_organizations = [
-		"current_organization_id"=>$currentOrganizationId,
-		"items"=>[]
-	];
-
-	foreach($res["organizations"] as $org){
-		array_push($iiko_organizations['items'],
-			[
-				"id"=>$org["id"],
-				"name"=>$org["name"],
-				"address"=>$org["restaurantAddress"]
-			]
-		);
-	}
-
 	// --------------------------
 	// GETTING EXTMENUS INFO
-	// --------------------------	
-	$url     = 'api/2/menu';
-	$headers = [
-	    "Content-Type"=>"application/json",
-	    "Authorization" => 'Bearer '.$token
-	]; 
-	$params  = [];
-	$res = iiko_get_info($url,$headers,$params);
-	if(!isset($res["externalMenus"]) || !count($res["externalMenus"])){
-		__errorjsonp("--has not menus");	
-	}	
-	
-	
-	$iiko_extmenus = [];	
-	foreach($res["externalMenus"] as $menu){
-		array_push($iiko_extmenus,[
-			"id"=>$menu["id"],			
-			"name"=>$menu["name"]			
-		]);
-	}
-
-	// ----------------------------
-	//  SETTING CURRENT EXTMENU ID
-	// ----------------------------
-	if(count($iiko_extmenus)>0){
-		
-		if(!empty($iiko_params->current_extmenu_id)){			
-			$filteredArray = array_filter($iiko_extmenus, function ($m) {
-				global $iiko_params;
-				return $m['id'] === $iiko_params->current_extmenu_id;
-			});
-			if(count($filteredArray)>0){
-				// оставляем как есть 
-				$iiko_current_extmenu_id = $iiko_params->current_extmenu_id;
-			}else{
-				// берем первое меню из списка
-				$iiko_current_extmenu_id = $res["externalMenus"][0]["id"];
-			}			
-		}else{
-			// берем первое меню из списка
-			$iiko_current_extmenu_id = $res["externalMenus"][0]["id"];
-		}
-	}else{
-		$iiko_current_extmenu_id = "";
-	}
-	
-
-	// --------------------------
-	// GETTING TERMINAL GROUPS 
 	// --------------------------		
+	$arr_extmenus = iiko_get_extmenus_info($token);	
+	if(!count($arr_extmenus))__errorjsonp("--has not menus");
+	$ROUGH_DATA["EXTERNALMENUS"] = $arr_extmenus;	
 
-	$url     = 'api/1/terminal_groups';
-	$headers = [
-	    "Content-Type"=>"application/json",
-	    "Authorization" => 'Bearer '.$token
-	]; 
-	$params  = ['organizationIds'      => [$currentOrganizationId], 'includeDisabled'      => true];
-	$res = iiko_get_info($url,$headers,$params);
-
-	if(!isset($res['terminalGroups'])){
-		__errorjsonp("--has not terminal groups");		
-	}	
-
-	
-	$currentTerminalGroups = $res['terminalGroups'][0]['items'];
-	if(!count($currentTerminalGroups)) __errorjsonp("--has not actual terminals");
-
-	$currentTerminalGroupId = $res['terminalGroups'][0]['items'][0]['id'];
-	
-	$terminalGroups = [
-		'current_terminal_group_id'=>$currentTerminalGroupId,
-		'items'=>$currentTerminalGroups
-	];	
+	$iiko_current_extmenu_id = iiko_get_new_current_extmenu_id($arr_extmenus, $iiko_params->current_extmenu_id);
 
 	// --------------------------
-	// GETTING TABLES FOR THE 
-	// TERMINAL GROUPS
-	// --------------------------	
+	// GETTING ALL TERMINAL GROUPS 
+	// FOR CURRENT ORGANIZATION
+	// --------------------------		
+	$all_terminal_groups = iiko_get_terminal_groups_info($token, $currentOrganizationId);	
+	if(!count($all_terminal_groups))__errorjsonp("--has not terminal groups");
+	$ROUGH_DATA["TERMINALS"] = $all_terminal_groups;	
 
-	$url     = 'api/1/reserve/available_restaurant_sections';
-	$headers = [
-	    "Content-Type"=>"application/json",
-	    "Authorization" => 'Bearer '.$token
-	]; 
-
-	$params  = ['terminalGroupIds' => [$currentTerminalGroupId], 'returnSchema'      => true];
-
-	$res = iiko_get_info($url,$headers,$params);
-
-	if(!isset($res['restaurantSections'])){
-		__errorjsonp('--cant getting tables info');	
-	}	
+	// GET TERMINAL GROUPS FOR CURRENT ORGANIZATION
+	$arr_terminals = $all_terminal_groups[0]['items'];
+	if(!count($arr_terminals)) __errorjsonp("--has not actual terminals");
+	$currentTerminalGroupId = $arr_terminals[0]['id'];
 	
-	glog("SECTIONS = \n".print_r($res,1));
-
-	$arr_tables = iiko_tables_res_parse($res);
-
-	// --------------------------
-	// GETTING ORDER_TYPES
-	// --------------------------
-
-	$url     = 'api/1/deliveries/order_types';
-	$headers = [
-	    "Content-Type"=>"application/json",
-	    "Authorization" => 'Bearer '.$token
-	]; 
-	$params  = ['organizationIds' => [$currentOrganizationId]];
-
-	$res = iiko_get_info($url,$headers,$params);
-
-	if(!isset($res['orderTypes'])){
-		__errorjsonp("--cant receive order types");		
+	// ----------------------------------------------
+	// GETTING TABLES (RESTORAUNT SECTIONS) 
+	// FOR ALL TERMINAL GROUPS IN CURRENT RESTAURANT
+	// ----------------------------------------------	
+	$arrTerminalGroupsIds = [];
+	foreach($arr_terminals as $terminalGroup){
+		array_push($arrTerminalGroupsIds, $terminalGroup["id"]);
 	}
-
-	$order_types = $res['orderTypes'][0]['items'];	
-
-	// --------------------------
-	// UPDATING SOME! CAFE INFO
-	// --------------------------	
+	$restaurantSections = iiko_get_table_sections_info($token, $arrTerminalGroupsIds);
+	if(!count($restaurantSections)) __errorjsonp("--cant getting tables info");
 	
-	$iiko_params->organizations = json_encode($iiko_organizations, JSON_UNESCAPED_UNICODE);	
-	$iiko_params->extmenus = json_encode($iiko_extmenus, JSON_UNESCAPED_UNICODE);	;	
-	$iiko_params->terminal_groups = json_encode($terminalGroups, JSON_UNESCAPED_UNICODE);	
+	$ROUGH_DATA["TABLES"] = $restaurantSections;	
+
+	$arr_tables = iiko_tables_res_parse($restaurantSections);
+		
+	// --------------------
+	// GETTING ORDER_TYPES
+	// --------------------
+	$arr_order_types = iiko_get_order_types_info($token, $currentOrganizationId);
+	if(!count($arr_order_types)) __errorjsonp("--cant receive order types");		
+	$order_types = $arr_order_types[0]['items'];	
+
+	$ROUGH_DATA["ORDER_TYPES"] = $arr_order_types;
+	
+	// --------------------------------
+	// UPDATING IIKO PARAMS SAVED INFO
+	// --------------------------------		
+	$iiko_params->organizations = json_encode($arr_organizations, JSON_UNESCAPED_UNICODE);			
+	$iiko_params->terminal_groups = json_encode($arr_terminals, JSON_UNESCAPED_UNICODE);	
 	$iiko_params->tables = json_encode($arr_tables, JSON_UNESCAPED_UNICODE);	
 	$iiko_params->order_types = json_encode($order_types, JSON_UNESCAPED_UNICODE);	
+	$iiko_params->extmenus = json_encode($arr_extmenus, JSON_UNESCAPED_UNICODE);	;	
+
 	$iiko_params->current_extmenu_id = $iiko_current_extmenu_id;
-	$iiko_params->updated_date = 'now()';	
+	$iiko_params->current_organization_id = $currentOrganizationId;
+	$iiko_params->current_terminal_id = $currentTerminalGroupId;
+
+	$iiko_params->rough_data = json_encode($ROUGH_DATA, JSON_UNESCAPED_UNICODE);	
+	$iiko_params->updated_date = 'now()';
 
 	if($iiko_params->save()){	
 		__answerjsonp($iiko_params->export());
@@ -249,5 +151,90 @@
 		glogError("Can't update iiko info for cafe, ".__FILE__.", ".__LINE__);
 		__errorjsonp("Can't save iiko_params for ".$iiko_params->id_cafe);
 	}
+
+	function iiko_get_organizations_info($token): array {
+		$url     = 'api/1/organizations';
+		$headers = [
+			"Content-Type"=>"application/json",
+			"Authorization" => 'Bearer '.$token
+		]; 
+		$params  = ['organizationIds' => null, 'returnAdditionalInfo' => true, 'includeDisabled' => true];
+		$res = iiko_get_info($url,$headers,$params);
+		return $res["organizations"] ?? [];
+	}
+
+	function iiko_get_extmenus_info($token): array {
+		$url     = 'api/2/menu';
+		$headers = [
+			"Content-Type"=>"application/json",
+			"Authorization" => 'Bearer '.$token
+		]; 
+		$params  = [];
+		$res = iiko_get_info($url,$headers,$params);
+		return $res["externalMenus"] ?? [];
+	}
+
+	function iiko_get_terminal_groups_info($token, $orgId): array {
+		$url     = 'api/1/terminal_groups';
+		$headers = [
+			"Content-Type"=>"application/json",
+			"Authorization" => 'Bearer '.$token
+		]; 
+		$params  = ['organizationIds' => [$orgId], 'includeDisabled' => true];
+		$res = iiko_get_info($url,$headers,$params);
+		return $res["terminalGroups"] ?? [];
+	}
+
+	function iiko_get_table_sections_info(string $token, array $arrTerminalGroupIds): array {		
+		$url     = 'api/1/reserve/available_restaurant_sections';
+		$headers = [
+			"Content-Type"=>"application/json",
+			"Authorization" => 'Bearer '.$token
+		]; 
+		$params  = ['terminalGroupIds' => [...$arrTerminalGroupIds], 'returnSchema' => true];
+		$res = iiko_get_info($url,$headers,$params);
+		return $res['restaurantSections'] ?? [];
+	}
+
+	function iiko_get_order_types_info(string $token, string $orgId): array {		
+		$url     = 'api/1/deliveries/order_types';
+		$headers = [
+			"Content-Type"=>"application/json",
+			"Authorization" => 'Bearer '.$token
+		]; 
+		$params  = ['organizationIds' => [$orgId]];
+		$res = iiko_get_info($url,$headers,$params);
+		return $res['orderTypes'] ?? [];
+	}	
+
+	// ------------------------------------------------------
+	//  checking if the current_extmenu_id has correct value
+	//  return verivied current_extmenu_id  
+	// ------------------------------------------------------
+	function iiko_get_new_current_extmenu_id(array $arr_extmenus, string $saved_current_extmenu_id): string{
+		
+		$new_current_extmenu_id = "";
+
+		if(count($arr_extmenus)>0){		
+			if(!empty($saved_current_extmenu_id)){			
+				$filteredArray = array_filter($arr_extmenus, function ($m) {	
+					global $saved_current_extmenu_id;				
+					return $m['id'] === $saved_current_extmenu_id;
+				});
+				if(count($filteredArray)>0){
+					// оставляем как есть 
+					$new_current_extmenu_id = $saved_current_extmenu_id;
+				}else{
+					// берем первое меню из списка
+					$new_current_extmenu_id = $arr_extmenus[0]["id"];
+				}			
+			}else{
+				// берем первое меню из списка
+				$new_current_extmenu_id = $arr_extmenus[0]["id"];
+			}
+		}
+
+		return $new_current_extmenu_id;
+	}	
 
 ?>

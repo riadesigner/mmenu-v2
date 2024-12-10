@@ -99,12 +99,10 @@ function iiko_get_info($url,$headers,$params){
       return json_decode($json, true);
 }
 
-
-function iiko_tables_res_parse($res){
-	$arr = [];
-	$arr_sections = $res['restaurantSections'];
-	if(is_array($arr_sections) && count($arr_sections)){
-		foreach($arr_sections as $section){
+function iiko_tables_res_parse(array $restaurantSections): array{
+	$arr = [];	
+	if(is_array($restaurantSections) && count($restaurantSections)){
+		foreach($restaurantSections as $section){
 			array_push($arr,[
 				'section_name'=>$section['name'],
 				'section_id'=>$section['id'],

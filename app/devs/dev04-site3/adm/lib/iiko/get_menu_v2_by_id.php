@@ -46,10 +46,11 @@ $id_cafe = (int) $_POST['id_cafe'];
 $cafe = new Smart_object("cafe",$id_cafe);
 if(!$cafe->valid())__errorjsonp("Unknown cafe, ".__LINE__);
 
-$iiko_params = new Iiko_params($cafe);
-if(!$iiko_params->found()) __errorjsonp("--cant find iiko params, ".__LINE__);
+$iiko_params_collect = new Smart_collect("iiko_params", "where id_cafe='".$cafe->id."'");
+if(!$iiko_params_collect || !$iiko_params_collect->full()) __errorjsonp("--cant find iiko params for cafe ".$cafe->id);
+$iiko_params = $iiko_params_collect->get(0);
 
-$orgs = $iiko_params->get("organizations");
+$orgs = $iiko_params->organizations;
 $orgs = !empty($orgs)?json_decode((string) $orgs):false;
 if(!$orgs) __errorjsonp("--cant find iiko organization_id for the cafe, ".__LINE__);
 $organization_id = $orgs->current_organization_id;

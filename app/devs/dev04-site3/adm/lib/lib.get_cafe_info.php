@@ -12,16 +12,11 @@
 	define("BASEPATH",__file__);
 	
 	require_once getenv('WORKDIR').'/config.php';
-	 
-
-	require_once WORK_DIR.APP_DIR.'core/common.php';	
-	
-	require_once WORK_DIR.APP_DIR.'core/class.sql.php';
-	 
+	require_once WORK_DIR.APP_DIR.'core/common.php';		
+	require_once WORK_DIR.APP_DIR.'core/class.sql.php';	 
 	require_once WORK_DIR.APP_DIR.'core/class.smart_object.php';
 	require_once WORK_DIR.APP_DIR.'core/class.smart_collect.php';
-	require_once WORK_DIR.APP_DIR.'core/class.user.php';
-	require_once WORK_DIR.APP_DIR.'core/class.iiko_params.php';
+	require_once WORK_DIR.APP_DIR.'core/class.user.php';	
 	
 	session_start();
 	SQL::connect();
@@ -36,12 +31,10 @@
 		$cafe = $all_cafe->get(0);		
 
 		if(!empty($cafe->iiko_api_key)){
-			$iiko_params = new iiko_params($cafe);
-			if(!$iiko_params->found()){
-				$arr_iiko_params = $iiko_params->get_empty();
-			}else{
-				$arr_iiko_params = $iiko_params->get();
-			}						 
+
+			$iiko_params_collect = new Smart_collect("iiko_params", "where id_cafe='".$cafe->id."'");
+			if(!$iiko_params_collect || !$iiko_params_collect->full()) __errorjsonp("--cant find iiko params for cafe ".$cafe->id);			
+			$arr_iiko_params = ($iiko_params_collect->get(0))->export();
 		}else{
 			$arr_iiko_params = [];
 		}
