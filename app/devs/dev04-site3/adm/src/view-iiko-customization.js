@@ -16,7 +16,8 @@ export var VIEW_IIKO_CUSTOMIZATION = {
 		this.$linkIikoQRCodeTablesHelp = this.$form.find('a[name=link-iiko-qrcode-tables]');
 
 		this.$general_information = this.$form.find('.iiko-general-information');
-		this.$extmenu_list = this.$form.find('.iiko-extmenu-list');	
+		this.$extmenu_list = this.$form.find('.iiko-extmenu-list');			
+		this.$terminals_list = this.$form.find('.iiko-terminals-sections');
 		this.$tables_list = this.$form.find('.iiko-table-sections');
 		
 		this.SITE_URL = CFG.base_url;
@@ -51,62 +52,22 @@ export var VIEW_IIKO_CUSTOMIZATION = {
 		const iiko_params = GLB.THE_CAFE.get("iiko_params");
 
 		// SHOW ORGANIZATIONS INFO (WITH CURRENT)
-		let str_info = "";	
 		let orgs = iiko_params['organizations']!==''?JSON.parse(iiko_params['organizations']):{};		
-		this.CURRENT_ORGANIZATION_ID = iiko_params['current_organization_id'];
-		for(let i in orgs){
-			let org = orgs[i];
-			str_info+=[
-				"<p data-organization-id='"+org.id+"'>",
-				"<strong>"+org.name+"</strong><br>",
-				org.restaurantAddress,
-				"</p>"
-				].join('');
-		};
-		this.$general_information.html(str_info);		
+		this.CURRENT_ORGANIZATION_ID = iiko_params['current_organization_id'];		
+		this.update_organizations_list(orgs, this.CURRENT_ORGANIZATION_ID);
 		
+		// SHOW TERMINAL INFO
+		let terminal_groups = iiko_params['terminal_groups']?JSON.parse(iiko_params['terminal_groups']):[];
+		this.update_terminals_list(terminal_groups, iiko_params['current_terminal_id']);				
+
 		// SHOW TABLES INFO
 		let table_sections = iiko_params['tables']?JSON.parse(iiko_params['tables']):[];
-		this.update_tables_list(table_sections);
+		this.update_tables_list(table_sections, terminal_groups);
 
-		// SHOW MENUS INFO (WITH CURRENT)
-		this.$extmenu_list.html("");
-		
+
 		const iiko_arr_extmenus = iiko_params['extmenus']!==""?JSON.parse(iiko_params['extmenus']):[];				
-		this.CURRENT_EXTMENU_ID = iiko_params['current_extmenu_id'].toString();		
-
-		console.log("this.CURRENT_EXTMENU_ID = ", this.CURRENT_EXTMENU_ID);
-		
-		if(iiko_arr_extmenus.length>0){			
-			for(let m in iiko_arr_extmenus){
-				if(iiko_arr_extmenus.hasOwnProperty(m)){
-					let menu = iiko_arr_extmenus[m];										
-
-					let $btnMenu = $('<div class="std-form__radio-button" data-menu-id="'+menu.id+'">'+menu.name+'</div>');
-
-					
-						$btnMenu.on("touchend",(e)=>{
-							this._blur({onBlur:()=>{
-								if(!this.LOADING && !this.VIEW_SCROLLED){
-									if(!$(e.target).hasClass("checked")){
-										$(e.target).siblings().removeClass("checked");
-										$(e.target).addClass("checked");
-										this.new_current_exmenu_id($(e.target).data("menu-id"));
-									}						
-								}
-							}});
-							e.originalEvent.cancelable && e.preventDefault();						
-						});
-					
-
-					if(this.CURRENT_EXTMENU_ID==menu.id){
-						$btnMenu.addClass("checked");
-					};
-					this.$extmenu_list.append($btnMenu);
-				}				
-			}
-		};
-		this.$extmenu_list.find('')
+		this.CURRENT_EXTMENU_ID = iiko_params['current_extmenu_id'].toString();					
+		this.update_extmenus(iiko_arr_extmenus, this.CURRENT_EXTMENU_ID);
 		
 		setTimeout(()=>{							
 			this._page_show();
@@ -179,8 +140,130 @@ export var VIEW_IIKO_CUSTOMIZATION = {
 		});
 			
 	},
-	update_tables_list:function(table_sections) {
+
+	new_current_organization_id:function(){
+
+	},
+	new_current_terminal_group_id:function(){
+
+	},
+
+	update_extmenus:function(iiko_arr_extmenus, current_extmenu_id){		
+		
+		this.$extmenu_list.html("");		
+		
+		if(iiko_arr_extmenus.length>0){			
+			for(let m in iiko_arr_extmenus){
+				if(iiko_arr_extmenus.hasOwnProperty(m)){
+					let menu = iiko_arr_extmenus[m];										
+
+					let $btnMenu = $('<div class="std-form__radio-button" data-menu-id="'+menu.id+'">'+menu.name+'</div>');
+					
+					$btnMenu.on("touchend",(e)=>{
+						this._blur({onBlur:()=>{
+							if(!this.LOADING && !this.VIEW_SCROLLED){
+								if(!$(e.target).hasClass("checked")){
+									$(e.target).siblings().removeClass("checked");
+									$(e.target).addClass("checked");
+									this.new_current_exmenu_id($(e.target).data("menu-id"));
+								}						
+							}
+						}});
+						e.originalEvent.cancelable && e.preventDefault();						
+					});
+					
+					if(current_extmenu_id==menu.id){
+						$btnMenu.addClass("checked");
+					};
+					this.$extmenu_list.append($btnMenu);
+				}				
+			}
+		};
+		this.$extmenu_list.find('')
+	},
+	update_organizations_list(arr_organizations, current_org_id){
+		
+		if(arr_organizations.length == 0) return;
+
+		this.$general_information.html('');
+
+		for(let i in arr_organizations){
+			let org = arr_organizations[i];
+			let org_address = org.restaurantAddress!=='' ? `<br><small>${org.restaurantAddress}</small>`:'';
+			let $btn = $(`<div class="std-form__radio-button" data-org-id="${org.id}"><b>${org.name}</b>${org_address}</div>`);				
+
+			$btn.on("touchend",(e)=>{
+				this._blur({onBlur:()=>{
+					if(!this.LOADING && !this.VIEW_SCROLLED){
+						if(!$(e.target).hasClass("checked")){
+							$(e.target).siblings().removeClass("checked");
+							$(e.target).addClass("checked");
+							this.new_current_organization_id($(e.target).data("org-id"));
+						}						
+					}
+				}});
+				e.originalEvent.cancelable && e.preventDefault();	
+			});		
+			
+			if(current_org_id==org.id){
+				$btn.addClass("checked");
+			};
+
+			this.$general_information.append($btn);
+		}
+
+	},
+	update_terminals_list:function(terminal_groups, current_terminal_group_id){
+		
+		if(terminal_groups && terminal_groups.length>0){
+			
+			this.$terminals_list.html("");		
+			
+			for(let m in terminal_groups){
+				
+				let t_group = terminal_groups[m];	
+
+				let t_group_address = t_group['address']!==''? `<br>адрес: ${t_group['address']}`:'';
+				let $btn = $(`<div class="std-form__radio-button" data-group-id="${t_group.id}">${t_group.name}${t_group_address}</div>`);				
+				
+				$btn.on("touchend",(e)=>{
+					this._blur({onBlur:()=>{
+						if(!this.LOADING && !this.VIEW_SCROLLED){
+							if(!$(e.target).hasClass("checked")){
+								$(e.target).siblings().removeClass("checked");
+								$(e.target).addClass("checked");
+								this.new_current_terminal_group_id($(e.target).data("group-id"));
+							}						
+						}
+					}});
+					e.originalEvent.cancelable && e.preventDefault();						
+				});
+				
+				if(current_terminal_group_id==t_group.id){
+					$btn.addClass("checked");
+				};
+				
+				this.$terminals_list.append($btn);
+
+			}
+			
+		}
+	},
+	update_tables_list:function(table_sections, terminal_groups) {
 		console.log('table_sections = ', table_sections);
+		const fn ={
+			calc_terminal_name:(termGroupId)=>{
+				let name = 'Без названия';
+				for(let i in terminal_groups){
+					let t_group = terminal_groups[i];
+					if(t_group.id==termGroupId){
+						name = t_group.name;
+						break;
+					}
+				};				
+				return 	name;
+			}
+		};
 		if(table_sections && table_sections.length>0){
 			let str_table_sections = "";
 			for(let i in table_sections){
@@ -189,10 +272,12 @@ export var VIEW_IIKO_CUSTOMIZATION = {
 
 					"<li>"+section['section_name']+": "+section['tables'].length+" столов</li>";					
 					const termGroupId = section['terminalGroupId'];
+					const trminalGroupName = fn.calc_terminal_name(termGroupId);
+
 					const html = [
 						`<li>`,
 						`<strong>${section['section_name']}: ${section['tables'].length} столов</strong> <br>`,
-						`терминальная группа: <br> ${termGroupId}`,
+						`терминалы: ${trminalGroupName}`,
 						`</li>`
 					].join('');
 					str_table_sections += html;

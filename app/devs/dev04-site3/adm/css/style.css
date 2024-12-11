@@ -1050,15 +1050,7 @@ textarea:focus.length-limit-reached{ animation: ani_limit_reached .3s linear;}
 .view-choosing-modifiers .btn-modifier.checked .btn-mode{
 	background: #FFF040;border:1px solid #FFF040;transform: scale(1);
 }
-
-
-
-/*
-	iiko	
-*/
-
-.iiko-general-information{padding: 10px;border:1px solid gray;border-radius: 10px;margin:10px 0;}
-
+.std-form__radio-button small{font-size: .9rem;}
 
 @media (max-width: 800px){
 
