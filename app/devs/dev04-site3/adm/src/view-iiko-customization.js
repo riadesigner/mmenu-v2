@@ -53,15 +53,14 @@ export var VIEW_IIKO_CUSTOMIZATION = {
 
 		// SHOW ORGANIZATIONS INFO (WITH CURRENT)
 		let orgs = iiko_params['organizations']!==''?JSON.parse(iiko_params['organizations']):{};		
-		this.CURRENT_ORGANIZATION_ID = iiko_params['current_organization_id'];				
+		this.CURRENT_ORGANIZATION_ID = iiko_params['current_organization_id'];
+		this.NEW_ORGANIZATION_ID = this.CURRENT_ORGANIZATION_ID;
 		this.update_organizations_list(orgs, this.CURRENT_ORGANIZATION_ID);
-
-		console.log(`this.CURRENT_ORGANIZATION_ID = ${this.CURRENT_ORGANIZATION_ID}`);
-		console.log(`iiko_params = ${iiko_params}`);
 		
 		// SHOW TERMINAL INFO
 		let terminal_groups = iiko_params['terminal_groups']?JSON.parse(iiko_params['terminal_groups']):[];
 		this.CURRENT_TERMINAL_GROUP_ID = iiko_params['current_terminal_group_id'];
+		this.NEW_TERMINAL_GROUP_ID = this.CURRENT_TERMINAL_GROUP_ID;
 		this.update_terminals_list(terminal_groups, iiko_params['current_terminal_group_id']);				
 
 		// SHOW TABLES INFO
@@ -71,6 +70,7 @@ export var VIEW_IIKO_CUSTOMIZATION = {
 
 		const iiko_arr_extmenus = iiko_params['extmenus']!==""?JSON.parse(iiko_params['extmenus']):[];				
 		this.CURRENT_EXTMENU_ID = iiko_params['current_extmenu_id'].toString();					
+		this.NEW_EXTMENU_ID = this.CURRENT_EXTMENU_ID;
 		this.update_extmenus(iiko_arr_extmenus, this.CURRENT_EXTMENU_ID);
 		
 		setTimeout(()=>{							
@@ -83,7 +83,6 @@ export var VIEW_IIKO_CUSTOMIZATION = {
 		this.check_if_need2save();		
 	},
 	new_current_organization_id:function(new_org_id){
-		console.log('new_org_id = ', new_org_id);		
 		this.NEW_ORGANIZATION_ID = new_org_id.toString();
 		this.check_if_need2save();		
 	},
@@ -100,11 +99,7 @@ export var VIEW_IIKO_CUSTOMIZATION = {
 			(this.NEW_IIKO_EXTMENU_ID && this.NEW_IIKO_EXTMENU_ID!==this.CURRENT_EXTMENU_ID)
 			|| (this.NEW_ORGANIZATION_ID && this.NEW_ORGANIZATION_ID!==this.CURRENT_ORGANIZATION_ID)
 			|| (this.NEW_TERMINAL_GROUP_ID && this.NEW_TERMINAL_GROUP_ID !==this.CURRENT_TERMINAL_GROUP_ID)
-		){
-			console.log('need to save!')
-			console.log(`${this.NEW_IIKO_EXTMENU_ID}!==${this.CURRENT_EXTMENU_ID} `)
-			console.log(`${this.NEW_ORGANIZATION_ID}!==${this.CURRENT_ORGANIZATION_ID} `)
-			console.log(`${this.NEW_TERMINAL_GROUP_ID}!==${this.CURRENT_TERMINAL_GROUP_ID} `)
+		){			
 			need2save = true;
 		}
 		// CHECK SPECIAL WORD
@@ -267,7 +262,6 @@ export var VIEW_IIKO_CUSTOMIZATION = {
 		}
 	},
 	update_tables_list:function(table_sections, terminal_groups) {
-		console.log('table_sections = ', table_sections);
 		const fn ={
 			calc_terminal_name:(termGroupId)=>{
 				let name = 'Без названия';
@@ -314,30 +308,16 @@ export var VIEW_IIKO_CUSTOMIZATION = {
 			this.$tables_list.html("<li>Не найдено. Обновите столы.</li>");
 		}		
 	},
-	iiko_vars_update:function(){		
-
-        const fn = {
-            okMessage:function(opt){
-                var msg = `<p>Информация из iiko успешно загружена</p>`;
-                GLB.VIEWS.modalMessage({
-                    title:GLB.LNG.get("lng_attention"),
-                    message:msg,
-                    btn_title:GLB.LNG.get('lng_close'),
-                    on_close:function(){
-                        opt && opt.onClose && opt.onClose();
-                    }
-                });
-            }
-        };
+	iiko_vars_update:function(){
 
 		console.log('iiko vars now updating');
 		this._now_loading();
 
 		this.iiko_vars_update_asynq()
 		.then((vars)=>{
-			console.log("vars = ",vars)
-
-        	fn.okMessage({onClose:()=>{
+			
+			const okMessage = `<p>Информация из iiko успешно загружена</p>`;			
+        	this.show_modal_ok(okMessage, {onClose:()=>{
         		location.reload();
         	}});
 
@@ -358,7 +338,7 @@ export var VIEW_IIKO_CUSTOMIZATION = {
 	iiko_vars_update_asynq:function(){
 		return new Promise((res,rej)=>{
 			let PATH = 'adm/lib/iiko/';
-            let url = PATH + 'lib.update_iiko_vars.php';
+            let url = PATH + 'lib.update_iiko_params.php';
         
             let data = {
                 id_cafe:GLB.THE_CAFE.get().id
@@ -391,55 +371,50 @@ export var VIEW_IIKO_CUSTOMIZATION = {
 		if(this.$inputDelKey.val()=="delete"){
 			this.remove_iiko_login()	
 		}else{
-			this.save_iiko_params();
+			this.save_current_params_asynq()
+			.then((vars)=>{
+				const okMessage = `<p>Настройки успешно обновлены</p><p>Панель управления будет перезагружена.</p>`;			
+				this.show_modal_ok(okMessage, {onClose:()=>{ location.reload();	}});				
+				setTimeout(()=>{ this._end_loading();},300);
+			})
+			.catch(()=>{
+				this.show_modal_error();
+				setTimeout(()=>{ this._end_loading();},300);
+			})
 		};
-		return false; 
+		
 	},
-	save_iiko_params:function() {				
-
-		const new_menu_id = this.NEW_IIKO_EXTMENU_ID.toString();
-
-        let PATH = 'adm/lib/iiko/';
-        let url = PATH + 'lib.save_iiko_params.php';
-    
-        let data = {
-            id_cafe:GLB.THE_CAFE.get().id,
-            current_organization_id:this.NEW_ORGANIZATION_ID,
-			current_terminal_group_id:this.NEW_TERMINAL_GROUP_ID,
-			current_extmenu_id:this.NEW_EXTMENU_ID
-        };
-
-		this._now_loading();
-
-        this.AJAX = $.ajax({
-            url: url+"?callback=?",
-            dataType:"jsonp",
-            data:data,
-            method:"POST",
-            success:(result)=> {             
-                // console.log('result',result)
-                if(result && !result.error){
-					GLB.THE_CAFE.set({'iiko_params':result.iiko_params});					
-                	this._go_back(); 
-					setTimeout(()=>{ 
-						this._end_loading();						
-					},300);
-                }else{
-                    this.show_modal_error();
-                    setTimeout(()=>{
-                    	this._end_loading();	
-                    },300);
-                }
-            },
-            error:(result)=> {                    
-                // console.log(result)
-                this.show_modal_error();
-                setTimeout(()=>{
-                	this._end_loading();	
-                },300);
-            }
-        }); 		
-
+	save_current_params_asynq:function() {
+		return new Promise((res,rej)=>{
+			let PATH = 'adm/lib/iiko/';
+			let url = PATH + 'lib.update_current_params.php';
+		
+			let data = {
+				id_cafe:GLB.THE_CAFE.get().id,
+				current_organization_id:this.NEW_ORGANIZATION_ID,
+				current_terminal_group_id:this.NEW_TERMINAL_GROUP_ID,
+				current_extmenu_id:this.NEW_IIKO_EXTMENU_ID
+			};
+	
+			this._now_loading();
+	
+			this.AJAX = $.ajax({
+				url: url+"?callback=?",
+				dataType:"jsonp",
+				data:data,
+				method:"POST",
+				success:(result)=> {					
+					if(result && !result.error){					
+						res(result);
+					}else{
+						rej(result);
+					}
+				},
+				error:(result)=> {                    
+					rej(result);
+				}
+			}); 			
+		});
 	},
 	remove_iiko_login:function() {		
 
@@ -513,48 +488,7 @@ export var VIEW_IIKO_CUSTOMIZATION = {
 
         });     
     },
-    // iiko_tables_update_asynq:function() {
-    // 	return new Promise((res,rej)=>{
-
-    //         let PATH = 'adm/lib/iiko/';
-    //         let url = PATH + 'iiko.tables_update.php';        	
-    //     	let CAFE = GLB.THE_CAFE.get();            
-            
-    //         let organizationId = this.CURRENT_ORGANIZATION_ID;
-
-    //     	if(!organizationId) {
-    //     		rej("неизвестный id организации");
-    //     		return false;
-    //     	};
-
-    //         let data = {
-    //             id_cafe:CAFE.id,
-    //             api_login:CAFE.iiko_api_key,
-    //             organizationId:organizationId,
-    //             terminalGroupId: this.CURRENT_TERMINAL_GROUP_ID
-    //         };
-
-    //         this.AJAX = $.ajax({
-    //             url: url+"?callback=?",
-    //             dataType:"jsonp",
-    //             data:data,
-    //             method:"POST",
-    //             success:(result)=> {             
-    //                 console.log('result',result);
-    //                 if(result && !result.error){
-    //                     res(result); 
-    //                 }else{
-    //                     rej(result.error);
-    //                 }
-    //             },
-    //             error:(result)=> {                    
-    //             	console.log('result',result);
-    //                 rej(result);                
-    //             }
-    //         });  
-
-    // 	});
-    // },
+ 
 	show_modal_error:function(msg=""){
 		const strMsg = msg!=="" ? msg : "<p>Что-то пошло не так. Попробуйте позже или обратитесь к разработчику Сервиса</p>"; 
 		GLB.VIEWS.modalMessage({
@@ -562,6 +496,22 @@ export var VIEW_IIKO_CUSTOMIZATION = {
 			message:strMsg,
 			btn_title:GLB.LNG.get('lng_close')
 		});
-	}	
+	},
+
+	show_modal_ok:function(msg="", opt){
+        const fn = {
+            okMessage:function(){                
+                GLB.VIEWS.modalMessage({
+                    title:GLB.LNG.get("lng_attention"),
+                    message:msg,
+                    btn_title:GLB.LNG.get('lng_close'),
+                    on_close:function(){
+                        opt && opt.onClose && opt.onClose();
+                    }
+                });
+            }
+        };
+		fn.okMessage();
+	}
 
 };

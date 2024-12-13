@@ -9,7 +9,7 @@ if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 class Iiko_params{
 		
 	private Smart_object $cafe;
-	private Smart_object $iiko_params;
+	private Smart_object $iiko_params;	
 	private string $API_KEY;
 	private string $token; 
 	private string $current_organization_id;
@@ -27,8 +27,12 @@ class Iiko_params{
 		$this->cafe = $cafe;			
 		$this->API_KEY = $cafe->iiko_api_key;
 		if(empty($this->API_KEY)){ throw new Exception("not found iiko api key"); }
+		return $this;
+	}
+
+	public function reload(): void{
 		if(!$this->check_iiko_key()){ throw new Exception("not valid iiko api key"); }
-		$this->ROUGH_DATA = [];	
+		$this->ROUGH_DATA = [];			
 		$this->read_iiko_params_for_cafe();
 		$this->read_organizations_info();
 		$this->read_extmenus_info();
@@ -36,7 +40,6 @@ class Iiko_params{
 		$this->read_iiko_tables_info();
 		$this->read_order_types();
 		$this->update_db();
-		return $this;
 	}
 
 	public function get(): Smart_object{

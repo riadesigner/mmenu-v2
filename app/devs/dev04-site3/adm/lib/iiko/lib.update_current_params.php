@@ -39,32 +39,31 @@
 	$current_extmenu_id = post_clean($_POST['current_extmenu_id'],100);	
 	
 	$iiko_params_collect = new Smart_collect("iiko_params", "where id_cafe='".$id_cafe."'");
-	if(!$iiko_params_collect || !$iiko_params_collect->full()) __errorjsonp("Not found iiko params for cafe {$id_cafe}");
-	
-	$iiko_params = $iiko_params_collect->get(0);
+	if(!$iiko_params_collect || !$iiko_params_collect->full()) __errorjsonp("Not found iiko params for cafe {$id_cafe}");	
+	$saved_params = $iiko_params_collect->get(0);
 
-	try{
-		iiko_save_new_params($current_terminal_group_id, $current_extmenu_id);
-
-		if($iiko_params->current_terminal_group_id !== $current_terminal_group_id){
-			iiko_reload_all_params();
+	// --------------------------------------
+	//  RELOAD ALL PARAMS FROM IIKO IF NEEDS
+	// --------------------------------------
+	if($saved_params->current_organization_id !== $current_organization_id){		
+		try{
+			$IIKO_PARAMS = new Iiko_params($cafe);		
+			$IIKO_PARAMS->reload();			
+		}catch(Excwption $e){
+			__errorjsonp("failed reload iiko params for cafe ".$cafe->id);
 		}
-
-	}catch(Exception $e){
-		glog($e->getMessage());
-		__errorjsonp("2. failed to create qr-code");
+	}
+	// ----------------
+	//  UPDATE CURENTS
+	// ----------------
+	$saved_params->current_organization_id = $current_organization_id;
+	$saved_params->current_terminal_group_id = $current_terminal_group_id;
+	$saved_params->current_extmenu_id = $current_extmenu_id;
+	$saved_params->updated_date = 'now()';		
+	if(!$saved_params->save()){
+		__errorjsonp("failed save iiko params for cafe ".$cafe->id);
 	}
 
-	function iiko_reload_all_params(): void{
-
-	}
-
-	function iiko_save_new_params(string $current_terminal_group_id, string $current_extmenu_id): void{
-		global $iiko_params;		
-		$iiko_params->current_terminal_group_id = $current_terminal_group_id;
-		$iiko_params->current_extmenu_id = $current_extmenu_id;
-		$iiko_params->updated_date = 'now()';		
-		if(!$iiko_params->save()){throw new Ecxeption('failed to save iiko params');}	
-	}	
-
+	__answerjsonp("ok");
+	
 ?>
