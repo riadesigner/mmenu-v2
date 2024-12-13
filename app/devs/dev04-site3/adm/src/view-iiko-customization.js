@@ -53,12 +53,16 @@ export var VIEW_IIKO_CUSTOMIZATION = {
 
 		// SHOW ORGANIZATIONS INFO (WITH CURRENT)
 		let orgs = iiko_params['organizations']!==''?JSON.parse(iiko_params['organizations']):{};		
-		this.CURRENT_ORGANIZATION_ID = iiko_params['current_organization_id'];		
+		this.CURRENT_ORGANIZATION_ID = iiko_params['current_organization_id'];				
 		this.update_organizations_list(orgs, this.CURRENT_ORGANIZATION_ID);
+
+		console.log(`this.CURRENT_ORGANIZATION_ID = ${this.CURRENT_ORGANIZATION_ID}`);
+		console.log(`iiko_params = ${iiko_params}`);
 		
 		// SHOW TERMINAL INFO
 		let terminal_groups = iiko_params['terminal_groups']?JSON.parse(iiko_params['terminal_groups']):[];
-		this.update_terminals_list(terminal_groups, iiko_params['current_terminal_id']);				
+		this.CURRENT_TERMINAL_GROUP_ID = iiko_params['current_terminal_group_id'];
+		this.update_terminals_list(terminal_groups, iiko_params['current_terminal_group_id']);				
 
 		// SHOW TABLES INFO
 		let table_sections = iiko_params['tables']?JSON.parse(iiko_params['tables']):[];
@@ -78,12 +82,29 @@ export var VIEW_IIKO_CUSTOMIZATION = {
 		this.NEW_IIKO_EXTMENU_ID = new_menu_id.toString();
 		this.check_if_need2save();		
 	},
+	new_current_organization_id:function(new_org_id){
+		console.log('new_org_id = ', new_org_id);		
+		this.NEW_ORGANIZATION_ID = new_org_id.toString();
+		this.check_if_need2save();		
+	},
+	new_current_terminal_group_id:function(new_terminal_group_id){		
+		this.NEW_TERMINAL_GROUP_ID = new_terminal_group_id.toString();
+		this.check_if_need2save();		
+	},	
 	check_if_need2save:function() {
 		
 		let need2save = false;
 		
 		//CHECK THE MENUS ID				
-		if(this.NEW_IIKO_EXTMENU_ID!=this.CURRENT_EXTMENU_ID){
+		if(
+			(this.NEW_IIKO_EXTMENU_ID && this.NEW_IIKO_EXTMENU_ID!==this.CURRENT_EXTMENU_ID)
+			|| (this.NEW_ORGANIZATION_ID && this.NEW_ORGANIZATION_ID!==this.CURRENT_ORGANIZATION_ID)
+			|| (this.NEW_TERMINAL_GROUP_ID && this.NEW_TERMINAL_GROUP_ID !==this.CURRENT_TERMINAL_GROUP_ID)
+		){
+			console.log('need to save!')
+			console.log(`${this.NEW_IIKO_EXTMENU_ID}!==${this.CURRENT_EXTMENU_ID} `)
+			console.log(`${this.NEW_ORGANIZATION_ID}!==${this.CURRENT_ORGANIZATION_ID} `)
+			console.log(`${this.NEW_TERMINAL_GROUP_ID}!==${this.CURRENT_TERMINAL_GROUP_ID} `)
 			need2save = true;
 		}
 		// CHECK SPECIAL WORD
@@ -100,6 +121,8 @@ export var VIEW_IIKO_CUSTOMIZATION = {
 		this._page_to_top();		
 		this.$inputDelKey.val("");
 		this.NEW_IIKO_EXTMENU_ID = "";
+		this.NEW_ORGANIZATION_ID = "";
+		this.NEW_TERMINAL_GROUP_ID = "";
 	},
 	update_content_once:function(){
 		this.$linkIikoQRCodeTablesHelp.attr({href:this.IIKO_QRCODE_TABLES_URL});
@@ -139,13 +162,6 @@ export var VIEW_IIKO_CUSTOMIZATION = {
 			e.originalEvent.cancelable && e.preventDefault();
 		});
 			
-	},
-
-	new_current_organization_id:function(){
-
-	},
-	new_current_terminal_group_id:function(){
-
 	},
 
 	update_extmenus:function(iiko_arr_extmenus, current_extmenu_id){		
@@ -194,11 +210,12 @@ export var VIEW_IIKO_CUSTOMIZATION = {
 
 			$btn.on("touchend",(e)=>{
 				this._blur({onBlur:()=>{
-					if(!this.LOADING && !this.VIEW_SCROLLED){
-						if(!$(e.target).hasClass("checked")){
-							$(e.target).siblings().removeClass("checked");
-							$(e.target).addClass("checked");
-							this.new_current_organization_id($(e.target).data("org-id"));
+					if(!this.LOADING && !this.VIEW_SCROLLED){						
+						const $el = ($(e.target).prop('tagName')).toLowerCase()==='div'?$(e.target) : $(e.target).parent();
+						if(!$el.hasClass("checked")){
+							$el.siblings().removeClass("checked");
+							$el.addClass("checked");
+							this.new_current_organization_id($el.data('org-id'));
 						}						
 					}
 				}});
@@ -270,13 +287,22 @@ export var VIEW_IIKO_CUSTOMIZATION = {
 				if(table_sections.hasOwnProperty(i)){
 					let section = table_sections[i];
 
-					"<li>"+section['section_name']+": "+section['tables'].length+" столов</li>";					
+					"<li>"+section['section_name']+", всего столов: "+section['tables'].length+"</li>";					
 					const termGroupId = section['terminalGroupId'];
 					const trminalGroupName = fn.calc_terminal_name(termGroupId);
+
+					let table_numbers = '';
+					if(section['tables'].length>0){
+						for(let t in section['tables']){
+						let tbl = section['tables'][t];
+						table_numbers+=`[${tbl.number}] `;
+						}						
+					};
 
 					const html = [
 						`<li>`,
 						`<strong>${section['section_name']}: ${section['tables'].length} столов</strong> <br>`,
+						`Номера столов: ${table_numbers}<br>`,
 						`терминалы: ${trminalGroupName}`,
 						`</li>`
 					].join('');
@@ -321,19 +347,6 @@ export var VIEW_IIKO_CUSTOMIZATION = {
 
 		})
 		.catch((vars)=>{
-			
-			// if (typeof vars === 'string' || vars instanceof String){
-			// 	if(vars.indexOf("has not actual terminals")!==-1){
-			// 		this.show_modal_error('<p>Не найдены зарегистрированные Терминалы. Проверьте настройки Iiko.</p>');
-			// 	}else if(vars.indexOf("cant update cafe info")!==-1){
-			// 		this.show_modal_error('<p>Не удалось сохранить информацию. Проблема на стороне ChefsMenu. Попробуйте позже.</p>');
-			// 	}else{
-			// 		this.show_modal_error();
-			// 	};				
-			// }else{
-			// 	this.show_modal_error();
-			// };
-
 			this.show_modal_error();
 			setTimeout(()=>{
 				this._end_loading();
@@ -371,80 +384,29 @@ export var VIEW_IIKO_CUSTOMIZATION = {
             });   
 		});
 	},
-	// iiko_tables_update:function() {		
-        
-    //     const fn = {
-    //         okMessage:function(opt){
-    //             var msg = `<p>Столы успешно обновлены</p>`;
-    //             GLB.VIEWS.modalMessage({
-    //                 title:GLB.LNG.get("lng_attention"),
-    //                 message:msg,
-    //                 btn_title:GLB.LNG.get('lng_close'),
-    //                 on_close:function(){
-    //                     opt && opt.onClose && opt.onClose();
-    //                 }
-    //             });
-    //         }
-    //     };
-
-	// 	this._now_loading();
-	// 	this.iiko_tables_update_asynq()
-	// 	.then((vars)=>{
-	// 		console.log("vars",vars)
-	// 		this.update_tables_list(vars);
-	// 		fn.okMessage();
-	// 		setTimeout(()=>{
-	// 			this._end_loading();
-	// 		},300);
-	// 	})
-	// 	.catch((vars)=>{
-			
-	// 		if (typeof vars === 'string' || vars instanceof String){
-	// 			if(vars.indexOf("has not actual terminals")!==-1){
-	// 				this.show_modal_error('<p>Не найдены зарегистрированные Терминалы. Проверьте настройки Iiko.</p>');
-	// 			}else if(vars.indexOf("cant update cafe info")!==-1){
-	// 				this.show_modal_error('<p>Не удалось сохранить информацию. Проблема на стороне ChefsMenu. Попробуйте позже.</p>');
-	// 			}else{
-	// 				this.show_modal_error();
-	// 			};				
-	// 		}else{
-	// 			this.show_modal_error();
-	// 		};
-
-	// 		setTimeout(()=>{
-	// 			this._end_loading();
-	// 		},300);
-
-	// 	});
-	// },
+ 
 	save:function() {
 
 		// CHECK SPECIAL WORD
 		if(this.$inputDelKey.val()=="delete"){
 			this.remove_iiko_login()	
 		}else{
-			//CHECK THE MENUS ID			
-			const iiko_params = GLB.THE_CAFE.get('iiko_params');
-			const current_extmenu_id = iiko_params['current_extmenu_id'].toString() || "";
-					
-			if(this.NEW_IIKO_EXTMENU_ID!==current_extmenu_id){
-				this.save_new_current_extmenu_id();	
-			}else{
-				return false;
-			}
+			this.save_iiko_params();
 		};
 		return false; 
 	},
-	save_new_current_extmenu_id:function() {				
+	save_iiko_params:function() {				
 
 		const new_menu_id = this.NEW_IIKO_EXTMENU_ID.toString();
 
         let PATH = 'adm/lib/iiko/';
-        let url = PATH + 'lib.save_iiko_current_extmenu_id.php';
+        let url = PATH + 'lib.save_iiko_params.php';
     
         let data = {
             id_cafe:GLB.THE_CAFE.get().id,
-            extmenu_id:new_menu_id
+            current_organization_id:this.NEW_ORGANIZATION_ID,
+			current_terminal_group_id:this.NEW_TERMINAL_GROUP_ID,
+			current_extmenu_id:this.NEW_EXTMENU_ID
         };
 
 		this._now_loading();
@@ -457,8 +419,7 @@ export var VIEW_IIKO_CUSTOMIZATION = {
             success:(result)=> {             
                 // console.log('result',result)
                 if(result && !result.error){
-					const iiko_params = GLB.THE_CAFE.get('iiko_params');
-					iiko_params['current_extmenu_id'] = new_menu_id;
+					GLB.THE_CAFE.set({'iiko_params':result.iiko_params});					
                 	this._go_back(); 
 					setTimeout(()=>{ 
 						this._end_loading();						
