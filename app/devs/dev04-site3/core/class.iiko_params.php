@@ -49,6 +49,18 @@ class Iiko_params{
 	public function get_token(): string{
 		return $this->token;
 	}
+	
+	public function get_current_organization(): array{
+		$currentOrganization = null;
+		$id = $this->current_organization_id;
+		foreach($this->arr_organizations as $org){
+			if($org["id"]===$id){
+				$currentOrganization = $org;
+				break;
+			}
+		}
+		return $currentOrganization;
+	}
 
 	public function export(): array{
 		return $this->iiko_params->export();		

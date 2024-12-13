@@ -18,8 +18,10 @@
 	 
 	require_once WORK_DIR.APP_DIR.'core/class.smart_object.php';
 	require_once WORK_DIR.APP_DIR.'core/class.smart_collect.php';
-	require_once WORK_DIR.APP_DIR.'core/class.user.php';
+	require_once WORK_DIR.APP_DIR.'core/class.user.php';	
 	
+	require_once WORK_DIR.APP_DIR.'core/class.iiko_params.php';
+
 
 	session_start();
 	SQL::connect();
@@ -48,7 +50,21 @@
 	if($saved_params->current_organization_id !== $current_organization_id){		
 		try{
 			$IIKO_PARAMS = new Iiko_params($cafe);		
-			$IIKO_PARAMS->reload();			
+			$IIKO_PARAMS->reload();
+
+			// ----------------------------
+			//  UPDATING CAFE DESCRIPTIONS
+			// ----------------------------
+			$org = $IIKO_PARAMS->get_current_organization();
+			if(!$org || !count($org)) __errorjsonp("--wrong iiko params. cant find organization");		
+			$cafe->cafe_title = $org["name"];
+			$cafe->cafe_address = $org["restaurantAddress"];
+			$cafe->chief_cook="";
+			$cafe->cafe_description="Нет описания";
+			$cafe->updated_date = 'now()';
+			$cafe->rev+=1;
+			$cafe->save();
+
 		}catch(Excwption $e){
 			__errorjsonp("failed reload iiko params for cafe ".$cafe->id);
 		}

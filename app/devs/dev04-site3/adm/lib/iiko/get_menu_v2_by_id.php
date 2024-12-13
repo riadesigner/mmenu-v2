@@ -49,12 +49,7 @@ if(!$cafe->valid())__errorjsonp("Unknown cafe, ".__LINE__);
 $iiko_params_collect = new Smart_collect("iiko_params", "where id_cafe='".$cafe->id."'");
 if(!$iiko_params_collect || !$iiko_params_collect->full()) __errorjsonp("--cant find iiko params for cafe ".$cafe->id);
 $iiko_params = $iiko_params_collect->get(0);
-
-$orgs = $iiko_params->organizations;
-$orgs = !empty($orgs)?json_decode((string) $orgs):false;
-if(!$orgs) __errorjsonp("--cant find iiko organization_id for the cafe, ".__LINE__);
-$organization_id = $orgs->current_organization_id;
-
+$organization_id = $iiko_params->current_organization_id;
 
 $url     = 'api/2/menu/by_id';
 $headers = [

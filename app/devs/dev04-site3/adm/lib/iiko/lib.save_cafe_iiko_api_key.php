@@ -22,6 +22,7 @@
 	require_once WORK_DIR.APP_DIR.'core/class.user.php';
 
 	require_once WORK_DIR.APP_DIR.'core/class.qr_tables.php';
+	require_once WORK_DIR.APP_DIR.'core/class.iiko_params.php';
 
 	session_start();
 	SQL::connect();
@@ -31,191 +32,37 @@
 
 	if(!isset($_POST['id_cafe']) || empty($_POST['id_cafe']) ) __errorjsonp("Unknown cafe, ".__LINE__);
 
-
 	$id_cafe = (int) $_POST['id_cafe'];
 	$cafe = new Smart_object("cafe",$id_cafe);
 	if(!$cafe->valid())__errorjsonp("Unknown cafe, ".__LINE__);
 
 	if($cafe->id_user!==$user->id)__errorjsonp("Not allowed, ".__LINE__);
-		
-	// SAVE IIKO API KEY	
+	
+	// CHECK IF IIKO API KEY HAS LEGAL NAME	
 	$key =  post_clean($_POST['new_iiko_api_key'], $CFG->inputs_length['iiko-api-key'] );
-
 	$msk = "|^[0-9a-zA-Z].[\-0-9a-zA-Z]*$|i";
 	if(!preg_match($msk,(string) $key)) {		
 		__errorjsonp("--illegal name");		
 	}
 	
-	// --------------------------
-	// CHECK IF IT IS REAL KEY
-	// GETTING TOKEN FROM IIKO
-	// --------------------------
+	$cafe->iiko_api_key = $key;
 
-	$url     = 'api/1/access_token';
-	$headers = ["Content-Type"=>"application/json"];
-	$params  = ["apiLogin" => $key];
-
-	$res = iiko_get_info($url,$headers,$params);
-
-	if( isset($res["errorDescription"]) ) {
-		if(str_contains((string) $res["errorDescription"], "is not authorized")){
-			__errorjsonp("--unknown login");	
-		}else{
-			__errorjsonp($res);
-		}		
+	try{
+		$IIKO_PARAMS = new Iiko_params($cafe);		
+		$IIKO_PARAMS->reload();				
+	}catch(Exceprion $e){
+		glogError($e->getMessage());
+		__errorjsonp("Something wrong. Can`t reload iiko params");		
 	}
 
-	if(!isset($res["token"])){
-		__errorjsonp($res);		
-	}else{
-		$token = $res["token"];	
-	}
-
-	// --------------------------
-	// GETTING ORGANIZATION INFO
-	// --------------------------	
-
-	$url     = 'api/1/organizations';
-	$headers = [
-	    "Content-Type"=>"application/json",
-	    "Authorization" => 'Bearer '.$token
-	]; 
-	$params  = ['organizationIds'      => null, 'returnAdditionalInfo' => true, 'includeDisabled'      => true];
-
-	$res = iiko_get_info($url,$headers,$params);
-
-	if(!isset($res["organizations"])){
-		__errorjsonp("--unknown organization");	
-	}
-
+	$org = $IIKO_PARAMS->get_current_organization();
+	if(!$org || !count($org)) __errorjsonp("--wrong iiko params. cant find organization");		
 	
-	$currentOrganizationId = $res["organizations"][0]["id"];
-	$currentOrganizationName = post_clean($res["organizations"][0]["name"]);
-	$currentOrganizationAddress = post_clean($res["organizations"][0]["restaurantAddress"]);		
-
-	$iiko_organizations = [
-		"current_organization_id"=>$currentOrganizationId,
-		"items"=>[]
-	];
-
-	foreach($res["organizations"] as $org){
-		array_push($iiko_organizations['items'],
-			[
-				"id"=>$org["id"],
-				"name"=>$org["name"],
-				"address"=>$org["restaurantAddress"]
-			]
-		);
-	}
-
-	// --------------------------
-	// GETTING EXTMENUS INFO
-	// --------------------------	
-	$url     = 'api/2/menu';
-	$headers = [
-	    "Content-Type"=>"application/json",
-	    "Authorization" => 'Bearer '.$token
-	]; 
-	$params  = [];
-	$res = iiko_get_info($url,$headers,$params);
-	if(!isset($res["externalMenus"]) || !count($res["externalMenus"])){
-		__errorjsonp("--has not menus");	
-	}	
-	$iiko_current_extmenu_id = $res["externalMenus"][0]["id"];
-	$iiko_extmenus = [];
-	foreach($res["externalMenus"] as $menu){
-		array_push($iiko_extmenus,[
-			"id"=>$menu["id"],			
-			"name"=>$menu["name"]			
-		]);
-	}
-
-	// --------------------------
-	// GETTING TERMINAL GROUPS 
-	// --------------------------		
-
-	$url     = 'api/1/terminal_groups';
-	$headers = [
-	    "Content-Type"=>"application/json",
-	    "Authorization" => 'Bearer '.$token
-	]; 
-	$params  = ['organizationIds'      => [$currentOrganizationId], 'includeDisabled'      => true];
-	$res = iiko_get_info($url,$headers,$params);
-
-	if(!isset($res['terminalGroups'])){
-		__errorjsonp("--has not terminal groups");		
-	}
-	
-	$currentTerminalGroups = $res['terminalGroups'][0]['items'];
-	if(!count($currentTerminalGroups)) __errorjsonp("--has not actual terminals");
-
-	$currentTerminalGroupId = $res['terminalGroups'][0]['items'][0]['id'];
-	
-	$terminalGroups = [
-		'current_terminal_group_id'=>$currentTerminalGroupId,
-		'items'=>$currentTerminalGroups
-	];	
-
-	// --------------------------
-	// GETTING TABLES FOR THE 
-	// TERMINAL GROUPS
-	// --------------------------	
-
-	$url     = 'api/1/reserve/available_restaurant_sections';
-	$headers = [
-	    "Content-Type"=>"application/json",
-	    "Authorization" => 'Bearer '.$token
-	]; 
-
-	$params  = ['terminalGroupIds' => [$currentTerminalGroupId], 'returnSchema'      => true];
-
-	$res = iiko_get_info($url,$headers,$params);
-
-	if(!isset($res['restaurantSections'])){
-		__errorjsonp('--cant getting tables info');	
-	}	
-	
-	$arr_tables = iiko_tables_res_parse($res['restaurantSections']);
-
-	// --------------------------
-	// GETTING ORDER_TYPES
-	// --------------------------
-
-	$url     = 'api/1/deliveries/order_types';
-	$headers = [
-	    "Content-Type"=>"application/json",
-	    "Authorization" => 'Bearer '.$token
-	]; 
-	$params  = ['organizationIds' => [$currentOrganizationId]];
-
-	$res = iiko_get_info($url,$headers,$params);
-
-	if(!isset($res['orderTypes'])){
-		__errorjsonp("--cant receive order types");		
-	}
-
-	$order_types = $res['orderTypes'][0]['items'];	
-
-	// CREATE IIKO PARAMS	
-	$iiko_params = new Smart_object("iiko_params");
-	$iiko_params->id_cafe = $cafe->id;
-	$iiko_params->updated_date = "now()";
-	
-	$iiko_params->organizations = json_encode($iiko_organizations, JSON_UNESCAPED_UNICODE);	
-	$iiko_params->extmenus = json_encode($iiko_extmenus, JSON_UNESCAPED_UNICODE);	;	
-	$iiko_params->terminal_groups = json_encode($terminalGroups, JSON_UNESCAPED_UNICODE);	
-	$iiko_params->tables = json_encode($arr_tables, JSON_UNESCAPED_UNICODE);	
-	$iiko_params->order_types = json_encode($order_types, JSON_UNESCAPED_UNICODE);
-	$iiko_params->current_extmenu_id = $iiko_current_extmenu_id; 		
-	$iiko_params->current_extmenu_hash = "";
-	$iiko_params->save();
-
 	// --------------------------
 	// UPDATING CAFE INFO
 	// --------------------------	
-	$cafe->iiko_api_key = $key;	
-	$cafe->cafe_title = $currentOrganizationName;
-	$cafe->cafe_address = $currentOrganizationAddress;
+	$cafe->cafe_title = $org["name"];
+	$cafe->cafe_address = $org["restaurantAddress"];
 	$cafe->chief_cook="";
 	$cafe->cafe_description="Нет описания";
 	$cafe->updated_date = 'now()';
@@ -227,6 +74,5 @@
 		glogError("Can't save cafe iiko api key, ".__FILE__.", ".__LINE__);
 		__errorjsonp("Can't save cafe ".$cafe->id." iiko api key");
 	}
-
 
 ?>

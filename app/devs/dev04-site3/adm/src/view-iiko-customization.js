@@ -70,7 +70,7 @@ export var VIEW_IIKO_CUSTOMIZATION = {
 
 		const iiko_arr_extmenus = iiko_params['extmenus']!==""?JSON.parse(iiko_params['extmenus']):[];				
 		this.CURRENT_EXTMENU_ID = iiko_params['current_extmenu_id'].toString();					
-		this.NEW_EXTMENU_ID = this.CURRENT_EXTMENU_ID;
+		this.NEW_IIKO_EXTMENU_ID = this.CURRENT_EXTMENU_ID;
 		this.update_extmenus(iiko_arr_extmenus, this.CURRENT_EXTMENU_ID);
 		
 		setTimeout(()=>{							
@@ -395,7 +395,7 @@ export var VIEW_IIKO_CUSTOMIZATION = {
 				current_terminal_group_id:this.NEW_TERMINAL_GROUP_ID,
 				current_extmenu_id:this.NEW_IIKO_EXTMENU_ID
 			};
-	
+
 			this._now_loading();
 	
 			this.AJAX = $.ajax({
