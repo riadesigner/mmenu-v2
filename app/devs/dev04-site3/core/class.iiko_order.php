@@ -9,16 +9,11 @@ if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 class Iiko_order{
 		
 	private Smart_object $cafe;
-	private array|null $iiko_tables=null;
-	private array|null $iiko_order_types=null;
+	private Smart_object $iiko_params;
 
 	function __construct(Smart_object $cafe){
 		$this->cafe = $cafe;
-		
-		// $this->$iiko_tables = $cafe->iiko_tables;
-		// $this->$iiko_order_types = $cafe->iiko_order_types;
-		$this->iiko_tables = [];
-		$this->iiko_order_types = [];		
+		$this->load_iiko_params();
 		return $this;
 	}
 
@@ -28,10 +23,11 @@ class Iiko_order{
 	 * @return array;
 	 */
 	public function prepare_order_for_table(int $table_number, array $order_rows): array{
-				
+						
+		$menu_id = $this->iiko_params->current_extmenu_id;
 		$table_id = $this->get_table_id_by_number($table_number);
-		if($table_id===null){throw new Exception("--cant calculate iiko table_id");}
-		
+		if($table_id===null){throw new Exception("--cant calculate iiko table_id");}		
+
 		$order_items = $this->prepare_items($order_rows);		
 		$order_type_id = $this->get_id_for_tables_type_order();
 
@@ -53,6 +49,12 @@ class Iiko_order{
 		];
 
 		return $order;
+	}
+
+	private function load_iiko_params(): void{
+		$iiko_params_collect = new Smart_collect("iiko_params","where id_cafe='".$this->cafe->id."'"); 
+		if(!$iiko_params_collect->full()) throw new Exception("--iiko psrams not found for the cafe ".$cafe->id);
+		$this->iiko_params = $iiko_params_collect->get(0);
 	}
 
 	/**
@@ -80,7 +82,7 @@ class Iiko_order{
 			$modifiers = [];
 			if($chosenModifiers && count($chosenModifiers)){		
 				foreach($chosenModifiers as $m){
-					$mod = [ 'productId'=>$m['id'], 'amount'=>1 ];
+					$mod = [ 'productId'=>$m['modifierId'], 'amount'=>1 ];
 					if(!empty($m['modifierGroupId'])) $mod['productGroupId'] = $m['modifierGroupId'];				
 					$modifiers[] = $mod;			
 				}		
@@ -104,9 +106,9 @@ class Iiko_order{
 
 	}
 
-	private function get_table_id_by_number($table_number): string{
+	private function get_table_id_by_number($table_number): string{		
 
-		$tbls = $this->iiko_tables;
+		$tbls = $this->iiko_params->tables;
 		$tbls = !empty($tbls)?json_decode($tbls,true):false;
 		if(!$tbls) throw new Exception("--cant find iiko tableIds for the cafe");
 
@@ -131,8 +133,8 @@ class Iiko_order{
 	}	
 
 	private function get_id_for_tables_type_order(): string{
-
-		$order_types = $this->iiko_order_types;
+		
+		$order_types = $this->iiko_params->order_types;
 		$order_types = !empty($order_types)?json_decode($order_types,true):[];
 		
 		if(!count($order_types)) throw new Exception("--cant find iiko order types");

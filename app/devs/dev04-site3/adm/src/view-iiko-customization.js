@@ -51,6 +51,8 @@ export var VIEW_IIKO_CUSTOMIZATION = {
 
 		const iiko_params = GLB.THE_CAFE.get("iiko_params");
 
+		console.log(' ----------- iiko_params = ',iiko_params);
+
 		// SHOW ORGANIZATIONS INFO (WITH CURRENT)
 		let orgs = iiko_params['organizations']!==''?JSON.parse(iiko_params['organizations']):{};		
 		this.CURRENT_ORGANIZATION_ID = iiko_params['current_organization_id'];

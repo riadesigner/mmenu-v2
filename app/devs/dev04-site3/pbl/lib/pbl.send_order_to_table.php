@@ -65,18 +65,18 @@ define('PENDING_MODE', (int) $cafe->order_way ); // int
 
 if(IIKO_MODE){
 
-	$ORDER_IIKO = "";
+	$ARR_ORDER_FOR_IIKO = "";
 
 	try{
 		$Iiko_order = new Iiko_order($cafe);
-		$ORDER_IIKO = $Iiko_order->prepare_order_for_table( $table_number, $order_data['order_items'] );
+		$ARR_ORDER_FOR_IIKO = $Iiko_order->prepare_order_for_table( $table_number, $order_data['order_items'] );
 	}catch( Exception $e){
 		glogError($e->getMessage());
 		__errorjsonp("--fail preparing order for table");
 	}
 
 } else {
-	$ORDER_IIKO = "";
+	$ARR_ORDER_FOR_IIKO = "";
 }
 
 
@@ -90,12 +90,13 @@ $short_number = Order_sender::save_order_to_db(
 	$cafe, 
 	[
 		"ORDER_TEXT"=>$ORDER_TXT,
-		"ORDER_IIKO"=>$ORDER_IIKO,
+		"ORDER_IIKO"=>$ARR_ORDER_FOR_IIKO,
 	], 
 	$table_number,
 	PENDING_MODE,
 	DEMO_MODE
 );
+
 if(!$short_number)__errorjsonp("--cant save order");
 
 DEMO_MODE && __answerjsonp(["short_number"=>$short_number,"demo_mode"=>DEMO_MODE]);
