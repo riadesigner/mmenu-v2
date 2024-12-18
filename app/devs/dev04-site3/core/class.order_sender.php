@@ -362,9 +362,15 @@ class Order_sender{
 
 				$comment_addition = $TG_USER->role === "waiter"? "Официант: ".$MANAGER_NAME : "Менеджер: ".$MANAGER_NAME;
 				$comment = "Отправлен через телеграм. ".$comment_addition;
-				$order_data = json_decode((string) $ORDER->description, 1); 
+				$order_description = json_decode((string) $ORDER->description, 1);
+				$order_data = $order_description["ORDER_IIKO"];				
 				$order_data["externalNumber"] = $ORDER->short_number;
 				$order_data["comment"] = $comment;
+
+				glog("=========== \$order_data =========== ".print_r($order_data,1));
+
+				self::send_message_to_tg_users($TG_USER->tg_user_id, "TEST STOP");
+				return; // TEST STOP
 
 				try{
 					// ---------------------------------------------
@@ -372,20 +378,20 @@ class Order_sender{
 					// ---------------------------------------------							
 					if($ORDER->order_target===self::ORDER_DELIVERY){
 						$answer = self::send_iiko_order_for_delivery($token, $organization_id, $terminal_group_id, $order_data);
-						$ok = self::parse_answer_from_iiko($answer);
+						self::parse_answer_from_iiko($answer);
 					// ---------------------------------------------
 					//      SEND PENDING IIKO-ORDER TO TABLE
 					// ---------------------------------------------					
 					}else if($ORDER->order_target===self::ORDER_TABLE){
 						$answer = self::send_iiko_order_to_table($token, $organization_id, $terminal_group_id, $order_data);
-						$ok = self::parse_answer_from_iiko($answer);
+						self::parse_answer_from_iiko($answer);
 					}else{
 						throw new Exception("Не найден ORDER_TARGET для кафе $cafe_uniq_name");
 					}					
 				}catch( Exception $e){
-					glogError($e->getMessage().", ".__FILE__.", ".__LINE__);
-					$err_message = "О нет! Ошибка настройки. Если она повторится, обратитесь в техническую поддержку";
-					self::send_message_to_tg_users($TG_USER->tg_user_id, $err_message);					
+					glogError($e->getMessage());
+					$err_message = "О нет! Не удалось отправить заказ в iiko. Если ошибка повторится, обратитесь в техническую поддержку";
+					self::send_message_to_tg_users($TG_USER->tg_user_id, $err_message);
 					return;					
 				}
 
@@ -411,9 +417,12 @@ class Order_sender{
 
 	}
 
-	static private function parse_answer_from_iiko(array $answer): bool{
+	static private function parse_answer_from_iiko(array $answer): void{
 		glog("===== answer iiko after sending order ====== \n".print_r($answer,1));
-		return true;
+		if(isset($answer["error"]) && !empty($answer["error"]) ){
+			glogError("IIKO ERR: ".$answer["error"]."\n ".$answer["errorDescription"] );
+			throw new Exception("---failed sending order to iiko");
+		}		
 	}
 
     /*
