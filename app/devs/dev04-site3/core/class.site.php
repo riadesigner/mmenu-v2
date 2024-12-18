@@ -74,10 +74,17 @@ class Site{
 				}
 			}else{
 				if(self::check_allowed_subdomain()){
-					if(self::real_cafe_subdomain()){
-						self::$SITE_PAGE = "Cafe";
+					if(self::real_cafe_subdomain()){						
 						self::add_body_classes("page-cafe");
-						self::$UNIQ_CAFE = self::$Cafe->uniq_name; 						
+						self::$UNIQ_CAFE = self::$Cafe->uniq_name; 												
+						self::$SITE_PAGE = 'Menu';
+						self::add_body_classes("page-menu");
+						$R = new Router();
+						if($R->get(0)!==null && $R->get(0)=="table" && $R->get(1)!==null){
+							$table_number = substr((string) $R->get(1), 0, 50);
+							self::add_body_classes("mode-orderto-table");
+							self::add_body_data("table-uniq", post_clean($table_number));			
+						}
 					}else{
 						self::$SITE_PAGE = "404";
 						self::add_body_classes("page-404");
@@ -110,7 +117,7 @@ class Site{
 					if($cafe_uniq_name && self::_check_cafe($cafe_uniq_name)){
 						self::$UNIQ_CAFE = self::$Cafe->uniq_name;
 						self::$SITE_PAGE = 'Menu';
-						self::add_body_classes("page-menu");
+						self::add_body_classes("page-menu");						
 						if($R->get(2)!==null && $R->get(2)=="table" && $R->get(3)!==null){
 							$table_number = substr((string) $R->get(3), 0, 50);
 							self::add_body_classes("mode-orderto-table");

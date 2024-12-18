@@ -24,12 +24,7 @@ if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 		'title'=>'Chefs Menu! QR-Меню для кафе и ресторанов за 10 минут!', 		
 		'descr'=>'Сервис быстрого создания электронного меню для ресторанов и кафе, с удобным управлением, корзиной для приема заказов!', 
 		'template'=>'site/views/tpl.site.php'],
-     // CAFE, ADDRESS WITH SUBDOMAIN
-     'Cafe'=>[
-		'title'=>'Chefs Menu!', 		
-		'descr'=>'Меню работает на платформе Chefs Menu!', 
-		'template'=>'site/views/tpl.menu.php',],
-     // CAFE, ADDRESS WITHOUT SUBDOMAIN
+     // MENU, ADDRESS WITHOUT SUBDOMAIN
      'Menu'=>[
 		'title'=>'Chefs Menu!',		
 		'descr'=>'Меню работает на платформе Chefs Menu!',
