@@ -65,7 +65,7 @@
 			$cafe->rev+=1;
 			$cafe->save();
 
-		}catch(Excwption $e){
+		}catch(Exception $e){
 			__errorjsonp("failed reload iiko params for cafe ".$cafe->id);
 		}
 	}

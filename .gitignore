@@ -7,4 +7,3 @@ db
 db-backup
 .env
 *.env
-db-backup

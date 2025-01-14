@@ -7,8 +7,8 @@ use Rector\Set\ValueObject\LevelSetList;
 
 return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->paths([
-        __DIR__ . '/dev02-001',
-    ]);
+        __DIR__ . '/devs/dev04-site3',
+    ]);    
 
     $rectorConfig->importNames();
     $rectorConfig->importShortClasses(false);
@@ -16,3 +16,4 @@ return static function (RectorConfig $rectorConfig): void {
         LevelSetList::UP_TO_PHP_83,
     ]);
 };
+
