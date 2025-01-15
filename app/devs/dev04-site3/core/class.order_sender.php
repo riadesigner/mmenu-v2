@@ -61,21 +61,20 @@ class Order_sender{
     -------------------------------- **/
 	static public function send_iiko_order_to_table($token, $organization_id, $terminal_group_id, $order): array{	
 
-		glog("send iiko order to table, args: ".print_r([
-			'token'=>$token, 
-			'organization_id'=>$organization_id, 
-			'terminal_group_id'=>$terminal_group_id, 
-			'order'=>$order
-		],1));
-
 		$url     = 'api/1/order/create';
 		$headers = [
 		    "Content-Type"=>"application/json",
 		    "Authorization" => 'Bearer '.$token
 		]; 	 	
-		$params  = ['organizationId' => $organization_id, 'terminalGroupId' => $terminal_group_id, 'order' => $order]; 			
+		$params  = [
+			'organizationId' => $organization_id, 
+			'terminalGroupId' => $terminal_group_id, 
+			'order' => $order
+		]; 			
 
-		$res = iiko_get_info($url,$headers,$params);		
+		glog("=============== SEND IIKO ORDER TO TABLE =============== \n".print_r($params,1));
+
+		$res = iiko_get_info($url, $headers, $params);		
 		glog("iiko answer: ".print_r($res,1));
 		return $res;
 	}
@@ -127,9 +126,8 @@ class Order_sender{
 			$ORDER->short_number = $short_number;			
 			$ORDER->pending_mode = $pending_mode;
 			$ORDER->date = "now()";
-			$ORDER->updated = "now()";
+			$ORDER->updated = "now()";			
 			$ORDER->description = json_encode($order_data, JSON_UNESCAPED_UNICODE);
-			
 			$just_created_id = $ORDER->save();			
 
 			if(!$just_created_id) {
@@ -139,6 +137,7 @@ class Order_sender{
 				$order_uniq_id = $just_created_id."-".$id_cafe."-".$short_number;
 				$ORDER->id_uniq = $order_uniq_id;			
 				$ORDER->save();
+
 				return $short_number;
 			}
 
@@ -354,7 +353,6 @@ class Order_sender{
 				if(!$iiko_params_collect || !$iiko_params_collect->full()) $err_message = "О нет! Ошибка настроек кафе. Если ошибка повторяется, обратитесь в техническую поддержку.";
 				$iiko_param = $iiko_params_collect->get(0);
 
-
 				$organization_id = $iiko_param->current_organization_id;
 				$terminal_group_id = $iiko_param->current_terminal_group_id;		
 				
@@ -362,15 +360,16 @@ class Order_sender{
 
 				$comment_addition = $TG_USER->role === "waiter"? "Официант: ".$MANAGER_NAME : "Менеджер: ".$MANAGER_NAME;
 				$comment = "Отправлен через телеграм. ".$comment_addition;
-				$order_description = json_decode((string) $ORDER->description, 1);
+				$order_description = json_decode($ORDER->description, 1);
+
 				$order_data = $order_description["ORDER_IIKO"];				
 				$order_data["externalNumber"] = $ORDER->short_number;
 				$order_data["comment"] = $comment;
 
-				glog("=========== \$order_data =========== ".print_r($order_data,1));
+				glog("=========== ORDER_DATA =========== ".print_r($order_data,1));
 
-				self::send_message_to_tg_users($TG_USER->tg_user_id, "TEST STOP");
-				return; // TEST STOP
+				// self::send_message_to_tg_users($TG_USER->tg_user_id, "TEST STOP");
+				// return;
 
 				try{
 					// ---------------------------------------------
@@ -378,19 +377,20 @@ class Order_sender{
 					// ---------------------------------------------							
 					if($ORDER->order_target===self::ORDER_DELIVERY){
 						$answer = self::send_iiko_order_for_delivery($token, $organization_id, $terminal_group_id, $order_data);
-						self::parse_answer_from_iiko($answer);
+						self::check_answer_from_iiko($answer);
 					// ---------------------------------------------
 					//      SEND PENDING IIKO-ORDER TO TABLE
 					// ---------------------------------------------					
 					}else if($ORDER->order_target===self::ORDER_TABLE){
 						$answer = self::send_iiko_order_to_table($token, $organization_id, $terminal_group_id, $order_data);
-						self::parse_answer_from_iiko($answer);
+						self::check_answer_from_iiko($answer);						
 					}else{
 						throw new Exception("Не найден ORDER_TARGET для кафе $cafe_uniq_name");
 					}					
 				}catch( Exception $e){
 					glogError($e->getMessage());
 					$err_message = "О нет! Не удалось отправить заказ в iiko. Если ошибка повторится, обратитесь в техническую поддержку";
+					$err_message.="\n_({$e->getMessage()})_";
 					self::send_message_to_tg_users($TG_USER->tg_user_id, $err_message);
 					return;					
 				}
@@ -417,12 +417,15 @@ class Order_sender{
 
 	}
 
-	static private function parse_answer_from_iiko(array $answer): void{
+	static private function check_answer_from_iiko(array $answer): void{
 		glog("===== answer iiko after sending order ====== \n".print_r($answer,1));
 		if(isset($answer["error"]) && !empty($answer["error"]) ){
 			glogError("IIKO ERR: ".$answer["error"]."\n ".$answer["errorDescription"] );
-			throw new Exception("---failed sending order to iiko");
+			throw new Exception($answer["errorDescription"]);
 		}		
+		if(mb_strtolower($answer["orderInfo"]["creationStatus"])==="error"){
+			throw new Exception($answer["orderInfo"]["errorInfo"]["message"]);
+		}
 	}
 
     /*

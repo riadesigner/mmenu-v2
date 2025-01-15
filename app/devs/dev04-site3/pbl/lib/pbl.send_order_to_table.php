@@ -79,6 +79,7 @@ if(IIKO_MODE){
 	$ARR_ORDER_FOR_IIKO = "";
 }
 
+glog("TYPE OF ARR_ORDER_FOR_IIKO === ".gettype($ARR_ORDER_FOR_IIKO));
 
 // ----------------------------------------
 //  - SAVE ORDER IN DB
@@ -88,8 +89,8 @@ if(IIKO_MODE){
 $short_number = Order_sender::save_order_to_db(
 	ORDER_TARGET,
 	$cafe, 
-	[
-		"ORDER_TEXT"=>$ORDER_TXT,
+	[		
+		"ORDER_TEXT"=>addcslashes($ORDER_TXT,"\n"),
 		"ORDER_IIKO"=>$ARR_ORDER_FOR_IIKO,
 	], 
 	$table_number,
@@ -106,6 +107,7 @@ $ORDER_TXT = "Заказ №: {$short_number}\n".$ORDER_TXT;
 // IF HAS NOT ACTIVE WAITERS
 define('NOTG_MODE', !Order_sender::total_tg_users_for($cafe->uniq_name, ORDER_TARGET));
 NOTG_MODE && __answerjsonp(["short_number"=>$short_number,"demo_mode"=>DEMO_MODE, "notg_mode"=>true]);
+
 
 // ---------------------------
 //  SENDING THE ORDER TO TG
