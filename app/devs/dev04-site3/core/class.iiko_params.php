@@ -68,6 +68,7 @@ class Iiko_params{
 
 	// PRIVATE FUNCS
 	private function update_db(): bool{
+
 		$this->iiko_params->organizations = json_encode($this->arr_organizations, JSON_UNESCAPED_UNICODE);			
 		$this->iiko_params->terminal_groups = json_encode($this->arr_terminals, JSON_UNESCAPED_UNICODE);	
 		$this->iiko_params->tables = json_encode($this->arr_tables, JSON_UNESCAPED_UNICODE);	
@@ -81,6 +82,8 @@ class Iiko_params{
 		$this->iiko_params->rough_data = json_encode($this->ROUGH_DATA, JSON_UNESCAPED_UNICODE);	
 		$this->iiko_params->updated_date = 'now()';
 	
+		// glog("------------------- IIKO LOADED ROUGH_DATA ---------------- \n".print_r($this->ROUGH_DATA,1));
+
 		if($this->iiko_params->save()){	
 			return true;			
 		}else{
@@ -145,11 +148,8 @@ class Iiko_params{
 		foreach($this->arr_terminals as $terminalGroup){
 			array_push($arrTerminalGroupsIds, $terminalGroup["id"]);
 		}
-		$restaurantSections = $this->iiko_get_table_sections_info($this->token, $arrTerminalGroupsIds);
-		if(!count($restaurantSections)) throw new Exception("--cant getting tables info");
-		
+		$restaurantSections = $this->iiko_get_table_sections_info($this->token, $arrTerminalGroupsIds);				
 		$this->ROUGH_DATA["TABLES"] = $restaurantSections;	
-	
 		$this->arr_tables = $this->iiko_parse_tables_res($restaurantSections);		
 	}
 
@@ -161,7 +161,8 @@ class Iiko_params{
 		// GET TERMINAL GROUPS FOR CURRENT ORGANIZATION
 		$this->arr_terminals = $this->all_terminal_groups[0]['items'];
 		if(!count($this->arr_terminals)) throw new Exception("--has not actual terminals");
-		$this->current_terminal_group_id = $this->arr_terminals[0]['id'];	
+		$this->current_terminal_group_id = $this->arr_terminals[0]['id'];
+
 	}	
 
 	private function iiko_parse_tables_res(array $restaurantSections): array{
@@ -225,8 +226,8 @@ class Iiko_params{
 			"Content-Type"=>"application/json",
 			"Authorization" => 'Bearer '.$token
 		]; 
-		$params  = ['terminalGroupIds' => [...$arrTerminalGroupIds], 'returnSchema' => true];
-		$res = iiko_get_info($url,$headers,$params);
+		$params  = ['terminalGroupIds' => [...$arrTerminalGroupIds], 'returnSchema' => true];				
+		$res = iiko_get_info($url,$headers,$params);					
 		return $res['restaurantSections'] ?? [];
 	}
 
