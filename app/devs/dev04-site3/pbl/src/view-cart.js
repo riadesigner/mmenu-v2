@@ -96,6 +96,13 @@ export var VIEW_CART = {
 			this.chefsmenu.end_loading();			
 			GLB.VIEW_ORDER_OK.update(order,{table_number});
 			GLB.UVIEWS.set_current("the-order-ok");
+			this.ORDER_SENDER.check_if_order_taken_async(order.short_number, GLB.CAFE.get('uniq_name'))
+			.then((vars)=>{
+				console.log('--vars--',vars);				
+			})
+			.catch((vars)=>{
+				console.log('err',vars);
+			});
 		})
 		.catch((vars)=>{
             this._show_modal_win(`Заказ не получается отправить. 
