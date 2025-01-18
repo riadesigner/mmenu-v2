@@ -82,7 +82,7 @@ class Iiko_params{
 		$this->iiko_params->rough_data = json_encode($this->ROUGH_DATA, JSON_UNESCAPED_UNICODE);	
 		$this->iiko_params->updated_date = 'now()';
 	
-		// glog("------------------- IIKO LOADED ROUGH_DATA ---------------- \n".print_r($this->ROUGH_DATA,1));
+		glog("------------------- IIKO LOADED ROUGH_DATA ---------------- \n".print_r($this->ROUGH_DATA,1));
 
 		if($this->iiko_params->save()){	
 			return true;			

@@ -101,8 +101,8 @@ export var LNG = {init:function(lang){
 				'В ближайшее время наш менеджер свяжется с вами для подтверждения заказа'
 			],
 			lng_thankful_waiter_msg:[
-				'Great! Our waiter is already in a hurry',
-				'Отлично! Официант уже спешит к вам'
+				'Great! Your order has been sent and will be processed soon.',
+				'Отлично! Ваш заказ отправлен и скоро будет принят в работу' 
 			],						
 			lng_menu_is_in_demo_mode_msg:[
 				'The menu is in demo mode. The cafe administrator is not waiting a messages at the moment.',
