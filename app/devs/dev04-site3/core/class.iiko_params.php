@@ -15,6 +15,7 @@ class Iiko_params{
 	private string $current_organization_id;
 	private string $iiko_current_extmenu_id;
 	private string $current_terminal_group_id;
+	private string $current_terminal_group_status;	
 	private array $arr_organizations;
 	private array $arr_extmenus;
 	private array $all_terminal_groups;
@@ -79,12 +80,14 @@ class Iiko_params{
 			"terminalGroupIds" => [$this->current_terminal_group_id],
 		];
 		$res = iiko_get_info($url,$headers,$params);
-
-		glog("=============== GET STATUS CURRENT TERMINAL GROUP / PARAMS =============== \n".print_r($params,1));
-		glog("=============== GET STATUS CURRENT TERMINAL GROUP/ RESULT =============== \n".print_r($res,1));
 		
-		if(!isset($res["isAliveStatus"])) glogError(print_r($res,1));		
-
+		if(!isset($res["isAliveStatus"])) {
+			glogError(print_r($res,1));	
+			$this->current_terminal_group_status = "unknown";				
+		}else{
+			$this->current_terminal_group_status = $res["isAliveStatus"]["isAlive"];
+		}
+		
 		$this->ROUGH_DATA["STATUS_CURRENT_TERMINAL_GROUP"] = $res;
 
 	}

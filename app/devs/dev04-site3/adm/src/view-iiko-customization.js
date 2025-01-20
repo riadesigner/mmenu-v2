@@ -63,7 +63,11 @@ export var VIEW_IIKO_CUSTOMIZATION = {
 		let terminal_groups = iiko_params['terminal_groups']?JSON.parse(iiko_params['terminal_groups']):[];
 		this.CURRENT_TERMINAL_GROUP_ID = iiko_params['current_terminal_group_id'];
 		this.NEW_TERMINAL_GROUP_ID = this.CURRENT_TERMINAL_GROUP_ID;
-		this.update_terminals_list(terminal_groups, iiko_params['current_terminal_group_id']);				
+		this.update_terminals_list(terminal_groups, iiko_params['current_terminal_group_id']);	
+		
+		// SHOW STATUS OF CURRENT TERMINAL GROUP
+		// let terminal_groups_status = iiko_params['terminal_groups']?JSON.parse(iiko_params['terminal_groups']):[];
+		// <p>(текущей терминальной группы)</p>
 
 		// SHOW TABLES INFO
 		let table_sections = iiko_params['tables']?JSON.parse(iiko_params['tables']):[];
