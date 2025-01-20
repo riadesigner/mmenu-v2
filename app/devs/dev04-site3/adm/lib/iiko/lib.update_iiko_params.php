@@ -43,6 +43,8 @@
 
 		$IIKO_PARAMS = new Iiko_params($cafe);		
 		$IIKO_PARAMS->reload();
+		// $current_terminal_group_status = $IIKO_PARAMS->get_status_current_terminal_group();
+		
 		__answerjsonp($IIKO_PARAMS->export());
 
 	}catch(Exceprion $e){

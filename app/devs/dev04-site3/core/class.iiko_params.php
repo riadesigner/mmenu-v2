@@ -38,7 +38,8 @@ class Iiko_params{
 		$this->read_extmenus_info();
 		$this->read_terminals_info();
 		$this->read_iiko_tables_info();
-		$this->read_order_types();
+		$this->read_order_types();	
+		$this->read_status_current_terminal_group();			
 		$this->update_db();
 	}
 
@@ -66,6 +67,28 @@ class Iiko_params{
 		return $this->iiko_params->export();		
 	}
 
+	public function read_status_current_terminal_group():void {					
+
+		$url     = 'api/1/terminal_groups/is_alive';
+		$headers = [
+			"Content-Type"=>"application/json",
+			"Authorization" => 'Bearer '.$this->token
+		]; 
+		$params  = [
+			"organizationIds" => [$this->current_organization_id],
+			"terminalGroupIds" => [$this->current_terminal_group_id],
+		];
+		$res = iiko_get_info($url,$headers,$params);
+
+		glog("=============== GET STATUS CURRENT TERMINAL GROUP / PARAMS =============== \n".print_r($params,1));
+		glog("=============== GET STATUS CURRENT TERMINAL GROUP/ RESULT =============== \n".print_r($res,1));
+		
+		if(!isset($res["isAliveStatus"])) glogError(print_r($res,1));		
+
+		$this->ROUGH_DATA["STATUS_CURRENT_TERMINAL_GROUP"] = $res;
+
+	}
+
 	// PRIVATE FUNCS
 	private function update_db(): bool{
 
@@ -77,8 +100,8 @@ class Iiko_params{
 	
 		$this->iiko_params->current_extmenu_id = $this->iiko_current_extmenu_id;
 		$this->iiko_params->current_organization_id = $this->current_organization_id;
-		$this->iiko_params->current_terminal_group_id = $this->current_terminal_group_id;
-	
+		$this->iiko_params->current_terminal_group_id = $this->current_terminal_group_id;		
+
 		$this->iiko_params->rough_data = json_encode($this->ROUGH_DATA, JSON_UNESCAPED_UNICODE);	
 		$this->iiko_params->updated_date = 'now()';
 	
@@ -237,7 +260,10 @@ class Iiko_params{
 			"Content-Type"=>"application/json",
 			"Authorization" => 'Bearer '.$token
 		]; 
-		$params  = ['organizationIds' => [$orgId], 'includeDisabled' => true];
+		$params  = [
+			'organizationIds' => [$orgId], 
+			'includeDisabled' => true
+		];
 		$res = iiko_get_info($url,$headers,$params);
 		return $res["terminalGroups"] ?? [];
 	}
