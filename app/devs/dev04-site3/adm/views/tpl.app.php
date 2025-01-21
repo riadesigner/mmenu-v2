@@ -369,10 +369,11 @@ App&&App();
 					</div>
 
 					<h2>Статус текущего терминала</h2>
-					<p>(текущей терминальной группы)</p>
-					<p>Статуc: <strong>не определен</strong></p>
+					<p>(<span class="iiko-terminal-status-info-name">текущая группа</span>)</p>
+					<p>Статуc: <strong class="iiko-terminal-status-info">Не определен</strong></p>
 					
-					<button class="std-special-single-button btn-iiko-terminal-to-alive">Разбудить терминал</button>
+					<!-- TODO -->
+					<!-- <button class="std-special-single-button btn-iiko-terminal-to-alive">Разбудить терминал</button> -->
 					
 					<h2>Столы</h2>					
 					<p>В вашем ресторане есть секции: </p>					

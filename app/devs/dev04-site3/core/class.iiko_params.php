@@ -81,11 +81,11 @@ class Iiko_params{
 		];
 		$res = iiko_get_info($url,$headers,$params);
 		
-		if(!isset($res["isAliveStatus"])) {
+		if(!isset($res["isAliveStatus"]) || !count($res["isAliveStatus"])) {
 			glogError(print_r($res,1));	
-			$this->current_terminal_group_status = "unknown";				
+			$this->current_terminal_group_status = "Unknown";				
 		}else{
-			$this->current_terminal_group_status = $res["isAliveStatus"]["isAlive"];
+			$this->current_terminal_group_status = $res["isAliveStatus"][0]["isAlive"];
 		}
 		
 		$this->ROUGH_DATA["STATUS_CURRENT_TERMINAL_GROUP"] = $res;
@@ -103,8 +103,9 @@ class Iiko_params{
 	
 		$this->iiko_params->current_extmenu_id = $this->iiko_current_extmenu_id;
 		$this->iiko_params->current_organization_id = $this->current_organization_id;
-		$this->iiko_params->current_terminal_group_id = $this->current_terminal_group_id;		
-
+		$this->iiko_params->current_terminal_group_id = $this->current_terminal_group_id;	
+		$this->iiko_params->current_terminal_group_status = $this->current_terminal_group_status;	
+			
 		$this->iiko_params->rough_data = json_encode($this->ROUGH_DATA, JSON_UNESCAPED_UNICODE);	
 		$this->iiko_params->updated_date = 'now()';
 	

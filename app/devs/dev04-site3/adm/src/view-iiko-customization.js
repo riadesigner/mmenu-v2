@@ -19,6 +19,8 @@ export var VIEW_IIKO_CUSTOMIZATION = {
 		this.$extmenu_list = this.$form.find('.iiko-extmenu-list');			
 		this.$terminals_list = this.$form.find('.iiko-terminals-sections');
 		this.$tables_list = this.$form.find('.iiko-table-sections');
+		this.$terminal_status_info_name = this.$form.find('.iiko-terminal-status-info-name');
+		this.$terminal_status_info = this.$form.find('.iiko-terminal-status-info');
 		
 		this.SITE_URL = CFG.base_url;
 		this.USER_EMAIL = CFG.user_email;
@@ -66,13 +68,14 @@ export var VIEW_IIKO_CUSTOMIZATION = {
 		this.update_terminals_list(terminal_groups, iiko_params['current_terminal_group_id']);	
 		
 		// SHOW STATUS OF CURRENT TERMINAL GROUP
-		// let terminal_groups_status = iiko_params['terminal_groups']?JSON.parse(iiko_params['terminal_groups']):[];
-		// <p>(текущей терминальной группы)</p>
+		let current_terminal_group_name = this.get_terminal_group_name(this.CURRENT_TERMINAL_GROUP_ID, terminal_groups);
+		let terminal_groups_status = iiko_params['current_terminal_group_status']||"Не определен";
+		terminal_groups_status === 1||"true"||true ? terminal_groups_status = "Активен" : terminal_groups_status = "Не активен";
+		this.update_terminal_status_info(current_terminal_group_name, terminal_groups_status);			
 
 		// SHOW TABLES INFO
 		let table_sections = iiko_params['tables']?JSON.parse(iiko_params['tables']):[];
 		this.update_tables_list(table_sections, terminal_groups);
-
 
 		const iiko_arr_extmenus = iiko_params['extmenus']!==""?JSON.parse(iiko_params['extmenus']):[];				
 		this.CURRENT_EXTMENU_ID = iiko_params['current_extmenu_id'].toString();					
@@ -163,6 +166,11 @@ export var VIEW_IIKO_CUSTOMIZATION = {
 			e.originalEvent.cancelable && e.preventDefault();
 		});
 			
+	},
+	
+	update_terminal_status_info:function(current_terminal_group_name, terminal_groups_status){		
+		this.$terminal_status_info_name.html(current_terminal_group_name);
+		this.$terminal_status_info.html(terminal_groups_status);
 	},
 
 	update_extmenus:function(iiko_arr_extmenus, current_extmenu_id){		
@@ -313,6 +321,17 @@ export var VIEW_IIKO_CUSTOMIZATION = {
 		}else{
 			this.$tables_list.html("<li>Не найдено. Обновите столы.</li>");
 		}		
+	},
+	get_terminal_group_name:function(terminal_group_id, terminal_groups){
+		let name = 'Без названия';
+		for(let i in terminal_groups){
+			let t_group = terminal_groups[i];
+			if(t_group.id==terminal_group_id){
+				name = t_group.name;
+				break;
+			}
+		};
+		return name;
 	},
 	iiko_vars_update:function(){
 
