@@ -83,7 +83,7 @@ class Iiko_params{
 		
 		if(!isset($res["isAliveStatus"]) || !count($res["isAliveStatus"])) {
 			glogError(print_r($res,1));	
-			$this->current_terminal_group_status = "Unknown";				
+			$this->current_terminal_group_status = "Unknown";
 		}else{
 			$this->current_terminal_group_status = $res["isAliveStatus"][0]["isAlive"];
 		}

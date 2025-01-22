@@ -12,12 +12,14 @@ export var VIEW_ORDER_OK = {
 		this.$btnClose = this.$view.find(this._CN+"btn-close-menu");
 		this.$btnBack = this.$view.find(this._CN+"btn-back, "+this._CN+"std-header-btn-back, "+this._CN+"btn-close-items");
 
-		this.$msgReport = this.$view.find(this._CN+"order-ok-report-main");
+		this.$msgReport = this.$view.find(this._CN+"order-ok-number-of-order");
 		this.$msgDemo = this.$view.find(this._CN+"order-ok-demo-message");
 		this.$msgNotFoundTgUsers = this.$view.find(this._CN+"order-ok-notg-message");
 		this.$msgManager = this.$view.find(this._CN+"order-ok-operator-message");		
 
-		this.$msgOrderSentOther = this.$view.find(this._CN+"order-ok-report-other");
+		
+		this.$msgOrderSentDelivery = this.$view.find(this._CN+"order-ok-report-delivery");
+		
 		this.$msgCartList = this.$view.find(this._CN+"order-ok-cart-list");
 		this.$totalCost =  this.$view.find(this._CN+"order-ok-total-cost");
 		
@@ -130,7 +132,7 @@ export var VIEW_ORDER_OK = {
 				"</p>"
 			].join("\n");
 
-			this.$msgOrderSentOther.html(msg2);
+			this.$msgOrderSentDelivery.html(delivery);
 
 			this.chefsmenu.end_loading();
 

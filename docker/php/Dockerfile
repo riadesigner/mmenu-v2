@@ -1,6 +1,5 @@
 # From
 FROM php:8.3.4-fpm-alpine3.19
-# FROM php:8.3.6-fpm-alpine3.18
 
 # Labels
 LABEL creatorName="Vagner dos Santos Cardoso"
@@ -114,6 +113,9 @@ COPY --from=composer:2.7.2 /usr/bin/composer /usr/local/bin/composer
 
 # Copy php settings
 COPY ./php.ini ${PHP_INI_DIR}/conf.d/99-php.ini
+
+# install crontab
+COPY crontab.txt /etc/crontab.txt
 
 # Copy entrypoint
 COPY ./entrypoint /usr/local/bin/docker-entrypoint

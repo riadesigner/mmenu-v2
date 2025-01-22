@@ -1,0 +1,2 @@
+# check every minute - are there any "not taken" orders in db?
+* * * * * /usr/local/bin/php /var/www/app/order-test.php >> /var/www/app/logs/order-test-logs.log 2>&1
