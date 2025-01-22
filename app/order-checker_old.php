@@ -13,17 +13,17 @@
 // fwrite($fh, $text);
 // fclose($fh);
 
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
+// error_reporting(E_ALL);
+// ini_set('display_errors', 1);
 
 // define("BASEPATH",__file__);
 // ini_set('display_errors', 0);
               
-// require_once 'config.php';
-// require_once WORK_DIR.APP_DIR.'core/class.sql.php';
-// require_once WORK_DIR.APP_DIR.'core/common.php';
+require_once 'config.php';
+require_once WORK_DIR.APP_DIR.'core/class.sql.php';
+require_once WORK_DIR.APP_DIR.'core/common.php';
 
-// glog("test crontab");
+glog("test crontab");
 
 // echo "TEST!!!!".(random()*1000);
 
