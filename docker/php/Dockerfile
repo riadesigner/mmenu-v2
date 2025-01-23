@@ -49,54 +49,54 @@ RUN set -eux \
   imap \
   gmp
 
-  # additional supports
-  
-  # Install xdebug
-  # RUN set -eux \
+# additional supports
+
+# Install xdebug
+# RUN set -eux \
   # && pecl install -o -f xdebug \
   # && docker-php-ext-enable xdebug
-  
-  # Install YML
-  RUN set -eux \
+
+# Install YML
+RUN set -eux \
   && pecl install -o -f yaml \
   && docker-php-ext-enable yaml
 
-  # Install redis
-  RUN set -eux \
+# Install redis
+RUN set -eux \
   && pecl install -o -f redis \
   && docker-php-ext-enable redis
 
-  # Install mongodb
-  # RUN set -eux \
+# Install mongodb
+# RUN set -eux \
   # && pecl install -o -f mongodb \
   # && docker-php-ext-enable mongodb 
-  
-  # Install apcu
-  RUN set -eux \
+
+# Install apcu
+RUN set -eux \
   && pecl install -o -f apcu \
   && docker-php-ext-enable apcu
-  
-  # Install ssh2
-  RUN set -eux \
+
+# Install ssh2
+RUN set -eux \
   && pecl install -o -f ssh2 \
   && docker-php-ext-enable ssh2
-  
-  # Clean php extensions
-  RUN set -eux \
+
+# Clean php extensions
+RUN set -eux \
   && rm -rf /tmp/pear \
   && docker-php-source delete
-  
-  # Clean up
-  RUN set -eux \
+
+# Clean up
+RUN set -eux \
   && apk del --purge .build_deps \
   && rm -rf /var/cache/apk/*
 
-  # install opcache
-  RUN set -eux \
+# install opcache
+RUN set -eux \
   opcache
 
-  # GD with jpeg support
-  RUN set -eux \  
+# GD with jpeg support
+RUN set -eux \  
   && apk add --no-cache \  
   zlib-dev \
   libpng-dev \
@@ -106,7 +106,10 @@ RUN set -eux \
   freetype \ 
   freetype-dev \   
   && docker-php-ext-configure gd --with-jpeg --with-webp --with-freetype \
-	&& docker-php-ext-install -j$(nproc) gd
+  && docker-php-ext-install -j$(nproc) gd
+
+RUN set -eux \
+  && apk add --no-cache logrotate
 
 # Install composer
 COPY --from=composer:2.7.2 /usr/bin/composer /usr/local/bin/composer
@@ -114,8 +117,11 @@ COPY --from=composer:2.7.2 /usr/bin/composer /usr/local/bin/composer
 # Copy php settings
 COPY ./php.ini ${PHP_INI_DIR}/conf.d/99-php.ini
 
-# install crontab
+# install cron
 COPY crontab.txt /etc/crontab.txt
+
+# install logrotate
+COPY logrotate-cron.txt /etc/logrotate.d/cron
 
 # Copy entrypoint
 COPY ./entrypoint /usr/local/bin/docker-entrypoint
