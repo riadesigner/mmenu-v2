@@ -6,8 +6,8 @@ if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 	
 	depended on: 
 	common.php -> send_telegram()
-	core/class.Smart_collect()
-	core/class.smart_object()
+	class Smart_collect()
+	class Smart_object()
 
 **/
 
@@ -198,41 +198,15 @@ class Order_sender{
 		}		
 	}
 
-    /*
-		SEND MESSAGE ABOUT FORGOTTEN ORDERS		
 
-		@param string $cafe_uniq_name
-		@param array $orders // Array<Smart_object>
-		@param int $delay // Time after which the message is sent
-		@return string // sent message
-    ---------------------------------------------------------------------------------- **/		
-	static public function send_forgotten_message(string $cafe_uniq_name, array $orders, int $delay): string{
-
-		$str_short_names = self::get_orders_short_names($orders);				
-		$msg = "Заказы, которые никто не взял в течение ".$delay." минут ";
-		$msg .= "отправлены в архив. \n";
-		$msg .= "номера заказов: $str_short_names.";
-		// sent the message to relevant users
-		// self::sent_to_tg($cafe_uniq_name, $msg);				
-		return $msg;
-	}	
-
-    /*
-    	SEND REMINDER ABOUT NOT TAKEN ORDERS
-
-		@param string $cafe_uniq_name
-		@param array $orders // Array<Smart_object>
-		@param int $delay // Time after which the message is sent
-		@return string // sent message
-    ---------------------------------------------------------------------------------- **/	
-	static public function send_a_reminder(string $cafe_uniq_name, array $orders, int $delay ): string{
-		$str_short_names = self::get_orders_short_names($orders);
-		$msg = "Внимание! Эти заказы ждут подтверждения более ".$delay." минут: \n";
-		$msg .= $str_short_names.".";	
-		// sent the message to relevant users
-		// self::sent_to_tg($cafe_uniq_name, $msg);		
-		return $msg;		
+	static private function send_to_all_relevant_users(string $cafe_uniq_name, string $order_target, $msg): void{
+		$team_users = self::get_team_tg_users($cafe_uniq_name, $order_target);		
+		$supervisors = self::get_cafe_supervisors($cafe_uniq_name);
+		$all_tg_users = [...$team_users, ...$supervisors];
+		glog("try to send tg message, ".__FILE__.", ".__LINE__);
+		self::send_message_to_tg_users($all_tg_users, $msg);		
 	}
+
 
     /*
     	BUILD A STRING FROM ORDERS ARRAY
@@ -501,7 +475,6 @@ class Order_sender{
 		$COND = match ($order_target) {
 			self::ORDER_DELIVERY => " AND role='manager'",
 			self::ORDER_TABLE => " AND role='waiter'",
-			self::ORDER_DELIVERY => " AND role='manager'",
 			default => "",
 		};
 		$q = "WHERE cafe_uniq_name='{$cafe_uniq_name}' ".$COND.$ACTIVE_ONLY.$EXCEPT_USER;		
