@@ -199,6 +199,64 @@ class Order_sender{
 	}
 
     /*
+		SEND MESSAGE ABOUT FORGOTTEN ORDERS		
+
+		@param string $cafe_uniq_name
+		@param array $orders // Array<Smart_object>
+		@param int $delay // Time after which the message is sent
+		@return string // sent message
+    ---------------------------------------------------------------------------------- **/		
+	static public function send_forgotten_message(string $cafe_uniq_name, array $orders, int $delay): string{
+
+		$str_short_names = self::get_orders_short_names($orders);				
+		$msg = "Заказы, которые никто не взял в течение ".$delay." минут ";
+		$msg .= "отправлены в архив. \n";
+		$msg .= "номера заказов: $str_short_names.";
+		// sent the message to relevant users
+		// self::sent_to_tg($cafe_uniq_name, $msg);				
+		return $msg;
+	}	
+
+    /*
+    	SEND REMINDER ABOUT NOT TAKEN ORDERS
+
+		@param string $cafe_uniq_name
+		@param array $orders // Array<Smart_object>
+		@param int $delay // Time after which the message is sent
+		@return string // sent message
+    ---------------------------------------------------------------------------------- **/	
+	static public function send_a_reminder(string $cafe_uniq_name, array $orders, int $delay ): string{
+		$str_short_names = self::get_orders_short_names($orders);
+		$msg = "Внимание! Эти заказы ждут подтверждения более ".$delay." минут: \n";
+		$msg .= $str_short_names.".";	
+		// sent the message to relevant users
+		// self::sent_to_tg($cafe_uniq_name, $msg);		
+		return $msg;		
+	}
+
+    /*
+    	BUILD A STRING FROM ORDERS ARRAY
+		
+		@param array $orders // Array<Smart_object>
+		@return string
+    ---------------------------------------------------------------------- **/	
+	static private function get_orders_short_names(array $orders): string{
+
+		$str_all_short_names = "";
+	
+		if(count($orders)){
+			$short_names = [];
+			foreach($orders as $order){
+				$short_names = [...$short_names, $order->short_number];
+			}
+			$str_all_short_names = implode(", ", $short_names);
+		}
+	
+		return $str_all_short_names;
+	
+	}
+
+    /*
     	TAKING THE ORDER
 
 		@param string $cafe_uniq_name
