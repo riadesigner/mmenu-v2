@@ -114,7 +114,13 @@ NOTG_MODE && __answerjsonp(["short_number"=>$short_number,"demo_mode"=>DEMO_MODE
 // ---------------------------
 try{
 	Order_sender::send_tg_order($cafe->uniq_name, ORDER_TARGET, $short_number, $ORDER_TXT);
-	__answerjsonp( ["short_number"=>$short_number, "demo_mode"=>DEMO_MODE, "notg_mode"=>NOTG_MODE] );	
+	
+	__answerjsonp( [
+		"short_number"=>$short_number, 
+		"demo_mode"=>DEMO_MODE,  // if cafe on demo_mode
+		"notg_mode"=>NOTG_MODE  // if has not active waiters
+		] );	
+
 }catch(Exception $e){
 	glogError($e->getMessage().", ".__FILE__.", ".__LINE__);
 	__errorjsonp("--fail sending to table tg-order");	

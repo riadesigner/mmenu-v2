@@ -216,17 +216,21 @@ class Order_sender{
     --------------------------------------------------------------- **/			
 	static public function do_take_the_order(string $cafe_uniq_name, Smart_object $ORDER, Smart_object $TG_USER ):void{
 
-		if($ORDER->state!=='forgotten'){										
+		// FOR ORDERS WITCH NOT IN ARCHIVE ONLY
+		if($ORDER->state==='forgotten'){										
 			$cancel_message = "Заказ ".$ORDER->short_number." невозможно взять, он в архиве!";
 			self::send_message_to_tg_users($TG_USER->tg_user_id, $cancel_message);							
 			return;
 		}
 
-		if($TG_USER->role !== 'waiter' && $TG_USER->role !== 'manager'){
+		// ALLOW FOR WAITERS AND MANAGERS ONLY
+		if($TG_USER->role !== 'waiter' 
+			&& $TG_USER->role !== 'manager'){
 			$cancel_message = "Вы не можете взять заказ. Для этого нужно иметь доступ Менеджера или Официанта";
 			self::send_message_to_tg_users($TG_USER->tg_user_id, $cancel_message);							
 			return;			
 		}
+		// ALLOW FOR ACTIVE USERS ONLY
 		if($TG_USER->state !== 'active'){
 			$cancel_message = "Вы не можете взять заказ. Сначала откройте смену.";
 			self::send_message_to_tg_users($TG_USER->tg_user_id, $cancel_message);							
@@ -238,8 +242,15 @@ class Order_sender{
 		$order_short_number = $ORDER->short_number;
 		$USER_NAME = !empty($TG_USER->nickname)?$TG_USER->nickname:$TG_USER->name;		
 		
-		$orders = new Smart_collect("orders","WHERE cafe_uniq_name='{$cafe_uniq_name}' AND short_number='{$order_short_number}'");
+		$q = implode([" ",
+			"WHERE cafe_uniq_name='{$cafe_uniq_name}'",
+			"AND short_number='{$order_short_number}'",
+		]);
+		$orders = new Smart_collect("orders", $q);
 
+		// ---------------------------
+		// IF ORDERS IS TAKEN ALREADY
+		// ---------------------------
 		if($ORDER->state!=='created'){
 			if($ORDER->manager===$TG_USER->id){
 				$cancel_message = "О нет, {$USER_NAME}! Вы уже взяли заказ {$order_short_number}.";
@@ -250,9 +261,10 @@ class Order_sender{
 				self::send_message_to_tg_users($TG_USER->tg_user_id, $cancel_message);				
 			}			
 		}else{
-			// --------------------
-			//  TAKING THE ORDER
-			// --------------------		
+		// ------------------------
+		// IF ORDERS NOT TAKEN YET
+		// ------------------------
+
 			$ORDER->state = 'taken';			
 			$ORDER->manager = $TG_USER->id;
 			$ORDER->updated = 'now()';

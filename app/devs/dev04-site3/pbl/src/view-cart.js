@@ -63,6 +63,13 @@ export var VIEW_CART = {
 		});		
 
 	},
+	/**
+	 * ------------------------------
+	 * 
+	 *         SEND TO TABLE
+	 * 
+	 * ------------------------------
+	 */
 	send_order_to_table:function(){
 
 		const fn = {
@@ -87,22 +94,18 @@ export var VIEW_CART = {
 		const table_number = GLB.MENU_TABLE_MODE.get_table_number();		
 		
 		this.ORDER_SENDER = $.extend({},THE_ORDER_SENDER);	
-		this.ORDER_SENDER.send_to_table_async(order,table_number)
+		this.ORDER_SENDER.send_to_table_async(order, table_number)
 		.then((vars)=>{
+			
 			console.log('--vars--',vars)	
 			order.short_number = vars['short_number'];
 			order.demo_mode = vars['demo_mode'];
 			order.notg_mode = vars['notg_mode']?true:false;
 			this.chefsmenu.end_loading();			
+
 			GLB.VIEW_ORDER_OK.update(order,{table_number});
 			GLB.UVIEWS.set_current("the-order-ok");
-			this.ORDER_SENDER.check_if_order_taken_async(order.short_number, GLB.CAFE.get('uniq_name'))
-			.then((vars)=>{
-				console.log('--vars--',vars);				
-			})
-			.catch((vars)=>{
-				console.log('err',vars);
-			});
+
 		})
 		.catch((vars)=>{
             this._show_modal_win(`Заказ не получается отправить. 
@@ -114,13 +117,36 @@ export var VIEW_CART = {
 		});
 
 	},
+	/**
+	 * ------------------------------
+	 * 
+	 *         SEND TO DELIVERY
+	 * 
+	 * ------------------------------
+	 */	
 	send_order_to_delivery:function() {
 		const has_delivery = GLB.CAFE.has_delivery();
 		console.log('!! has_delivery = ', has_delivery)
 		if(!GLB.CAFE.has_delivery()){
+			/**
+			 * ------------------------------- 
+			 * 
+			 *     GO TO PICKUP SELF MODE
+			 *     / CAFE HAS NO DELIVERY /
+			 * 
+			 * -------------------------------
+			 */
 			GLB.VIEW_ORDERING.update({pickupMode:true});
 			GLB.UVIEWS.set_current("the-ordering");						
 		}else{
+			/**
+			 * ------------------------------- 
+			 * 
+			 *     GO TO CHOOSING MODE
+			 *     / DELIVERY OR PICKUPSELF /
+			 * 
+			 * -------------------------------
+			 */			
 			GLB.VIEW_CHOOSING_MODE.update();
 			GLB.UVIEWS.set_current("the-choosing-mode");
 		}

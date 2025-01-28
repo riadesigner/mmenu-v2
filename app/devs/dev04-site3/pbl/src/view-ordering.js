@@ -455,15 +455,18 @@ export var VIEW_ORDERING = {
 		const order = $.extend(order_params,{order_items});
 
 		this.ORDER_SENDER = $.extend({},THE_ORDER_SENDER);	
-		this.ORDER_SENDER.send_async(order,this.PICKUPSELF_MODE)
-		.then((vars)=>{		
+		this.ORDER_SENDER.send_async(order, this.PICKUPSELF_MODE)
+		.then((vars)=>{	
+
 			console.log('--vars--',vars)	
 			order.short_number = vars['short_number'];
 			order.demo_mode = vars['demo_mode'];
 			order.notg_mode = vars['notg_mode']?true:false;
+			
 			const pickupself_mode = this.PICKUPSELF_MODE;
-			GLB.VIEW_ORDER_OK.update(order,{pickupself_mode:pickupself_mode});
+			GLB.VIEW_ORDER_OK.update(order, {pickupself_mode:pickupself_mode} );
 			GLB.UVIEWS.set_current("the-order-ok");			
+
 		})
 		.catch((vars)=>{
             this._show_modal_win(`Заказ не получается отправить. 
