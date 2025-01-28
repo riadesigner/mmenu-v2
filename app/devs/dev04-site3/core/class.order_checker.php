@@ -125,14 +125,36 @@ class Order_checker{
 		}else{
 			// NOT TAKEN ORDERS
 			if(count($orders) > 1){
-				$msg = "Внимание! Эти заказы ($str_short_names) ждут подтверждения более ".self::ORDER_WAITING_DELAY." минут: \n";
+				$msg = "Внимание! Эти заказы ($str_short_names) ждут подтверждения более ".self::ORDER_WAITING_DELAY." минут. \n";
 			}else{
-				$msg = "Внимание! Этот заказ ($str_short_names) ждет подтверждения более ".self::ORDER_WAITING_DELAY." минут: \n";
+				$msg = "Внимание! Этот заказ ($str_short_names) ждет подтверждения более ".self::ORDER_WAITING_DELAY." минут. \n";
 			}			
 		}
 		Order_sender::send_to_all_relevant_users($cafe_uniq_name, $order_target, $msg);
 		return $msg;
 	}
+
+   /*
+    	BUILD A STRING FROM ORDERS ARRAY
+		
+		@param array $orders // Array<Smart_object>
+		@return string
+    ---------------------------------------------------------------------- **/	
+	static private function get_orders_short_names(array $orders): string{
+
+		$str_all_short_names = "";
+	
+		if(count($orders)){
+			$short_names = [];
+			foreach($orders as $order){
+				$short_names = [...$short_names, $order->short_number];
+			}
+			$str_all_short_names = implode(", ", $short_names);
+		}
+	
+		return $str_all_short_names;
+	
+	}	
 
 }
 		

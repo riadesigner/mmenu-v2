@@ -20,7 +20,7 @@ SQL::connect();
 
 $time = date('Y-m-d H:i:s');
 
-// for table_orders only
+// for table_orders only (so far)
 Order_checker::find_forgotten(Order_sender::ORDER_TABLE);
 Order_checker::find_not_taken(Order_sender::ORDER_TABLE);
 

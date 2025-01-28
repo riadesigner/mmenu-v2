@@ -199,35 +199,12 @@ class Order_sender{
 	}
 
 
-	static private function send_to_all_relevant_users(string $cafe_uniq_name, string $order_target, $msg): void{
+	static public function send_to_all_relevant_users(string $cafe_uniq_name, string $order_target, $msg): void{
 		$team_users = self::get_team_tg_users($cafe_uniq_name, $order_target);		
 		$supervisors = self::get_cafe_supervisors($cafe_uniq_name);
 		$all_tg_users = [...$team_users, ...$supervisors];
 		glog("try to send tg message, ".__FILE__.", ".__LINE__);
 		self::send_message_to_tg_users($all_tg_users, $msg);		
-	}
-
-
-    /*
-    	BUILD A STRING FROM ORDERS ARRAY
-		
-		@param array $orders // Array<Smart_object>
-		@return string
-    ---------------------------------------------------------------------- **/	
-	static private function get_orders_short_names(array $orders): string{
-
-		$str_all_short_names = "";
-	
-		if(count($orders)){
-			$short_names = [];
-			foreach($orders as $order){
-				$short_names = [...$short_names, $order->short_number];
-			}
-			$str_all_short_names = implode(", ", $short_names);
-		}
-	
-		return $str_all_short_names;
-	
 	}
 
     /*
@@ -236,8 +213,15 @@ class Order_sender{
 		@param string $cafe_uniq_name
 		@param Smart_object $ORDER
 		@param Smart_object $TG_USER				
-    --------------------------------------- **/			
+    --------------------------------------------------------------- **/			
 	static public function do_take_the_order(string $cafe_uniq_name, Smart_object $ORDER, Smart_object $TG_USER ):void{
+
+		if($ORDER->state!=='forgotten'){										
+			$cancel_message = "Заказ ".$ORDER->short_number." невозможно взять, он в архиве!";
+			self::send_message_to_tg_users($TG_USER->tg_user_id, $cancel_message);							
+			return;
+		}
+
 		if($TG_USER->role !== 'waiter' && $TG_USER->role !== 'manager'){
 			$cancel_message = "Вы не можете взять заказ. Для этого нужно иметь доступ Менеджера или Официанта";
 			self::send_message_to_tg_users($TG_USER->tg_user_id, $cancel_message);							
@@ -259,7 +243,7 @@ class Order_sender{
 		if($ORDER->state!=='created'){
 			if($ORDER->manager===$TG_USER->id){
 				$cancel_message = "О нет, {$USER_NAME}! Вы уже взяли заказ {$order_short_number}.";
-				self::send_message_to_tg_users($TG_USER->tg_user_id, $cancel_message);				
+				self::send_message_to_tg_users($TG_USER->tg_user_id, $cancel_message);
 			}else{
 				$ORDER_MANAGER = self::get_tg_user_name_by_id($ORDER->manager, true);
 				$cancel_message = "О нет, {$USER_NAME}! Заказ {$order_short_number} уже взял {$ORDER_MANAGER}";
