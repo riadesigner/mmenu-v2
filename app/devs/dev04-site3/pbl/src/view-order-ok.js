@@ -264,7 +264,7 @@ export var VIEW_ORDER_OK = {
 		.then((vars)=>{
 			console.log('--vars--',vars);				
 			if(vars.order_status==='taken'){
-				this.show_successful_message(vars.order_manager);
+				this.show_successful_message(vars.order_manager_name);
 			}
 		})
 		.catch((vars)=>{

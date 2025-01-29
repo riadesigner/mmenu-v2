@@ -21,11 +21,11 @@ class Order_checker{
 
 	// max time (minutes) for take an order
 	// after that its need to sending a reminder to TG
-	public static $ORDER_WAITING_DELAY = 5; 
+	public static $ORDER_WAITING_DELAY = 5; // this value will replace from env 
 
 	// end time (minutes) for take an order
 	// after that its need to mark the order as forgotten
-	public static $ORDER_FORGOTTEN_DELAY = 10;	
+	public static $ORDER_FORGOTTEN_DELAY = 10; // this value will replace from env
   
 	// ---------------------- PART I ---------------------- 
 	// находим все заказы, созданные более N+ минут назад

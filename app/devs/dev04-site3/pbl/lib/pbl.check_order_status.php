@@ -37,7 +37,22 @@ $orders = new Smart_collect("orders", $q);
 if(!$orders->full()) __errorjsonp("--not found order");
 $order = $orders->get(0);
 
-__answerjsonp( ["order_status"=>$order->state, "order_manager"=>$order->manager] );	
+if(!empty($order->manager) ){
+    $manager = new Smart_object("tg_users", $order->manager); 
+    if($manager && $manager->valid()){
+        $order_manager_name = $manager->name;
+    }else{
+        $order_manager_name = "";
+    }    
+}else{
+    $order_manager_name = "";
+}
+
+__answerjsonp( [
+    "order_status"=>$order->state, 
+    "order_manager"=>$order->manager,
+    "order_manager_name"=>$order_manager_name,
+    ] );	
 
 
 ?>
