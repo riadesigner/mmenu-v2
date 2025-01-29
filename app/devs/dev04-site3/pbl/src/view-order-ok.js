@@ -158,7 +158,7 @@ export var VIEW_ORDER_OK = {
 	progress_bar_restart:function(){
 		this.$progressbar.show();		
 		const $b = this.$progressbar.find('div');
-		$b.css({width:'0%',transition:'0'});
+		$b.css({width:'0%',transition:'0s'});
 
 		const overTime = SITE_CFG.order_forgotten_delay*60;
 		this.statusbarIsStopped = false;
@@ -184,6 +184,8 @@ export var VIEW_ORDER_OK = {
 				if (progress < 1) {
 					// Запускаем следующий кадр
 					requestAnimationFrame(fn.update.bind(this, progressBar, startTime, duration)); 
+				}else{
+					this.timeout_for_taking_the_order();
 				}
 			}			
 		}
@@ -271,9 +273,17 @@ export var VIEW_ORDER_OK = {
 			console.log('err',vars);
 		});		
 	},
+	timeout_for_taking_the_order:function(){
+		this.statusbarIsStopped = true;
+		this.show_fail_message();
+	},
+	show_fail_message(){
+		this.progress_bar_to_end();
+		this.set_operator_message_to(`Внимание! <br>Заказ не взяли в работу.<br> Обратитесь к администратору!`);		
+	},
 	show_successful_message(order_manager_name){
 		this.progress_bar_to_end();
-		this.set_operator_message_to(`Заказ в работе! <br> Ваш официант ${order_manager_name}`);		
+		this.set_operator_message_to(`Заказ в работе! <br> Ваш официант – ${order_manager_name}`);		
 	}
 };
 

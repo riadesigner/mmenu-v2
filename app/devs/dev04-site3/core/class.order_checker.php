@@ -122,11 +122,11 @@ class Order_checker{
 
 		if($subject==="FORGOTTEN_ORDERS"){
 			if(count($orders) > 1){
-				$msg = "Внимание! Т.к заказы ($str_short_names), и их никто не взял";
-				$msg .= " – они отправлены в архив. \n";
+				$msg = "Внимание! Время для взятия заказов вышло: ($str_short_names)";
+				$msg .= " – отправлены в архив. \n";
 			}else{
-				$msg = "Внимание! Т.к заказ ($str_short_names), и его никто не взял";
-				$msg .= " – он отправлен в архив. \n";
+				$msg = "Внимание! Время для взятия заказа вышло: ($str_short_names)";
+				$msg .= " – отправлен в архив. \n";
 			}
 		}else{
 			// NOT TAKEN ORDERS

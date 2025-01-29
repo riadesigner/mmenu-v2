@@ -45,7 +45,7 @@ class Iiko_order{
 			"payments"=>"",
 			"tips"=>"",
 			"orderTypeId"=>$order_type_id,
-			"chequeAdditionalInfo"=> ""
+			"chequeAdditionalInfo"=> "",
 		];
 
 		return $order;
