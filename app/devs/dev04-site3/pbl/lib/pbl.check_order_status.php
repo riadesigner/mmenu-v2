@@ -27,7 +27,13 @@ if(!isset($_POST['short_number'])) __errorjsonp("--not found short_number");
 $cafe_uniq_name = $_POST['cafe_uniq_name'];
 $short_number = $_POST['short_number'];
 
-$orders = new Smart_collect("orders", "where cafe_uniq_name='$cafe_uniq_name' AND short_number='$short_number'");	
+$q = implode(" ",[
+    "where cafe_uniq_name='$cafe_uniq_name'",
+    "AND short_number='$short_number'",
+]);
+
+$orders = new Smart_collect("orders", $q);	
+
 if(!$orders->full()) __errorjsonp("--not found order");
 $order = $orders->get(0);
 

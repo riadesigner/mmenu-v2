@@ -227,6 +227,34 @@ if(!function_exists('str_contains')){
 }
 
 
+/**
+ * ----------------------
+ * склонение слова минут
+ * в словосочетании
+ * "ждет N минут",
+ * где n = 0....60 
+ * ----------------------
+ */
+function getMinutesWord(int $n): string {
+    // Остатки от деления на 10 и 100
+    $lastDigit = $n % 10; 
+    $lastTwoDigits = $n % 100;
+
+    // Проверяем исключения для 11–19
+    if ($lastTwoDigits >= 11 && $lastTwoDigits <= 19) {
+        return 'минут';
+    }
+
+    // Проверяем окончание числа
+    if ($lastDigit === 1) {
+        return 'минута';
+    } elseif ($lastDigit >= 2 && $lastDigit <= 4) {
+        return 'минуты';
+    } else {
+        return 'минут';
+    }
+}
+
 /* for remember and TODO */
 
 // try {

@@ -12,27 +12,40 @@ export const THE_ORDER_CHECKER = {
 check_if_order_taken_async: function(short_number, cafe_uniq_name) {
     return new Promise((res,rej)=>{
         
-        // after "counter*1000" seconds return 'timeout'; 
-        // if order status will not equal 'taken'
-        const counter = 30;
+        // after this time return 'timeout'; 
+        // if order state will not get 'taken'
+        const total_times = SITE_CFG.order_forgotten_delay * 60 * 1000;
+        console.log(`total_times = ${SITE_CFG.order_forgotten_delay} min = ${total_times/1000} sec`);
+
+        // verify every 5 second
+        const check_delay = 5000;
+        let counter = 0;
         
         const interval = setInterval(()=>{
+            
+            console.log('start checking the order status')
+            counter++;
             this.check_order_status_async(short_number, cafe_uniq_name)
             .then((result)=>{
                 if(result.order_status == 'taken'){
                     clearInterval(interval);
                     res(result);
+                }else{
+                    console.log(`order is waiting now... ${counter * check_delay/1000} s из ${SITE_CFG.order_forgotten_delay * 60} s`);
                 }
             })
             .catch((err)=>{
                 clearInterval(interval);
                 rej(err);
             });
-        },3000);
+
+        },check_delay);
+
         setTimeout(()=>{
             clearInterval(interval);
             rej('timeout');
-        },counter*1000);
+        },total_times);
+
     });
 },
 

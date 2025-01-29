@@ -45,7 +45,10 @@ $CAFE_UNIQ_NAME = $Cafe ? $Cafe->uniq_name : '';
 var SITE_CFG = {
 	lang:	'<?=SITE::get_lang();?>',
 	home_page: '<?=SITE::get_link("home");?>/',	
+	order_forgotten_delay: <?=$_ENV['ORDER_FORGOTTEN_AFTER_TIME'];?>, // minutes
 };
+
+console.log('SITE_CFG = ',SITE_CFG);
 
 $(function() {
 	setTimeout(function(){

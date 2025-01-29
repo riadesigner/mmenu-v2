@@ -21,23 +21,29 @@ class Order_checker{
 
 	// max time (minutes) for take an order
 	// after that its need to sending a reminder to TG
-	public const ORDER_WAITING_DELAY = 3; 
+	public static $ORDER_WAITING_DELAY = 5; 
 
 	// end time (minutes) for take an order
 	// after that its need to mark the order as forgotten
-	public const ORDER_FORGOTTEN_DELAY = 7;	
+	public static $ORDER_FORGOTTEN_DELAY = 10;	
   
 	// ---------------------- PART I ---------------------- 
 	// находим все заказы, созданные более N+ минут назад
 	// никем не взятые (не подтвержлденные), 
 	// и отмечаем их брошенными (forgotten)
 
+	static public function init(int $reminder_delay, int $forgotten_delay): void{
+		self::$ORDER_WAITING_DELAY = $reminder_delay;
+		self::$ORDER_FORGOTTEN_DELAY = $forgotten_delay;
+		glog('vars: $ORDER_WAITING_DELAY, $ORDER_FORGOTTEN_DELAY = '.self::$ORDER_WAITING_DELAY.", ".self::$ORDER_FORGOTTEN_DELAY);
+	}
+
 	static public function find_forgotten(string $order_target): void{
 
 		$time = date('Y-m-d H:i:s');
 
 		$sql = implode("",[
-			" WHERE date < NOW() - INTERVAL ".self::ORDER_FORGOTTEN_DELAY." MINUTE",
+			" WHERE date < NOW() - INTERVAL ".self::$ORDER_FORGOTTEN_DELAY." MINUTE",
 			" AND state = 'created'",
 			" AND order_target = '".$order_target."'",
 		]);
@@ -71,7 +77,7 @@ class Order_checker{
 		$time = date('Y-m-d H:i:s');
 
 		$sql = implode("",[
-			" WHERE date < NOW() - INTERVAL ".self::ORDER_WAITING_DELAY." MINUTE",
+			" WHERE date < NOW() - INTERVAL ".self::$ORDER_WAITING_DELAY." MINUTE",
 			" AND state = 'created'",
 			" AND order_target = '".$order_target."'",
 		]);
@@ -112,22 +118,22 @@ class Order_checker{
 	 */
 	static public function send_message(string $subject, string $cafe_uniq_name, string $order_target, array $orders): string{
 
-		$str_short_names = self::get_orders_short_names($orders);
+		$str_short_names = self::get_orders_formated_short_names($orders);
 
 		if($subject==="FORGOTTEN_ORDERS"){
 			if(count($orders) > 1){
-				$msg = "Внимание! Т.к заказы ($str_short_names) никто не взял в течение ".self::ORDER_FORGOTTEN_DELAY." минут ";
+				$msg = "Внимание! Т.к заказы ($str_short_names), и их никто не взял";
 				$msg .= " – они отправлены в архив. \n";
 			}else{
-				$msg = "Внимание! Т.к заказ ($str_short_names) никто не взял в течение ".self::ORDER_FORGOTTEN_DELAY." минут ";
-				$msg .= " – он отправлен в архив. \n";				
+				$msg = "Внимание! Т.к заказ ($str_short_names), и его никто не взял";
+				$msg .= " – он отправлен в архив. \n";
 			}
 		}else{
 			// NOT TAKEN ORDERS
-			if(count($orders) > 1){
-				$msg = "Внимание! Эти заказы ($str_short_names) ждут подтверждения более ".self::ORDER_WAITING_DELAY." минут. \n";
+			if(count($orders) > 1){				
+				$msg = "Внимание! Эти заказы ждут подтверждения! $str_short_names. \n";
 			}else{
-				$msg = "Внимание! Этот заказ ($str_short_names) ждет подтверждения более ".self::ORDER_WAITING_DELAY." минут. \n";
+				$msg = "Внимание! Этот заказ ждет подтверждения! $str_short_names. \n";
 			}			
 		}
 		Order_sender::send_to_all_relevant_users($cafe_uniq_name, $order_target, $msg);
@@ -140,14 +146,21 @@ class Order_checker{
 		@param array $orders // Array<Smart_object>
 		@return string
     ---------------------------------------------------------------------- **/	
-	static private function get_orders_short_names(array $orders): string{
+	static private function get_orders_formated_short_names(array $orders): string{
 
 		$str_all_short_names = "";
 	
 		if(count($orders)){
 			$short_names = [];
 			foreach($orders as $order){
-				$short_names = [...$short_names, $order->short_number];
+				
+				$currentDatetime = new DateTime();
+				$orderDatetime = new DateTime($order->date);
+				$interval = $orderDatetime->diff($currentDatetime);
+				$minutesPassed = ($interval->days * 24 * 60) + ($interval->h * 60) + $interval->i;
+				$str_waiting = ": ждет $minutesPassed " . getMinutesWord($minutesPassed);
+
+				$short_names = [...$short_names, "\n".$order->short_number.$str_waiting];
 			}
 			$str_all_short_names = implode(", ", $short_names);
 		}
