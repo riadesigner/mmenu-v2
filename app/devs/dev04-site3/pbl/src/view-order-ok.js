@@ -21,6 +21,9 @@ export var VIEW_ORDER_OK = {
 		this.$totalCost =  this.$view.find(this._CN+"order-ok-total-cost");		
 		this.$tplOrderedItem = $("#mm2-templates "+this._CN+"ordered-item");
 
+		this.$operator_message =  this.$view.find(this._CN+'order-ok-operator-message');
+		this.$progressbar = this.$view.find(this._CN+"order-wating-progress-bar");
+
 		this.behavior();
 		return this;
 	},
@@ -45,7 +48,8 @@ export var VIEW_ORDER_OK = {
 
 	update:function(order, opt){		
 
-		console.log('order = `!!!!!!!!!!!!   ', order);
+		this.set_operator_message_to_start();
+		this.progress_bar_restart();
 		
 		this.TABLE_MODE = opt&&opt.table_number?true:false;
 		this.IIKO_MODE = GLB.CAFE.is_iiko_mode();		
@@ -135,6 +139,60 @@ export var VIEW_ORDER_OK = {
 		this.$msgOrderSentDelivery.html(msg2);
 	
 	},
+
+	set_operator_message_to_start:function(){
+		this.$operator_message.removeClass('bright');
+		const waiting_message = 'Отлично! Ваш заказ отправлен и скоро будет принят в работу';
+		this.$operator_message.find('span').html(waiting_message)
+	},
+	set_operator_message_to:function(msg){
+		this.$operator_message.addClass('bright');
+		this.$operator_message.find('span').html(msg);
+	},	
+
+	progress_bar_to_end:function(){
+		this.statusbarIsStopped = true;
+		const $b = this.$progressbar.find('div');
+		$b.css({width:'100%',transition:'1s'});
+	},
+	progress_bar_restart:function(){
+		this.$progressbar.show();		
+		const $b = this.$progressbar.find('div');
+		$b.css({width:'0%',transition:'0'});
+
+		const overTime = SITE_CFG.order_forgotten_delay*60;
+		this.statusbarIsStopped = false;
+
+		const fn = {
+			animateProgressBar: (n, progressBar)=>{
+								
+				let startTime = performance.now(); // Время начала анимации
+				let duration = n * 1000; // Перевод секунд в миллисекунды
+			
+				this.statusbarIsStopped = false; // Сбрасываем флаг остановки
+				// Запускаем анимацию
+				requestAnimationFrame(fn.update.bind(this, progressBar, startTime, duration)); 
+			},
+			update:(progressBar, startTime, duration) => {
+				if (this.statusbarIsStopped) return; // Прерываем анимацию, если флаг установлен
+		
+				let elapsedTime = performance.now() - startTime; // Прошедшее время
+				let progress = Math.min(elapsedTime / duration, 1); // От 0 до 1
+		
+				progressBar.style.width = (progress * 100) + "%"; // Устанавливаем ширину
+		
+				if (progress < 1) {
+					// Запускаем следующий кадр
+					requestAnimationFrame(fn.update.bind(this, progressBar, startTime, duration)); 
+				}
+			}			
+		}
+
+		console.log('overTime = ',overTime);
+		fn.animateProgressBar(overTime, $b[0]);
+
+
+	},
 	formatLngTime:function(tm,full){
 		var t = tm.split(" ");
 		var d = t[0].split("-");
@@ -205,10 +263,17 @@ export var VIEW_ORDER_OK = {
 		this.ORDER_CHECKER.check_if_order_taken_async(short_number, cafe_uniq_name)
 		.then((vars)=>{
 			console.log('--vars--',vars);				
+			if(vars.order_status==='taken'){
+				this.show_successful_message(vars.order_manager);
+			}
 		})
 		.catch((vars)=>{
 			console.log('err',vars);
 		});		
+	},
+	show_successful_message(order_manager_name){
+		this.progress_bar_to_end();
+		this.set_operator_message_to(`Заказ в работе! <br> Ваш официант ${order_manager_name}`);		
 	}
 };
 
