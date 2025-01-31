@@ -36,8 +36,6 @@ export var ITEM = {
 		this.$descr =  this.$item.find(this._CN+"item-description");
 		this.$bhvPortrait = this.$item.find(this._CN+"item-bhv-portrait");
 		this.$bhvLandscape = this.$item.find(this._CN+"item-bhv-landscape");
-
-		this.$btnReadMore = this.$item.find(this._CN+"item-btn-more-largescreen"); 
 		
 		this.CLASS_PLAY_ADDTOCART = this.CN+"play-addtocart";
 		this.CLASS_LARGE_IMAGE = this.CN+"show-large-image";
@@ -278,7 +276,6 @@ export var ITEM = {
 		
 		this.IMAGE = image_object;
 		this.image_end_loading();
-		
 
 		var params = this.calc_image_bounds();
 		var src = this.item_data.image_url;
@@ -327,94 +324,43 @@ export var ITEM = {
 		]);		
 
 		var fn = {
-			bhvSwipe:function(opt) {
-				if(!_this.is_portrait()) return false;
-				if(opt.direction=="up"){					
-					_this.bhv_portrait_touched(true);
-				}else if(opt.direction=="down" && !_this.has_class_large()){					
-					_this.bhv_portrait_touched();
-				}else if(opt.direction=="left"){
-					_this.objParent.try_next();
-				}else if(opt.direction=="right"){
-					_this.objParent.try_prev();
+			bhvSwipe:(opt)=> {
+				if(!this.is_portrait()) {return false;}
+				if(opt.direction==="up" || opt.direction==="down"){		
+					this.bhv_portrait_touched(opt.direction);
+				}else if(opt.direction==="left"){
+					this.objParent.try_next();
+				}else if(opt.direction==="right"){
+					this.objParent.try_prev();
 				}
-			},
-			bhvDescrSwipe:function(opt) {
-				if(!_this.is_portrait()) return false;
-				if(opt.direction=="up"){					
-				}else if(opt.direction=="down"){					
-				}else if(opt.direction=="left"){
-					_this.objParent.try_next();
-				}else if(opt.direction=="right"){
-					_this.objParent.try_prev();
-				}
-			}			
+			}		
 		};
 
 		this.$bhvPortrait.swipe({
-			onSwipe:function(opt){ 
+			onSwipe:(opt)=>{ 
 				fn.bhvSwipe(opt); 
 			}, distance:40, 
 			enableMouse:false
 		});					
 		
-		this.$bhvPortrait.on("click",function(e){
+		this.$bhvPortrait.on("click",function(e){	
+			console.log(e);		
 			var event = e.originalEvent;
 			var offset = _this.calc_offset_vertical();
-			var show_description = ($(this).height()-event.offsetY) < Math.abs(offset.top);
-			_this.bhv_portrait_touched(show_description);
-		});
-
-		this.$descr.on("touchstart",function(e) {
-			if(_this.is_portrait()){
-				_this.DESCR_SCROLLED = false;
-			}			
-		});
-		this.$descr.on("touchmove",function(e) {
-			 if(_this.is_portrait()){
-			 	_this.DESCR_SCROLLED = true;
-			 }
-		});
-
-		this.$descr.swipe({
-			onSwipe:function(opt){ 
-				fn.bhvDescrSwipe(opt); 
-			}, distance:40, 
-			enableMouse:false,
-			preventDefault:false
-		});	
-
-		this.$descr.on("touchend",function(e) {
-			if(!_this.DESCR_SCROLLED && _this.is_portrait()){
-				_this.portrait_close_descr();
-			}					
-			e.originalEvent.cancelable && e.preventDefault();
-			e.stopPropagation();
-		});
-
-		this.$descr.on("mousedown",function(){
-			if(_this.is_portrait()){
-				_this.DESCR_SCROLLED = false;
-			}			
-		});
-		this.$descr.on("mousemove",function(){
-			if(_this.is_portrait()){
-				_this.DESCR_SCROLLED = true;	
-			}			
-		});		
-
-		this.$descr.on("click",function(){
-			_this.is_portrait() 
-			&& !_this.DESCR_SCROLLED 
-			&& _this.portrait_close_descr();
-			return false;
-		});
-
-		this.$btnReadMore.on("touchend click",function(){			
-			_this.is_portrait() 
-			&& _this.has_class_description()
-			&& _this.portrait_close_descr();
-			return false;	
+			switch(_this.get_vertical_pos()){
+				case 0:
+					var show_description = ($(this).height()-event.offsetY) < Math.abs(offset.top);
+					const mode = show_description?"up":"down";
+					_this.bhv_portrait_touched(mode);
+					break;
+				case 1:
+					_this.bhv_portrait_touched("up");
+					break;
+				case 2:
+					_this.bhv_portrait_touched("down");
+				break;					
+			}
+			
 		});
 
 		$(window).on("resize",function() {
@@ -434,6 +380,16 @@ export var ITEM = {
 
 	},
 
+	get_vertical_pos:function(){
+		if(this.has_class_large()){
+			return 1;
+		}else if(this.has_class_description()){
+			return 2;
+		}else{
+			return 0;
+		}
+	},
+
 	bhv_landscape_touched:function() {
 		if(this.has_class_large()){
 			this.$item.removeClass(this.CLASS_LARGE_IMAGE);
@@ -442,21 +398,18 @@ export var ITEM = {
 		};
 		this.update_image();		
 	},
-	bhv_portrait_touched:function(show_description) {
-		// close large image or description if shown		
-		if(this.has_class_description()){
-			this.portrait_close_descr();
-		}else if(this.has_class_large()){
-			// this.portrait_close_large_image();
-			this.objParent.all_items_close_large_images();
-		}else{
-			// if not shown desc or image			
-			if(show_description){				
-				this.portrait_show_descr();
-			}else{
-				this.objParent.all_items_show_large_images();
-			};
-		};	
+	bhv_portrait_touched:function(direction) {
+		if(direction=="down"){
+			switch(this.get_vertical_pos()){
+				case 0: this.portrait_show_large_image(); break;
+				case 2: this.portrait_close_descr(); break;
+			}
+		}else if(direction=="up"){
+			switch(this.get_vertical_pos()){
+				case 1: this.portrait_close_large_image(); break;
+				case 0: this.portrait_show_descr(); break;										
+			}
+		};
 	},
 
 	portrait_close_large_image:function(fast){
