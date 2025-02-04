@@ -83,10 +83,10 @@ glog("TYPE OF ARR_ORDER_FOR_IIKO === ".gettype($ARR_ORDER_FOR_IIKO));
 
 // ----------------------------------------
 //  - SAVE ORDER IN DB
-//	- GETTING ORDER_SHORT_NUMBER
+//	- GETTING ORDER_ID_UNIQ
 // ----------------------------------------
  
-$short_number = Order_sender::save_order_to_db(
+$order_id_uniq = Order_sender::save_order_to_db(
 	ORDER_TARGET,
 	$cafe, 
 	[		
@@ -98,7 +98,9 @@ $short_number = Order_sender::save_order_to_db(
 	DEMO_MODE
 );
 
-if(!$short_number)__errorjsonp("--cant save order");
+if(!$order_id_uniq)__errorjsonp("--cant save order");
+
+$short_number = Order_sender::get_short_number($order_id_uniq);
 
 DEMO_MODE && __answerjsonp(["short_number"=>$short_number,"demo_mode"=>DEMO_MODE]);
 
@@ -113,8 +115,8 @@ NOTG_MODE && __answerjsonp(["short_number"=>$short_number,"demo_mode"=>DEMO_MODE
 //  SENDING THE ORDER TO TG
 // ---------------------------
 try{
-	Order_sender::send_tg_order($cafe->uniq_name, ORDER_TARGET, $short_number, $ORDER_TXT);
-	
+	Order_sender::send_tg_order($cafe->uniq_name, ORDER_TARGET, $order_id_uniq, $ORDER_TXT);	
+
 	__answerjsonp( [
 		"short_number"=>$short_number, 
 		"demo_mode"=>DEMO_MODE,  // if cafe on demo_mode

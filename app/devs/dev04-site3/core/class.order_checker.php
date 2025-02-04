@@ -119,13 +119,14 @@ class Order_checker{
 	static public function send_message(string $subject, string $cafe_uniq_name, string $order_target, array $orders): string{
 
 		$str_short_names = self::get_orders_formated_short_names($orders);
+		$str_short_names_past = self::get_orders_formated_short_names($orders,'past');
 
 		if($subject==="FORGOTTEN_ORDERS"){
 			if(count($orders) > 1){
-				$msg = "Внимание! Время для взятия заказов вышло: ($str_short_names)";
+				$msg = "Внимание! Время для взятия заказов вышло: ($str_short_names_past)";
 				$msg .= " – отправлены в архив. \n";
 			}else{
-				$msg = "Внимание! Время для взятия заказа вышло: ($str_short_names)";
+				$msg = "Внимание! Время для взятия заказа вышло: ($str_short_names_past)";
 				$msg .= " – отправлен в архив. \n";
 			}
 		}else{
@@ -144,21 +145,22 @@ class Order_checker{
     	BUILD A STRING FROM ORDERS ARRAY
 		
 		@param array $orders // Array<Smart_object>
+		@param $name_time // 'present'||'past'
 		@return string
     ---------------------------------------------------------------------- **/	
-	static private function get_orders_formated_short_names(array $orders): string{
+	static private function get_orders_formated_short_names(array $orders, string $name_time='present'): string{
 
 		$str_all_short_names = "";
 	
 		if(count($orders)){
 			$short_names = [];
 			foreach($orders as $order){
-				
+				$str_verb = $name_time==='present'?'ждет':'ждал';
 				$currentDatetime = new DateTime();
 				$orderDatetime = new DateTime($order->date);
 				$interval = $orderDatetime->diff($currentDatetime);
 				$minutesPassed = ($interval->days * 24 * 60) + ($interval->h * 60) + $interval->i;
-				$str_waiting = ": ждет $minutesPassed " . getMinutesWord($minutesPassed);
+				$str_waiting = ": $str_verb $minutesPassed " . getMinutesWord($minutesPassed);
 
 				$short_names = [...$short_names, "\n".$order->short_number.$str_waiting];
 			}

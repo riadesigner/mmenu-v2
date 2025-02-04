@@ -164,13 +164,13 @@ class Tg_hook {
         switch($command){
             case 'take_the_order':
                 $cafe_uniq_name= $params[1];
-                $order_short_number= $params[2];                
-                $this->take_the_order($cafe_uniq_name,$order_short_number);
+                $order_id_uniq= $params[2];                
+                $this->take_the_order($cafe_uniq_name, $order_id_uniq);
             break;            
             case 'send_to_iiko':
                 $cafe_uniq_name = $params[1];
-                $order_short_number = $params[2];
-                Order_sender::send_order_to_iiko($cafe_uniq_name, $order_short_number, $this->REAL_TG_USER);
+                $order_id_uniq = $params[2];
+                Order_sender::send_order_to_iiko($cafe_uniq_name, $order_id_uniq, $this->REAL_TG_USER);
             break;
             case 'change_state':
 
@@ -192,9 +192,11 @@ class Tg_hook {
         $this->send_message("опция в разработке");
     }
 
-    private function take_the_order($cafe_uniq_name, $order_short_number): void{     
+    private function take_the_order($cafe_uniq_name, $order_uniq_id): void{     
         
-        if(!$ORDER = $this->valid_order($cafe_uniq_name, $order_short_number)){
+        $order_short_number = Order_sender::get_short_number($order_uniq_id);
+
+        if(!$ORDER = $this->valid_order($order_uniq_id)){            
             $this->send_error_message("Заказ с номером {$order_short_number} не найден");
             return;
         }        
@@ -239,13 +241,11 @@ class Tg_hook {
     /*
     	FIND ORDER IN DB
 
-		@param string $cafe_uniq_name
-        @param string $order_short_number
-        
+		@param string $order_id_uniq        
         @return Smart_object|null          
     --------------------------------------- **/	
-    private function valid_order($cafe_uniq_name, $order_short_number): Smart_object|null{
-        $q = "WHERE cafe_uniq_name='".$cafe_uniq_name."' AND short_number='".$order_short_number."'";
+    private function valid_order($order_id_uniq): Smart_object|null{
+        $q = "WHERE id_uniq='".$order_id_uniq."'";
         $orders = new Smart_collect('orders',$q);        
         if($orders&&$orders->full()){
             $ORDER = $orders->get(0);

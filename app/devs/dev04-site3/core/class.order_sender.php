@@ -79,6 +79,15 @@ class Order_sender{
 		return $res;
 	}
 
+	/*
+		GET SHORT NUMBER FROM ORDER_ID_UNIQ
+	------------------------------------- **/
+	static public function get_short_number(string $order_id_uniq): string{
+		$n = explode("-", $order_id_uniq);
+		$order_id_uniq = $n[2]."-".$n[3];
+		return $order_id_uniq;
+	}
+
     /*
     	SAVE ORDER TO DB
 		CREATE & RETURN SHORT NUMBER
@@ -90,7 +99,7 @@ class Order_sender{
 		@param int $pending_mode=0 // 0|1
 		@param bool $demo_mode // !==2
 
-		@return string $short_number
+		@return string $order_id_uniq
     ----------------------------------------------------- **/	
 	static public function save_order_to_db(
 		string $order_target,
@@ -134,11 +143,11 @@ class Order_sender{
 				// cant saving order to db
 				return false;
 			}else{			
-				$order_uniq_id = $just_created_id."-".$id_cafe."-".$short_number;
-				$ORDER->id_uniq = $order_uniq_id;			
+				$order_id_uniq = $just_created_id."-".$id_cafe."-".$short_number;
+				$ORDER->id_uniq = $order_id_uniq;			
 				$ORDER->save();
 
-				return $short_number;
+				return $order_id_uniq;
 			}
 
 		}else{
@@ -146,8 +155,8 @@ class Order_sender{
 			$count = random_int(1,100); 
 			$pre = date("y").substr(date("F"),0,1).date("d");
 			$num = sprintf("%03d", $count);
-			$short_number = $pre."-".$num."-DEMO";		
-			return $short_number;
+			$order_id_uniq = $pre."-".$num."-DEMO";		
+			return  $order_id_uniq;
 		}
 	}
 
@@ -157,13 +166,13 @@ class Order_sender{
 
 		@param string $cafe_uniq_name
 		@param string $order_target // self::ORDER_DELIVERY | self::IIKO-TABLE | self::IIKO-DELIVERY 
-		@param string $order_short_number
+		@param string $order_id_uniq
 		@param string $tg_order_text				
     ---------------------------------------------------------------------------------- **/	
 	static public function send_tg_order(
 		$cafe_uniq_name, 
 		$order_target, 
-		$order_short_number, 
+		$order_id_uniq, 
 		$tg_order_text
 		): void {
 		
@@ -171,7 +180,7 @@ class Order_sender{
 
 		// $button_take_title = $waiter_mode?"Я беру":"Взять заказ";
 		$button_take_title = "Взять заказ";
-		$button_take_the_order = "take_the_order:{$cafe_uniq_name}:{$order_short_number}";
+		$button_take_the_order = "take_the_order:{$cafe_uniq_name}:{$order_id_uniq}";
 		$keyboard = json_encode([
 			"inline_keyboard" => [
 				[
@@ -238,15 +247,12 @@ class Order_sender{
 		}
 
 		define('PENDING_MODE', (int) $ORDER->pending_mode===1);
-
-		$order_short_number = $ORDER->short_number;
+		
 		$USER_NAME = !empty($TG_USER->nickname)?$TG_USER->nickname:$TG_USER->name;		
 		
-		$q = implode([" ",
-			"WHERE cafe_uniq_name='{$cafe_uniq_name}'",
-			"AND short_number='{$order_short_number}'",
-		]);
-		$orders = new Smart_collect("orders", $q);
+		$order_short_number = $ORDER->short_number; 
+		$order_id_uniq = $ORDER->id_uniq;
+		$orders = new Smart_collect("orders", "WHERE id_uniq='{$order_id_uniq}'");
 
 		// ---------------------------
 		// IF ORDERS IS TAKEN ALREADY
@@ -275,7 +281,7 @@ class Order_sender{
 
 				if(PENDING_MODE){
 					$button_send_to_iiko_title = "Отправить в iiko";
-					$button_send_to_iiko = "send_to_iiko:{$cafe_uniq_name}:{$order_short_number}";
+					$button_send_to_iiko = "send_to_iiko:{$cafe_uniq_name}:{$order_id_uniq}";
 					$keyboard = json_encode([
 						"inline_keyboard" => [
 							[
@@ -314,10 +320,12 @@ class Order_sender{
 		(FOR PENDING MODE)
 
 		@param string $cafe_uniq_name
-		@param string $order_short_number
+		@param string $order_id_uniq
 		@param Smart_object $TG_USER
     ----------------------------------- **/		
-	static public function send_order_to_iiko(string $cafe_uniq_name, string $order_short_number, Smart_object $TG_USER ):void {
+	static public function send_order_to_iiko(string $cafe_uniq_name, string $order_id_uniq, Smart_object $TG_USER ):void {
+
+		$order_short_number = self::get_short_number($order_id_uniq);		
 
 		if($TG_USER->role !== 'waiter' && $TG_USER->role !== 'manager'){
 			$cancel_message = "Вы не можете отпралять заказы. Для этого нужно иметь доступ Менеджера или Официанта";
@@ -391,13 +399,10 @@ class Order_sender{
 				$order_description = json_decode($ORDER->description, 1);
 
 				$order_data = $order_description["ORDER_IIKO"];				
-				$order_data["externalNumber"] = $ORDER->short_number;
+				$order_data["externalNumber"] = $ORDER->id_uniq;
 				$order_data["comment"] = $comment;
 
 				glog("=========== ORDER_DATA =========== ".print_r($order_data,1));
-
-				// self::send_message_to_tg_users($TG_USER->tg_user_id, "TEST STOP");
-				// return;
 
 				try{
 					// ---------------------------------------------
@@ -427,7 +432,7 @@ class Order_sender{
 				$ORDER->updated = 'now()';
 
 				if(!$ORDER->save()){
-					glogError("Cant save the order {$order_short_number} for cafe {$cafe_uniq_name}, ".__FILE__.", ".__LINE__);
+					glogError("Cant save the order ".$ORDER->id_uniq." for cafe {$cafe_uniq_name}, ".__FILE__.", ".__LINE__);
 					$err_message = "Заказ отправлен, но его статус не обновлен. Если ошибка повторится, обратитесь к разработчику ChefsMenu";
 					self::send_message_to_tg_users($TG_USER->tg_user_id, $err_message);					
 					return;					
