@@ -37,21 +37,27 @@ function __errorjson($msg): never{
 	echo json_encode(["error"=>$msg], JSON_UNESCAPED_UNICODE);
 	exit();
 }
+	
 
-function glog($msg, $script_file="", $pre="glog:"){	
+function glogIikoHook($msg){	
 	global $CFG;		
-	if(J_ENV_TEST){			
-		$name = !empty($fileName)?$fileName:$CFG->log_file_name;
-		$path = $CFG->dirroot.$CFG->log_file_path.$name.'_'.date('Y_m_d').'.log';		
-		if (!file_exists($path)) { touch($path); }
-		$log = date('Y-m-d H:i:s') . " $pre $msg";
-		if(!empty($script_file)) $log = $log.", FILE: ".$script_file;
-		file_put_contents($path, $log . PHP_EOL, FILE_APPEND);
-	}
+	$pre = "iikoHook: ";	
+	$path = $CFG->dirroot.$CFG->log_path.$CFG->log_iiko_hook_file;		
+	if (!file_exists($path)) { touch($path); }
+	$log = date('Y-m-d H:i:s') . " $pre $msg";	
+	file_put_contents($path, $log . PHP_EOL, FILE_APPEND);
 }	
 
-function glogError($msg, $script_file=""){
-	glog($msg,$script_file,"gError:");
+function glog($msg, $pre="log: "){	
+	global $CFG;			
+	$path = $CFG->dirroot.$CFG->log_path.$CFG->log_menu_file;		
+	if (!file_exists($path)) { touch($path); }
+	$log = date('Y-m-d H:i:s') . " $pre $msg";	
+	file_put_contents($path, $log . PHP_EOL, FILE_APPEND);
+}	
+
+function glogError($msg){
+	glog($msg, "gError: ");
 }	
 
 /* --------------------------------------------------

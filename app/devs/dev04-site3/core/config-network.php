@@ -68,8 +68,9 @@ if(J_ENV_LOCAL){
 	$CFG->base_app_url = $CFG->http.$CFG->wwwroot.'/'.APP_DIR;
 	$CFG->base_url = $CFG->http.$CFG->wwwroot.'/';
 
-	$CFG->log_file_path = "logs/";
-	$CFG->log_file_name	= 'menu_log';		
+	$CFG->log_path = $_ENV['LOG_PATH'];
+	$CFG->log_menu_file = $_ENV['LOG_MENU_FILE'];
+	$CFG->log_iiko_hook_file = $_ENV['LOG_IIKO_HOOK_FILE'];
 
 	$CFG->user_cookie_time = 3600*24*30*3; // 3 mounth		
 

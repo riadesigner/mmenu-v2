@@ -1,0 +1,10 @@
+/var/www/app/logs/menu.log {
+    daily   
+    size 1k    
+    rotate 3
+    compress
+    delaycompress
+    missingok
+    notifempty
+    copytruncate
+}

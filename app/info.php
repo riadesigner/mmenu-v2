@@ -1,6 +1,14 @@
 <?php
 // phpinfo();
 
+define("BASEPATH",__file__);
+require_once 'config.php';
+require_once WORK_DIR.APP_DIR.'core/common.php';
+
+
+glogIikoHook("test iikoHook message");
+echo "ok";
+
 
 // $str = "123123";
 
@@ -10,8 +18,8 @@
 //     echo "\nyes";
 // }
 
-$tg_user_ids = '123';
-$tg_user_ids = [$tg_user_ids];
+// $tg_user_ids = '123';
+// $tg_user_ids = [$tg_user_ids];
 // $s = print_r($tg_user_ids,1);
 // $s = var_export($tg_user_ids,1);
 

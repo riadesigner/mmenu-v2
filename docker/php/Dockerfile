@@ -122,6 +122,8 @@ COPY crontab.txt /etc/crontab.txt
 
 # install logrotate
 COPY logrotate-cron.txt /etc/logrotate.d/cron
+COPY logrotate-menu.txt /etc/logrotate.d/menu
+COPY logrotate-iiko-hook.txt /etc/logrotate.d/iiko-hook
 
 # Copy entrypoint
 COPY ./entrypoint /usr/local/bin/docker-entrypoint
