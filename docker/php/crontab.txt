@@ -1,5 +1,7 @@
 # check every minute - are there any "not taken" orders in db?
 * * * * * /usr/local/bin/php /var/www/app/order-test.php >> /var/www/app/logs/cron-logs.log 2>&1
 
-# daily rotate cron-log.log file
+# daily rotate log files
 0 0 * * * /usr/sbin/logrotate /etc/logrotate.d/cron
+0 0 * * * /usr/sbin/logrotate /etc/logrotate.d/menu
+0 0 * * * /usr/sbin/logrotate /etc/logrotate.d/iiko-hook

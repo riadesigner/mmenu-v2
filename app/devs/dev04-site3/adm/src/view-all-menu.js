@@ -160,7 +160,7 @@ export var VIEW_ALL_MENU = {
 
 		Loader.load_extmenu_asynq(extmenu_id)
 		.then((vars)=>{
-			
+
 			const [roughMenu, roughMenuHash, need2update] = vars;
 
 			// --------------------
@@ -172,7 +172,23 @@ export var VIEW_ALL_MENU = {
 				return false
 			}
 
-			console.log('roughMenu',roughMenu);					
+			if(roughMenu.error){
+				let msg = 'Возникла ошибка загрузки внешнего меню.';
+				if(roughMenu.error=='EXTERNAL_MENU_DATA_MISSED'){
+					msg += [
+						`Чтобы исправить, выберите в настройках iikoweb `,
+						`<b>источник цен: "Внешнее меню"</b>`
+					].join(' ');					
+				}else{
+					msg += [
+						`Код: ${roughMenu.error}. `,
+						`Ответ сервера: ${roughMenu.errorDescription}`
+					].join(' ');
+				};				
+				this.error_message(msg);
+				setTimeout(()=>{ this.end_loading(); this._page_show();},200);
+				return false				
+			};
 			
 			if(roughMenu && roughMenuHash && need2update){
 				// --------------
@@ -241,7 +257,9 @@ export var VIEW_ALL_MENU = {
 	do_update_iiko_menu:function(cafe, newMenu,roughMenuHash){
 		const _this=this;
 		
-		console.log('cafe, newMenu,roughMenuHash = ', cafe, newMenu,roughMenuHash);;
+		console.log('cafe = ', cafe);
+		console.log('newMenu = ', newMenu);
+		console.log('roughMenuHash = ', roughMenuHash);
 
 		const opt = {
 			id_cafe:cafe.id,
