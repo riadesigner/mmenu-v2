@@ -5,40 +5,37 @@ define("BASEPATH",__file__);
 require_once 'config.php';
 require_once WORK_DIR.APP_DIR.'core/common.php';
 
+// $url = "http://31.200.237.194/iiko-hook.php";
 
-glogIikoHook("test iikoHook message");
-echo "ok";
+$url = "https://chefsmenu.ru/iikohook-dev/";
 
+$data = ["name"=>"petya"];
+$jsonData = json_encode($data);
 
-// $str = "123123";
+$res =  sent_json_to_url($jsonData, $url);
 
-// if(gettype($str)==='string'){
-//     echo "\nyes";
-// }else{
-//     echo "\nyes";
-// }
+echo "\$res=$res\n"; 
+echo "--ok!--";
 
-// $tg_user_ids = '123';
-// $tg_user_ids = [$tg_user_ids];
-// $s = print_r($tg_user_ids,1);
-// $s = var_export($tg_user_ids,1);
+function sent_json_to_url($jsonData, $url): string{
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_URL, $url);
+    curl_setopt($ch, CURLOPT_POST, 1);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, $jsonData);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, [
+        "Content-Type: application/json",
+        "Content-Length: " . strlen($jsonData)
+    ]);    
+    $response = curl_exec($ch);    
+    // проверяем на ошибки
+    if (curl_errno($ch)) {
+        echo "Ошибка: " . curl_error($ch);
+    }
+    // закрываем соединение
+    curl_close ($ch);    
+    return "Ответ dev сервера: " . $response;
+}
 
-
-// echo "\n\n\$s=$s";
-// var_dump($tg_user_ids);
-
-
-// $str = '/start 319mhg-zz76';
-
-// if(str_starts_with($str, '/start ')){
-//     $key = explode(" ",$str)[1];
-//     echo $key;
-// }else{
-//     echo "no";
-// }
-
-// if (str_contains($string, 'lazy')) {
-//     echo "The string 'lazy' was found in the string\n";
-// }
 
 ?>
