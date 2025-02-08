@@ -568,8 +568,7 @@ class Order_sender{
 		if(empty($TG_USER->name)) return "Неизвестный";
         $public_name = !empty($TG_USER->nickname)?$TG_USER->nickname." (".$TG_USER->name.")":$TG_USER->name;
         return $public_name;
-    }	
-
+    }
 
 }
 		

@@ -27,7 +27,7 @@ check_if_order_taken_async: function(short_number, cafe_uniq_name) {
             counter++;
             this.check_order_status_async(short_number, cafe_uniq_name)
             .then((result)=>{
-                if(result.order_status == 'taken'){
+                if(result.order_status == 'taken' || result.order_status == 'sentout'){
                     clearInterval(interval);
                     res(result);
                 }else{

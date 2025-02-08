@@ -32,6 +32,8 @@ $q = implode(" ",[
     "AND short_number='$short_number'",
 ]);
 
+glog("order check: \$q");
+
 $orders = new Smart_collect("orders", $q);	
 
 if(!$orders->full()) __errorjsonp("--not found order");

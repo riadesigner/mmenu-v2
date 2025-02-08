@@ -3,20 +3,14 @@
 define("BASEPATH",__file__);
 require_once 'config.php';
 require_once WORK_DIR.APP_DIR.'core/common.php';
+require_once WORK_DIR.APP_DIR.'core/class.Iiko_hook.php';
+
 
 $data = json_decode(file_get_contents('php://input'), true);
 
-glogIikoHook(print_r($data, 1));
+$IikoHook = new Iiko_hook($data);
+$IikoHook->parse();
 
 echo "ok";
-
-// if(!$_SERVER["CURRENT_ENV_LOCAL"]){    
-//     // PRODUCTION ENV
-//     echo sent_copy_to_dev($jsonData);
-// }else{
-//     // DEVELOP ENV
-//     echo "ok";
-// }
-
 
 ?>

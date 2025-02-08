@@ -9,13 +9,40 @@ require_once WORK_DIR.APP_DIR.'core/common.php';
 
 $url = "https://chefsmenu.ru/iikohook-dev/";
 
-$data = ["name"=>"petya"];
+
+class ErrMessaage {
+    public $message;
+    public $description;
+
+    public function __construct($message, $description) {
+        $this->message = $message;
+        $this->description = $description;
+    }
+}
+
+$data = [
+    [
+        "eventType"=>"TableOrderError",
+        "eventInfo"=>[
+            "externalNumber"=>"705-308-250207-004",
+            "creationStatus"=>"Error",
+            "errorInfo"=>[
+                "code"=>"Common",
+                "message"=>"test message",
+                "description"=>"test description"
+            ]
+        ],
+    ],
+];
+
+
+
+
 $jsonData = json_encode($data);
 
-$res =  sent_json_to_url($jsonData, $url);
+$res = sent_json_to_url($jsonData, $url);
 
 echo "\$res=$res\n"; 
-echo "--ok!--";
 
 function sent_json_to_url($jsonData, $url): string{
     $ch = curl_init();
