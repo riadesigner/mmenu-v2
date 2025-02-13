@@ -41,6 +41,13 @@ define("ORDER_TARGET", Order_sender::ORDER_TABLE);
 $order_data = $_POST['order'];
 $table_number = (int) $_POST['table_number'];
 
+glog("-------ORDER DATA------- \n".print_r($order_data,1));
+glog("-------ORDER TARGET------- \n".print_r(ORDER_TARGET,1));
+glog("-------TABLE NUMBER------- \n".print_r($table_number,1));
+glog("-------DEMO MODE------- \n".print_r(DEMO_MODE,1));
+
+if(DEMO_MODE) __errorjsonp("--demo mode");
+
 $params = [
 	"order_data"=>$order_data,
 	"order_target"=>ORDER_TARGET,	

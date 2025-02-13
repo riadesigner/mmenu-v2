@@ -186,7 +186,8 @@ export var ITEM = {
 			this.$btnAddToCart.removeClass("this-cart-full");	
 		}
 	},
-	update_price_and_volume:function(vars) {			
+	update_price_and_volume:function(vars) {	
+		console.log('update_price_and_volume',vars);		
 		var currency_symbol = GLB.CAFE.get('cafe_currency').symbol;
 		this.$item_price.html(vars.price + " " + currency_symbol);		
 		const sizeNameStr = vars.sizeName ? `${vars.sizeName}<br>` : '';
