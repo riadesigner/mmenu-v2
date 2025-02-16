@@ -151,8 +151,11 @@ export var VIEW_ALLITEMS = {
 			e.originalEvent.cancelable && e.preventDefault();
 		});
 
-		this.$btnBack.on("touchend click",(e)=> {			
-			GLB.UVIEWS.go_back();
+		this.$btnBack.on("touchend click",(e)=> {
+			this.cancel_all_loadings_async()
+			.then(()=>{
+				GLB.UVIEWS.go_back();
+			});			
 			e.originalEvent.cancelable && e.preventDefault();
 		});
 
@@ -229,7 +232,12 @@ export var VIEW_ALLITEMS = {
 						img.src = URL.createObjectURL(blob);
 					},
 					error: (xhr, status, error)=> {
-						console.error('Ошибка:', error);
+						if(error==='abort'){
+							console.error('Загрузка отменена');
+						}else{
+							console.error('Ошибка загружки изображения:', error);
+						}
+						
 					}
 				});
 			}
@@ -244,7 +252,7 @@ export var VIEW_ALLITEMS = {
 			var url = GLB_APP_URL+"pbl/lib/pbl.get_all_items.php";	
 			var data = {menu:this.MENU.id};
 	
-			this.AJAX = $.ajax({
+			this.AJX_ITEMS = $.ajax({
 				url: url + "?callback=?",
 				jsonpCallback:GLB.CALLBACK_RANDOM.get(),
 				dataType: "jsonp",
@@ -281,6 +289,19 @@ export var VIEW_ALLITEMS = {
 		this.render_items_range();
 
 		opt && opt.onReady && opt.onReady();
+	},
+	cancel_all_loadings_async:function(){		
+		return new Promise((res,rej)=>{
+			 
+			console.log('- отменили загрузку позиций');
+			this.AJX_ITEMS && this.AJX_ITEMS.abort();			
+
+			console.log('- отменили загрузку изображений');
+			this.ARR_NEED_TO_LOAD_IMAGE = [];
+			this.AJX_IMG_LOADING && this.AJX_IMG_LOADING.abort();
+			
+			res();
+		})
 	},
 	render_items_range:function(){
 		const items_range = this.get_items_range();
