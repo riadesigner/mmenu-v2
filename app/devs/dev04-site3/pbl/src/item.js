@@ -6,7 +6,13 @@ import {ITEM_MODIF_PANEL} from './item-modif-panel.js';
 import swipe from './plugins/swipe.js'; // no delete from here
 
 export var ITEM = {
-	init:function(objParent,itemData,index) {
+	/**
+	 * @param {Object} objParent - items container
+	 * @param {Object} itemData - item data
+	 * @param {Number} index - index of item in parent object
+	 * 
+	 */
+	init:function( objParent, itemData, index ) {
 
 		this.objParent = objParent;
 		this.$elParent = objParent.get_element();
@@ -62,8 +68,6 @@ export var ITEM = {
 		});
 
 		this.behavior();
-
-		this.$elParent.append(this.$item);	
 		
 		this.IIKO_MODE = GLB.CAFE.is_iiko_mode();		
 
@@ -73,11 +77,16 @@ export var ITEM = {
 			this.init_model_item(CHEFS_ITEM);
 		}
 
+		
+		this.render();
 		this.insert_data();
-		this.update_lng();
+		this.update_lng();				
 
 		return this;
 
+	},	
+	render:function() {
+		this.$elParent.append(this.$item);	
 	},
 	get_view:function(){
 		return this.$item;
@@ -187,7 +196,7 @@ export var ITEM = {
 		}
 	},
 	update_price_and_volume:function(vars) {	
-		console.log('update_price_and_volume',vars);		
+		// console.log('update_price_and_volume',vars);		
 		var currency_symbol = GLB.CAFE.get('cafe_currency').symbol;
 		this.$item_price.html(vars.price + " " + currency_symbol);		
 		const sizeNameStr = vars.sizeName ? `${vars.sizeName}<br>` : '';
@@ -279,7 +288,7 @@ export var ITEM = {
 		this.image_end_loading();
 
 		var params = this.calc_image_bounds();
-		var src = this.item_data.image_url;
+		// var src = this.item_data.image_url;
 	
 		this.$image = $(image_object).css({
 			position:"absolute",

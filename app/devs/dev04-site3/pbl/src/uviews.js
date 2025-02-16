@@ -118,7 +118,7 @@ export var UVIEWS = {
 		if(!this.arrViews[name]){ console.log("unknown the name"); return false; };	
 		if(name==this.CURRENT_VIEW_NAME){ console.log(" the same name"); return false; };	
 				
-		console.log("current name", name);
+		console.log("current view tpl name", name);
 
 		this.bhv_protect(700);
 
@@ -134,6 +134,10 @@ export var UVIEWS = {
 			this.is_forward(name) ? this.move_forward($currView,$nextView,anim) : this.move_backward($currView,$nextView,anim);
 			this.CURRENT_VIEW_NAME = name;
 		}
+
+		if (performance.memory) {
+			console.log(`performance.memory`, GLB.CMN.formatBytes(performance.memory.usedJSHeapSize)); // Показывает общий объем используемой памяти
+		}		
 	},
 	go_back:function() {
 		var _this=this;	

@@ -5,6 +5,7 @@ import $ from 'jquery';
 import {META_VIEWPORT} from './meta-viewport.js';
 import {CALLBACK_RANDOM} from './callback-random.js';
 import {MOBILE_BUTTONS} from './mobile_buttons.js';
+import {CMN} from './common.js';
 
 import {UVIEWS} from './uviews.js';
 import {CAFE} from './cafe.js';
@@ -30,6 +31,7 @@ import {VIEW_TABLE_CHANGE} from './view-table-change.js';
 GLB.META_VIEWPORT = META_VIEWPORT;
 GLB.CALLBACK_RANDOM = CALLBACK_RANDOM;
 GLB.MOBILE_BUTTONS = MOBILE_BUTTONS;
+GLB.CMN = CMN;
 
 GLB.UVIEWS = UVIEWS;
 GLB.CAFE = CAFE;
