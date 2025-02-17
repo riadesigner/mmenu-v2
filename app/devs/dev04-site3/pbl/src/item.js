@@ -88,6 +88,10 @@ export var ITEM = {
 	render:function() {
 		this.$elParent.append(this.$item);	
 	},
+	unmount:function(){
+		// console.log(`unmounting ${this.item_data.title}`);
+		this.$item.remove();
+	},
 	get_view:function(){
 		return this.$item;
 	},

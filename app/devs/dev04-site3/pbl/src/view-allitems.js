@@ -154,8 +154,13 @@ export var VIEW_ALLITEMS = {
 		this.$btnBack.on("touchend click",(e)=> {
 			this.cancel_all_loadings_async()
 			.then(()=>{
-				GLB.UVIEWS.go_back();
-			});			
+				this.cut_tail_before_go_back_async()
+				.then(()=>{
+					setTimeout(()=>{
+						GLB.UVIEWS.go_back();
+					},0);					
+				});											
+			});
 			e.originalEvent.cancelable && e.preventDefault();
 		});
 
@@ -286,7 +291,7 @@ export var VIEW_ALLITEMS = {
 		this.go_to(this.CURRENT,"fast");		
 		this.update_tpl_page_counter();
 
-		this.render_items_range();
+		// this.render_items_range();
 
 		opt && opt.onReady && opt.onReady();
 	},
@@ -299,41 +304,54 @@ export var VIEW_ALLITEMS = {
 			console.log('- отменили загрузку изображений');
 			this.ARR_NEED_TO_LOAD_IMAGE = [];
 			this.AJX_IMG_LOADING && this.AJX_IMG_LOADING.abort();
-			
+
+			res();
+
+		})
+	},
+	cut_tail_before_go_back_async:function(){
+		return new Promise((res,rej)=>{
+			console.log('cutting the tail...');
+			var currId = this.ALL_ITEMS.arr[this.CURRENT].id;			
+			for(let i in this.ITEMS){
+				let item = this.ITEMS[i];
+				// unmounting from view all except current item				
+				currId!==item.get().id && item.unmount();				
+			}			
 			res();
 		})
 	},
-	render_items_range:function(){
-		const items_range = this.get_items_range();
-		for(i in items_range){
-			// items_range[i].render();
-		}		
-	},
-	get_items_range:function(){
-		const [from, to] = this.calc_current_range();
-		var items_range = [];		
-		console.log('from',from,'to',to);
-		for(var i=from;i<to+1;i++){			
-			// if(i<this.TOTAL_ITEMS){
-			// 	items_range.push(this.ALL_ITEMS.arr[i].id);
-			// }
-		}		
-		return items_range;
-	},	
-	calc_current_range:function(){
-		// const curr = this.CURRENT; 
-		const curr = 2; 
-		// let from, to = 0;
+	// render_items_range:function(){
+	// 	const items_range = this.get_items_range();
+	// 	for(i in items_range){
+	// 		// items_range[i].render();
+	// 	}		
+	// },
+	// get_items_range:function(){
+	// 	const [from, to] = this.calc_current_range();
+	// 	var items_range = [];		
+	// 	console.log('from',from,'to',to);
+	// 	for(var i=from;i<to+1;i++){			
+	// 		// if(i<this.TOTAL_ITEMS){
+	// 		// 	items_range.push(this.ALL_ITEMS.arr[i].id);
+	// 		// }
+	// 	}		
+	// 	return items_range;
+	// },	
+	// calc_current_range:function(){
+	// 	// const curr = this.CURRENT; 
+	// 	const curr = 2; 
+	// 	// let from, to = 0;
 		
-		console.log('curr',curr, 'this.SAFE_NUMBER', this.SAFE_NUMBER)
-		const SN = this.SAFE_NUMBER;
-		if(curr < SN){			
-		}
-		const from = curr < SN ? 0 : SN - curr;
-		const remains = curr < SN ? SN - curr : 0;				
-		const to = curr + SN + Math.abs(remains);
-		return [from, to];
-	},
+	// 	console.log('curr',curr, 'this.SAFE_NUMBER', this.SAFE_NUMBER)
+	// 	const SN = this.SAFE_NUMBER;
+	// 	if(curr < SN){			
+	// 	}
+	// 	const from = curr < SN ? 0 : SN - curr;
+	// 	const remains = curr < SN ? SN - curr : 0;				
+	// 	const to = curr + SN + Math.abs(remains);
+	// 	return [from, to];
+	// },
 	get_element:function() {
 		return this.$itemsContainer;
 	},
