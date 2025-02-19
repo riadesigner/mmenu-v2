@@ -14,6 +14,8 @@ export var ITEM = {
 	 */
 	init:function( objParent, itemData, index ) {
 
+		this.NOW_IN_VIEWPORT = false
+
 		this.objParent = objParent;
 		this.$elParent = objParent.get_element();
 		this.item_data = itemData;		
@@ -78,19 +80,29 @@ export var ITEM = {
 		}
 
 		
-		this.render();
+		
 		this.insert_data();
 		this.update_lng();				
+		
+		// this.render();
 
 		return this;
 
 	},	
 	render:function() {
-		this.$elParent.append(this.$item);	
+		if(!this.NOW_IN_VIEWPORT){
+			this.NOW_IN_VIEWPORT = true;
+			this.$elParent.append(this.$item);	
+			this.update_layout();
+			console.log("render ",this.item_data.title);
+		}
 	},
 	unmount:function(){
-		// console.log(`unmounting ${this.item_data.title}`);
-		this.$item.remove();
+		if(this.NOW_IN_VIEWPORT){
+			this.NOW_IN_VIEWPORT = false;
+			this.$item.detach();
+			console.log("unmount ",this.item_data.title);
+		}
 	},
 	get_view:function(){
 		return this.$item;
@@ -188,7 +200,7 @@ export var ITEM = {
 		this.$item.find(this._CN+"item-about").html(item.description);
 		
 		this.update_price_and_volume(this.MODEL_ITEM.sizer_get_vars());
-		this.update_item_data_container();		
+		
 
 	},
 	update_cart_btn:function(total_orders) {				

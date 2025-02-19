@@ -19,35 +19,26 @@ export var VIEW_ALLITEMS = {
 		this.$itemsContainer = this.$view.find(this._CN+"allitems-container");		
 		this.$bhv = this.$view.find(this._CN+"bhv");		
 
-		this.TOTAL_ITEMS = 0;
-		this.ALL_ITEMS = []; // items data
+		this.TOTAL_ITEMS = 0; 
+		this.ALL_ITEMS = {}; // saved items data in two way: associative array and array		
 		this.ITEMS = {}; // GLB.ITEM objects
 		this.CURRENT = 0;
-		this.SAFE_NUMBER = 5; // ( total page / 2 ) to safely show in viewport in the same time
+		this.SAFE_NUMBER = 5;
 		this.TOTAL_BYTES_LOADED = 0;		
 
 		this.behavior();
 
 		return this;
 	},
-	update:function(menu) {
+	update:function(menu) {		
 
-		this.MENU = menu;		
-		
-		console.log('start all-menu viewer updating');
-
-		this.$headerTitle.find("span").html(menu.title);
-
-		for(var i in GLB.MENU_ICONS.get()){ 
-			this.$headerIcon.removeClass(this.CN+"icon-"+GLB.MENU_ICONS.get(i));
-		}
-
-		this.$headerIcon.addClass(this.CN+"icon-"+ GLB.MENU_ICONS.get(this.MENU.id_icon));
-
+		this.MENU = menu;
+		this.upade_header();
 		this._content_hide();		
+				
+		var allitems = this.chefsmenu.get_allitems_for_menu(this.MENU);		
+		console.log("allitems",allitems);		
 		
-		var allitems = this.chefsmenu.get_allitems(this.MENU);		
-
 		var fn = {
 			start_items_build:()=>{
 
@@ -55,29 +46,31 @@ export var VIEW_ALLITEMS = {
 				console.log(`Размер объекта this.ALL_ITEMS: ${GLB.CMN.formatBytes(sizeInBytes)} байт`);				
 
 				console.log("start items build")
-				this.build({onReady:()=>{
-						fn.on_built();
-					}
-				});
-			},
-			on_built:()=>{				
-				console.log("all built ok!")		
-				this.hide_bhv_btns(false);					
-				this._content_show();						
-				setTimeout(()=>{ 
-					this.chefsmenu.end_loading(); 
+				this.$itemsContainer.html("");		
+				this.CURRENT = 0;
+				this.build_instances_async()
+				.then((ITEMS)=>{
+					this.ITEMS = ITEMS;					
+					this.render_actual_range();
+					this.go_to(this.CURRENT,"fast");			
+					this.update_tpl_page_counter();										
+					this.hide_bhv_btns(false);
+					this._content_show();					
 					setTimeout(()=>{ 
-						/// TODO loading only current image and nears
-						this.start_load_images();
-					},300);
-				},100);
+						this.chefsmenu.end_loading(); 
+						// setTimeout(()=>{ 
+						// 	/// TODO loading only current image and nears
+						// 	this.start_load_images();
+						// },300);
+					},100);
+				})
 			},
 			arr2obj:function(arr){
 				var obj = {};
 				for(var i=0;i<arr.length;i++){
 					obj[arr[i].id] = arr[i];
-				}
-				obj.arr = arr;
+				}		
+				obj.arr = arr;		
 				return obj;
 			}			
 		};       		
@@ -98,12 +91,12 @@ export var VIEW_ALLITEMS = {
 				this.load_items_async()
 				.then((arr_items)=>{
 					console.log('arr_items loaded',arr_items)
-
-					this.ALL_ITEMS = fn.arr2obj(arr_items);
-					this.TOTAL_ITEMS = arr_items.length;		
-					this.chefsmenu.set_allitems(this.MENU,this.ALL_ITEMS);					
 					
-					console.log('created all_items object',this.ALL_ITEMS);
+					this.ALL_ITEMS = fn.arr2obj(arr_items);					
+					this.TOTAL_ITEMS = arr_items.length;							
+					this.chefsmenu.set_allitems_for_menu(this.MENU,this.ALL_ITEMS);					
+					
+					console.log('created all_items object',this.ALL_ITEMS);					
 					
 					fn.start_items_build();
 				})
@@ -115,14 +108,69 @@ export var VIEW_ALLITEMS = {
 		};
 
 	},	
+	upade_header:function(){
+		this.$headerTitle.find("span").html(this.MENU.title);
+		for(var i in GLB.MENU_ICONS.get()){ 
+			this.$headerIcon.removeClass(this.CN+"icon-"+GLB.MENU_ICONS.get(i));
+		}
+		this.$headerIcon.addClass(this.CN+"icon-"+ GLB.MENU_ICONS.get(this.MENU.id_icon));		
+	},
+	render_actual_range:function() {
+		const range = this.calc_actual_range();	
+		for(let i=0;i< this.ALL_ITEMS.arr.length;i++){
+			let item_id = this.ALL_ITEMS.arr[i].id;			
+			if(i>=range.start && i<=range.end){				
+				this.ITEMS[item_id].render();				
+			}else{				
+				this.ITEMS[item_id].unmount();
+			}
+		}	
+	},
+	/**
+	 * calculating range items 
+	 * what maximum can rendered in the listitems
+	 * at the same time,
+	 * max_on_page = sn * 2 + 1
+	 */
+	calc_actual_range:function() {		
+		let current = this.CURRENT;
+		let total = this.get_total();
+		let safe_number = this.SAFE_NUMBER;
+		const max_on_page = safe_number*2+1;
+		if(total<=max_on_page){
+			let range = {
+				start:0,
+				end:total
+			};
+			console.log('range = 0 to total: ',range, `curr: ${current}`);
+			return range;
+		}else{
+			const range = {
+				start:current-safe_number,
+				end:current+safe_number
+			};
+			if(range.start<0){
+				range.end+=Math.abs(current-safe_number);
+				range.start=0;
+			}
+			if(range.end>total){
+				let new_start = range.start-Math.abs(total-range.end);
+				if(new_start >= 0) {range.start=new_start;} 			
+				range.end=total;
+			};
+			console.log('calculated new range',range, `curr: ${current}`);
+			return range;
+		}
+
+	},
 	get_menu_data:function(){
 		return this.MENU;		
 	},
 	get_total:function() {
 		return this.TOTAL_ITEMS;
 	},
-	get_all_items:function(index) {
-		return index!==undefined ? this.ALL_ITEMS[index] : this.ALL_ITEMS;
+	get_all_items:function(id_item) {
+		return id_item!==undefined ? this.ALL_ITEMS[id_item] : this.ALL_ITEMS;
 	},
 	hide_bhv_btns:function(mode) {
 		if(mode){
@@ -195,12 +243,12 @@ export var VIEW_ALLITEMS = {
 
 		this.ARR_NEED_TO_LOAD_IMAGE = [];		
 
-		var items = this.get_all_items();
+		var arr_items = this.get_all_items().arr;
 
 		if(this.get_total()){
-			for(var i=0;i<items.arr.length;i++){
-				items.arr[i].image_url && this.ARR_NEED_TO_LOAD_IMAGE.push(items.arr[i]);
-				items.arr[i].image_url && this.ITEMS[items.arr[i].id].image_now_loading();
+			for(var i=0;i<arr_items.length;i++){
+				arr_items[i].image_url && this.ARR_NEED_TO_LOAD_IMAGE.push(arr_items[i]);
+				arr_items[i].image_url && this.ITEMS[arr_items[i].id].image_now_loading();
 			}
 		};		
 
@@ -251,7 +299,10 @@ export var VIEW_ALLITEMS = {
 		fn.next_load_image();		
 
 	},
-	load_items_async:function(opt){
+	/**
+	 * @return {array} arr_items
+	 */
+	load_items_async:function(){
 		return new Promise((res, rej)=>{			
 		
 			var url = GLB_APP_URL+"pbl/lib/pbl.get_all_items.php";	
@@ -273,27 +324,20 @@ export var VIEW_ALLITEMS = {
 			});		
 		})		
 	},
-	build:function(opt) {
-		var _this=this;
-		this.$itemsContainer.html("");		
-		
-		this.ITEMS = {};
-
-		var items = this.get_all_items();		
-		
-		if(this.get_total()){
-			for(var i=0;i<items.arr.length;i++){
-				var newItem  = $.extend({},GLB.ITEM); 
-				this.ITEMS[items.arr[i].id] = newItem.init( _this, items.arr[i], i );
-			}
-		};
-		this.CURRENT = 0;
-		this.go_to(this.CURRENT,"fast");		
-		this.update_tpl_page_counter();
-
-		// this.render_items_range();
-
-		opt && opt.onReady && opt.onReady();
+	build_instances_async:function() {
+		return new Promise((res,rej)=>{						
+			const ITEMS = {};				
+			var arr_items = this.get_all_items().arr;
+			if(this.get_total()){
+				for(var i=0;i<arr_items.length;i++){
+					// creating new instance of ITEM model
+					var newItem  = $.extend({},GLB.ITEM); 
+					ITEMS[arr_items[i].id] = newItem.init( this, arr_items[i], i );
+					// ITEMS[arr_items[i].id].render();
+				}
+			};		
+			res(ITEMS);
+		})
 	},
 	cancel_all_loadings_async:function(){		
 		return new Promise((res,rej)=>{
@@ -321,37 +365,6 @@ export var VIEW_ALLITEMS = {
 			res();
 		})
 	},
-	// render_items_range:function(){
-	// 	const items_range = this.get_items_range();
-	// 	for(i in items_range){
-	// 		// items_range[i].render();
-	// 	}		
-	// },
-	// get_items_range:function(){
-	// 	const [from, to] = this.calc_current_range();
-	// 	var items_range = [];		
-	// 	console.log('from',from,'to',to);
-	// 	for(var i=from;i<to+1;i++){			
-	// 		// if(i<this.TOTAL_ITEMS){
-	// 		// 	items_range.push(this.ALL_ITEMS.arr[i].id);
-	// 		// }
-	// 	}		
-	// 	return items_range;
-	// },	
-	// calc_current_range:function(){
-	// 	// const curr = this.CURRENT; 
-	// 	const curr = 2; 
-	// 	// let from, to = 0;
-		
-	// 	console.log('curr',curr, 'this.SAFE_NUMBER', this.SAFE_NUMBER)
-	// 	const SN = this.SAFE_NUMBER;
-	// 	if(curr < SN){			
-	// 	}
-	// 	const from = curr < SN ? 0 : SN - curr;
-	// 	const remains = curr < SN ? SN - curr : 0;				
-	// 	const to = curr + SN + Math.abs(remains);
-	// 	return [from, to];
-	// },
 	get_element:function() {
 		return this.$itemsContainer;
 	},
@@ -360,7 +373,7 @@ export var VIEW_ALLITEMS = {
 		if(!arr.length){return false;}
 		for(var i=0;i<arr.length;i++){
 			var fast = (i!==this.CURRENT) ? true : false;
-			var currId = this.ALL_ITEMS.arr[i].id;
+			var currId = arr[i].id;
 			var item = this.ITEMS[currId];
 			item && item.portrait_show_large_image(fast);
 		}
@@ -370,7 +383,7 @@ export var VIEW_ALLITEMS = {
 		if(!arr.length){return false;}
 		for(var i=0;i<arr.length;i++){
 			var fast = (i!==this.CURRENT) ? true : false;
-			var currId = this.ALL_ITEMS.arr[i].id;
+			var currId = arr[i].id;
 			var item = this.ITEMS[currId];
 			item && item.portrait_close_large_image(fast);
 		}
@@ -392,8 +405,9 @@ export var VIEW_ALLITEMS = {
 		this.current_item_close_modifiers();
 
 		if(this.CURRENT<this.get_total()-1){
-			this.CURRENT+=1;
-			this.go_to(this.CURRENT);
+			this.CURRENT+=1;			
+			this.render_actual_range();
+			this.go_to(this.CURRENT);			
 		}else{
 			this.show_cant_next();
 		}
@@ -406,7 +420,8 @@ export var VIEW_ALLITEMS = {
 		
 		if(this.CURRENT>0){
 			this.CURRENT-=1;
-			this.go_to(this.CURRENT);
+			this.render_actual_range();
+			this.go_to(this.CURRENT);			
 		}else{
 			this.show_cant_prev();
 		}

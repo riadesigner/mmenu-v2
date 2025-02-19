@@ -15,6 +15,9 @@ export var CHEFSMENU = {
         this.CHEFS_URL = opt.CHEFS_URL;
         this.$body = $('body');
                 
+        window[this.G_DATA].ALLITEMS = {};
+        window[this.G_DATA].ARRITEMS = {};
+
         this.CLASS_MENU_IS_SHOWED = 'chefsmenu-is-showed';
         this.CLASS_READY_TO_USE = 'ready-to-use';
         this.CLASS_IIKO_MODE = 'menu-iiko-mode';
@@ -146,10 +149,15 @@ export var CHEFSMENU = {
         this.onMenuReady && this.onMenuReady();
 
     },
-    set_allitems:function(menu,allitems) {
+    // set items as associative array, where key = id_item
+    set_allitems_for_menu:function(menu,allitems) {
         return window[this.G_DATA].ALLITEMS[menu.id]=allitems; 
     },
-    get_allitems:function(menu) {
+    // get items 
+    // - as associative array, where key = id_item
+    // - as array
+    
+    get_allitems_for_menu:function(menu) {
         return window[this.G_DATA].ALLITEMS[menu.id];
     },
     get_cafe:function() {
