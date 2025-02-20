@@ -1394,7 +1394,7 @@ a.mm2-home-link:hover{ color: %[color-home-link-hover]%; }
   .mm2-menu{ padding: 2%;}  
   a.mm2-home-link{display: none;}
 
-  .mm2-item-btns-sizes-mobile{display: block;}
+  .mm2-item-btns-sizes-mobile{display: block; will-change: transform, opacity;}
   .mm2-item-btns-sizes-desktop{display: none;}
  
  /* --- FOOTER --- */
