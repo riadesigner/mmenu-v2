@@ -79,12 +79,8 @@ export var ITEM = {
 			this.init_model_item(CHEFS_ITEM);
 		}
 
-		
-		
 		this.insert_data();
-		this.update_lng();				
-		
-		// this.render();
+		this.update_lng();
 
 		return this;
 
@@ -95,6 +91,7 @@ export var ITEM = {
 			this.$elParent.append(this.$item);	
 			this.update_layout();
 			console.log("render ",this.item_data.title);
+			this.load_image(this.get().image_url);
 		}
 	},
 	unmount:function(){
@@ -102,6 +99,7 @@ export var ITEM = {
 			this.NOW_IN_VIEWPORT = false;
 			this.$item.detach();
 			console.log("unmount ",this.item_data.title);
+			this.cancel_loading_image();
 		}
 	},
 	get_view:function(){
@@ -297,14 +295,46 @@ export var ITEM = {
 	has_class_description:function() {
 		return this.$item.hasClass(this.CLASS_FULL_DESCRIPTION);
 	},
+	cancel_loading_image:function() {
+		if(this.AJX_IMG_LOADING){
+			this.AJX_IMG_LOADING.abort();
+			this.AJX_IMG_LOADING = null;
+		}
+	},
+	load_image:function(url) {
+		if(!this.IMAGE && url){
+			this.image_now_loading();
+
+			this.AJX_IMG_LOADING = $.ajax({
+				url: url,
+				method: 'GET',
+				cache: true,
+				xhrFields: {
+					responseType: 'blob'
+				},
+				success: (blob)=> {
+					this.TOTAL_BYTES_LOADED = blob.size;
+					console.log('Загружено:', GLB.CMN.formatBytes(blob.size), url);
+					const img = new Image();
+					img.onload = ()=>{ this.insert_image(img); }
+					img.src = URL.createObjectURL(blob);
+				},
+				error: (xhr, status, error)=> {
+					if(error==='abort'){
+						console.error('Загрузка отменена');
+					}else{
+						console.error('Ошибка загружки изображения:', error);
+					}					
+				}
+			});	
+		}
+	},
 	insert_image:function(image_object) {
-		var _this=this;
-		
+				
 		this.IMAGE = image_object;
 		this.image_end_loading();
 
 		var params = this.calc_image_bounds();
-		// var src = this.item_data.image_url;
 	
 		this.$image = $(image_object).css({
 			position:"absolute",
@@ -314,9 +344,9 @@ export var ITEM = {
 		});
 		this.$itemImageContainer.html(this.$image);
 
-		setTimeout(function() {
-			_this.$image.css({opacity:1,transition:"opacity 1s,transform .5s"});			
-			_this.$item.addClass(_this.CLASS_IMAGE_READY_TO_ZOOM);
+		setTimeout(()=> {
+			this.$image.css({opacity:1,transition:"opacity 1s,transform .5s"});			
+			this.$item.addClass(this.CLASS_IMAGE_READY_TO_ZOOM);
 		},100);
 
 	},	

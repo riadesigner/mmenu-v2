@@ -58,8 +58,8 @@ GLB.G_DATA = "CHEFSMENUGLOBALDATA";
 
 export default (function($){    
 
-    GLB.META_VIEWPORT.init();    
-    
+    GLB.META_VIEWPORT.init();        
+       
     /**
     * EXT_MODE – for mobile only.
     * if EXT_MODE, turn on:

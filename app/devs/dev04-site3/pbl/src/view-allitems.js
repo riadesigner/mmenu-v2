@@ -24,7 +24,6 @@ export var VIEW_ALLITEMS = {
 		this.ITEMS = {}; // GLB.ITEM objects
 		this.CURRENT = 0;
 		this.SAFE_NUMBER = 5;
-		this.TOTAL_BYTES_LOADED = 0;		
 
 		this.behavior();
 
@@ -35,7 +34,7 @@ export var VIEW_ALLITEMS = {
 		this.MENU = menu;
 		this.upade_header();
 		this._content_hide();		
-				
+
 		var allitems = this.chefsmenu.get_allitems_for_menu(this.MENU);		
 		console.log("allitems",allitems);		
 		
@@ -58,10 +57,6 @@ export var VIEW_ALLITEMS = {
 					this._content_show();					
 					setTimeout(()=>{ 
 						this.chefsmenu.end_loading(); 
-						// setTimeout(()=>{ 
-						// 	/// TODO loading only current image and nears
-						// 	this.start_load_images();
-						// },300);
 					},100);
 				})
 			},
@@ -116,7 +111,7 @@ export var VIEW_ALLITEMS = {
 		this.$headerIcon.addClass(this.CN+"icon-"+ GLB.MENU_ICONS.get(this.MENU.id_icon));		
 	},
 	render_actual_range:function() {
-		const range = this.calc_actual_range();	
+		const range = this.calc_actual_range();			
 		for(let i=0;i< this.ALL_ITEMS.arr.length;i++){
 			let item_id = this.ALL_ITEMS.arr[i].id;			
 			if(i>=range.start && i<=range.end){				
@@ -237,67 +232,15 @@ export var VIEW_ALLITEMS = {
 		}
 	
 	},
-	start_load_images:function() {
-		
-		this.AJX_IMG_LOADING && this.AJX_IMG_LOADING.abort();
-
-		this.ARR_NEED_TO_LOAD_IMAGE = [];		
-
-		var arr_items = this.get_all_items().arr;
-
-		if(this.get_total()){
-			for(var i=0;i<arr_items.length;i++){
-				arr_items[i].image_url && this.ARR_NEED_TO_LOAD_IMAGE.push(arr_items[i]);
-				arr_items[i].image_url && this.ITEMS[arr_items[i].id].image_now_loading();
-			}
-		};		
-
-		var fn = {
-			next_load_image:()=>{
-				var item = this.ARR_NEED_TO_LOAD_IMAGE.shift();								
-				if(item){					
-					fn.load_image(item,(image_object)=> {						
-						setTimeout(()=>{
-							this.ITEMS[item.id].insert_image(image_object);
-							fn.next_load_image();
-						},300);
-					});
-				}else{
-					console.log('Всего загружено:', GLB.CMN.formatBytes(this.TOTAL_BYTES_LOADED));
-					console.log('end loading images');
-				}
-			},
-			load_image:(item, doAfterLoad)=> {
-				
-				const url = item.image_url;
-			
-				this.AJX_IMG_LOADING = $.ajax({
-					url: url,
-					method: 'GET',
-					xhrFields: {
-						responseType: 'blob'
-					},
-					success: (blob)=> {
-						this.TOTAL_BYTES_LOADED += blob.size;
-						console.log('Загружено:', GLB.CMN.formatBytes(blob.size), url);
-						const img = new Image();
-						img.onload = function(){ doAfterLoad && doAfterLoad(this); }
-						img.src = URL.createObjectURL(blob);
-					},
-					error: (xhr, status, error)=> {
-						if(error==='abort'){
-							console.error('Загрузка отменена');
-						}else{
-							console.error('Ошибка загружки изображения:', error);
-						}
-						
-					}
-				});
-			}
-		};
-
-		fn.next_load_image();		
-
+	get_instances:function(items){
+		const item_instances = [];
+		for(let i=0;i<items.length;i++){
+			this.ITEMS[items[i].id] && item_instances.push(this.ITEMS[items[i].id]);
+		}
+		return item_instances;
+	},
+	get_items_from_range:function(range) {
+		return this.get_all_items().arr.slice(range.start, range.end);
 	},
 	/**
 	 * @return {array} arr_items
@@ -333,7 +276,6 @@ export var VIEW_ALLITEMS = {
 					// creating new instance of ITEM model
 					var newItem  = $.extend({},GLB.ITEM); 
 					ITEMS[arr_items[i].id] = newItem.init( this, arr_items[i], i );
-					// ITEMS[arr_items[i].id].render();
 				}
 			};		
 			res(ITEMS);
@@ -406,8 +348,8 @@ export var VIEW_ALLITEMS = {
 
 		if(this.CURRENT<this.get_total()-1){
 			this.CURRENT+=1;			
-			this.render_actual_range();
-			this.go_to(this.CURRENT);			
+			this.render_actual_range();			
+			this.go_to(this.CURRENT);				
 		}else{
 			this.show_cant_next();
 		}
@@ -421,7 +363,7 @@ export var VIEW_ALLITEMS = {
 		if(this.CURRENT>0){
 			this.CURRENT-=1;
 			this.render_actual_range();
-			this.go_to(this.CURRENT);			
+			this.go_to(this.CURRENT);
 		}else{
 			this.show_cant_prev();
 		}
