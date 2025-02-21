@@ -484,8 +484,13 @@ App&&App();
 		</div>
 		<div class="app-view-page">		
 			<div class="app-view-page-container overflow-y">
-				<div class="std-form">					
+				<div class="std-form">	
 					
+					<div class="iiko-mode-only">
+						<h2>Всего столов в iiko</h2>
+						<p class="iiko-tables-total-message"><!-- всего настроенных столов в iiko --></p>
+					</div>
+
 					<h2>Получить QR-коды:</h2>
 					<p>Выберите нужные столы и нажмите кнопку <strong>Отправить</strong>. QR-коды будут сгенерированы и отправлены на почту администратора <strong><span class="adm_email"></span></strong>.</p>					
 					<div class="wrapper-qrcode-list-of-table-sections">
