@@ -156,7 +156,7 @@ export var VIEW_IIKO_ADDING_API_KEY = {
         return new Promise((res,rej)=>{
             
             let PATH = 'adm/lib/iiko/';
-            let url = PATH + 'lib.save_cafe_iiko_api_key.php';
+            let url = PATH + 'lib.add_new_iiko_api_key.php';
         
             var data = {
                 id_cafe:GLB.THE_CAFE.get().id,
@@ -212,10 +212,7 @@ export var VIEW_IIKO_ADDING_API_KEY = {
         };      
 
         var msk = /^[0-9a-zA-Z].[\-0-9a-zA-Z]*$/g;
-        var errMsg = GLB.LNG.get([
-            '-',
-            'Для имени допустимы только бувы латинского алфавита, цифры и тире. Имя должно начинаться с буквы или цифры.'
-                ]);
+        var errMsg = 'Несуществующий API-key.';
         if(!msk.test(iiko_api_key)){
             GLB.VIEWS.modalMessage({
                 title:GLB.LNG.get("lng_attention"),

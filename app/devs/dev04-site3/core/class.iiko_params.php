@@ -3,12 +3,11 @@
 if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 /**
  * 	СОБИРАЕМ И ОБНОВЛЯЕМ ВСЕ ПАРАМЕТРЫ IIKO
- *  @param Smart_object $cafe
+ *  @param <Smart_object> $cafe
  *  
 */
 class Iiko_params{
-		
-	private Smart_object $cafe;
+	private Smart_object $cafe;				
 	private Smart_object $iiko_params;	
 	private string $API_KEY;
 	private string $token; 
@@ -25,14 +24,15 @@ class Iiko_params{
 	private array $ROUGH_DATA;
 
 	function __construct(Smart_object $cafe){
-		$this->cafe = $cafe;			
+		if( !$cafe || !$this->check_iiko_key($cafe->iiko_api_key) ){
+			throw new Exception("not valid iiko api key"); 
+		}	
+		$this->cafe = $cafe;	
 		$this->API_KEY = $cafe->iiko_api_key;
-		if(empty($this->API_KEY)){ throw new Exception("not found iiko api key"); }
 		return $this;
 	}
 
-	public function reload(): void{
-		if(!$this->check_iiko_key()){ throw new Exception("not valid iiko api key"); }
+	public function reload(): void{		
 		$this->ROUGH_DATA = [];			
 		$this->read_iiko_params_for_cafe();
 		$this->read_organizations_info();
@@ -99,9 +99,10 @@ class Iiko_params{
 		$this->iiko_params->terminal_groups = json_encode($this->arr_terminals, JSON_UNESCAPED_UNICODE);	
 		$this->iiko_params->tables = json_encode($this->arr_tables, JSON_UNESCAPED_UNICODE);	
 		$this->iiko_params->order_types = json_encode($this->arr_order_types, JSON_UNESCAPED_UNICODE);	
-		$this->iiko_params->extmenus = json_encode($this->arr_extmenus, JSON_UNESCAPED_UNICODE);	;	
-	
-		$this->iiko_params->current_extmenu_id = $this->iiko_current_extmenu_id;
+		if($this->arr_extmenus && count($this->arr_extmenus)){
+			$this->iiko_params->extmenus = json_encode($this->arr_extmenus, JSON_UNESCAPED_UNICODE);	;	
+			$this->iiko_params->current_extmenu_id = $this->iiko_current_extmenu_id;
+		}		
 		$this->iiko_params->current_organization_id = $this->current_organization_id;
 		$this->iiko_params->current_terminal_group_id = $this->current_terminal_group_id;	
 		$this->iiko_params->current_terminal_group_status = $this->current_terminal_group_status;	
@@ -118,11 +119,15 @@ class Iiko_params{
 		}
 	
 	}
-
-	private function check_iiko_key():bool{
+	
+	private function check_iiko_key(string $api_key):bool{
+		if(empty($api_key)) {
+			glogError("empty api key");	
+			return false;
+		}
 		$url     = 'api/1/access_token';
 		$headers = ["Content-Type"=>"application/json"];
-		$params  = ["apiLogin" => $this->API_KEY];
+		$params  = ["apiLogin" => $api_key];
 		$res = iiko_get_info($url,$headers,$params);
 		if( isset($res["errorDescription"]) ) {
 			if(str_contains((string) $res["errorDescription"], "is not authorized")){				
@@ -165,7 +170,7 @@ class Iiko_params{
 
 	private function read_extmenus_info(): void{
 		$this->arr_extmenus = $this->iiko_get_extmenus_info($this->token);	
-		if(!count($this->arr_extmenus))throw new Exception("--has not menus");
+		if(!count($this->arr_extmenus)) return;
 		$this->ROUGH_DATA["EXTERNALMENUS"] = $this->arr_extmenus;	
 		$this->iiko_current_extmenu_id = $this->calc_new_current_extmenu_id($this->arr_extmenus, $this->iiko_params->current_extmenu_id);
 	}	
