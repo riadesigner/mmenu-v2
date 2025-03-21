@@ -1028,24 +1028,21 @@ App&&App();
 			<div class="app-view-page-container overflow-y">
 				<div class="std-form">
 					 
-					<p>Здесь вы можете пригласить сотрудников в кафе и назначить им роли.</p>			
+					<p>Здесь вы можете пригласить сотрудников в кафе и назначить им роли.</p>
 
-					<p><strong><i>Официант</i></strong> – будет получать заказы на стол (в кафе).</p>
-					<p><strong><i>Менеджер</i></strong> – будет получать внешние заказы на доставку или самовывоз.</p>
-					<p><strong><i>Администратор</i></strong> – будет получать статистику по всем заказам за день.</p>					
+					<p>Все заказы приходят в специальный телеграм канал <strong>@<?=$CFG->tg_cart_bot;?></strong>. 
+						После подтверждения заказа, официант или менеджер могут переправить его на кассу.</p>
+											
 
-					<p>Все заказы приходят в специальный телеграм-чат <strong>@<?=$CFG->tg_cart_bot;?></strong>. 
-					После подтверждения заказа, официант или менеджер могут переправить его на кассу.</p>
+					<h2>Выберите роль для себя:</h2>
 
-					<h2>Получение заказов:</h2>
+					<p>Выберите роль для себя и получите ссылку-приглашение в телеграм канал вашего кафе, чтобы работать с заказами.</p>
 
 					<div class="customizing-cart__tg-links-section-attention std-form__highlight-field">
 						<strong>Не найдено ни одного телеграм ключа!</strong><br>Нажмите ниже «Сбросить телеграм ключи».
 					</div>
 
-					<div class="customizing-cart__tg-links-section">
-
-						<p>Выберите нужную роль, чтобы зарегистрироваться в чате.</p >
+					<div class="customizing-cart__tg-links-section">						
 						
 						<div class="customizing-cart__all-keylinks">
 							<a href="<?=$CFG->http.$CFG->wwwroot;?>" target="_blank" class="link-waiter"><button class="std-special-single-button">ОФИЦИАНТ</button></a>
@@ -1053,10 +1050,9 @@ App&&App();
 							<a href="<?=$CFG->http.$CFG->wwwroot;?>" target="_blank" class="link-supervisor"><button class="std-special-single-button">АДМИНИСТРАТОР</button></a>
 						</div>
 
-						<h2 id="anchor_invitation">Пригласить сотрудника:</h2>
+					<h2 id="anchor_invitation">Пригласите сотрудника:</h2>
 
-						<p>Чтобы пригласить в специальный телеграм-чат нового сотрудника, 
-							нажмите соответствующую кнопку ниже. Выберите любой из вариантов – ссылку-приглашение или QR-код.</p>
+						<p>Чтобы пригласить нового сотрудника, перешлите ему ссылку соответствующеее приглашение с нужной ролью. Или покажите ему соответствующий QR-код.</p>
 
 						<h3>Ссылка-приглашение:</h3>
 						<div class="customizing-cart__all-invite-links">
@@ -1074,23 +1070,29 @@ App&&App();
 
 					</div>					
 					
-					<hr>
+					<h2>Сотрудники кафе:</h2>
 
 					<div class="customizing-cart__all-tgusers">
-						<p>Сейчас для кафе зарегистрированы телеграм пользователи:</p>
+						<p>Сейчас в кафе зарегистрированы следующие сотрудники:</p>
 						<ul>
 							<li class="tgusers-role-waiter">Официанты: <span>нет</span></li>
 							<li class="tgusers-role-manager">Менеджеры: <span>нет</span></li>
 							<li class="tgusers-role-supervisor">Администраторы: <span>нет</span></li>
 						</ul>
 					</div>
-					
-					<hr>						
+
+					<h2>Справка:</h2>
+
+					<p><strong><i>Официант</i></strong> – будет получать заказы на стол (в кафе).</p>
+					<p><strong><i>Менеджер</i></strong> – будет получать внешние заказы на доставку или самовывоз.</p>
+					<p><strong><i>Администратор</i></strong> – будет получать статистику по всем заказам за день.</p>					
+
+					<h2>Удаление сотрудников:</h2>						
 					
 					<div class="super-admin-only">						
 						<p>Если нужно отозвать все разрешения и заново пересоздать ключи для доступа в телеграм, выберите:</p>
 						<button name="update_all_tg_keys">Сбросить телеграм ключи</button>
-					</div>
+					</div>								
 					
 				</div>										
 			</div>
