@@ -16,7 +16,8 @@ export var VIEW_CUSTOMIZE_ALL = {
 		this.$titleGetContract = this.$form.find('.title-get-contract');				
 
 		this.$btnChangePassword = this.$form.find('.btn-change-password');
-		this.$btnChangeCartSettings = this.$form.find('.btn-cart-settings');
+		this.$btnCartSettings = this.$form.find('.btn-cart-settings');
+		this.$btnStaffSettings = this.$form.find('.btn-staff-settings');
 		this.$btnChangeSubdomain = this.$form.find('.btn-change-subdomain');
 		this.$btnAddIiko = this.$form.find('.btn-add-iiko');				
 		this.$btnIikoCustomization = this.$form.find('.btn-iiko-customization');				
@@ -153,13 +154,21 @@ export var VIEW_CUSTOMIZE_ALL = {
 			e.originalEvent.cancelable && e.preventDefault();
 		});		
 
-		this.$btnChangeCartSettings.on('touchend',function(e){			
+		this.$btnCartSettings.on('touchend',function(e){			
 			if(!_this.VIEW_SCROLLED){				
 			GLB.VIEW_CUSTOMIZING_CART.update(_this.ID_USER);
 			GLB.VIEWS.setCurrent(GLB.VIEW_CUSTOMIZING_CART.name);
 			};
 			e.originalEvent.cancelable && e.preventDefault();
 		});		
+
+		this.$btnStaffSettings.on('touchend',function(e){			
+			if(!_this.VIEW_SCROLLED){				
+			GLB.VIEW_CUSTOMIZING_STAFF.update(_this.ID_USER);
+			GLB.VIEWS.setCurrent(GLB.VIEW_CUSTOMIZING_STAFF.name);
+			};
+			e.originalEvent.cancelable && e.preventDefault();
+		});
 
 		this.$btnMenuLink.on('touchend',function(e){			
 			if(!_this.VIEW_SCROLLED){				

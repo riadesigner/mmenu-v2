@@ -11,10 +11,8 @@ export var VIEW_CUSTOMIZING_CART = {
 		
 		this.$buttonsCartMode = this.$view.find('.customizing-cart__cart-mode');
 		this.$buttonsDeliveryMode = this.$view.find('.customizing-cart__delivery-mode');		
-		this.$buttonsOrderWayMode = this.$view.find('.customizing-cart__order-way-mode');		
-				
-		// this.$iikoSectionOnly = this.$view.find('.iiko-section-only');
-
+		this.$buttonsOrderWayMode = this.$view.find('.customizing-cart__order-way-mode');				
+		
 		this.behavior();
 
 		return this;

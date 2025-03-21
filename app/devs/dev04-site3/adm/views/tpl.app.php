@@ -1012,7 +1012,7 @@ App&&App();
 	</div>	
 <!-- - - - - - - - VIEW CUSTOMIZING STAFF - - - - - - - - - - - - - - - -->
 
-<div class="app-view view-customizing-staff">
+	<div class="app-view view-customizing-staff">
 		<div class="app-view-header">
 			
 			<div class="view-header-title">
