@@ -98,6 +98,5 @@ echo  "nomenclature:";
 echo  "<pre>";
 echo json_encode($res);
 echo  "</pre>";   
-// 9da77ff8-862d-45e4-a7f2-a5117910fa66
 
 ?>
