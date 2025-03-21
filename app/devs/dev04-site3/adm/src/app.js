@@ -23,6 +23,7 @@ import {VIEW_ITEM_IMAGE_CHANGE} from './view-item-image-change.js';
 import {VIEW_CUSTOMIZE_ALL} from './view-customize-all.js';
 import {VIEW_CUSTOMIZING_CAFE} from './view-customizing-cafe.js';
 import {VIEW_CUSTOMIZING_CART} from './view-customizing-cart.js';
+import {VIEW_CUSTOMIZING_STAFF}	from './view-customizing-staff.js';
 import {VIEW_CUSTOMIZE_INTERFACE} from './view-customize-interface.js';
 import {VIEW_CAFE_DESCRIPTION} from './view-cafe-description.js';
 import {VIEW_REPLACING_PARENT_SECTION} from './view-replacing-parent-section.js';
@@ -71,6 +72,7 @@ GLB.VIEW_CUSTOMIZE_ALL = $.extend( VIEW_CUSTOMIZE_ALL, VIEW_STD);
 GLB.VIEW_ITEM_IMAGE_CHANGE = $.extend( VIEW_ITEM_IMAGE_CHANGE, VIEW_STD);
 GLB.VIEW_CUSTOMIZING_CAFE = $.extend( VIEW_CUSTOMIZING_CAFE, VIEW_STD);
 GLB.VIEW_CUSTOMIZING_CART = $.extend( VIEW_CUSTOMIZING_CART, VIEW_STD);
+GLB.VIEW_CUSTOMIZING_STAFF = $.extend( VIEW_CUSTOMIZING_STAFF, VIEW_STD);
 GLB.VIEW_CUSTOMIZE_INTERFACE = $.extend( VIEW_CUSTOMIZE_INTERFACE, VIEW_STD);
 GLB.VIEW_CAFE_DESCRIPTION = $.extend( VIEW_CAFE_DESCRIPTION, VIEW_STD);
 GLB.VIEW_MAIN_HELP = $.extend( VIEW_MAIN_HELP, VIEW_STD); // todo Send email to Support
@@ -150,8 +152,15 @@ export default function(){
 		name:"view-customizing-cart",
 		template:"#templates .view-customizing-cart",
 		anim:'animLeft',
-		vars:{tgbot_link:CFG.tgbot_link}
 	}));
+
+	VIEWS.addView(
+		VIEW_CUSTOMIZING_STAFF.init({
+		name:"view-customizing-staff",
+		template:"#templates .view-customizing-staff",
+		anim:'animLeft',
+		vars:{tgbot_link:CFG.tgbot_link}
+	}));	
 
 	VIEWS.addView(
 		VIEW_CAFE_DESCRIPTION.init({

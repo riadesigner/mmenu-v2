@@ -825,6 +825,9 @@ App&&App();
 
 					<div class="std-form__section-description" >Здесь вы можете настроить получение заказов</div>
 					<div class="std-form__wide-button btn-cart-settings bright-btn" >Настроить Корзину</div>
+
+					<div class="std-form__section-description" >Здесь вы можете добавить сотрудников</div>
+					<div class="std-form__wide-button btn-staff-settings bright-btn" >Сотрудники кафе</div>					
 					
 					<div class="std-form__section-description" lang="lng_view_customize_all__menu_link"><!-- Здесь вы можете скачать QR-код и поделиться ссылкой на ваше меню --></div>					
 					<div class="std-form__wide-button btn-menu-link" lang="lng_view_customize_all__menu_link_btn"><!-- Ссылка на QR-код --></div>	
@@ -983,9 +986,9 @@ App&&App();
 		<div class="app-view-page">
 			<div class="app-view-page-container overflow-y">
 				<div class="std-form">
-					 
+						
 					<p>Выберите режим корзины и способ приема заказов:</p>					
-
+			
 					<h2>Корзина:</h2>
 					<div class="customizing-cart__cart-mode"><!-- [code] --></div>
 
@@ -995,16 +998,46 @@ App&&App();
 					<div class="iiko-mode-only">
 						<h2>Отправка заказа:</h2>
 						<div class="customizing-cart__order-way-mode"><!-- [code] --></div>
-					</div>					
+					</div>	
+					
+				</div>										
+			</div>
+		</div>
+		<div class="app-view-loader"><span></span></div>
+		<div class="app-view-footer">
+			<div class="button-section"><div class="button cancel"><span lang="lng_cancel"><!-- Cancel --></span></div></div>
+			<div class="button-section"></div>
+			<div class="button-section"><div class="button save"><span lang="lng_save"><!-- Save --></span></div></div>
+		</div>
+	</div>	
+<!-- - - - - - - - VIEW CUSTOMIZING STAFF - - - - - - - - - - - - - - - -->
 
-					<h2>Получение заказов:</h2>
+<div class="app-view view-customizing-staff">
+		<div class="app-view-header">
+			
+			<div class="view-header-title">
+				<div class="view-header-title_icon ico-adm-customizing"></div>
+				<div class="view-header-title_text">Настройка персонала</div>
+			</div>			
 
-					<p>Все заказы приходят в специальный телеграм-чат <strong>@<?=$CFG->tg_cart_bot;?></strong></p>					
-					<p>В этом чате у участников есть три роли:</p>
+			<div class="view-header-buttons">
+				<div class="view-header-buttons__button view-header-buttons__button_help"></div>
+			</div>
+		</div>
+		<div class="app-view-page">
+			<div class="app-view-page-container overflow-y">
+				<div class="std-form">
+					 
+					<p>Здесь вы можете пригласить сотрудников в кафе и назначить им роли.</p>			
 
 					<p><strong><i>Официант</i></strong> – будет получать заказы на стол (в кафе).</p>
 					<p><strong><i>Менеджер</i></strong> – будет получать внешние заказы на доставку или самовывоз.</p>
 					<p><strong><i>Администратор</i></strong> – будет получать статистику по всем заказам за день.</p>					
+
+					<p>Все заказы приходят в специальный телеграм-чат <strong>@<?=$CFG->tg_cart_bot;?></strong>. 
+					После подтверждения заказа, официант или менеджер могут переправить его на кассу.</p>
+
+					<h2>Получение заказов:</h2>
 
 					<div class="customizing-cart__tg-links-section-attention std-form__highlight-field">
 						<strong>Не найдено ни одного телеграм ключа!</strong><br>Нажмите ниже «Сбросить телеграм ключи».
@@ -1068,7 +1101,7 @@ App&&App();
 			<div class="button-section"></div>
 			<div class="button-section"><div class="button save"><span lang="lng_save"><!-- Save --></span></div></div>
 		</div>
-	</div>	
+	</div>		
 
 <!-- - - - - - - - VIEW CAFE DESCRIPTION - - - - - - - - - - - - - - - - - - -->
 
@@ -1100,9 +1133,8 @@ App&&App();
 		</div>
 	</div>
 
-<!-- - - - - - - - VIEW CAFE TABLES - - - - - - - - - - - - - -->
-	
-<div class="app-view view-cafe-tables">
+<!-- - - - - - - - VIEW CAFE TABLES - - - - - - - - - - - - - -->	
+	<div class="app-view view-cafe-tables">
 		<div class="app-view-header">
 			
 			<div class="view-header-title">
