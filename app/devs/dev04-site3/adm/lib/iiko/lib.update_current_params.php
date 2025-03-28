@@ -42,44 +42,48 @@
 	
 	$iiko_params_collect = new Smart_collect("iiko_params", "where id_cafe='".$id_cafe."'");
 	if(!$iiko_params_collect || !$iiko_params_collect->full()) __errorjsonp("Not found iiko params for cafe {$id_cafe}");	
-	$saved_params = $iiko_params_collect->get(0);
+	$saved_params = $iiko_params_collect->get(0);	
+	
 
-	// --------------------------------------
-	//  RELOAD ALL PARAMS FROM IIKO IF NEEDS
-	// --------------------------------------
+	// ---------------------------------
+	//  RELOAD ALL PARAMS FROM IIKO 
+	//  IF ORGANIZATION_ID IS DIFFERENT
+	// ---------------------------------
 	if($saved_params->current_organization_id !== $current_organization_id){		
+		try{			
+			$IIKO_PARAMS = new Iiko_params($id_cafe, $cafe->iiko_api_key);
+			$IIKO_PARAMS->reload($current_organization_id);
+
+			// // ----------------------------
+			// //  UPDATING CAFE DESCRIPTIONS
+			// // ----------------------------
+			// $org = $IIKO_PARAMS->get_current_organization();
+			// if(!$org || !count($org)) __errorjsonp("--wrong iiko params. cant find organization");		
+			// $cafe->cafe_title = $org["name"];
+			// $cafe->cafe_address = $org["restaurantAddress"];
+			// $cafe->chief_cook="";
+			// $cafe->cafe_description="Нет описания";
+			// $cafe->updated_date = 'now()';
+			// $cafe->rev+=1;
+			// $cafe->save();
+
+			__answerjsonp($IIKO_PARAMS->export());
+		}catch(Exception $e){
+			glogError($e->getMessage());
+			__errorjsonp("failed (1) reload iiko params for cafe ".$cafe->id);
+		}
+
+	} else {
 		try{
 			$IIKO_PARAMS = new Iiko_params($cafe);		
-			$IIKO_PARAMS->reload();
-
-			// ----------------------------
-			//  UPDATING CAFE DESCRIPTIONS
-			// ----------------------------
-			$org = $IIKO_PARAMS->get_current_organization();
-			if(!$org || !count($org)) __errorjsonp("--wrong iiko params. cant find organization");		
-			$cafe->cafe_title = $org["name"];
-			$cafe->cafe_address = $org["restaurantAddress"];
-			$cafe->chief_cook="";
-			$cafe->cafe_description="Нет описания";
-			$cafe->updated_date = 'now()';
-			$cafe->rev+=1;
-			$cafe->save();
-
+			// $IIKO_PARAMS->set_current_terminal_group_id($current_terminal_group_id);
+			// $IIKO_PARAMS->set_current_extmenu_id($current_extmenu_id);
+			// $IIKO_PARAMS->save();
+			__answerjsonp($IIKO_PARAMS->export());
 		}catch(Exception $e){
-			__errorjsonp("failed reload iiko params for cafe ".$cafe->id);
+			glogError($e->getMessage());
+			__errorjsonp("failed (2) reload iiko params for cafe ".$cafe->id);
 		}
-	}
-	// ----------------
-	//  UPDATE CURENTS
-	// ----------------
-	$saved_params->current_organization_id = $current_organization_id;
-	$saved_params->current_terminal_group_id = $current_terminal_group_id;
-	$saved_params->current_extmenu_id = $current_extmenu_id;
-	$saved_params->updated_date = 'now()';		
-	if(!$saved_params->save()){
-		__errorjsonp("failed save iiko params for cafe ".$cafe->id);
-	}
-
-	__answerjsonp("ok");
+	}	
 	
 ?>

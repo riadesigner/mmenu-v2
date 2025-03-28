@@ -2,17 +2,22 @@
 
 if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 /**
- * 	СОБИРАЕМ И ОБНОВЛЯЕМ ВСЕ ПАРАМЕТРЫ IIKO
- *  @param <Smart_object> $cafe
- *  
+ * 	СОБИРАЕМ И ОБНОВЛЯЕМ ВСЕ ПАРАМЕТРЫ IIKO ДЛЯ КАФЕ
+ * 
+ *  @param <int> $id_cafe
+ *  @param <string> $iiko_api_key
+ * 
+ *  @return <Iiko_params> $this
 */
 class Iiko_params{
-	private Smart_object $cafe;				
-	private Smart_object $iiko_params;	
+	private int $id_cafe;
 	private string $API_KEY;
+	private Smart_object $iiko_params;		
 	private string $token; 
+	private array $ROUGH_DATA;
+	private string $switch_to_current_organization_id;
 	private string $current_organization_id;
-	private string $iiko_current_extmenu_id;
+	private string $current_extmenu_id;
 	private string $current_terminal_group_id;
 	private string $current_terminal_group_status;	
 	private array $arr_organizations;
@@ -21,27 +26,28 @@ class Iiko_params{
 	private array $arr_terminals;
 	private array $arr_tables;
 	private array $arr_order_types;
-	private array $ROUGH_DATA;
 
-	function __construct(Smart_object $cafe){
-		if( !$cafe || !$this->check_iiko_key($cafe->iiko_api_key) ){
+	function __construct(int $id_cafe, string $iiko_api_key){
+		if( !$id_cafe || !$this->check_iiko_key($iiko_api_key) ){
 			throw new Exception("not valid iiko api key"); 
 		}	
-		$this->cafe = $cafe;	
-		$this->API_KEY = $cafe->iiko_api_key;
+		$this->id_cafe = $id_cafe;	
+		$this->API_KEY = $iiko_api_key;
+		// read iiko params from db
+		$this->iiko_params = $this->read_params_for_cafe($id_cafe);
 		return $this;
 	}
 
-	public function reload(): void{		
-		$this->ROUGH_DATA = [];			
-		$this->read_iiko_params_for_cafe();
+	public function reload(string $new_current_organization_id = ""): bool{	
+		$this->switch_to_current_organization_id = $new_current_organization_id;
+		$this->ROUGH_DATA = [];
 		$this->read_organizations_info();
 		$this->read_extmenus_info();
 		$this->read_terminals_info();
 		$this->read_iiko_tables_info();
 		$this->read_order_types();	
 		$this->read_status_current_terminal_group();			
-		$this->update_db();
+		return $this->update_db();		
 	}
 
 	public function get(): Smart_object{
@@ -52,6 +58,7 @@ class Iiko_params{
 		return $this->token;
 	}
 	
+	// return info about current organization 
 	public function get_current_organization(): array{
 		$currentOrganization = null;
 		$id = $this->current_organization_id;
@@ -66,6 +73,10 @@ class Iiko_params{
 
 	public function export(): array{
 		return $this->iiko_params->export();		
+	}
+
+	public function set_current_terminal_group_id(string $id): void{
+		$this->current_terminal_group_id = $id;
 	}
 
 	public function read_status_current_terminal_group():void {					
@@ -101,7 +112,7 @@ class Iiko_params{
 		$this->iiko_params->order_types = json_encode($this->arr_order_types, JSON_UNESCAPED_UNICODE);	
 		if($this->arr_extmenus && count($this->arr_extmenus)){
 			$this->iiko_params->extmenus = json_encode($this->arr_extmenus, JSON_UNESCAPED_UNICODE);	;	
-			$this->iiko_params->current_extmenu_id = $this->iiko_current_extmenu_id;
+			$this->iiko_params->current_extmenu_id = $this->current_extmenu_id;
 		}		
 		$this->iiko_params->current_organization_id = $this->current_organization_id;
 		$this->iiko_params->current_terminal_group_id = $this->current_terminal_group_id;	
@@ -110,17 +121,16 @@ class Iiko_params{
 		$this->iiko_params->rough_data = json_encode($this->ROUGH_DATA, JSON_UNESCAPED_UNICODE);	
 		$this->iiko_params->updated_date = 'now()';
 	
-		glog("------------------- IIKO LOADED ROUGH_DATA ---------------- \n".print_r($this->ROUGH_DATA,1));
+		glog("-- IIKO LOADED ROUGH_DATA -- \n".print_r($this->ROUGH_DATA,1));
+		return $this->save();
+	}
 
-		if($this->iiko_params->save()){	
-			return true;			
-		}else{
-			throw new Exception("Can't save iiko_params for ".$this->iiko_params->id_cafe);
-		}
-	
+	public function save(): bool {
+		return $this->iiko_params->save();
 	}
 	
 	private function check_iiko_key(string $api_key):bool{
+		glog("check_iiko_key: ".$api_key);
 		if(empty($api_key)) {
 			glogError("empty api key");	
 			return false;
@@ -149,30 +159,40 @@ class Iiko_params{
 		return true;
 	}
 
-	private function read_iiko_params_for_cafe(): void{
-		$id_cafe = $this->cafe->id;
+	private function read_params_for_cafe(int $id_cafe): Smart_object{		
 		$iiko_params_collect = new Smart_collect("iiko_params", "where id_cafe='".$id_cafe."'");
 		if($iiko_params_collect->full()){
-			$this->iiko_params = $iiko_params_collect->get(0);
+			return $iiko_params_collect->get(0);			
 		}else{
-			$this->iiko_params = new Smart_object("iiko_params");
-			$this->iiko_params->id_cafe = $id_cafe;		
-			if(!$this->iiko_params->save()) throw new Exception("Something wrong. Can`t saving iiko params");
-		}
+			$iiko_params = new Smart_object("iiko_params");
+			$iiko_params->id_cafe = $id_cafe;		
+			if(!$iiko_params->save()) throw new Exception("Something wrong. Can`t saving iiko params");			
+			return $iiko_params;
+		}		
 	}
 
 	private function read_organizations_info(): void{
 		$this->arr_organizations = $this->iiko_get_organizations_info($this->token);
 		if(!count($this->arr_organizations))throw new Exception("--unknown organization");
-		$this->current_organization_id = $this->arr_organizations[0]["id"];	
-		$this->ROUGH_DATA["ORGANIZATIONS"] = $this->arr_organizations;	
+		if(!$this->switch_to_current_organization_id){
+			$this->current_organization_id = $this->arr_organizations[0]["id"];	
+		}else{
+			foreach($this->arr_organizations as $organization){
+				if($organization["id"] == $this->switch_to_current_organization_id){
+					$this->current_organization_id = $organization["id"];
+					break;
+				}
+			}
+		}
+		$this->ROUGH_DATA["ORGANIZATIONS"] = $this->arr_organizations;			
 	}	
 
 	private function read_extmenus_info(): void{
 		$this->arr_extmenus = $this->iiko_get_extmenus_info($this->token);	
-		if(!count($this->arr_extmenus)) return;
-		$this->ROUGH_DATA["EXTERNALMENUS"] = $this->arr_extmenus;	
-		$this->iiko_current_extmenu_id = $this->calc_new_current_extmenu_id($this->arr_extmenus, $this->iiko_params->current_extmenu_id);
+		if(count($this->arr_extmenus)){
+			$this->ROUGH_DATA["EXTERNALMENUS"] = $this->arr_extmenus;	
+			$this->current_extmenu_id = $this->calc_new_current_extmenu_id($this->arr_extmenus, $this->iiko_params->current_extmenu_id);
+		}		
 	}	
 
 	private function read_iiko_tables_info(): void{

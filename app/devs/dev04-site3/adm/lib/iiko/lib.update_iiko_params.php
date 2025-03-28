@@ -41,9 +41,8 @@
 	
 	try{
 
-		$IIKO_PARAMS = new Iiko_params($cafe);		
+		$IIKO_PARAMS = new Iiko_params($id_cafe, $cafe->iiko_api_key);
 		$IIKO_PARAMS->reload();
-		// $current_terminal_group_status = $IIKO_PARAMS->get_status_current_terminal_group();
 		
 		__answerjsonp($IIKO_PARAMS->export());
 

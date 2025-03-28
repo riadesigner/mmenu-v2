@@ -24,6 +24,7 @@ export var VIEW_IIKO_CUSTOMIZATION = {
 		
 		this.SITE_URL = CFG.base_url;
 		this.USER_EMAIL = CFG.user_email;
+		this.DATA = {};
 		
 		this.IIKO_QRCODE_TABLES_URL = "/link-iiko-qrcode_tables"; 
 		
@@ -56,31 +57,31 @@ export var VIEW_IIKO_CUSTOMIZATION = {
 		console.log(' ----------- iiko_params = ',iiko_params);
 
 		// SHOW ORGANIZATIONS INFO (WITH CURRENT)
-		let orgs = iiko_params['organizations']!==''?JSON.parse(iiko_params['organizations']):{};		
+		this.DATA.orgs = iiko_params['organizations']!==''?JSON.parse(iiko_params['organizations']):{};		
 		this.CURRENT_ORGANIZATION_ID = iiko_params['current_organization_id'];
 		this.NEW_ORGANIZATION_ID = this.CURRENT_ORGANIZATION_ID;
-		this.update_organizations_list(orgs, this.CURRENT_ORGANIZATION_ID);
+		this.update_organizations_list(this.DATA.orgs, this.CURRENT_ORGANIZATION_ID);		 
 		
 		// SHOW TERMINAL INFO
-		let terminal_groups = iiko_params['terminal_groups']?JSON.parse(iiko_params['terminal_groups']):[];
+		this.DATA.terminal_groups = iiko_params['terminal_groups']?JSON.parse(iiko_params['terminal_groups']):[];
 		this.CURRENT_TERMINAL_GROUP_ID = iiko_params['current_terminal_group_id'];
 		this.NEW_TERMINAL_GROUP_ID = this.CURRENT_TERMINAL_GROUP_ID;
-		this.update_terminals_list(terminal_groups, iiko_params['current_terminal_group_id']);	
+		this.update_terminals_list(this.DATA.terminal_groups, this.CURRENT_TERMINAL_GROUP_ID);		
 		
 		// SHOW STATUS OF CURRENT TERMINAL GROUP
-		let current_terminal_group_name = this.get_terminal_group_name(this.CURRENT_TERMINAL_GROUP_ID, terminal_groups);
+		let current_terminal_group_name = this.get_terminal_group_name(this.CURRENT_TERMINAL_GROUP_ID, this.DATA.terminal_groups);
 		let terminal_groups_status = iiko_params['current_terminal_group_status']||"Не определен";
 		terminal_groups_status === 1||"true"||true ? terminal_groups_status = "Активен" : terminal_groups_status = "Не активен";
-		this.update_terminal_status_info(current_terminal_group_name, terminal_groups_status);			
+		this.update_terminal_status_info(current_terminal_group_name, terminal_groups_status);					
 
 		// SHOW TABLES INFO
-		let table_sections = iiko_params['tables']?JSON.parse(iiko_params['tables']):[];
-		this.update_tables_list(table_sections, terminal_groups);
+		this.DATA.table_sections = iiko_params['tables']?JSON.parse(iiko_params['tables']):[];
+		this.update_tables_list(this.DATA.table_sections, this.DATA.terminal_groups);		
 
-		const iiko_arr_extmenus = iiko_params['extmenus']!==""?JSON.parse(iiko_params['extmenus']):[];				
+		this.DATA.iiko_arr_extmenus = iiko_params['extmenus']!==""?JSON.parse(iiko_params['extmenus']):[];				
 		this.CURRENT_EXTMENU_ID = iiko_params['current_extmenu_id'].toString();					
 		this.NEW_IIKO_EXTMENU_ID = this.CURRENT_EXTMENU_ID;
-		this.update_extmenus(iiko_arr_extmenus, this.CURRENT_EXTMENU_ID);
+		this.update_extmenus(this.DATA.iiko_arr_extmenus, this.CURRENT_EXTMENU_ID);		
 		
 		setTimeout(()=>{							
 			this._page_show();
@@ -103,7 +104,7 @@ export var VIEW_IIKO_CUSTOMIZATION = {
 		
 		let need2save = false;
 		
-		//CHECK THE MENUS ID				
+		// CHECK THE MENUS_ID, ORGANIZATION_ID, TERMINAL_GROUP_ID				
 		if(
 			(this.NEW_IIKO_EXTMENU_ID && this.NEW_IIKO_EXTMENU_ID!==this.CURRENT_EXTMENU_ID)
 			|| (this.NEW_ORGANIZATION_ID && this.NEW_ORGANIZATION_ID!==this.CURRENT_ORGANIZATION_ID)
@@ -258,7 +259,9 @@ export var VIEW_IIKO_CUSTOMIZATION = {
 							if(!$(e.target).hasClass("checked")){
 								$(e.target).siblings().removeClass("checked");
 								$(e.target).addClass("checked");
-								this.new_current_terminal_group_id($(e.target).data("group-id"));
+								let group_id = $(e.target).data("group-id");
+								this.new_current_terminal_group_id(group_id);								
+								this.update_tables_list(this.DATA.table_sections, this.DATA.terminal_groups);
 							}						
 						}
 					}});
@@ -297,7 +300,7 @@ export var VIEW_IIKO_CUSTOMIZATION = {
 
 					"<li>"+section['section_name']+", всего столов: "+section['tables'].length+"</li>";					
 					const termGroupId = section['terminalGroupId'];
-					const trminalGroupName = fn.calc_terminal_name(termGroupId);
+					const terminalGroupName = fn.calc_terminal_name(termGroupId);
 
 					let table_numbers = '';
 					if(section['tables'].length>0){
@@ -306,12 +309,13 @@ export var VIEW_IIKO_CUSTOMIZATION = {
 						table_numbers+=`[${tbl.number}] `;
 						}						
 					};
+					const selected = termGroupId == this.NEW_TERMINAL_GROUP_ID ? 'selected' : '';
 
 					const html = [
 						`<li>`,
 						`<strong>${section['section_name']}: ${section['tables'].length} столов</strong> <br>`,
 						`Номера столов: ${table_numbers}<br>`,
-						`терминалы: ${trminalGroupName}`,
+						`терминалы: <span class="outlined-inline ${selected}">${terminalGroupName}</span>`,
 						`</li>`
 					].join('');
 					str_table_sections += html;
@@ -402,7 +406,8 @@ export var VIEW_IIKO_CUSTOMIZATION = {
 				this.show_modal_ok(okMessage, {onClose:()=>{ location.reload();	}});				
 				setTimeout(()=>{ this._end_loading();},300);
 			})
-			.catch(()=>{
+			.catch((vars)=>{
+				console.log('error',vars);
 				this.show_modal_error();
 				setTimeout(()=>{ this._end_loading();},300);
 			})
@@ -421,6 +426,7 @@ export var VIEW_IIKO_CUSTOMIZATION = {
 				current_extmenu_id:this.NEW_IIKO_EXTMENU_ID
 			};
 
+
 			this._now_loading();
 	
 			this.AJAX = $.ajax({
@@ -428,7 +434,7 @@ export var VIEW_IIKO_CUSTOMIZATION = {
 				dataType:"jsonp",
 				data:data,
 				method:"POST",
-				success:(result)=> {					
+				success:(result)=> {
 					if(result && !result.error){					
 						res(result);
 					}else{

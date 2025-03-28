@@ -63,9 +63,9 @@ class Smart_object implements Stringable {
     // Если объект не существует в БД;
     private $_VALID = false;
     // Номер объекта в таблице;
-    private $_ID=0;
+    private $_ID = 0;
 
-function __construct($table_name='',$id=0){
+function __construct( $table_name='', $id=0 ){
     if(!$this->TABLE_NAME=$table_name) return false;
     $this->_ID = (int) $id;    
     if(!$this->table_parse()) return false;
@@ -107,7 +107,7 @@ private function check_and_fill(){
     }
 }
 
-public function save(){
+public function save(): int|bool {
     global $CFG;  
 
     if(!$this->valid()){ 

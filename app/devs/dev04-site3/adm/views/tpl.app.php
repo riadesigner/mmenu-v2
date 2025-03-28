@@ -350,10 +350,16 @@ App&&App();
 					<h1>Ваш iiko API Login:</h1>
 					
 					<button name='iiko-api-key' class="std-special-single-button">&nbsp;</button>
-					<h2>Общая информация</h2>
-
-					<div class="iiko-general-information"></div>					
 					
+					<h2>Организации</h2>
+					<p>Веберите организацию:</p>
+
+					<div class="iiko-general-information"></div>													
+
+					<h2 class="iiko-current-org-title">Настройки <span>Pizzaiolo</span>:</h2>
+
+					<p>При выборе (смене) организации, вся информация и настройки ниже – внешние меню, терминалы, столы – будут заново загружены для соответствующей организации и сброшены в начальное состояние.</p>
+
 					<h2>Внешние меню</h2>
 					<p>Выберите внешнее меню из имеющихся:</p>					 
 					<div class="iiko-extmenu-list">
@@ -376,7 +382,7 @@ App&&App();
 					<!-- <button class="std-special-single-button btn-iiko-terminal-to-alive">Разбудить терминал</button> -->
 					
 					<h2>Столы</h2>					
-					<p>В вашем ресторане есть секции: </p>					
+					<p>У вас есть зарегистрированные столы: </p>					
 					<ul class="iiko-table-sections">
 						<li>Не найдено.</li>
 					</ul>					
