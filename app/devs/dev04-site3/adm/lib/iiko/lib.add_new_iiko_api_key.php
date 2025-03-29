@@ -48,7 +48,7 @@
 	$cafe->iiko_api_key = $key;
 
 	try{
-		$IIKO_PARAMS = new Iiko_params($cafe);		
+		$IIKO_PARAMS = new Iiko_params($cafe->id, $cafe->iiko_api_key);
 		$IIKO_PARAMS->reload();				
 	}catch(Exceprion $e){
 		glogError($e->getMessage());

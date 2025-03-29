@@ -46,7 +46,9 @@ class Iiko_params{
 		$this->read_terminals_info();
 		$this->read_iiko_tables_info();
 		$this->read_order_types();	
-		$this->read_status_current_terminal_group();			
+		$this->read_status_current_terminal_group();	
+		glog("-- IIKO LOADED ROUGH_DATA -- \n".print_r($this->ROUGH_DATA,1));
+						
 		return $this->update_db();		
 	}
 
@@ -77,8 +79,12 @@ class Iiko_params{
 
 	public function set_current_terminal_group_id(string $id): void{
 		$this->current_terminal_group_id = $id;
+		$this->iiko_params->current_terminal_group_id = $id;	
 	}
-
+	public function set_current_extmenu_id(string $id): void{
+		$this->current_extmenu_id = $id;
+		$this->iiko_params->current_extmenu_id = $id;	
+	}	
 	public function read_status_current_terminal_group():void {					
 
 		$url     = 'api/1/terminal_groups/is_alive';
@@ -105,7 +111,7 @@ class Iiko_params{
 
 	// PRIVATE FUNCS
 	private function update_db(): bool{
-
+		
 		$this->iiko_params->organizations = json_encode($this->arr_organizations, JSON_UNESCAPED_UNICODE);			
 		$this->iiko_params->terminal_groups = json_encode($this->arr_terminals, JSON_UNESCAPED_UNICODE);	
 		$this->iiko_params->tables = json_encode($this->arr_tables, JSON_UNESCAPED_UNICODE);	
@@ -118,14 +124,13 @@ class Iiko_params{
 		$this->iiko_params->current_terminal_group_id = $this->current_terminal_group_id;	
 		$this->iiko_params->current_terminal_group_status = $this->current_terminal_group_status;	
 			
-		$this->iiko_params->rough_data = json_encode($this->ROUGH_DATA, JSON_UNESCAPED_UNICODE);	
-		$this->iiko_params->updated_date = 'now()';
-	
-		glog("-- IIKO LOADED ROUGH_DATA -- \n".print_r($this->ROUGH_DATA,1));
+		$this->iiko_params->rough_data = json_encode($this->ROUGH_DATA, JSON_UNESCAPED_UNICODE);					
+
 		return $this->save();
 	}
 
 	public function save(): bool {
+		$this->iiko_params->updated_date = 'now()';
 		return $this->iiko_params->save();
 	}
 	

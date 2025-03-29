@@ -54,18 +54,17 @@
 			$IIKO_PARAMS = new Iiko_params($id_cafe, $cafe->iiko_api_key);
 			$IIKO_PARAMS->reload($current_organization_id);
 
-			// // ----------------------------
-			// //  UPDATING CAFE DESCRIPTIONS
-			// // ----------------------------
-			// $org = $IIKO_PARAMS->get_current_organization();
-			// if(!$org || !count($org)) __errorjsonp("--wrong iiko params. cant find organization");		
-			// $cafe->cafe_title = $org["name"];
-			// $cafe->cafe_address = $org["restaurantAddress"];
-			// $cafe->chief_cook="";
-			// $cafe->cafe_description="Нет описания";
-			// $cafe->updated_date = 'now()';
-			// $cafe->rev+=1;
-			// $cafe->save();
+			// --------------------------
+			// UPDATING CAFE INFO
+			// --------------------------	
+			$org = $IIKO_PARAMS->get_current_organization();
+			$cafe->cafe_title = $org["name"];
+			$cafe->cafe_address = $org["restaurantAddress"];
+			$cafe->chief_cook="";
+			$cafe->cafe_description="Нет описания";
+			$cafe->updated_date = 'now()';
+			$cafe->rev+=1;
+			$cafe->save();
 
 			__answerjsonp($IIKO_PARAMS->export());
 		}catch(Exception $e){
@@ -75,10 +74,10 @@
 
 	} else {
 		try{
-			$IIKO_PARAMS = new Iiko_params($cafe);		
-			// $IIKO_PARAMS->set_current_terminal_group_id($current_terminal_group_id);
-			// $IIKO_PARAMS->set_current_extmenu_id($current_extmenu_id);
-			// $IIKO_PARAMS->save();
+			$IIKO_PARAMS = new Iiko_params($id_cafe, $cafe->iiko_api_key);			
+			if(!empty($current_terminal_group_id)) $IIKO_PARAMS->set_current_terminal_group_id($current_terminal_group_id);
+			if(!empty($current_extmenu_id)) $IIKO_PARAMS->set_current_extmenu_id($current_extmenu_id);
+			if(!empty($current_terminal_group_id) || !empty($current_extmenu_id)) $IIKO_PARAMS->save();			
 			__answerjsonp($IIKO_PARAMS->export());
 		}catch(Exception $e){
 			glogError($e->getMessage());

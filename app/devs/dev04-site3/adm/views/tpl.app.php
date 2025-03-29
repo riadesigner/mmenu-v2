@@ -388,7 +388,7 @@ App&&App();
 					</ul>					
 
 					<h2>Синхронизация</h2>
-					<p>Здесь вы можете выбрать время автоматической синхронизации ChefsMenu c Внешним Меню iiko.</p>					
+					<p>Время автоматической синхронизации ChefsMenu c Внешним Меню iiko.</p>					
 					<div>
 						<ul>
 							<li>03:00</li>
@@ -401,7 +401,7 @@ App&&App();
 					<input class="std-form__input" type="input" placeholder="" name="iiko-del-key" maxlength="20" >
 					
 					<h2>Обновить данные iiko</h2>
-					<p>Если вы поменяли / добавили внешние меню, здесь можно подгузить обновленные данные. </p>
+					<p>Если вы поменяли / добавили терминалы или столы в iiko-office – здесь можно подгузить обновленные данные. </p>
 					<button class="std-special-single-button btn-iiko-vars-update">Обновить данные iiko</button>					
 
 					<h2>Помощь</h2>
