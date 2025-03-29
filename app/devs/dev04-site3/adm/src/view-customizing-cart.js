@@ -39,6 +39,7 @@ export var VIEW_CUSTOMIZING_CART = {
 	
 		this.reset();		
 		this.rebuild();	
+		this._page_show();
 	},
 
 	end_updating_with_error(error_message, foo){
@@ -62,12 +63,12 @@ export var VIEW_CUSTOMIZING_CART = {
 	rebuild:function(){
 		
 		var _this=this;		
-		var cafe = GLB.THE_CAFE.get();
+		const cafe = GLB.THE_CAFE.get();		
 
 		this.$buttonsCartMode.html("");
 		var arrBtns = ["Корзина выключена","Корзина включена"];
 		for(let i=0;i<arrBtns.length;i++){
-			let checked = parseInt(GLB.THE_CAFE.get().cart_mode,10) == i?" checked":"";
+			let checked = parseInt(cafe.cart_mode,10) == i?" checked":"";
 			let $btn = $("<div class='std-form__radio-button "+checked+"' mode='"+i+"'>"+arrBtns[i]+"</div>\n");
 			$btn.on("touchend",function(e){
 				if(!_this.VIEW_SCROLLED){
@@ -86,7 +87,7 @@ export var VIEW_CUSTOMIZING_CART = {
 		this.$buttonsDeliveryMode.html("");
 		var arrBtns = ["Нет доставки","Есть доставка"];
 		for(let i=0;i<arrBtns.length;i++){
-			let checked = parseInt(GLB.THE_CAFE.get().has_delivery,10) == i?" checked":"";
+			let checked = parseInt(cafe.has_delivery,10) == i?" checked":"";
 			let $btn = $("<div class='std-form__radio-button "+checked+"' mode='"+i+"'>"+arrBtns[i]+"</div>\n");
 			$btn.on("touchend",function(e){
 				if(!_this.VIEW_SCROLLED){
@@ -103,9 +104,9 @@ export var VIEW_CUSTOMIZING_CART = {
 		};
 		
 		this.$buttonsOrderWayMode.html("");	
-		var arrBtns = ["Только в TG","В ТG, затем в IIKO"];
+		var arrBtns = ["1. Только в TG","2. В ТG, затем в IIKO"];
 		for(let i=0;i<arrBtns.length;i++){
-			let checked = parseInt(GLB.THE_CAFE.get().order_way,10) == i?" checked":"";
+			let checked = parseInt(cafe.order_way,10) == i?" checked":"";
 			let $btn = $("<div class='std-form__radio-button "+checked+"' mode='"+i+"'>"+arrBtns[i]+"</div>\n");
 			$btn.on("touchend",function(e){
 				if(!_this.VIEW_SCROLLED){
