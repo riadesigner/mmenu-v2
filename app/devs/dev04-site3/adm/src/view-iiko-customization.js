@@ -19,6 +19,7 @@ export var VIEW_IIKO_CUSTOMIZATION = {
 		this.$extmenu_list = this.$form.find('.iiko-extmenu-list');			
 		this.$terminals_list = this.$form.find('.iiko-terminals-sections');
 		this.$tables_list = this.$form.find('.iiko-table-sections');
+		this.$current_organization_title = this.$form.find('.iiko-current-org-title span');		
 		this.$terminal_status_info_name = this.$form.find('.iiko-terminal-status-info-name');
 		this.$terminal_status_info = this.$form.find('.iiko-terminal-status-info');
 		
@@ -60,7 +61,9 @@ export var VIEW_IIKO_CUSTOMIZATION = {
 		this.DATA.orgs = iiko_params['organizations']!==''?JSON.parse(iiko_params['organizations']):{};		
 		this.CURRENT_ORGANIZATION_ID = iiko_params['current_organization_id'];
 		this.NEW_ORGANIZATION_ID = this.CURRENT_ORGANIZATION_ID;
-		this.update_organizations_list(this.DATA.orgs, this.CURRENT_ORGANIZATION_ID);		 
+		this.update_organizations_list(this.DATA.orgs, this.CURRENT_ORGANIZATION_ID);	
+		
+		this.update_current_organization_title(this.CURRENT_ORGANIZATION_ID, this.DATA.orgs);				
 		
 		// SHOW TERMINAL INFO
 		this.DATA.terminal_groups = iiko_params['terminal_groups']?JSON.parse(iiko_params['terminal_groups']):[];
@@ -133,6 +136,11 @@ export var VIEW_IIKO_CUSTOMIZATION = {
 		this.$linkIikoQRCodeTablesHelp.attr({href:this.IIKO_QRCODE_TABLES_URL});
 	},
 
+	update_current_organization_title:function(current_organization_id, organizations){
+		let current_organization = organizations.find(org=>org.id===current_organization_id);
+		this.$current_organization_title.html(current_organization.name);
+	},
+	
 	behavior:function()	{
 		var _this = this;
 

@@ -356,7 +356,7 @@ App&&App();
 
 					<div class="iiko-general-information"></div>													
 
-					<h2 class="iiko-current-org-title">Настройки <span>Pizzaiolo</span>:</h2>
+					<h2 class="iiko-current-org-title">Настройки <span>...</span>:</h2>
 
 					<p>При выборе (смене) организации, вся информация и настройки ниже – внешние меню, терминалы, столы – будут заново загружены для соответствующей организации и сброшены в начальное состояние.</p>
 
