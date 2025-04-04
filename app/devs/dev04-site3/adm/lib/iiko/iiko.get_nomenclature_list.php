@@ -85,11 +85,6 @@ if (json_last_error() !== JSON_ERROR_NONE) {
     __errorjsonp("Ошибка в формате JSON: " . json_last_error_msg());
 }
 
-// Выводим результат (для проверки)
-// echo "<pre>";
-// print_r($array);
-// echo "</pre>";
-
 // Проверяем на ошибки
 if( empty($array) || 
     !count($array) || 
@@ -122,6 +117,11 @@ function save_menus_to_iiko_params($id_cafe, $menus, $current_oldway_menu_id): v
             $iiko_params->current_oldway_menu_id = $current_oldway_menu_id;
             $iiko_params->nomenclature_mode = 1;
             $iiko_params->save();
+        }else{            
+            $iiko_params->oldway_menus = "";
+            $iiko_params->current_oldway_menu_id = "";
+            $iiko_params->nomenclature_mode = 0;
+            $iiko_params->save();
         }
     }
 }
@@ -130,6 +130,10 @@ $menus = get_menus($array);
 $current_oldway_menu_id = $menus[0]['id'];
 save_menus_to_iiko_params($id_cafe, $menus, $current_oldway_menu_id);
 
-__answerjsonp(array("menus"=>$menus, "current_oldway_menu_id"=>$current_oldway_menu_id));
+__answerjsonp([
+    "menus"=>$menus, 
+    "current_oldway_menu_id"=>$current_oldway_menu_id,
+    "nomenclature_mode"=>1,
+]);
 
 ?>

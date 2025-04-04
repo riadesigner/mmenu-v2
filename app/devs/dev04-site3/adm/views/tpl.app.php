@@ -382,17 +382,18 @@ App&&App();
 					<h2>Внешние меню</h2>
 					<p>Выберите внешнее меню из имеющихся:</p>					 
 					<div class="iiko-extmenu-list">
-						<div class="std-form__radio-button ">Меню тест 1</div>	
-						<div class="std-form__radio-button checked">Меню тест 2</div>
+						<p>Не найдено.</p>
 					</div>					
 
 					<h2>Номенклатура</h2>
 					<div class="download-nomenclature-section">
 						<p>При невозможности работы с внешними меню, загрузите его из номенклатуры. Этот способ предполагает предварительную выгрузку в его iiko ofiice.</p>
-						<button class="std-special-single-button btn-iiki-load-nomenclature">Загрузить номенклатуру</button>
+						<button class="std-special-single-button btn-iiki-load-nomenclature">Загрузить</button>
 					</div>
-					<p>Выберите меню, загруженное из номерклатурного списка:</p>
-					<div class="iiko-oldway_menu-list">Не загружено</div>
+					<div class="choosing-nomenclature-section">
+						<p>Выберите меню, загруженное из номерклатурного списка:</p>
+						<div class="iiko-oldway_menu-list">Не загружено</div>
+					</div>
 					
 					<h2>Синхронизация</h2>
 					<p>Время автоматической синхронизации ChefsMenu c Внешним Меню iiko.</p>					
@@ -408,12 +409,10 @@ App&&App();
 					<input class="std-form__input" type="input" placeholder="" name="iiko-del-key" maxlength="20" >
 					
 					<h2>Обновить данные iiko</h2>
-					<p>Если вы поменяли / добавили терминалы или столы в iiko-office – здесь можно подгузить обновленные данные. </p>
-					<button class="std-special-single-button btn-iiko-vars-update">Обновить данные iiko</button>					
-
-					<h2>Помощь</h2>
-					<p>Узнать все подробности взаимодействия ChefsMenu и iiko и текущие 
-						возможности интеграции вы можете <a href="#">по этой ссылке.</a></p>
+					<p>Если вы поменяли / добавили терминалы или столы в iiko-office – здесь можно подгузить обновленные настройки. </p>
+					<p>При этом, источником Меню снова будет выбрано <strong>«Внешнее меню»</strong> (если был выбран другой вариант), как более современное решение.</p>
+					<p>Для переключения на вариант загрузки меню из номенклатуры, просто нажмите кнопку <strong>Загрузить</strong> в разделе <strong>«Номенклатура».</strong></p>
+					<button class="std-special-single-button btn-iiko-vars-update">Обновить данные iiko</button>
 
 				</div>						
 			</div>

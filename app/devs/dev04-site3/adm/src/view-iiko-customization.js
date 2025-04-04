@@ -20,6 +20,7 @@ export var VIEW_IIKO_CUSTOMIZATION = {
 		this.$extmenu_list = this.$form.find('.iiko-extmenu-list');		
 		this.$oldway_menu_list = this.$form.find('.iiko-oldway_menu-list');					
 		this.$oldway_download_section = this.$form.find('.download-nomenclature-section');
+		this.$oldway_choosing_section = this.$form.find('.choosing-nomenclature-section');
 		this.$terminals_list = this.$form.find('.iiko-terminals-sections');
 		this.$tables_list = this.$form.find('.iiko-table-sections');
 		this.$current_organization_title = this.$form.find('.iiko-current-org-title span');		
@@ -87,18 +88,17 @@ export var VIEW_IIKO_CUSTOMIZATION = {
 		this.DATA.iiko_arr_extmenus = iiko_params['extmenus']!==""?JSON.parse(iiko_params['extmenus']):[];				
 		this.CURRENT_EXTMENU_ID = iiko_params['current_extmenu_id'].toString();					
 		this.NEW_EXTMENU_ID = this.CURRENT_EXTMENU_ID;
-		this.update_extmenus(this.DATA.iiko_arr_extmenus, this.CURRENT_EXTMENU_ID);		
+		if(this.DATA.iiko_arr_extmenus && this.DATA.iiko_arr_extmenus.length>0){
+			this.update_extmenus(this.DATA.iiko_arr_extmenus, this.CURRENT_EXTMENU_ID);		
+		}		
 
 		// SHOW OLDWAY MENUS INFO
-		this.NOMENCLATURE_MODE = iiko_params['nomenclature_mode']?true:false;
-		if(this.NOMENCLATURE_MODE){
-			this.$oldway_download_section.hide();
-			this.DATA.oldway_menus = iiko_params['oldway_menus']?JSON.parse(iiko_params['oldway_menus']):[];				
-			this.CURRENT_OLDWAY_MENU_ID = iiko_params['current_oldway_menu_id'].toString();					
-			this.NEW_OLDWAY_MENU_ID = this.CURRENT_OLDWAY_MENU_ID;
-			this.update_oldway_menus(this.DATA.oldway_menus, this.CURRENT_OLDWAY_MENU_ID);
-		}
-
+		this.NOMENCLATURE_MODE = parseInt(iiko_params['nomenclature_mode'],10)?true:false;
+		this.DATA.oldway_menus = iiko_params['oldway_menus']?JSON.parse(iiko_params['oldway_menus']):[];				
+		this.CURRENT_OLDWAY_MENU_ID = iiko_params['current_oldway_menu_id'].toString();					
+		this.NEW_OLDWAY_MENU_ID = this.CURRENT_OLDWAY_MENU_ID;
+		this.update_oldway_menus_list(this.DATA.oldway_menus, this.CURRENT_OLDWAY_MENU_ID);
+		this.update_oldway_menu_section();
 		setTimeout(()=>{							
 			this._page_show();
 		},300);
@@ -201,10 +201,20 @@ export var VIEW_IIKO_CUSTOMIZATION = {
 					this.iiko_download_nomenclature_async()
 					.then((answer)=>{												
 						console.log('nomencl:', answer);
+						// updating loaded iiko_menu params
 						this.DATA.oldway_menus = answer.menus;
-						this.CURRENT_OLDWAY_MENU_ID = answer.current_oldway_menu_id;				
-						this.NOMENCLATURE_MODE = true;
-						this.update_oldway_menus(this.DATA.oldway_menus, this.CURRENT_OLDWAY_MENU_ID);
+						this.DATA.current_oldway_menu_id = answer.current_oldway_menu_id;
+						this.DATA.nomenclature_mode = answer.nomenclature_mode;
+						// updating instanse vars
+						this.CURRENT_OLDWAY_MENU_ID = answer.current_oldway_menu_id;										
+						this.NOMENCLATURE_MODE = answer.nomenclature_mode;
+
+						// updating ui oldway menu section
+						this.update_oldway_menu_section();
+
+						// updating ui oldway list
+						this.update_oldway_menus_list(this.DATA.oldway_menus, this.CURRENT_OLDWAY_MENU_ID);
+
 						this._end_loading();
 					})
 					.catch((err)=>{
@@ -219,6 +229,15 @@ export var VIEW_IIKO_CUSTOMIZATION = {
 
 	},	
 
+	update_oldway_menu_section:function(){
+		if(this.NOMENCLATURE_MODE){
+			this.$oldway_download_section.hide();
+			this.$oldway_choosing_section.show();
+		}else{
+			this.$oldway_download_section.show();
+			this.$oldway_choosing_section.hide();			
+		}
+	},
 	iiko_download_nomenclature_async:function(){
 		return new Promise((res, rej) => {
             let PATH = 'adm/lib/iiko/';
@@ -254,11 +273,12 @@ export var VIEW_IIKO_CUSTOMIZATION = {
 		this.$terminal_status_info.html(terminal_groups_status);
 	},
 
-	update_oldway_menus:function(menus, current_oldway_menu_id){		
-		
-		this.$oldway_menu_list.html("");		
-		
-		if(menus.length>0){			
+	update_oldway_menus_list:function(menus, current_oldway_menu_id){		
+				
+		if(menus && menus.length>0){	
+			
+			this.$oldway_menu_list.html("");
+
 			for(let m in menus){
 				if(menus.hasOwnProperty(m)){
 					let menu = menus[m];										
@@ -284,7 +304,9 @@ export var VIEW_IIKO_CUSTOMIZATION = {
 					this.$oldway_menu_list.append($btnMenu);
 				}				
 			}
-		};		
+		}else{
+			this.$oldway_menu_list.html("Не загружено");
+		}
 	},
 
 	update_extmenus:function(iiko_arr_extmenus, current_extmenu_id){		
@@ -465,7 +487,6 @@ export var VIEW_IIKO_CUSTOMIZATION = {
         	this.show_modal_ok(okMessage, {onClose:()=>{
         		location.reload();
         	}});
-
 			setTimeout(()=>{				
 				this._end_loading();
 			},300);						

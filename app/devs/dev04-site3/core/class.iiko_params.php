@@ -126,7 +126,11 @@ class Iiko_params{
 		$this->iiko_params->current_terminal_group_id = $this->current_terminal_group_id;	
 		$this->iiko_params->current_terminal_group_status = $this->current_terminal_group_status;	
 			
-		$this->iiko_params->rough_data = json_encode($this->ROUGH_DATA, JSON_UNESCAPED_UNICODE);					
+		$this->iiko_params->rough_data = json_encode($this->ROUGH_DATA, JSON_UNESCAPED_UNICODE);	
+		
+		$this->iiko_params->oldway_menus = "";
+		$this->iiko_params->current_oldway_menu_id="";
+		$this->iiko_params->nomenclature_mode = 0;
 
 		return $this->save();
 	}
