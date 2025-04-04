@@ -61,9 +61,11 @@ class Iiko_params{
 	}
 	
 	// return info about current organization 
+	// works only after $this->reload()!
+	// because $current_organization_id not init in __construct
 	public function get_current_organization(): array{
 		$currentOrganization = null;
-		$id = $this->current_organization_id;
+		$id = $this->iiko_params->current_organization_id;
 		foreach($this->arr_organizations as $org){
 			if($org["id"]===$id){
 				$currentOrganization = $org;
@@ -117,7 +119,7 @@ class Iiko_params{
 		$this->iiko_params->tables = json_encode($this->arr_tables, JSON_UNESCAPED_UNICODE);	
 		$this->iiko_params->order_types = json_encode($this->arr_order_types, JSON_UNESCAPED_UNICODE);	
 		if($this->arr_extmenus && count($this->arr_extmenus)){
-			$this->iiko_params->extmenus = json_encode($this->arr_extmenus, JSON_UNESCAPED_UNICODE);	;	
+			$this->iiko_params->extmenus = json_encode($this->arr_extmenus, JSON_UNESCAPED_UNICODE);	
 			$this->iiko_params->current_extmenu_id = $this->current_extmenu_id;
 		}		
 		$this->iiko_params->current_organization_id = $this->current_organization_id;

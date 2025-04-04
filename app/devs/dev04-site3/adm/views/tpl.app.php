@@ -360,14 +360,6 @@ App&&App();
 
 					<p>При выборе (смене) организации, вся информация и настройки ниже – внешние меню, терминалы, столы – будут заново загружены для соответствующей организации и сброшены в начальное состояние.</p>
 
-					<h2>Внешние меню</h2>
-					<p>Выберите внешнее меню из имеющихся:</p>					 
-					<div class="iiko-extmenu-list">
-						<div label="menu-10101" class="std-form__radio-button ">Меню тест 1</div>	
-						<div label="menu-10344" class="std-form__radio-button checked">Меню тест 2</div>
-					</div>
-
-
 					<h2>Терминалы</h2>					
 					<p>Выберите текущую терминальную группу для отправки заказов </p>					
 					<div class="iiko-terminals-sections">
@@ -387,6 +379,21 @@ App&&App();
 						<li>Не найдено.</li>
 					</ul>					
 
+					<h2>Внешние меню</h2>
+					<p>Выберите внешнее меню из имеющихся:</p>					 
+					<div class="iiko-extmenu-list">
+						<div class="std-form__radio-button ">Меню тест 1</div>	
+						<div class="std-form__radio-button checked">Меню тест 2</div>
+					</div>					
+
+					<h2>Номенклатура</h2>
+					<div class="download-nomenclature-section">
+						<p>При невозможности работы с внешними меню, загрузите его из номенклатуры. Этот способ предполагает предварительную выгрузку в его iiko ofiice.</p>
+						<button class="std-special-single-button btn-iiki-load-nomenclature">Загрузить номенклатуру</button>
+					</div>
+					<p>Выберите меню, загруженное из номерклатурного списка:</p>
+					<div class="iiko-oldway_menu-list">Не загружено</div>
+					
 					<h2>Синхронизация</h2>
 					<p>Время автоматической синхронизации ChefsMenu c Внешним Меню iiko.</p>					
 					<div>

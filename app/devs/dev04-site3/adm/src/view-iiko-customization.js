@@ -12,11 +12,14 @@ export var VIEW_IIKO_CUSTOMIZATION = {
 		this.$inputDelKey =  this.$form.find('input[name=iiko-del-key]');
 		this.$btnIikoKey = this.$form.find('button[name=iiko-api-key]');
 		this.$btnIikoVarsUpdate = this.$form.find('.btn-iiko-vars-update');
-		
+		this.btnDownloadNomenclature = this.$form.find('.btn-iiki-load-nomenclature');
+
 		this.$linkIikoQRCodeTablesHelp = this.$form.find('a[name=link-iiko-qrcode-tables]');
 
 		this.$general_information = this.$form.find('.iiko-general-information');
-		this.$extmenu_list = this.$form.find('.iiko-extmenu-list');			
+		this.$extmenu_list = this.$form.find('.iiko-extmenu-list');		
+		this.$oldway_menu_list = this.$form.find('.iiko-oldway_menu-list');					
+		this.$oldway_download_section = this.$form.find('.download-nomenclature-section');
 		this.$terminals_list = this.$form.find('.iiko-terminals-sections');
 		this.$tables_list = this.$form.find('.iiko-table-sections');
 		this.$current_organization_title = this.$form.find('.iiko-current-org-title span');		
@@ -54,8 +57,7 @@ export var VIEW_IIKO_CUSTOMIZATION = {
 		this.$btnIikoKey.html(iiko_api_key);		
 
 		const iiko_params = GLB.THE_CAFE.get("iiko_params");
-
-		console.log(' ----------- iiko_params = ',iiko_params);
+		console.log(' ----------- iiko_params = ',iiko_params);		
 
 		// SHOW ORGANIZATIONS INFO (WITH CURRENT)
 		this.DATA.orgs = iiko_params['organizations']!==''?JSON.parse(iiko_params['organizations']):{};		
@@ -81,20 +83,35 @@ export var VIEW_IIKO_CUSTOMIZATION = {
 		this.DATA.table_sections = iiko_params['tables']?JSON.parse(iiko_params['tables']):[];
 		this.update_tables_list(this.DATA.table_sections, this.DATA.terminal_groups);		
 
+		// SHOW EXTMENUS INFO
 		this.DATA.iiko_arr_extmenus = iiko_params['extmenus']!==""?JSON.parse(iiko_params['extmenus']):[];				
 		this.CURRENT_EXTMENU_ID = iiko_params['current_extmenu_id'].toString();					
-		this.NEW_IIKO_EXTMENU_ID = this.CURRENT_EXTMENU_ID;
+		this.NEW_EXTMENU_ID = this.CURRENT_EXTMENU_ID;
 		this.update_extmenus(this.DATA.iiko_arr_extmenus, this.CURRENT_EXTMENU_ID);		
-		
+
+		// SHOW OLDWAY MENUS INFO
+		this.NOMENCLATURE_MODE = iiko_params['nomenclature_mode']?true:false;
+		if(this.NOMENCLATURE_MODE){
+			this.$oldway_download_section.hide();
+			this.DATA.oldway_menus = iiko_params['oldway_menus']?JSON.parse(iiko_params['oldway_menus']):[];				
+			this.CURRENT_OLDWAY_MENU_ID = iiko_params['current_oldway_menu_id'].toString();					
+			this.NEW_OLDWAY_MENU_ID = this.CURRENT_OLDWAY_MENU_ID;
+			this.update_oldway_menus(this.DATA.oldway_menus, this.CURRENT_OLDWAY_MENU_ID);
+		}
+
 		setTimeout(()=>{							
 			this._page_show();
 		},300);
 		
 	},
-	new_current_exmenu_id:function(new_menu_id) {		
-		this.NEW_IIKO_EXTMENU_ID = new_menu_id.toString();
+	new_current_extmenu_id:function(new_menu_id) {		
+		this.NEW_EXTMENU_ID = new_menu_id.toString();
 		this.check_if_need2save();		
 	},
+	new_current_oldway_menu_id:function(new_menu_id) {		
+		this.NEW_OLDWAY_MENU_ID = new_menu_id.toString();
+		this.check_if_need2save();		
+	},		
 	new_current_organization_id:function(new_org_id){
 		this.NEW_ORGANIZATION_ID = new_org_id.toString();
 		this.check_if_need2save();		
@@ -109,7 +126,8 @@ export var VIEW_IIKO_CUSTOMIZATION = {
 		
 		// CHECK THE MENUS_ID, ORGANIZATION_ID, TERMINAL_GROUP_ID				
 		if(
-			(this.NEW_IIKO_EXTMENU_ID && this.NEW_IIKO_EXTMENU_ID!==this.CURRENT_EXTMENU_ID)
+			(this.NEW_EXTMENU_ID && this.NEW_EXTMENU_ID!==this.CURRENT_EXTMENU_ID)			
+			|| (this.NOMENCLATURE_MODE && this.NEW_OLDWAY_MENU_ID && this.NEW_OLDWAY_MENU_ID !==this.CURRENT_OLDWAY_MENU_ID)
 			|| (this.NEW_ORGANIZATION_ID && this.NEW_ORGANIZATION_ID!==this.CURRENT_ORGANIZATION_ID)
 			|| (this.NEW_TERMINAL_GROUP_ID && this.NEW_TERMINAL_GROUP_ID !==this.CURRENT_TERMINAL_GROUP_ID)
 		){			
@@ -128,9 +146,10 @@ export var VIEW_IIKO_CUSTOMIZATION = {
 		this._need2save(false);
 		this._page_to_top();		
 		this.$inputDelKey.val("");
-		this.NEW_IIKO_EXTMENU_ID = "";
+		this.NEW_EXTMENU_ID = "";
+		this.NEW_OLDWAY_MENU_ID = "";
 		this.NEW_ORGANIZATION_ID = "";
-		this.NEW_TERMINAL_GROUP_ID = "";
+		this.NEW_TERMINAL_GROUP_ID = "";		
 	},
 	update_content_once:function(){
 		this.$linkIikoQRCodeTablesHelp.attr({href:this.IIKO_QRCODE_TABLES_URL});
@@ -174,15 +193,103 @@ export var VIEW_IIKO_CUSTOMIZATION = {
 			}});			
 			e.originalEvent.cancelable && e.preventDefault();
 		});
-			
+
+		this.btnDownloadNomenclature.bind('touchend',(e)=>{
+			this._blur({onBlur:()=>{
+				if(!this.LOADING && !_this.VIEW_SCROLLED){
+					this._now_loading();
+					this.iiko_download_nomenclature_async()
+					.then((answer)=>{												
+						console.log('nomencl:', answer);
+						this.DATA.oldway_menus = answer.menus;
+						this.CURRENT_OLDWAY_MENU_ID = answer.current_oldway_menu_id;				
+						this.NOMENCLATURE_MODE = true;
+						this.update_oldway_menus(this.DATA.oldway_menus, this.CURRENT_OLDWAY_MENU_ID);
+						this._end_loading();
+					})
+					.catch((err)=>{
+						console.log(err);
+						this.show_modal_error();
+						this._end_loading();
+					});
+				}
+			}});			
+			e.originalEvent.cancelable && e.preventDefault();
+		});			
+
+	},	
+
+	iiko_download_nomenclature_async:function(){
+		return new Promise((res, rej) => {
+            let PATH = 'adm/lib/iiko/';
+            let url = PATH + 'iiko.get_nomenclature_list.php';
+        
+            let data = {
+                id_cafe:GLB.THE_CAFE.get().id
+            };
+
+            this.AJAX = $.ajax({
+                url: url+"?callback=?",
+                dataType:"jsonp",
+                data:data,
+                method:"POST",
+                success:(result)=> {             
+                    // console.log('result',result)
+                    if(result && !result.error){                        
+                        res(result); 
+                    }else{
+                        rej(result.error);
+                    }
+                },
+                error:(result)=> {         
+                	// console.log('result',result)           
+                    rej(result);                
+                }
+            });  
+		});		
 	},
-	
+
 	update_terminal_status_info:function(current_terminal_group_name, terminal_groups_status){		
 		this.$terminal_status_info_name.html(current_terminal_group_name);
 		this.$terminal_status_info.html(terminal_groups_status);
 	},
 
+	update_oldway_menus:function(menus, current_oldway_menu_id){		
+		
+		this.$oldway_menu_list.html("");		
+		
+		if(menus.length>0){			
+			for(let m in menus){
+				if(menus.hasOwnProperty(m)){
+					let menu = menus[m];										
+
+					let $btnMenu = $('<div class="std-form__radio-button" data-menu-id="'+menu.id+'">'+menu.name+'</div>');
+					
+					$btnMenu.on("touchend",(e)=>{
+						this._blur({onBlur:()=>{
+							if(!this.LOADING && !this.VIEW_SCROLLED){
+								if(!$(e.target).hasClass("checked")){
+									$(e.target).siblings().removeClass("checked");
+									$(e.target).addClass("checked");
+									this.new_current_oldway_menu_id($(e.target).data("menu-id"));
+								}						
+							}
+						}});
+						e.originalEvent.cancelable && e.preventDefault();						
+					});
+					
+					if(current_oldway_menu_id==menu.id){
+						$btnMenu.addClass("checked");
+					};
+					this.$oldway_menu_list.append($btnMenu);
+				}				
+			}
+		};		
+	},
+
 	update_extmenus:function(iiko_arr_extmenus, current_extmenu_id){		
+		
+		this.CURRENT_OLDWAY_MENU_ID = current_extmenu_id;
 		
 		this.$extmenu_list.html("");		
 		
@@ -199,7 +306,7 @@ export var VIEW_IIKO_CUSTOMIZATION = {
 								if(!$(e.target).hasClass("checked")){
 									$(e.target).siblings().removeClass("checked");
 									$(e.target).addClass("checked");
-									this.new_current_exmenu_id($(e.target).data("menu-id"));
+									this.new_current_extmenu_id($(e.target).data("menu-id"));
 								}						
 							}
 						}});
@@ -213,8 +320,9 @@ export var VIEW_IIKO_CUSTOMIZATION = {
 				}				
 			}
 		};
-		this.$extmenu_list.find('')
+		
 	},
+	
 	update_organizations_list(arr_organizations, current_org_id){
 		
 		if(arr_organizations.length == 0) return;
@@ -431,7 +539,7 @@ export var VIEW_IIKO_CUSTOMIZATION = {
 				id_cafe:GLB.THE_CAFE.get().id,
 				current_organization_id:this.NEW_ORGANIZATION_ID,
 				current_terminal_group_id:this.NEW_TERMINAL_GROUP_ID,
-				current_extmenu_id:this.NEW_IIKO_EXTMENU_ID
+				current_extmenu_id:this.NEW_EXTMENU_ID
 			};
 
 
