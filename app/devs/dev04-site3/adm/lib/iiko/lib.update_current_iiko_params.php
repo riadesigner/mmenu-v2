@@ -39,12 +39,12 @@
 	$current_organization_id = post_clean($_POST['current_organization_id'],100);	
 	$current_terminal_group_id = post_clean($_POST['current_terminal_group_id'],100);	
 	$current_extmenu_id = post_clean($_POST['current_extmenu_id'],100);	
+	$current_oldway_menu_id = post_clean($_POST['current_oldway_menu_id'],100);	
 	
 	$iiko_params_collect = new Smart_collect("iiko_params", "where id_cafe='".$id_cafe."'");
 	if(!$iiko_params_collect || !$iiko_params_collect->full()) __errorjsonp("Not found iiko params for cafe {$id_cafe}");	
 	$saved_params = $iiko_params_collect->get(0);	
 	
-
 	// ---------------------------------
 	//  RELOAD ALL PARAMS FROM IIKO 
 	//  IF ORGANIZATION_ID IS DIFFERENT
@@ -77,7 +77,13 @@
 			$IIKO_PARAMS = new Iiko_params($id_cafe, $cafe->iiko_api_key);			
 			if(!empty($current_terminal_group_id)) $IIKO_PARAMS->set_current_terminal_group_id($current_terminal_group_id);
 			if(!empty($current_extmenu_id)) $IIKO_PARAMS->set_current_extmenu_id($current_extmenu_id);
-			if(!empty($current_terminal_group_id) || !empty($current_extmenu_id)) $IIKO_PARAMS->save();			
+			if(!empty($current_oldway_menu_id)) $IIKO_PARAMS->set_current_oldway_menu_id($current_oldway_menu_id);
+			
+			if(!empty($current_terminal_group_id) || 
+			!empty($current_extmenu_id) ||
+			!empty($current_oldway_menu_id)) {
+				$IIKO_PARAMS->save();
+			}			
 			__answerjsonp($IIKO_PARAMS->export());
 		}catch(Exception $e){
 			glogError($e->getMessage());

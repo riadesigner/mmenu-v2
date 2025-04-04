@@ -127,7 +127,7 @@ export var VIEW_IIKO_CUSTOMIZATION = {
 		// CHECK THE MENUS_ID, ORGANIZATION_ID, TERMINAL_GROUP_ID				
 		if(
 			(this.NEW_EXTMENU_ID && this.NEW_EXTMENU_ID!==this.CURRENT_EXTMENU_ID)			
-			|| (this.NOMENCLATURE_MODE && this.NEW_OLDWAY_MENU_ID && this.NEW_OLDWAY_MENU_ID !==this.CURRENT_OLDWAY_MENU_ID)
+			|| (this.NEW_OLDWAY_MENU_ID && this.NEW_OLDWAY_MENU_ID !==this.CURRENT_OLDWAY_MENU_ID)
 			|| (this.NEW_ORGANIZATION_ID && this.NEW_ORGANIZATION_ID!==this.CURRENT_ORGANIZATION_ID)
 			|| (this.NEW_TERMINAL_GROUP_ID && this.NEW_TERMINAL_GROUP_ID !==this.CURRENT_TERMINAL_GROUP_ID)
 		){			
@@ -554,15 +554,15 @@ export var VIEW_IIKO_CUSTOMIZATION = {
 	save_current_params_asynq:function() {
 		return new Promise((res,rej)=>{
 			let PATH = 'adm/lib/iiko/';
-			let url = PATH + 'lib.update_current_params.php';
+			let url = PATH + 'lib.update_current_iiko_params.php';
 		
 			let data = {
 				id_cafe:GLB.THE_CAFE.get().id,
 				current_organization_id:this.NEW_ORGANIZATION_ID,
 				current_terminal_group_id:this.NEW_TERMINAL_GROUP_ID,
-				current_extmenu_id:this.NEW_EXTMENU_ID
+				current_extmenu_id:this.NEW_EXTMENU_ID,
+				current_oldway_menu_id:this.NEW_OLDWAY_MENU_ID,
 			};
-
 
 			this._now_loading();
 	

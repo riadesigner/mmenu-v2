@@ -19,6 +19,7 @@ class Iiko_params{
 	private string $current_organization_id;
 	private string $current_extmenu_id;
 	private string $current_terminal_group_id;
+	private string $current_oldway_menu_id;	
 	private string $current_terminal_group_status;	
 	private array $arr_organizations;
 	private array $arr_extmenus;
@@ -78,10 +79,13 @@ class Iiko_params{
 	public function export(): array{
 		return $this->iiko_params->export();		
 	}
-
+	public function set_current_oldway_menu_id(string $id): void{
+		$this->current_oldway_menu_id = $id;
+		$this->iiko_params->current_oldway_menu_id = $id;	
+	}
 	public function set_current_terminal_group_id(string $id): void{
 		$this->current_terminal_group_id = $id;
-		$this->iiko_params->current_terminal_group_id = $id;	
+		$this->iiko_params->current_terminal_group_id = $id;
 	}
 	public function set_current_extmenu_id(string $id): void{
 		$this->current_extmenu_id = $id;
