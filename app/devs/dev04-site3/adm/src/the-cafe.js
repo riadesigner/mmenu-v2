@@ -1,5 +1,3 @@
-
-
 export var THE_CAFE = {
 	init:function() {
 		this.CAFE = false;

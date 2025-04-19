@@ -199,8 +199,8 @@ export var VIEW_IIKO_CUSTOMIZATION = {
 				if(!this.LOADING && !_this.VIEW_SCROLLED){
 					this._now_loading();
 					this.iiko_download_nomenclature_async()
-					.then((answer)=>{												
-						console.log('nomencl:', answer);
+					.then((answer)=>{											
+						console.log('nomencl:', answer);						
 						// updating loaded iiko_menu params
 						this.DATA.oldway_menus = answer.menus;
 						this.DATA.current_oldway_menu_id = answer.current_oldway_menu_id;
@@ -208,14 +208,25 @@ export var VIEW_IIKO_CUSTOMIZATION = {
 						// updating instanse vars
 						this.CURRENT_OLDWAY_MENU_ID = answer.current_oldway_menu_id;										
 						this.NOMENCLATURE_MODE = answer.nomenclature_mode;
-
 						// updating ui oldway menu section
 						this.update_oldway_menu_section();
-
 						// updating ui oldway list
 						this.update_oldway_menus_list(this.DATA.oldway_menus, this.CURRENT_OLDWAY_MENU_ID);
-
+						// update THE_CAFE
+						GLB.THE_CAFE.set({
+							nomenclature_mode:answer.nomenclature_mode,
+							oldway_menus: JSON.stringify(answer.menus),
+							current_oldway_menu_id: answer.current_oldway_menu_id
+						});
 						this._end_loading();
+
+						// let strMenuList = '';
+						// for(let i in answer.menus){let m = answer.menus[i];strMenuList+=`<li><${m.name}/li>`; }
+						// strMenuList=`<ul>${strMenuList}</ul>`;
+						// const okMessage = `<p>Найдено ${} Меню:</p>${strMenuList}<p>Панель управления будет перезагружена.</p>`;
+						// this.show_modal_ok(okMessage, {onClose:()=>{ location.reload();	}});				
+						// setTimeout(()=>{ this._end_loading();},300);
+
 					})
 					.catch((err)=>{
 						console.log(err);
@@ -489,7 +500,7 @@ export var VIEW_IIKO_CUSTOMIZATION = {
         	}});
 			setTimeout(()=>{				
 				this._end_loading();
-			},300);						
+			},300);
 
 		})
 		.catch((vars)=>{
