@@ -194,9 +194,11 @@ export var VIEW_ALL_MENU = {
 				// --------------
 				//  IF NEW MENU
 				// --------------
+				
 				const newMenu = GLB.IIKO_EXT_MENU_PARSER.parse(roughMenu);					
-				console.log('newMenu',newMenu)
-				console.log('newMenu json',JSON.stringify(newMenu));
+				console.log('loaded menu',roughMenu);
+				console.log('parsed menu',newMenu);
+				console.log('parsed menu -> json',JSON.stringify(newMenu));
 							
 				this.do_update_iiko_menu(cafe, newMenu, roughMenuHash);
 
