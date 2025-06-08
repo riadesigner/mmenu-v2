@@ -21,7 +21,7 @@ export var VIEW_ITEM_IMAGE_CHANGE = {
 		this.$extraLoaderLine = this.$extraLoader.find('.app-view-extra-loader__line');
 		this.$extraLoaderStatus = this.$extraLoader.find('.app-view-extra-loader__status');
 
-		this.IMAGE_MAX_WIDTH = 1500;
+		this.IMAGE_MAX_WIDTH = 1500;		
 
 		this.reset();
 		this.behavior();
@@ -65,6 +65,8 @@ export var VIEW_ITEM_IMAGE_CHANGE = {
 		this.reset();
 		this._update();		
 		this._page_hide();
+
+		console.log("========== GLB.CFG ==========", GLB);
 
 		this.ITEM = options.item;
 		this.ID_ITEM = this.ITEM.id;		

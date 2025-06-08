@@ -59,6 +59,8 @@ register_shutdown_function(function(){
 
 	$bucket = $CFG->S3['bucket'];
 
+	glog("\$bucket = $bucket");
+
 	// calculate new fileName
 	$ext = ".jpg";	
 	$uniq = mb_strtolower((string) $cafe->uniq_name);

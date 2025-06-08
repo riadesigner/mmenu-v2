@@ -44,11 +44,11 @@ if(J_ENV_LOCAL){
 	$CFG->session_secure = true; // session through https
 
 	$CFG->S3 = [
-		'region' => $_ENV['LOCAL_S3_REGION'],
-		'key'=> $_ENV['LOCAL_S3_KEY'],
-		'secret'=> $_ENV['LOCAL_S3_SECRET'],
-		'endpoint'=> $_ENV['LOCAL_S3_ENDPOINT'],
-		'bucket'=> $_ENV['LOCAL_S3_BUCKET']
+		'region' => $_ENV['PROD_S3_REGION'],
+		'key'=> $_ENV['PROD_S3_KEY'],
+		'secret'=> $_ENV['PROD_S3_SECRET'],
+		'endpoint'=> $_ENV['PROD_S3_ENDPOINT'],
+		'bucket'=> $_ENV['PROD_S3_BUCKET']
 		];
 
 	$CFG->tg_cart_token =  $_ENV['TG_CART_TOKEN'];	

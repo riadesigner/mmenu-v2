@@ -42,5 +42,4 @@ $tpl = Site::get_template();
 include (WORK_DIR.APP_DIR.$tpl);
 
 
-
 ?>

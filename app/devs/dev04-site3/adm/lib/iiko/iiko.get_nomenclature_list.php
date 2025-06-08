@@ -64,7 +64,7 @@ if( empty($orgId) || empty($token) ) __errorjsonp("not valid data, ".__LINE__);
 // -------------------------------------------
 
 // Путь к JSON-файлу
-$file_path = WORK_DIR.'/files/nomenclature-full.json';
+$file_path = WORK_DIR.'/files/json-info-formated-full-new.json';
 
 // Проверяем существование файла
 if (!file_exists($file_path)) {
