@@ -1,0 +1,175 @@
+<?php
+/**
+ * ПРЕОБРАЗУЕМ ФОРМАТ UNIMENU В CHEFSMENU
+ * 
+ * */
+
+class Conv_unimenu_to_chefs {
+    
+    private array $UNIMENU;    
+    private array $DATA;    
+
+
+	function __construct(array $unimenu){				
+        $this->UNIMENU = $unimenu;
+		return $this;
+	}
+
+    public function convert(): Conv_unimenu_to_chefs {
+        $ready_menus = array(); 
+
+        $menus = $this->UNIMENU['Menus'];
+
+        foreach($menus as $menu){
+            $ready_menus[$menu["menuId"]] = $this->convert_menu($menu);
+        }
+
+        $this->DATA = $ready_menus;
+        return $this;
+    }
+
+    public function get_data(): array {
+        return [
+            "SourceMenus" => "NOMENCLATURE",
+            "TypeMenus" => "CHEFSMENU",
+            "TotalMenus" => count($this->DATA),
+            "Menus" => $this->DATA,            
+        ];        
+    }
+
+    private function convert_menu(array $menu): array {
+        $data = array();
+        $data['id'] = $menu['menuId'];
+        $data['name'] = $menu['name'];
+        $data['description'] = $menu['description'];
+        $data['categories'] = $this->get_categoties($menu['groups']);        
+        $counter = 0;
+        foreach($data['categories'] as &$category){
+            $counter++;
+            $category['items'] = $this->get_items($menu, $category["id"]);
+        }
+        return $data;
+    }
+
+    // собираем категории
+    private function get_categoties(array $groups): array {        
+        $categories = array_filter($groups, fn($e) => $e["type"] === "CATEGORY");
+        $categories = array_map(fn($e) => [
+            "id" => $e["groupId"],
+            "name" => $e["name"],
+        ], $categories);
+        return $categories;
+    }
+
+    // собираем товары
+    private function get_items(array $menu, string $category_id): array {
+        $items = array_filter($menu['products'], fn($e) => $e["parentGroup"] === $category_id);
+        $items_parsed = array_map(function($e) use($menu) { 
+                        
+            [$gNormalModifiers, $gSizesModifiers] = $this->get_modifiers_goups($menu, $e["groupModifiers"]);
+
+            $sizes = $this->get_item_sizes($e["itemSizes"], $gSizesModifiers);
+
+            return [
+            "id" => $e["itemId"],
+            "name" => $e["name"],
+            "description" => $e["description"],
+            "imageUrl"=> $e["imageUrl"],
+            "sizes"=> $sizes,
+            "modifiers"=> $gNormalModifiers,
+            "orderItemType"=>"",
+            "sku"=>"",        
+        ];}, $items);
+        return $items_parsed;
+    }
+
+    // собираем группы модификаторов
+    private function get_modifiers_goups(array $menu, array $groupModifiers): array {
+
+        $gModifiers = array_map(fn($e) => [
+            "modifierGroupId" => $e["groupId"],            
+            "name" =>  $menu["groups"][$e["groupId"]]["name"]??"",
+            "restrictions"=>[
+                "minQuantity"=> $e["restrictions"]["minQuantity"],
+                "maxQuantity"=> $e["restrictions"]["maxQuantity"],
+                "required"=>$e["restrictions"]["required"],
+                "freeQuantity"=> $e["restrictions"]["freeQuantity"],
+                "byDefault"=> $e["restrictions"]["byDefault"],                
+            ],
+            "items"=> $this->get_modifiers_items($menu, $e["groupId"]),
+            ],$groupModifiers);
+
+        // ФИШКА PIZZAIOLO:
+        // делим группы модификаторов
+        // на ОБЫЧНЫЕ и на МОДИФИКАТОРЫ РАЗМЕРА
+        // (если в названии группы модификаторов есть слово "размер")
+        $gNormalModifiers = array_filter($gModifiers, fn($e) => !str_contains(mb_strtolower($e["name"]), "размер"));
+        $gSizesModifiers = array_filter($gModifiers, fn($e) => str_contains(mb_strtolower($e["name"]), "размер"));
+
+        return [$gNormalModifiers, $gSizesModifiers];
+
+    }
+
+    // собираем модификаторы
+    private function get_modifiers_items(array $menu, string $modifierGroupId): array {
+        $items = array_filter($menu['products'], fn($e) => ($e["parentGroup"] === $modifierGroupId));
+        $items_parsed = array_map(fn($e) => [
+            "modifierId" => $e["itemId"],
+            "name" => $e["name"],
+            "description" => $e["description"],
+            "imageUrl"=> $e["imageUrl"],
+            "portionWeightGrams"=>$e["itemSizes"][0]["weightGrams"]??0,
+            "price"=>$e["itemSizes"][0]["price"]??0,
+        ], $items);
+        return $items_parsed;
+    }
+
+    // собираем размеры товара
+    private function get_item_sizes(array $sizes, array $gSizesModifiers=null): array {
+        
+        // фишка PIZZAIOLO:
+        // если есть специальный модификатор для размеров, 
+        // то строим размерный ряд из него        
+        if($gSizesModifiers!==null && count($gSizesModifiers)>0){
+
+            $gSizesModifier = $gSizesModifiers[array_key_first($gSizesModifiers)];            
+            $mainPrice = (int) $sizes[0]["price"];
+            $measureUnitType = $sizes[0]["measureUnitType"];
+            $weightGrams = (int) $sizes[0]["weightGrams"];
+
+            $sizes_parsed = [];
+
+            foreach($gSizesModifier["items"] as $item){
+                $sizes_parsed[] = [
+                    "sizeCode"=>"",
+                    "sizeId" => $item["modifierId"],
+                    "sizeName" => $item["name"],
+                    "isDefault"=> false,
+                    "price" => (int) $item["price"] + $mainPrice,
+                    "measureUnitType"=> $measureUnitType,
+                    "portionWeightGrams" => (int) $item["portionWeightGrams"] + $weightGrams,
+                ];
+            }
+
+        // иначе, применяем обычные размеры
+        }else{
+            $sizes_parsed = array_map(fn($e)=>[
+                "sizeCode"=>"",
+                "sizeId" => $e["sizeId"],
+                "sizeName" => "",
+                "isDefault"=> true,
+                "price" => $e["price"],
+                "measureUnitType"=>$e["measureUnitType"],
+                "portionWeightGrams" => $e["weightGrams"],
+            ], $sizes);
+        }
+
+        return $sizes_parsed;
+    }
+
+}
+
+
+
+
+?>
