@@ -101,6 +101,11 @@ export var VIEW_ALL_MENU = {
 	},
 
 	ask_to_reload_iiko_menu:function() {
+
+		const menu_for_loading = this.get_current_menu_for_loading_from_iiko();
+
+		console.log('menu_for_loading = ', menu_for_loading);
+
 		GLB.VIEWS.modalConfirm({
 			title:GLB.LNG.get("lng_attention"),
 			ask:`<p>Меню из iiko заменит текущее меню. 
@@ -117,14 +122,30 @@ export var VIEW_ALL_MENU = {
 			buttons:[GLB.LNG.get("lng_ok"),GLB.LNG.get("lng_cancel")]
 		});
 
+	},	
+
+	get_current_menu_for_loading_from_iiko:function(){
+		const EXTERNALMENU_MODE = this.get_externalmenu_mode();
+		const id_menu_for_loading = this.get_current_extmenu_id(EXTERNALMENU_MODE);
+		const fn = {
+			calc_name:()=>{
+				return this.get_iiko_extmenus_array().find(item=>item.id===id_menu_for_loading).name;
+			}
+		}
+		return {
+			source:EXTERNALMENU_MODE?"Внешнее Меню":"Номенклатура",
+			id:id_menu_for_loading,
+			name:fn.calc_name(),
+		}
 	},
+
 	// @return array|bool [ {id: string, name: string }, ... ,] 
 	get_iiko_extmenus_array:function(){		
 		const iiko_params = GLB.THE_CAFE.get('iiko_params');
-		let iiko_extmenus = iiko_params['extmenus']; // string json
-		iiko_extmenus = iiko_extmenus?JSON.parse(iiko_extmenus):false;
-		console.log('iiko_params = ', iiko_params);
-		return iiko_extmenus;
+		const EXTERNALMENU_MODE = this.get_externalmenu_mode();
+		let menus = EXTERNALMENU_MODE ? iiko_params['extmenus'] : iiko_params['oldway_menus']; 
+		menus = menus?JSON.parse(menus):false;
+		return menus;
 	},
 	get_current_extmenu_id:function(externalmenu_mode){		
 		const iiko_params = GLB.THE_CAFE.get('iiko_params');
@@ -134,15 +155,20 @@ export var VIEW_ALL_MENU = {
 			return iiko_params['current_oldway_menu_id']??"";
 		}
 	},	
+
+	// @return boolean
+	get_externalmenu_mode:function(){
+		const iiko_params = GLB.THE_CAFE.get('iiko_params');
+		return !parseInt(iiko_params['nomenclature_mode'],10)?true:false;
+	},
+
 	do_reload_iiko_menu:function(){				
 				
 		const cafe = GLB.THE_CAFE.get();
 
 		console.log("starting reload iiko menu")
-		
-		// выбираем какое менбю загружать
-		const iiko_params = GLB.THE_CAFE.get('iiko_params');
-		const EXTERNALMENU_MODE = !parseInt(iiko_params['nomenclature_mode'],10)?true:false;
+				
+		const EXTERNALMENU_MODE = this.get_externalmenu_mode();
 		const id_menu_for_loading = this.get_current_extmenu_id(EXTERNALMENU_MODE);
 
 		if(!id_menu_for_loading){
