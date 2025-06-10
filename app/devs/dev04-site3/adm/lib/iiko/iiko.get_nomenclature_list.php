@@ -44,42 +44,27 @@ if( empty($orgId) || empty($token) ) __errorjsonp("not valid data, ".__LINE__);
 
 // GETTING NOMENCLATURE FROM IIKO
 
-
-// -------------------------------------------
-//  GETTING NOMENCLATURE FROM EXAMPLE FILE
-// -------------------------------------------
-
-// Путь к JSON-файлу
+// Путь к тостовому JSON-файлу (выгрузка номенлатуры из iiko)
 $file_path = WORK_DIR.'/files/json-info-formated-full-new.json';
+[$error, $array] = getting_nomenc_from_test_file($file_path);
 
-// Проверяем существование файла
-if (!file_exists($file_path)) {
-    __errorjsonp("Ошибка: Файл не найден.");
+if($error!==null ){
+    __errorjsonp($error);
 }
 
-// Читаем содержимое файла
-$json_data = file_get_contents($file_path);
-if ($json_data === false) {
-    __errorjsonp("Ошибка: Не удалось прочитать файл.");
-}
+$menus = get_menus($array);
+$current_oldway_menu_id = $menus[0]['id'];
+save_menus_to_iiko_params($id_cafe, $menus, $current_oldway_menu_id);
 
-// Декодируем JSON в ассоциативный массив
-$array = json_decode($json_data, true);
+__answerjsonp([
+    "menus"=>$menus, 
+    "current_oldway_menu_id"=>$current_oldway_menu_id,
+    "nomenclature_mode"=>1,
+]);
 
-// Проверяем на ошибки декодирования
-if (json_last_error() !== JSON_ERROR_NONE) {
-    __errorjsonp("Ошибка в формате JSON: " . json_last_error_msg());
-}
-
-// Проверяем на ошибки
-if( empty($array) || 
-    !count($array) || 
-    isset($array["error"]) ||
-    !isset($array["groups"])
-    ){
-    __errorjsonp("Что-то пошло не так");
-}
-
+// -----------------
+//  LOCAL FUNCTIONS
+// -----------------
 function get_menus($array) {
     $menus = [];
     foreach ($array["groups"] as $group) {
@@ -92,6 +77,42 @@ function get_menus($array) {
         }
     }
     return $menus;
+}
+
+function getting_nomenc_from_test_file($file_path): array {
+
+    $error = null;
+
+    // Проверяем существование файла
+    if (!file_exists($file_path)) {
+        $error = "Ошибка: Файл не найден.";        
+    }
+
+    // Читаем содержимое файла
+    $json_data = file_get_contents($file_path);
+    if ($json_data === false) {
+        $error = "Ошибка: Не удалось прочитать файл.";        
+    }
+
+    // Декодируем JSON в ассоциативный массив
+    $array = json_decode($json_data, true);
+
+    // Проверяем на ошибки декодирования
+    if (json_last_error() !== JSON_ERROR_NONE) {
+        $error = "Ошибка в формате JSON: " . json_last_error_msg();        
+    }
+
+    // Проверяем на ошибки
+    if( empty($array) || 
+        !count($array) || 
+        isset($array["error"]) ||
+        !isset($array["groups"])
+        ){
+        $error = "Что-то пошло не так";
+    }
+
+    return [$error, $array];
+
 }
 
 function save_menus_to_iiko_params($id_cafe, $menus, $current_oldway_menu_id): void {
@@ -112,14 +133,5 @@ function save_menus_to_iiko_params($id_cafe, $menus, $current_oldway_menu_id): v
     }
 }
 
-$menus = get_menus($array);
-$current_oldway_menu_id = $menus[0]['id'];
-save_menus_to_iiko_params($id_cafe, $menus, $current_oldway_menu_id);
-
-__answerjsonp([
-    "menus"=>$menus, 
-    "current_oldway_menu_id"=>$current_oldway_menu_id,
-    "nomenclature_mode"=>1,
-]);
 
 ?>
