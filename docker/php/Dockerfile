@@ -115,7 +115,8 @@ RUN set -eux \
 COPY --from=composer:2.7.2 /usr/bin/composer /usr/local/bin/composer
 
 # Copy php settings
-COPY ./php.ini ${PHP_INI_DIR}/conf.d/99-php.ini
+# COPY ./php.ini ${PHP_INI_DIR}/conf.d/99-php.ini
+COPY ./php.ini ${PHP_INI_DIR}/conf.d/custom.ini
 
 # install cron
 COPY crontab.txt /etc/crontab.txt

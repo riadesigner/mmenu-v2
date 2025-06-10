@@ -103,7 +103,7 @@ export var VIEW_ALL_MENU = {
 	ask_to_reload_iiko_menu:function() {
 		GLB.VIEWS.modalConfirm({
 			title:GLB.LNG.get("lng_attention"),
-			ask:`<p>Меню из iiko заменит текущее меню в ChefsMenu. 
+			ask:`<p>Меню из iiko заменит текущее меню. 
 			При этом, поля, заполненные вами здесь, 
 			сохранятся в новом меню.</p>`,
 			action:()=>{									
@@ -123,42 +123,37 @@ export var VIEW_ALL_MENU = {
 		const iiko_params = GLB.THE_CAFE.get('iiko_params');
 		let iiko_extmenus = iiko_params['extmenus']; // string json
 		iiko_extmenus = iiko_extmenus?JSON.parse(iiko_extmenus):false;
+		console.log('iiko_params = ', iiko_params);
 		return iiko_extmenus;
 	},
-	get_current_extmenu_id:function(){		
+	get_current_extmenu_id:function(externalmenu_mode){		
 		const iiko_params = GLB.THE_CAFE.get('iiko_params');
-		let current_id = iiko_params['current_extmenu_id']; // string
-		current_id = current_id?current_id:false;
-		return current_id;
+		if(externalmenu_mode){
+			return iiko_params['current_extmenu_id']??"";
+		}else{
+			return iiko_params['current_oldway_menu_id']??"";
+		}
 	},	
 	do_reload_iiko_menu:function(){				
 				
 		const cafe = GLB.THE_CAFE.get();
 
 		console.log("starting reload iiko menu")
+		
+		// выбираем какое менбю загружать
+		const iiko_params = GLB.THE_CAFE.get('iiko_params');
+		const EXTERNALMENU_MODE = !parseInt(iiko_params['nomenclature_mode'],10)?true:false;
+		const id_menu_for_loading = this.get_current_extmenu_id(EXTERNALMENU_MODE);
 
-		// checking if exist iiko menus
-		const iiko_extmenus = this.get_iiko_extmenus_array();
-		console.log('iiko_extmenus = ', iiko_extmenus);
-
-		if(!iiko_extmenus){
+		if(!id_menu_for_loading){
 			this.ask_to_reconnect_to_iiko();			
-			setTimeout(()=>{ this.end_loading(); this._page_show(); },300);			
-			return;
-		};
-
-		// checking if exist current_extmenu_id
-		const extmenu_id = this.get_current_extmenu_id();
-		if(!extmenu_id){
-			this.ask_to_reconnect_to_iiko();
-			console.log('extmenu_id = ',extmenu_id);
 			setTimeout(()=>{ this.end_loading(); this._page_show();},300);
 			return;
 		};
 
 		const Loader = GLB.IIKO_LOADER.init();
 
-		Loader.load_extmenu_asynq(extmenu_id)
+		Loader.load_extmenu_asynq(id_menu_for_loading, EXTERNALMENU_MODE)
 		.then((vars)=>{
 
 			const [roughMenu, roughMenuHash, need2update] = vars;
@@ -172,6 +167,9 @@ export var VIEW_ALL_MENU = {
 				return false
 			}
 
+			// --------------------
+			//  IF MENU HAS ERROR
+			// --------------------
 			if(roughMenu.error){
 				let msg = 'Возникла ошибка загрузки внешнего меню.';
 				if(roughMenu.error=='EXTERNAL_MENU_DATA_MISSED'){
@@ -191,16 +189,25 @@ export var VIEW_ALL_MENU = {
 			};
 			
 			if(roughMenu && roughMenuHash && need2update){
-				// --------------
-				//  IF NEW MENU
-				// --------------
 				
-				const newMenu = GLB.IIKO_EXT_MENU_PARSER.parse(roughMenu);					
-				console.log('loaded menu',roughMenu);
+				// ---------------------
+				//  IF MENU WAS UPDATED
+				// ---------------------								
+				// меню из номенклатуры уже в нужном формате, поэтому парсить не нужно  
+				const newMenu = EXTERNALMENU_MODE ? GLB.IIKO_EXT_MENU_PARSER.parse(roughMenu) : roughMenu; 
+				
+				const total_categories = Object.keys(newMenu.categories).length;				
+
+				if(!total_categories){
+					this.error_message('Внешнее меню пустое.');
+					setTimeout(()=>{ this.end_loading(); this._page_show();},200);
+					return false;
+				}			
+
 				console.log('parsed menu',newMenu);
 				// console.log('loaded menu -> json',JSON.stringify(roughMenu));
 				// console.log('parsed menu -> json',JSON.stringify(newMenu));
-							
+								
 				this.do_update_iiko_menu(cafe, newMenu, roughMenuHash);
 
 			}else{

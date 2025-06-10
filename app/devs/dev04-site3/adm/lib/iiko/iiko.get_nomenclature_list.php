@@ -43,21 +43,7 @@ $token = $res['token'];
 if( empty($orgId) || empty($token) ) __errorjsonp("not valid data, ".__LINE__);
 
 // GETTING NOMENCLATURE FROM IIKO
-// $url     = 'api/1/nomenclature';
-// $headers = [
-//     "Content-Type"=>"application/json",
-//     "Authorization" => 'Bearer '.$token
-// ]; 
-// $params  = [
-//     "organizationId"=> $orgId,
-//     "startRevision"=> "0",    
-// ];
-// $res = iiko_get_info($url,$headers,$params);
 
-// echo  "nomenclature:";
-// echo  "<pre>";
-// echo json_encode($res);
-// echo  "</pre>";   
 
 // -------------------------------------------
 //  GETTING NOMENCLATURE FROM EXAMPLE FILE

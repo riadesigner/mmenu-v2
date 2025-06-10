@@ -4,6 +4,7 @@ export var IikoLoader = {
 
     init:function() {
 
+        this.EXTERNALMENU_MODE = true; 
         this.TOKEN = false;
         this.ORGANIZATION_ID = false;
         this.TERMINAL_GROUP_ID = false;
@@ -14,15 +15,21 @@ export var IikoLoader = {
         return this;
 
     },
-    load_extmenu_asynq: function(extmenu_id) {
+    load_extmenu_asynq: function(extmenu_id, externalmenu_mode = true) {
         return new Promise((res,rej)=>{        
+            
 
             if(this.NOW_LOADING){
                 rej("Идет загрузка меню, попробуйте позже");
                 return;
             };
             
-            this.NOW_LOADING = true;            
+            this.NOW_LOADING = true;        
+            this.EXTERNALMENU_MODE = externalmenu_mode;
+            this.EXTMENU_ID = extmenu_id;
+
+            console.log('EXTERNALMENU_MODE = ', this.EXTERNALMENU_MODE);
+		    console.log('id_menu_for_loading = ', this.EXTMENU_ID);
 
             // GETTING TOKEN
             this.get_token_asynq()
@@ -31,7 +38,7 @@ export var IikoLoader = {
                 this.TOKEN = token;
 
                 // GETTING EXTMENU ID
-                this.get_menu_by_id_asynq(extmenu_id)
+                this.get_menu_by_id_asynq(this.EXTMENU_ID)
                 .then((vars)=>{                            
                     this.NOW_LOADING = false;
 
@@ -117,8 +124,9 @@ export var IikoLoader = {
     },
     get_menu_by_id_asynq:function(menu_id){
         return new Promise((res,rej)=>{
+ 
             const PATH = "./adm/lib/iiko/";    
-            const url = PATH + "get_menu_v2_by_id.php";
+            const url = this.EXTERNALMENU_MODE ? PATH + "get_menu_v2_by_id.php" : PATH + "get_oldway_menu_by_id.php";
             const cafe = GLB.THE_CAFE.get();
             const iiko_params = GLB.THE_CAFE.get('iiko_params');
 
@@ -126,7 +134,7 @@ export var IikoLoader = {
                 token:this.TOKEN,
                 id_cafe:cafe.id,
                 externalMenuId: menu_id,
-                currentExtmenuHash: iiko_params['current_extmenu_hash'],
+                currentExtmenuHash: this.EXTERNALMENU_MODE ? iiko_params['current_extmenu_hash']: "",
             };            
 
             const AJAX = $.ajax({
