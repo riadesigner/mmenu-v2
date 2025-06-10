@@ -13,6 +13,8 @@ require_once WORK_DIR.APP_DIR.'core/class.smart_object.php';
 require_once WORK_DIR.APP_DIR.'core/class.smart_collect.php';
 require_once WORK_DIR.APP_DIR.'core/class.user.php';
 require_once WORK_DIR.APP_DIR.'core/class.iiko_params.php';
+require_once WORK_DIR.APP_DIR.'core/class.iiko_nomenclature.php';
+require_once WORK_DIR.APP_DIR.'core/class.iiko_parser_to_unimenu_v2.php';
 
 session_start();
 SQL::connect();
@@ -42,18 +44,42 @@ $token = $res['token'];
 
 if( empty($orgId) || empty($token) ) __errorjsonp("not valid data, ".__LINE__);
 
-// GETTING NOMENCLATURE FROM IIKO
 
-// Путь к тостовому JSON-файлу (выгрузка номенлатуры из iiko)
-$file_path = WORK_DIR.'/files/json-info-formated-full-new.json';
-[$error, $array] = getting_nomenc_from_test_file($file_path);
+// ---------------------------------------------------------------------
+//  Загрузка номенклатуры из тестового файла (реальной выгрузки из iiko) 
+// ---------------------------------------------------------------------
+// $file_path = WORK_DIR.'/files/json-info-formated-full-new.json';
+// [$error, $array] = getting_nomenc_from_test_file($file_path);
+// if($error!==null ){ __errorjsonp($error); }
+// $menus = get_menus($array);
 
-if($error!==null ){
-    __errorjsonp($error);
+
+// --------------------------------
+//  GETTING NOMENCLATURE FROM IIKO
+// --------------------------------
+$NOMCL = new Iiko_nomenclature($orgId, $key);    
+$NOMCL->reload();
+$iiko_response = $NOMCL->get_data();
+
+// ------------------------------------
+//  Преобразуем ответ в формат UNIMENU
+// ------------------------------------
+// используем папки как категории
+define("FOLDERS_AS_CATEGORY", false); 
+$UNIMENU = new Iiko_parser_to_unimenu_v2($iiko_response);
+$UNIMENU->parse(FOLDERS_AS_CATEGORY); 
+$data = $UNIMENU->get_data();
+
+$menus = [];
+foreach ($data["Menus"] as $menu) {
+    $menus[] = [
+        "id" => $menu["menuId"],
+        "name" => $menu["name"],
+    ];
 }
 
-$menus = get_menus($array);
-$current_oldway_menu_id = $menus[0]['id'];
+$current_oldway_menu_id = $menus[0]["id"] ?? null;
+
 save_menus_to_iiko_params($id_cafe, $menus, $current_oldway_menu_id);
 
 __answerjsonp([
