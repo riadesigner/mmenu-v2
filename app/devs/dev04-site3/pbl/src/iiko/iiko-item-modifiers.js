@@ -89,7 +89,12 @@ export const IIKO_ITEM_MODIFIERS = {
 	// @return void
 	_init_modif_with_groups:function(){
 		// the parsed modifier groups
-		this.MODIFIERS = [...this.item_data.iiko_modifiers_parsed];		
+		let modifs = this.item_data.iiko_modifiers_parsed; 
+
+		// console.log('modifs', modifs);
+		// console.log('modifs JSON', JSON.stringify(modifs));
+
+		this.MODIFIERS = [...modifs];		
 
 		const fn = {
 			make_object:(modifs)=>{
