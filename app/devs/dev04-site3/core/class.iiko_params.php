@@ -81,6 +81,9 @@ class Iiko_params{
 		return $this->iiko_params->export();		
 	}
 	public function set_current_oldway_menu_id(string $id): void{
+		if(!array_key_exists($id,['GROUPS_AS_CATEGORY','REAL_CATEGORY'])){
+			$id = "REAL_CATEGORY";
+		}
 		$this->current_oldway_menu_id = $id;
 		$this->iiko_params->current_oldway_menu_id = $id;	
 	}
@@ -140,8 +143,7 @@ class Iiko_params{
 		$this->iiko_params->oldway_menus = "";
 		$this->iiko_params->oldway_menutypes = "";
 		$this->iiko_params->current_oldway_menu_id="";
-		$this->iiko_params->current_oldway_menutype_id="";
-		$this->iiko_params->current_oldway_menutype_id="";
+		$this->iiko_params->current_oldway_menutype_id="GROUPS_AS_CATEGORY";
 		$this->iiko_params->nomenclature_mode = 0;
 
 		return $this->save();
