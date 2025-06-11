@@ -622,6 +622,7 @@ export var VIEW_IIKO_CUSTOMIZATION = {
 				current_terminal_group_id:this.NEW_TERMINAL_GROUP_ID,
 				current_extmenu_id:this.NEW_EXTMENU_ID,
 				current_oldway_menu_id:this.NEW_OLDWAY_MENU_ID,
+				current_oldway_menutype_id:this.NEW_OLDWAY_MENUTYPE_ID,
 			};
 
 			this._now_loading();

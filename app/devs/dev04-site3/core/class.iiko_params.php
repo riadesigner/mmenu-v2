@@ -20,6 +20,7 @@ class Iiko_params{
 	private string $current_extmenu_id;
 	private string $current_terminal_group_id;
 	private string $current_oldway_menu_id;	
+	private string $current_oldway_menutype_id;	
 	private string $current_terminal_group_status;	
 	private array $arr_organizations;
 	private array $arr_extmenus;
@@ -83,6 +84,10 @@ class Iiko_params{
 		$this->current_oldway_menu_id = $id;
 		$this->iiko_params->current_oldway_menu_id = $id;	
 	}
+	public function set_current_oldway_menutype_id(string $id): void{
+		$this->current_oldway_menutype_id = $id;
+		$this->iiko_params->current_oldway_menutype_id = $id;	
+	}	
 	public function set_current_terminal_group_id(string $id): void{
 		$this->current_terminal_group_id = $id;
 		$this->iiko_params->current_terminal_group_id = $id;
@@ -133,7 +138,10 @@ class Iiko_params{
 		$this->iiko_params->rough_data = json_encode($this->ROUGH_DATA, JSON_UNESCAPED_UNICODE);	
 		
 		$this->iiko_params->oldway_menus = "";
+		$this->iiko_params->oldway_menutypes = "";
 		$this->iiko_params->current_oldway_menu_id="";
+		$this->iiko_params->current_oldway_menutype_id="";
+		$this->iiko_params->current_oldway_menutype_id="";
 		$this->iiko_params->nomenclature_mode = 0;
 
 		return $this->save();
