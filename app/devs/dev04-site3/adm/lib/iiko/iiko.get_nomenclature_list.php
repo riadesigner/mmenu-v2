@@ -80,17 +80,27 @@ foreach ($data["Menus"] as $menu) {
 
 $current_oldway_menu_id = $menus[0]["id"] ?? null;
 
-save_menus_to_iiko_params($id_cafe, $menus, $current_oldway_menu_id);
+$menutypes = [
+    ["id"=>"real_category", "name"=>"Классические категории"],
+    ["id"=>"groups_as_category", "name"=>"Папки как категории"],    
+];
+$current_oldway_menutype_id = $menutypes[0]["id"];
+
+
+save_menus_to_iiko_params($id_cafe, $menus, $current_oldway_menu_id, $menutypes, $current_oldway_menutype_id);
 
 __answerjsonp([
     "menus"=>$menus, 
     "current_oldway_menu_id"=>$current_oldway_menu_id,
+    "menutypes"=>$menutypes, 
+    "current_oldway_menutype_id"=>$current_oldway_menutype_id,    
     "nomenclature_mode"=>1,
 ]);
 
 // -----------------
 //  LOCAL FUNCTIONS
 // -----------------
+// this function only for testing
 function get_menus($array) {
     $menus = [];
     foreach ($array["groups"] as $group) {
@@ -141,18 +151,22 @@ function getting_nomenc_from_test_file($file_path): array {
 
 }
 
-function save_menus_to_iiko_params($id_cafe, $menus, $current_oldway_menu_id): void {
+function save_menus_to_iiko_params($id_cafe, $menus, $current_oldway_menu_id, $menutypes, $current_oldway_menutype_id): void {
     $iiko_params_collect = new Smart_collect("iiko_params", "where id_cafe='".$id_cafe."'");
     if($iiko_params_collect->full()){
         $iiko_params = $iiko_params_collect->get(0);			        
         if(count($menus)){
             $iiko_params->oldway_menus = json_encode($menus, JSON_UNESCAPED_UNICODE);                
+            $iiko_params->oldway_menutypes = json_encode($menutypes, JSON_UNESCAPED_UNICODE);                
             $iiko_params->current_oldway_menu_id = $current_oldway_menu_id;
+            $iiko_params->current_oldway_menutype_id = $current_oldway_menutype_id;
             $iiko_params->nomenclature_mode = 1;
             $iiko_params->save();
         }else{            
             $iiko_params->oldway_menus = "";
             $iiko_params->current_oldway_menu_id = "";
+            $iiko_params->oldway_menutypes = "";
+            $iiko_params->current_oldway_menutype_id = "";            
             $iiko_params->nomenclature_mode = 0;
             $iiko_params->save();
         }
