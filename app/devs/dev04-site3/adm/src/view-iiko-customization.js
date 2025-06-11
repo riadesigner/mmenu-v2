@@ -1,4 +1,3 @@
-import { name } from 'ejs';
 import {GLB} from './glb.js';
 
 export var VIEW_IIKO_CUSTOMIZATION = {
@@ -303,7 +302,9 @@ export var VIEW_IIKO_CUSTOMIZATION = {
 		this.$terminal_status_info.html(terminal_groups_status);
 	},
 	
-	update_oldway_menus_list:function(menus, current_oldway_menu_id){		
+	update_oldway_menus_list:function(menus, current_oldway_menu_id){
+		
+		console.log('====== current_oldway_menu_id ===== ', current_oldway_menu_id);		
 				
 		if(menus && menus.length>0){	
 			
@@ -321,7 +322,9 @@ export var VIEW_IIKO_CUSTOMIZATION = {
 								if(!$(e.target).hasClass("checked")){
 									$(e.target).siblings().removeClass("checked");
 									$(e.target).addClass("checked");
-									this.new_current_oldway_menu_id($(e.target).data("menu-id"));
+									let new_current_oldway_menu_id = $(e.target).data("menu-id");
+									console.log('---- new_current_oldway_menu_id ---- ',new_current_oldway_menu_id);
+									this.new_current_oldway_menu_id(new_current_oldway_menu_id);																		
 								}						
 							}
 						}});
@@ -357,7 +360,9 @@ export var VIEW_IIKO_CUSTOMIZATION = {
 								if(!$(e.target).hasClass("checked")){
 									$(e.target).siblings().removeClass("checked");
 									$(e.target).addClass("checked");
-									this.new_current_oldway_menutype_id($(e.target).data("menutype-id"));
+									let new_current_oldway_menutype_id = $(e.target).data("menutype-id");
+									console.log('---- new_current_oldway_menutype_id ---- ',new_current_oldway_menutype_id);
+									this.new_current_oldway_menutype_id(new_current_oldway_menutype_id);
 								}						
 							}
 						}});
@@ -628,6 +633,8 @@ export var VIEW_IIKO_CUSTOMIZATION = {
 				current_oldway_menu_id:this.NEW_OLDWAY_MENU_ID,
 				current_oldway_menutype_id:this.NEW_OLDWAY_MENUTYPE_ID,
 			};
+
+			console.log('data',data);
 
 			this._now_loading();
 	
