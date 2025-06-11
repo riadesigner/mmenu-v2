@@ -98,6 +98,7 @@ export var VIEW_IIKO_CUSTOMIZATION = {
 		this.DATA.oldway_menus = iiko_params['oldway_menus']?JSON.parse(iiko_params['oldway_menus']):[];				
 		this.DATA.oldway_menutypes = iiko_params['oldway_menutypes']?JSON.parse(iiko_params['oldway_menutypes']):[];		
 		this.CURRENT_OLDWAY_MENU_ID = iiko_params['current_oldway_menu_id'].toString();					
+		this.CURRENT_OLDWAY_MENUTYPE_ID = iiko_params['current_oldway_menutype_id'].toString();
 		this.NEW_OLDWAY_MENU_ID = this.CURRENT_OLDWAY_MENU_ID;
 		this.update_oldway_menus_list(this.DATA.oldway_menus, this.CURRENT_OLDWAY_MENU_ID);
 		this.update_oldway_menutypes_list(this.DATA.oldway_menutypes, this.CURRENT_OLDWAY_MENUTYPE_ID);
@@ -223,7 +224,7 @@ export var VIEW_IIKO_CUSTOMIZATION = {
 						this.update_oldway_menu_section();
 						// updating ui oldway list
 						this.update_oldway_menus_list(this.DATA.oldway_menus, this.CURRENT_OLDWAY_MENU_ID);
-						this.update_oldway_menutypres_list(this.DATA.oldway_menutypes, this.CURRENT_OLDWAY_MENUTYPE_ID);
+						this.update_oldway_menutypes_list(this.DATA.oldway_menutypes, this.CURRENT_OLDWAY_MENUTYPE_ID);
 						// update THE_CAFE
 						GLB.THE_CAFE.set({
 							nomenclature_mode:answer.nomenclature_mode,
@@ -339,7 +340,7 @@ export var VIEW_IIKO_CUSTOMIZATION = {
 			this.$oldway_menutypes_list.html("");
 
 			for(let mt in menutypes){
-				if(menus.hasOwnProperty(mt)){
+				if(menutypes.hasOwnProperty(mt)){
 					let menutype = menutypes[mt];										
 
 					let $btnMenu = $('<div class="std-form__radio-button" data-menutype-id="'+menutype.id+'">'+menutype.name+'</div>');
