@@ -235,8 +235,9 @@ export var VIEW_IIKO_CUSTOMIZATION = {
 							nomenclature_mode:answer.nomenclature_mode,
 							oldway_menus: JSON.stringify(answer.menus),
 							current_oldway_menu_id: answer.current_oldway_menu_id
-						});
-						this._end_loading();
+						});						
+
+						this.show_all_updated_and_reload();
 
 						// let strMenuList = '';
 						// for(let i in answer.menus){let m = answer.menus[i];strMenuList+=`<li><${m.name}/li>`; }
@@ -604,9 +605,7 @@ export var VIEW_IIKO_CUSTOMIZATION = {
 		}else{
 			this.save_current_params_asynq()
 			.then((vars)=>{
-				const okMessage = `<p>Настройки успешно обновлены</p><p>Панель управления будет перезагружена.</p>`;			
-				this.show_modal_ok(okMessage, {onClose:()=>{ location.reload();	}});				
-				setTimeout(()=>{ this._end_loading();},300);
+				this.show_all_updated_and_reload();
 			})
 			.catch((vars)=>{
 				console.log('error',vars);
@@ -746,6 +745,12 @@ export var VIEW_IIKO_CUSTOMIZATION = {
             }
         };
 		fn.okMessage();
+	},
+
+	show_all_updated_and_reload:function() {
+		const okMessage = `<p>Настройки успешно обновлены</p><p>Панель управления будет перезагружена.</p>`;			
+		this.show_modal_ok(okMessage, {onClose:()=>{ location.reload();	}});				
+		setTimeout(()=>{ this._end_loading();},300);	
 	}
 
 };
