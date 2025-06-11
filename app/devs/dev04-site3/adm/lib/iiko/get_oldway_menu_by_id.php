@@ -54,22 +54,25 @@ if(!$iiko_params_collect || !$iiko_params_collect->full()) __errorjsonp("--cant 
 $iiko_params = $iiko_params_collect->get(0);
 $organization_id = $iiko_params->current_organization_id;
 
+// -------------------------------------------------------
+// загружаем номенклатуру из тестового файла
+// (реальный ответ от iiko, API 1, получение номенклатуры)
+// -------------------------------------------------------
+// $file_path = WORK_DIR.'/files/json-info-formated-full-new.json';
+// $iiko_response = get_response_from_test_file($file_path);
+// $menu_id = "9da77ff8-862d-45e4-a7f2-a5117910fa66";
 
-// ---------------------------------------------------------
-//  загружаем номенклатуру из тестового файла
-//  (реальный ответ от iiko, API 1, получение номенклатуры)
-// ---------------------------------------------------------
-$file_path = WORK_DIR.'/files/json-info-formated-full-new.json';
-$iiko_response = get_response_from_test_file($file_path);
-$menu_id = "9da77ff8-862d-45e4-a7f2-a5117910fa66";
+// -------------------------------------------------------
+// получаем номенклатуру с сервера iiko
+// -------------------------------------------------------
+$NOMCL = new Iiko_nomenclature($organization_id, "", $token);    
+$NOMCL->reload();
+$iiko_response = $NOMCL->get_data();
 
-// получаем номенклатуру
-// $NOMCL = new Iiko_nomenclature($organization_id, "", $token);    
-// $NOMCL->reload();
-// $iiko_response = $NOMCL->get_data();
-
-// используем папки как категории
-define("FOLDERS_AS_CATEGORY", false); 
+// -------------------------------------------------------
+// используем папки как категории (false, если PIZZAIOLO)
+// -------------------------------------------------------
+define("FOLDERS_AS_CATEGORY", true); 
 
 // преобразуем ее в формат UNIMENU
 $UNIMENU = new Iiko_parser_to_unimenu_v2($iiko_response);
@@ -80,12 +83,7 @@ $data = $UNIMENU->get_data();
 $CHEFS_CONVERTER = new Conv_unimenu_to_chefs($data);
 $chefsdata = $CHEFS_CONVERTER->convert()->get_data();
 
-// $menu = $chefsdata["Menus"][$externalMenuId]??null;
-
-// $menu = $chefsdata["Menus"]["46bb5ac0-10ac-4bb7-bc34-af4cf75207e2"]??null;
-
-$menu = $chefsdata["Menus"][$menu_id]??null;
-
+$menu = $chefsdata["Menus"][$externalMenuId]??null;
 
 // $res = iiko_get_info($url,$headers,$params);
 // $newExtmenuHash = md5(json_encode($res, JSON_UNESCAPED_UNICODE));

@@ -135,7 +135,6 @@ export var IikoLoader = {
                 id_cafe:cafe.id,
                 externalMenuId: menu_id,
                 currentExtmenuHash: this.EXTERNALMENU_MODE ? iiko_params['current_extmenu_hash']: "",
-                externalmenu_mode: this.EXTERNALMENU_MODE ? 1 : 0,
             };            
 
             const AJAX = $.ajax({

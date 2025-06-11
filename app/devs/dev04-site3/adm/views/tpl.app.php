@@ -393,6 +393,13 @@ App&&App();
 					<div class="choosing-nomenclature-section">
 						<p>Выберите меню, загруженное из номерклатурного списка:</p>
 						<div class="iiko-oldway_menu-list">Не загружено</div>
+						<br>
+						<p>Какой тип меню у вас:</p>
+						<div class="iiko-oldway_menutype-list">
+							<div class="std-form__radio-button checked">Классические категории</div>
+							<div class="std-form__radio-button">Папки как категории</div>
+						</div>
+
 					</div>
 					
 					<h2>Синхронизация</h2>
