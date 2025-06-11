@@ -108,9 +108,7 @@ export var VIEW_ALL_MENU = {
 
 		GLB.VIEWS.modalConfirm({
 			title:GLB.LNG.get("lng_attention"),
-			ask:`<p>Меню из iiko заменит текущее меню. 
-			При этом, поля, заполненные вами здесь, 
-			сохранятся в новом меню.</p>`,
+			ask:`<p>Будет загружено меню «${menu_for_loading.name}». Источник: «${menu_for_loading.source}»</p>`,
 			action:()=>{									
 				this.do_reload_iiko_menu();
 			},

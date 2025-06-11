@@ -54,21 +54,14 @@ if(!$iiko_params_collect || !$iiko_params_collect->full()) __errorjsonp("--cant 
 $iiko_params = $iiko_params_collect->get(0);
 $organization_id = $iiko_params->current_organization_id;
 
-// -------------------------------------
-// Путь к JSON-файлу
+
+// ---------------------------------------------------------
+//  загружаем номенклатуру из тестового файла
+//  (реальный ответ от iiko, API 1, получение номенклатуры)
+// ---------------------------------------------------------
 $file_path = WORK_DIR.'/files/json-info-formated-full-new.json';
-// Проверяем существование файла
-if (!file_exists($file_path)) {
-    __errorjsonp("Ошибка: Файл не найден.");
-}
-// Читаем содержимое файла
-$json_data = file_get_contents($file_path);
-if ($json_data === false) {
-    __errorjsonp("Ошибка: Не удалось прочитать файл.");
-}
-// Декодируем JSON в ассоциативный массив
-$iiko_response = json_decode($json_data, true);
-// -------------------------------------
+$iiko_response = get_response_from_test_file($file_path);
+$menu_id = "9da77ff8-862d-45e4-a7f2-a5117910fa66";
 
 // получаем номенклатуру
 // $NOMCL = new Iiko_nomenclature($organization_id, "", $token);    
@@ -91,7 +84,7 @@ $chefsdata = $CHEFS_CONVERTER->convert()->get_data();
 
 // $menu = $chefsdata["Menus"]["46bb5ac0-10ac-4bb7-bc34-af4cf75207e2"]??null;
 
-$menu = $chefsdata["Menus"]["9da77ff8-862d-45e4-a7f2-a5117910fa66"]??null;
+$menu = $chefsdata["Menus"][$menu_id]??null;
 
 
 // $res = iiko_get_info($url,$headers,$params);
@@ -106,5 +99,22 @@ $answer = [
 
 __answerjsonp($answer);
 
+
+
+function get_response_from_test_file($file_path): array{
+    // Проверяем существование файла
+    if (!file_exists($file_path)) {
+        __errorjsonp("Ошибка: Файл не найден.");
+    }
+    // Читаем содержимое файла
+    $json_data = file_get_contents($file_path);
+    if ($json_data === false) {
+        __errorjsonp("Ошибка: Не удалось прочитать файл.");
+    }
+    // Декодируем JSON в ассоциативный массив
+    $iiko_response = json_decode($json_data, true);
+
+    return $iiko_response;
+}
 
 ?>
