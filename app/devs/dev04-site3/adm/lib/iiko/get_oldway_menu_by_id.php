@@ -79,6 +79,9 @@ $UNIMENU = new Iiko_parser_to_unimenu_v2($iiko_response);
 $UNIMENU->parse(FOLDERS_AS_CATEGORY); 
 $data = $UNIMENU->get_data();
 
+glog("----------- UNIMENU -----------");
+glog(print_r($data,true));
+
 // конвертим ее в текущий формат CHEFSMENU
 $CHEFS_CONVERTER = new Conv_unimenu_to_chefs($data);
 $chefsdata = $CHEFS_CONVERTER->convert()->get_data();

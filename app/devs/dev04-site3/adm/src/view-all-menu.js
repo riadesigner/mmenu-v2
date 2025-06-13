@@ -228,6 +228,8 @@ export var VIEW_ALL_MENU = {
 					return false;
 				}			
 
+
+				console.log('loaded menu',roughMenu);
 				console.log('parsed menu',newMenu);
 				// console.log('loaded menu -> json',JSON.stringify(roughMenu));
 				// console.log('parsed menu -> json',JSON.stringify(newMenu));

@@ -1,11 +1,15 @@
 <?php
 /**
- * ПРЕОБРАЗУЕМ ФОРМАТ UNIMENU В CHEFSMENU (v-2.1.0)
+ * ПРЕОБРАЗУЕМ ФОРМАТ UNIMENU В CHEFSMENU (v-2.1.1)
  * 
  * - добавлено поле originalPrice (для виртуального размерного ряда)
  * (для возможности перед отправкой заказа в iiko  
  * распарсить размерный ряд обратно в модификатор размера, 
  * из которого он был собран)
+ * 
+ * - добавлены названия для размерного ряда, если он есть, а имена пустые
+ * (такое может быть, если используется настоящий размерный ряд, 
+ * но загружается меню как Номенклатура, а не как Внешнее меню)
  * 
  * особенность формата chefsmenu в том (в том числе), что 
  * CATEGORIES и ITEMS (ТОВАРЫ) - хранятся как ассоциативный массив (с id ключами ),
@@ -169,17 +173,45 @@ class Conv_unimenu_to_chefs {
             }
 
         // иначе, применяем обычные размеры
-        }else{
+        }else{            
             $sizes_parsed = array_map(fn($e)=>[
                 "sizeCode"=>"",
                 "sizeId" => $e["sizeId"],
-                "sizeName" => "",
-                "isDefault"=> true,
+                "sizeName" => $e["sizeName"],
+                "isDefault"=> false,
                 "price" => $e["price"],
                 "originalPrice" => null,
                 "measureUnitType"=>$e["measureUnitType"],
                 "portionWeightGrams" => $e["weightGrams"],
             ], $sizes);
+            // устанавливаем первый по счету размер по умолчанию
+            $sizes_parsed[0]["isDefault"] = true;
+            // ------------------------------------------------------------------
+            // если названия хотябы одного размера не укзано, 
+            // то присваеваем всем размерам свои названия S, M, L, XL, XXL, XXXL;
+            // ------------------------------------------------------------------
+            // ищем пустые названия размеров            
+            if((in_array('', array_column($sizes_parsed, 'sizeName'), true))){
+                // если есть хоть одно пустое название:
+                // сортируем по цене
+                usort($arr, function($a, $b) {
+                    return $a['price'] <=> $b['price'];
+                });
+                // Добавляем размеры
+                foreach ($arr as $index => &$item) {
+                    if ($index == 0) {
+                        $item['sizeName'] = 'S';
+                    } elseif ($index == 1) {
+                        $item['sizeName'] = 'M';
+                    } elseif ($index == 2) {
+                        $item['sizeName'] = 'L';
+                    } else {
+                        $xCount = $index - 2; // Количество "X" = позиция - 2
+                        $item['sizeName'] = str_repeat('X', $xCount) . 'L';
+                    }
+                }
+                unset($item); // Разрываем ссылку после цикла
+            }
         }
 
         return $sizes_parsed;

@@ -186,11 +186,12 @@ export const IIKO_ITEM_MODIFIERS = {
 					let chosen = '';
 					let chosenByDefault = ''
 					if(radioMode && m_counter===byDefault){  chosen = 'chosen'; chosenByDefault = 'chosen-by-default'}
+					const modif_price = modifier.price>0?'+ '+modifier.price+' руб.':'';
 					$m_list_group.append([
 						`<li class="btn-modifier ${mode_radio} ${chosen} ${chosenByDefault}" data-modifier-id="${modifier.modifierId}">`,
 							`<div class="m-check ${type_radio}"><span></span></div>`,
 							`<div class="m-title">${modifier.name}</div>`,
-							`<div class="m-price">+ ${modifier.price} руб.</div>`,
+							`<div class="m-price">${modif_price}</div>`,
 						`</li>`
 						].join(''));
 					m_counter++;
