@@ -1,6 +1,11 @@
 <?php
 /**
- * ПРЕОБРАЗУЕМ ФОРМАТ UNIMENU В CHEFSMENU (v-2)
+ * ПРЕОБРАЗУЕМ ФОРМАТ UNIMENU В CHEFSMENU (v-2.1.0)
+ * 
+ * - добавлено поле originalPrice (для виртуального размерного ряда)
+ * (для возможности перед отправкой заказа в iiko  
+ * распарсить размерный ряд обратно в модификатор размера, 
+ * из которого он был собран)
  * 
  * особенность формата chefsmenu в том (в том числе), что 
  * CATEGORIES и ITEMS (ТОВАРЫ) - хранятся как ассоциативный массив (с id ключами ),
@@ -154,6 +159,7 @@ class Conv_unimenu_to_chefs {
                     "sizeName" => $item["name"],
                     "isDefault"=> false,
                     "price" => (int) $item["price"] + $mainPrice,
+                    "originalPrice" => (int) $item["price"],
                     "measureUnitType"=> $measureUnitType,
                     "portionWeightGrams" => (int) $item["portionWeightGrams"] + $weightGrams,
                 ];
@@ -167,6 +173,7 @@ class Conv_unimenu_to_chefs {
                 "sizeName" => "",
                 "isDefault"=> true,
                 "price" => $e["price"],
+                "originalPrice" => null,
                 "measureUnitType"=>$e["measureUnitType"],
                 "portionWeightGrams" => $e["weightGrams"],
             ], $sizes);
