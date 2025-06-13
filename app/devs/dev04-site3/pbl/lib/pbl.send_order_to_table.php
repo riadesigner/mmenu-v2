@@ -68,15 +68,24 @@ try{
 
 define('IIKO_MODE', !empty($cafe->iiko_api_key)); // bool
 define('PENDING_MODE', (int) $cafe->order_way ); // int
-
+define('NOMENCLATURE_MODE', (int) $cafe->nomenclature_mode ); // int)
 
 if(IIKO_MODE){
+
+	if(NOMENCLATURE_MODE){
+		// разворачиваем размерный ряд опять 
+		// в модификаторы размеров
+		$order_items = $Iiko_order->remake_for_nomenclature($order_data['order_items']);		
+
+	}else{
+		$order_items = $order_data['order_items'];
+	}
 
 	$ARR_ORDER_FOR_IIKO = "";
 
 	try{
 		$Iiko_order = new Iiko_order($cafe);
-		$ARR_ORDER_FOR_IIKO = $Iiko_order->prepare_order_for_table( $table_number, $order_data['order_items'] );
+		$ARR_ORDER_FOR_IIKO = $Iiko_order->prepare_order_for_table( $table_number, $order_items );
 	}catch( Exception $e){
 		glogError($e->getMessage());
 		__errorjsonp("--fail preparing order for table");

@@ -51,6 +51,70 @@ class Iiko_order{
 		return $order;
 	}
 
+	public function remake_for_nomenclature($order_items): array{
+		
+		glog("-------ORDER ITEMS------- \n".print_r($order_items,1));		
+		array_map(function($item){
+			if((int) $item["originalPrice"] > 0){
+				// --------------------------------------
+				// конвертим размер в модификатор размера
+				// --------------------------------------
+				// убираем размерный ряд
+				$sizeId = "";
+				$sizeCode = "";
+				$originalPrice = $item["originalPrice"];
+				// добавляем модификатор размера
+
+
+                //    [chosen_modifiers] => Array
+                //         (
+                //             [0] => Array
+                //                 (
+                //                     [modifierId] => 2a686ab0-45c8-4c2b-a971-20e9683f88b9
+                //                     [name] => Сыр Чеддер
+                //                     [description] => 
+                //                     [imageUrl] => 
+                //                     [portionWeightGrams] => 1000
+                //                     [price] => 30
+                //                 )
+
+                //             [1] => Array
+                //                 (
+                //                     [modifierId] => e499a3af-be3e-4b8f-ba60-903e5b6851b5
+                //                     [name] => Сыр пармезан
+                //                     [description] => 
+                //                     [imageUrl] => 
+                //                     [portionWeightGrams] => 1000
+                //                     [price] => 30
+                //                 )
+
+                //         )
+
+
+
+			}else{
+				$sizeId = $item["sizeId"];
+				$sizeCode = $item["sizeCode"];
+				$originalPrice = $item["originalPrice"];
+			}
+			return [
+					"itemId" => $item["itemId"],
+                    "uniq_name" => $item["uniq_name"],
+                    "price" => $item["price"],
+                    "count" => $item["count"],
+                    "volume" => $item["volume"],
+                    "units" => $item["units"],
+					"item_data"	=> $item["item_data"],
+					"sizeName"	=> $item["sizeName"],                    
+					"sizeId" => $sizeId,
+                    "sizeCode" => $sizeCode,
+                    "originalPrice" => $originalPrice,
+			];
+		}, $order_items);
+
+		return $order_items;
+	} 
+	
 	private function load_iiko_params(): void{
 		$iiko_params_collect = new Smart_collect("iiko_params","where id_cafe='".$this->cafe->id."'"); 
 		if(!$iiko_params_collect->full()) throw new Exception("--iiko psrams not found for the cafe ".$cafe->id);

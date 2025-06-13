@@ -76,10 +76,8 @@ export const THE_ORDER_SENDER = {
                 table_number,        
             };
 
-            console.log('data',data); 
-            
-            rej("PAUSE!");
-            
+            console.log('data',data);
+
             const AJAX = $.ajax({
                 url: url+"?callback=?",
                 data:data,
