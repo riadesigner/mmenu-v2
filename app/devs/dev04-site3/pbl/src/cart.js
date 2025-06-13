@@ -46,6 +46,9 @@ export var CART = {
 	 * }
 	*/
 	add_preorder:function(preorder){						
+		
+		console.log('add_preorder!',preorder);
+
 		let total_in_cart = this.get_total_orders(preorder.itemId);
 		const order = this.ALL_ORDERS[preorder.uniq_name];
 		if(order){

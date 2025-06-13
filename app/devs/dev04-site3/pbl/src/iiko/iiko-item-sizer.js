@@ -13,6 +13,7 @@ export const IIKO_ITEM_SIZER = {
 	reset:function() {
 		this.VARS = {
 			price:0,
+			originalPrice:0, // for nomenclature (oldway menu)
 			sizeName:""	,
 			volume:"",
 			units:""
@@ -44,6 +45,7 @@ export const IIKO_ITEM_SIZER = {
 					const currentClass = s.isDefault=='true'? " active":"";
 					const $btn = $('<div></div>',{class: this.CN+"item-size-btn "+currentClass});
 					const price = s.price || 0;
+					const originalPrice = s.originalPrice || 0;
 					const sizeName = s.sizeName || "";
 					const volume = s.portionWeightGrams || 0;
 					const units = foo.units_to_strings(s.measureUnitType);					
@@ -52,14 +54,14 @@ export const IIKO_ITEM_SIZER = {
 
 					$btn.html(`${sizeName}<br>${volume} ${units}`);
 
-					(function($btn, index, price, sizeName) {
+					(function($btn, index, price, originalPrice, sizeName) {
 						$btn.on('touchend click',function(e){														
-							_this.change_current_size({$btn, index, price, sizeName, volume, units, sizeId, sizeCode});
+							_this.change_current_size({$btn, index, price, originalPrice, sizeName, volume, units, sizeId, sizeCode});
 							e.originalEvent.cancelable && e.preventDefault();
 						});
-					})($btn, i, price, sizeName, volume, units, sizeId, sizeCode);
+					})($btn, i, price, originalPrice, sizeName, volume, units, sizeId, sizeCode);
 				
-					s.isDefault=='true' && this.set_current_vars({price, sizeName, volume, units, sizeId, sizeCode});							
+					s.isDefault=='true' && this.set_current_vars({price, originalPrice, sizeName, volume, units, sizeId, sizeCode});							
 					$btns.append($btn);
 
 				};							
@@ -72,6 +74,7 @@ export const IIKO_ITEM_SIZER = {
 					'KILOGRAM':'кг',
 					'LITER':'л',
 					'GRAM':'г',
+					'ПОРЦ':'порц',
 				};	
 				return unitTypes[unit_type_name] || '';
 			}			
@@ -88,13 +91,14 @@ export const IIKO_ITEM_SIZER = {
 				foo.create_btns(this.$arr_btns['desktop']);
 			}else{								
 				const s = sizes[0];				
-				const price = s.price;							
+				const price = s.price;
+				const originalPrice = s.originalPrice;
 				const volume = s.portionWeightGrams;
 				const units = foo.units_to_strings(s.measureUnitType);				
 				const sizeName = s.sizeName;				
 				const sizeId = s.sizeId || "";
 				const sizeCode = s.sizeCode || "";
-				this.set_current_vars({price, sizeName, volume, units, sizeId, sizeCode});
+				this.set_current_vars({price, originalPrice, sizeName, volume, units, sizeId, sizeCode});
 			};
 		}else{
 			this.reset();

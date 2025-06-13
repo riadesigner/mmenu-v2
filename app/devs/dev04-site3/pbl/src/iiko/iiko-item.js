@@ -41,6 +41,7 @@ export const IIKO_ITEM = {
 		itemId: this.item_data.id,
 			uniq_name: uniq_name,
 			price: total_price,
+			
 			count: count,
 
 			volume: s.volume,
@@ -50,7 +51,8 @@ export const IIKO_ITEM = {
 			sizeName: s.sizeName,
 			sizeId: s.sizeId||'',
 			sizeCode: s.sizeCode||'',
-
+			originalPrice: s.originalPrice||'', // for nomenclature (oldway menu)
+			
 			chosen_modifiers:chosen_modifiers
 		};			
 		
