@@ -194,11 +194,18 @@ class Conv_unimenu_to_chefs {
             if((in_array('', array_column($sizes_parsed, 'sizeName'), true))){
                 // если есть хоть одно пустое название:
                 // сортируем по цене
-                usort($arr, function($a, $b) {
+
+                echo "<pre>";
+                print_r($sizes_parsed,1);
+                echo "</pre>";
+
+                usort($sizes_parsed, function($a, $b) {
                     return $a['price'] <=> $b['price'];
                 });
+
+                exit();
                 // Добавляем размеры
-                foreach ($arr as $index => &$item) {
+                foreach ($sizes_parsed as $index => &$item) {
                     if ($index == 0) {
                         $item['sizeName'] = 'S';
                     } elseif ($index == 1) {
