@@ -42,7 +42,7 @@ export var CART = {
 	 *	 units: string (г|мл|л|кг)
 	 *	 sizeId: string; / optional (IIKO)
 	 *	 sizeCode: string; / optional (IIKO)			
-	 *	 chosen_modifiers: string; / optional (IIKO)
+	 *	 chosen_modifiers: array; / optional (IIKO)
 	 * }
 	*/
 	add_preorder:function(preorder){						

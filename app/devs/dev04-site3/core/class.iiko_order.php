@@ -53,64 +53,61 @@ class Iiko_order{
 
 	public function remake_for_nomenclature($order_items): array{
 		
-		glog("-------ORDER ITEMS------- \n".print_r($order_items,1));		
-		array_map(function($item){
+		glog("-------ORDER ITEMS BEFORE------- \n".print_r($order_items,1));
+		
+		$order_items = array_map(function($item){
+
+			$res = [
+				"itemId" => $item["itemId"],
+				"uniq_name" => $item["uniq_name"],				
+				"count" => $item["count"],
+				"volume" => $item["volume"],
+				"units" => $item["units"],
+				"item_data"	=> $item["item_data"],
+			];			
+
 			if((int) $item["originalPrice"] > 0){
-				// --------------------------------------
-				// конвертим размер в модификатор размера
-				// --------------------------------------
-				// убираем размерный ряд
-				$sizeId = "";
-				$sizeCode = "";
-				$originalPrice = $item["originalPrice"];
-				// добавляем модификатор размера
+				// --------------------------------------------------------
+				// преобразуем размерный ряд обратно в модификатор размеров
+				// --------------------------------------------------------
+				// убираем размерный ряд				
+				$originalPrice = (int) $item["originalPrice"];
+				$price =  (int) $item["price"] - $originalPrice;
+				$chosen_modifiers = $item["chosen_modifiers"] ?? [];
+				// добавляем модификатор размера				
+				$chosen_modifiers[] = 
+					[
+					"modifierId" => $item["sizeId"],
+					"name" => $item["name"],
+					"description" => $item["description"],
+					"imageUrl" => $item["imageUrl"],
+					"portionWeightGrams" => $item["portionWeightGrams"],
+					"price" => $originalPrice,															
+					];	
+				$res["price"] = $price;	
+				$res["chosen_modifiers"] = $chosen_modifiers;	
 
-
-                //    [chosen_modifiers] => Array
-                //         (
-                //             [0] => Array
-                //                 (
-                //                     [modifierId] => 2a686ab0-45c8-4c2b-a971-20e9683f88b9
-                //                     [name] => Сыр Чеддер
-                //                     [description] => 
-                //                     [imageUrl] => 
-                //                     [portionWeightGrams] => 1000
-                //                     [price] => 30
-                //                 )
-
-                //             [1] => Array
-                //                 (
-                //                     [modifierId] => e499a3af-be3e-4b8f-ba60-903e5b6851b5
-                //                     [name] => Сыр пармезан
-                //                     [description] => 
-                //                     [imageUrl] => 
-                //                     [portionWeightGrams] => 1000
-                //                     [price] => 30
-                //                 )
-
-                //         )
-
-
+				$res["sizeName"] = "";
+				$res["sizeId"] = "";
+				$res["sizeCode"] = "";
+				$res["originalPrice"] = $item["originalPrice"];
 
 			}else{
-				$sizeId = $item["sizeId"];
-				$sizeCode = $item["sizeCode"];
-				$originalPrice = $item["originalPrice"];
+
+				$res["price"] = $item["price"];	
+				
+				if(isset($item["chosen_modifiers"])){
+					$res["chosen_modifiers"] = $item["chosen_modifiers"];
+				}
+				
+				$res["sizeName"] = $item["sizeName"];
+				$res["sizeId"] = $item["sizeId"];
+				$res["sizeCode"] = $item["sizeCode"];
+				$res["originalPrice"] = $item["originalPrice"];				
 			}
-			return [
-					"itemId" => $item["itemId"],
-                    "uniq_name" => $item["uniq_name"],
-                    "price" => $item["price"],
-                    "count" => $item["count"],
-                    "volume" => $item["volume"],
-                    "units" => $item["units"],
-					"item_data"	=> $item["item_data"],
-					"sizeName"	=> $item["sizeName"],                    
-					"sizeId" => $sizeId,
-                    "sizeCode" => $sizeCode,
-                    "originalPrice" => $originalPrice,
-			];
-		}, $order_items);
+
+
+		}, $order_items);		
 
 		return $order_items;
 	} 
@@ -142,7 +139,7 @@ class Iiko_order{
 				];
 		
 			if(!empty($productSizeId)) $item["productSizeId"]=$productSizeId;
-			
+			///xxx
 			$modifiers = [];
 			if($chosenModifiers && count($chosenModifiers)){		
 				foreach($chosenModifiers as $m){

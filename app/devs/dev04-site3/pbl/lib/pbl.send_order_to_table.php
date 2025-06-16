@@ -14,6 +14,7 @@ require_once WORK_DIR.APP_DIR.'core/class.smart_collect.php';
 require_once WORK_DIR.APP_DIR.'core/class.user.php';
 require_once WORK_DIR.APP_DIR.'core/class.order_sender.php';
 require_once WORK_DIR.APP_DIR.'core/class.iiko_order.php';
+require_once WORK_DIR.APP_DIR.'core/class.iiko_params_reader.php';
 
 require_once WORK_DIR.APP_DIR.'pbl/lib/pbl.class.order_parser.php';
 
@@ -41,10 +42,10 @@ define("ORDER_TARGET", Order_sender::ORDER_TABLE);
 $order_data = $_POST['order'];
 $table_number = (int) $_POST['table_number'];
 
-glog("-------ORDER DATA------- \n".print_r($order_data,1));
-glog("-------ORDER TARGET------- \n".print_r(ORDER_TARGET,1));
-glog("-------TABLE NUMBER------- \n".print_r($table_number,1));
-glog("-------DEMO MODE------- \n".print_r(DEMO_MODE,1));
+glog("----------------- ORDER DATA ----------------- \n".print_r($order_data,1));
+glog("----------------- ORDER TARGET ----------------- \n".print_r(ORDER_TARGET,1));
+glog("----------------- TABLE NUMBER ----------------- \n".print_r($table_number,1));
+glog("----------------- DEMO MODE ----------------- \n".print_r(DEMO_MODE,1));
 
 if(DEMO_MODE) __errorjsonp("--demo mode");
 
@@ -65,12 +66,19 @@ try{
 	__errorjsonp("--fail parsing the order params");	
 }
 
+$IIKO_PARAMS = (new Iiko_params_reader($id_cafe))->get();
 
 define('IIKO_MODE', !empty($cafe->iiko_api_key)); // bool
 define('PENDING_MODE', (int) $cafe->order_way ); // int
-define('NOMENCLATURE_MODE', (int) $cafe->nomenclature_mode ); // int)
+define('NOMENCLATURE_MODE', (int) $IIKO_PARAMS->nomenclature_mode ); // int)
+
+glog("----------- IIKO_PARAMS -----------");
+glog(print_r($IIKO_PARAMS,1));
+glog("NOMENCLATURE_MODE = ".NOMENCLATURE_MODE.";");
 
 if(IIKO_MODE){
+
+	$Iiko_order = new Iiko_order($cafe);
 
 	if(NOMENCLATURE_MODE){
 		// разворачиваем размерный ряд опять 
@@ -83,8 +91,7 @@ if(IIKO_MODE){
 
 	$ARR_ORDER_FOR_IIKO = "";
 
-	try{
-		$Iiko_order = new Iiko_order($cafe);
+	try{		
 		$ARR_ORDER_FOR_IIKO = $Iiko_order->prepare_order_for_table( $table_number, $order_items );
 	}catch( Exception $e){
 		glogError($e->getMessage());
@@ -97,6 +104,10 @@ if(IIKO_MODE){
 
 glog("TYPE OF ARR_ORDER_FOR_IIKO === ".gettype($ARR_ORDER_FOR_IIKO));
 
+glog(print_r($ARR_ORDER_FOR_IIKO,1));
+
+
+// __errorjsonp("PAUSED 2!");
 // ----------------------------------------
 //  - SAVE ORDER IN DB
 //	- GETTING ORDER_ID_UNIQ

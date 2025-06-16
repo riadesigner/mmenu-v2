@@ -4,6 +4,12 @@ if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 /**
  * 	СОБИРАЕМ И ОБНОВЛЯЕМ ВСЕ ПАРАМЕТРЫ IIKO ДЛЯ КАФЕ
  * 
+ *  данный класс – только для adm,
+ *  для pbl - не использовать, т.к.:  
+ * 
+ *  - класс создает и администрирует iiko_params, а не только читает текущие настройки
+ *  - класс обращается в iiko, а не только в БД chefsmenu
+ * 
  *  @param <int> $id_cafe
  *  @param <string> $iiko_api_key
  * 
@@ -28,8 +34,9 @@ class Iiko_params{
 	private array $arr_terminals;
 	private array $arr_tables;
 	private array $arr_order_types;
+	private int $nomenclature_mode;
 
-	function __construct(int $id_cafe, string $iiko_api_key){
+	function __construct(int $id_cafe = null, string $iiko_api_key = ""){
 		if( !$id_cafe || !$this->check_iiko_key($iiko_api_key) ){
 			throw new Exception("not valid iiko api key"); 
 		}	
@@ -123,7 +130,11 @@ class Iiko_params{
 
 	}
 
+	// -------------
 	// PRIVATE FUNCS
+	// -------------
+	
+	// обновляем БД chefsmenu - таблицу iiko_params	
 	private function update_db(): bool{
 		
 		$this->iiko_params->organizations = json_encode($this->arr_organizations, JSON_UNESCAPED_UNICODE);			
@@ -140,6 +151,7 @@ class Iiko_params{
 			
 		$this->iiko_params->rough_data = json_encode($this->ROUGH_DATA, JSON_UNESCAPED_UNICODE);	
 		
+		// сбрасываем переменные группы oldway_menu
 		$this->iiko_params->oldway_menus = "";
 		$this->iiko_params->oldway_menutypes = "";
 		$this->iiko_params->current_oldway_menu_id="";

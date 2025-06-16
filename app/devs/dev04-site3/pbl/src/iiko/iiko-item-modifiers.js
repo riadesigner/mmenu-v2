@@ -111,8 +111,10 @@ export const IIKO_ITEM_MODIFIERS = {
 				return obj;
 			}
 		};
-		this.OBJ_MODIFIERS = fn.make_object(this.MODIFIERS);		
 
+		this.OBJ_MODIFIERS = fn.make_object(this.MODIFIERS);		
+		console.log(" ====== this.MODIFIERS ====== ", this.MODIFIERS);
+		console.log(" ====== this.OBJ_MODIFIERS ====== ", this.OBJ_MODIFIERS);
 	},
 
 	// @return { 
