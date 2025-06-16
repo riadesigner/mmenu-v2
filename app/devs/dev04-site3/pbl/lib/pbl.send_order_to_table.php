@@ -81,12 +81,19 @@ if(IIKO_MODE){
 	$Iiko_order = new Iiko_order($cafe);
 
 	if(NOMENCLATURE_MODE){
+
+		glog("-------ORDER ITEMS BEFORE REMAKE------- \n".print_r($order_data['order_items'],1));
+
 		// разворачиваем размерный ряд опять 
 		// в модификаторы размеров
-		$order_items = $Iiko_order->remake_for_nomenclature($order_data['order_items']);		
+		$order_items = $Iiko_order->remake_for_nomenclature($order_data['order_items']);
+		glog("-------ORDER ITEMS AFTER REMAKE------- \n".print_r($order_items,1));
+		
 
 	}else{
 		$order_items = $order_data['order_items'];
+		glog("-------ORDER ITEMS NOT REMAKED------- \n".print_r($order_items,1));
+		
 	}
 
 	$ARR_ORDER_FOR_IIKO = "";
