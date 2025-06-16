@@ -190,7 +190,7 @@ export var VIEW_ALL_MENU = {
 				setTimeout(()=>{ this.end_loading(); this._page_show();},200);
 				return false
 			}
-
+			
 			// --------------------
 			//  IF MENU HAS ERROR
 			// --------------------

@@ -39,7 +39,6 @@ if(!isset($_POST['id_cafe']) || empty($_POST['id_cafe']) ){
     exit();
 }
 
-
 $token = $_POST['token'];
 $externalMenuId = $_POST['externalMenuId'];
 // $currentExtmenuHash = $_POST['currentExtmenuHash'];
@@ -72,11 +71,13 @@ $iiko_response = $NOMCL->get_data();
 // -------------------------------------------------------
 // используем папки как категории (false, если PIZZAIOLO)
 // -------------------------------------------------------
-define("FOLDERS_AS_CATEGORY", true); 
+define("GROUPS_AS_CATEGORIES", $iiko_params->current_nomenclature_type=='GROUPS_AS_CATEGORIES'); 
+
+$current_type = GROUPS_AS_CATEGORIES?'GROUPS_AS_CATEGORIES':'PIZZAIOLO';
 
 // преобразуем ее в формат UNIMENU
 $UNIMENU = new Iiko_parser_to_unimenu_v2($iiko_response);
-$UNIMENU->parse(FOLDERS_AS_CATEGORY); 
+$UNIMENU->parse(GROUPS_AS_CATEGORIES); 
 $data = $UNIMENU->get_data();
 
 glog("----------- UNIMENU -----------");

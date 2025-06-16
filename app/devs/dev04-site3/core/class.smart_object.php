@@ -300,6 +300,7 @@ private function get_type_from_param($param){
 
     $type = 's'; // default use quotes 
     $str = strtoupper((string) $param['Type']);
+    $str = preg_replace('/\([^)]*\)/', '', $str);
 
     if( str_contains($str, 'INT')    
         // also TINYINT/SMALLINT/MEDIUMINT/BIGINT

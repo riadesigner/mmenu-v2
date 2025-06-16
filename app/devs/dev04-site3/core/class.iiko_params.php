@@ -26,7 +26,7 @@ class Iiko_params{
 	private string $current_extmenu_id;
 	private string $current_terminal_group_id;
 	private string $current_oldway_menu_id;	
-	private string $current_oldway_menutype_id;	
+	private string $current_nomenclature_type;	
 	private string $current_terminal_group_status;	
 	private array $arr_organizations;
 	private array $arr_extmenus;
@@ -91,12 +91,15 @@ class Iiko_params{
 		$this->current_oldway_menu_id = $id;
 		$this->iiko_params->current_oldway_menu_id = $id;	
 	}
-	public function set_current_oldway_menutype_id(string $id): void{
-		if(!array_key_exists($id,['GROUPS_AS_CATEGORY','REAL_CATEGORY'])){
-			$id = "REAL_CATEGORY";
-		}		
-		$this->current_oldway_menutype_id = $id;
-		$this->iiko_params->current_oldway_menutype_id = $id;	
+	public function set_current_nomenclature_type(string $id): void{
+		$id = mb_strtolower($id); 
+		// if(!array_key_exists($id,["groups_as_categories","real_categories"])){
+		// 	$id = "real_categories";
+		// }		
+		$this->current_nomenclature_type = $id;
+		$this->iiko_params->current_nomenclature_type = $id;	
+
+		glog("current_nomenclature_type ===== ".$this->current_nomenclature_type);
 	}	
 	public function set_current_terminal_group_id(string $id): void{
 		$this->current_terminal_group_id = $id;
@@ -152,10 +155,9 @@ class Iiko_params{
 		$this->iiko_params->rough_data = json_encode($this->ROUGH_DATA, JSON_UNESCAPED_UNICODE);	
 		
 		// сбрасываем переменные группы oldway_menu
-		$this->iiko_params->oldway_menus = "";
-		$this->iiko_params->oldway_menutypes = "";
+		$this->iiko_params->oldway_menus = "";		
 		$this->iiko_params->current_oldway_menu_id="";
-		$this->iiko_params->current_oldway_menutype_id="GROUPS_AS_CATEGORY";
+		$this->iiko_params->current_nomenclature_type="real_categories";
 		$this->iiko_params->nomenclature_mode = 0;
 
 		return $this->save();

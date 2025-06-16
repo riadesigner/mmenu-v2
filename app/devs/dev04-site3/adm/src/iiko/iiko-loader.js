@@ -125,8 +125,10 @@ export var IikoLoader = {
     get_menu_by_id_asynq:function(menu_id){
         return new Promise((res,rej)=>{
  
-            const PATH = "./adm/lib/iiko/";    
+            const PATH = "./adm/lib/iiko/";
+            
             const url = this.EXTERNALMENU_MODE ? PATH + "get_menu_v2_by_id.php" : PATH + "get_oldway_menu_by_id.php";
+
             const cafe = GLB.THE_CAFE.get();
             const iiko_params = GLB.THE_CAFE.get('iiko_params');
 

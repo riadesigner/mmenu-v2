@@ -33,8 +33,8 @@ export var VIEW_IIKO_CUSTOMIZATION = {
 		this.DATA = {};
 
 		this.OLDWAY_MENUTYPES = [
-			{id:'REAL_CATEGORY',name:'Классические категории'},
-			{id:'GROUPS_AS_CATEGORY',name:'Папки как категории'},
+			{id:'real_categories',name:'Классические категории'},
+			{id:'groups_as_categories',name:'Папки как категории'},
 		];
 		
 		this.IIKO_QRCODE_TABLES_URL = "/link-iiko-qrcode_tables"; 
@@ -102,10 +102,10 @@ export var VIEW_IIKO_CUSTOMIZATION = {
 		this.NOMENCLATURE_MODE = parseInt(iiko_params['nomenclature_mode'],10)?true:false;
 		this.DATA.oldway_menus = iiko_params['oldway_menus']?JSON.parse(iiko_params['oldway_menus']):[];						
 		this.CURRENT_OLDWAY_MENU_ID = iiko_params['current_oldway_menu_id'].toString();					
-		this.CURRENT_OLDWAY_MENUTYPE_ID = iiko_params['current_oldway_menutype_id'].toString();
+		this.CURRENT_NOMENCLATURE_TYPE = iiko_params['current_nomenclature_type'].toString();
 		this.NEW_OLDWAY_MENU_ID = this.CURRENT_OLDWAY_MENU_ID;
 		this.update_oldway_menus_list(this.DATA.oldway_menus, this.CURRENT_OLDWAY_MENU_ID);
-		this.update_oldway_menutypes_list(this.OLDWAY_MENUTYPES, this.CURRENT_OLDWAY_MENUTYPE_ID);
+		this.update_oldway_menutypes_list(this.OLDWAY_MENUTYPES, this.CURRENT_NOMENCLATURE_TYPE);
 		this.update_oldway_menu_section();
 		setTimeout(()=>{							
 			this._page_show();
@@ -120,8 +120,8 @@ export var VIEW_IIKO_CUSTOMIZATION = {
 		this.NEW_OLDWAY_MENU_ID = new_menu_id.toString();
 		this.check_if_need2save();		
 	},		
-	new_current_oldway_menutype_id:function(new_menutype_id) {		
-		this.NEW_OLDWAY_MENUTYPE_ID = new_menutype_id.toString();
+	new_current_nomenclature_type:function(new_menutype) {		
+		this.NEW_NOMENCLATURE_TYPE = new_menutype.toString();
 		this.check_if_need2save();		
 	},			
 	new_current_organization_id:function(new_org_id){
@@ -140,7 +140,7 @@ export var VIEW_IIKO_CUSTOMIZATION = {
 		if(
 			(this.NEW_EXTMENU_ID && this.NEW_EXTMENU_ID!==this.CURRENT_EXTMENU_ID)			
 			|| (this.NEW_OLDWAY_MENU_ID && this.NEW_OLDWAY_MENU_ID !==this.CURRENT_OLDWAY_MENU_ID)
-			|| (this.NEW_OLDWAY_MENUTYPE_ID && this.NEW_OLDWAY_MENUTYPE_ID !==this.CURRENT_OLDWAY_MENUTYPE_ID)
+			|| (this.NEW_NOMENCLATURE_TYPE && this.NEW_NOMENCLATURE_TYPE !==this.CURRENT_NOMENCLATURE_TYPE)
 			|| (this.NEW_ORGANIZATION_ID && this.NEW_ORGANIZATION_ID!==this.CURRENT_ORGANIZATION_ID)
 			|| (this.NEW_TERMINAL_GROUP_ID && this.NEW_TERMINAL_GROUP_ID !==this.CURRENT_TERMINAL_GROUP_ID)
 		){			
@@ -161,7 +161,7 @@ export var VIEW_IIKO_CUSTOMIZATION = {
 		this.$inputDelKey.val("");
 		this.NEW_EXTMENU_ID = "";
 		this.NEW_OLDWAY_MENU_ID = "";
-		this.NEW_OLDWAY_MENUTYPE_ID = "";
+		this.NEW_NOMENCLATURE_TYPE = "";
 		this.NEW_ORGANIZATION_ID = "";
 		this.NEW_TERMINAL_GROUP_ID = "";		
 	},
@@ -216,19 +216,18 @@ export var VIEW_IIKO_CUSTOMIZATION = {
 					.then((answer)=>{											
 						console.log('nomencl:', answer);						
 						// updating loaded iiko_menu params
-						this.DATA.oldway_menus = answer.menus;
-						this.DATA.oldway_menutypes = answer.menutypes;
+						this.DATA.oldway_menus = answer.menus;						
 						this.DATA.current_oldway_menu_id = answer.current_oldway_menu_id;
 						this.DATA.nomenclature_mode = answer.nomenclature_mode;
 						// updating instanse vars
 						this.CURRENT_OLDWAY_MENU_ID = answer.current_oldway_menu_id;										
-						this.CURRENT_OLDWAY_MENUTYPE_ID = answer.current_oldway_menutype_id;
+						this.CURRENT_NOMENCLATURE_TYPE = answer.current_nomenclature_type;
 						this.NOMENCLATURE_MODE = answer.nomenclature_mode;
 						// updating ui oldway menu section
 						this.update_oldway_menu_section();
 						// updating ui oldway list
 						this.update_oldway_menus_list(this.DATA.oldway_menus, this.CURRENT_OLDWAY_MENU_ID);
-						this.update_oldway_menutypes_list(this.OLDWAY_MENUTYPES, this.CURRENT_OLDWAY_MENUTYPE_ID);
+						this.update_oldway_menutypes_list(this.OLDWAY_MENUTYPES, this.CURRENT_NOMENCLATURE_TYPE);
 						// update THE_CAFE
 						GLB.THE_CAFE.set({
 							nomenclature_mode:answer.nomenclature_mode,
@@ -342,7 +341,7 @@ export var VIEW_IIKO_CUSTOMIZATION = {
 		}
 	},
 
-	update_oldway_menutypes_list:function(menutypes, current_oldway_menutype_id){		
+	update_oldway_menutypes_list:function(menutypes, current_nomenclature_type){		
 				
 		if(menutypes && menutypes.length>0){	
 			
@@ -360,16 +359,16 @@ export var VIEW_IIKO_CUSTOMIZATION = {
 								if(!$(e.target).hasClass("checked")){
 									$(e.target).siblings().removeClass("checked");
 									$(e.target).addClass("checked");
-									let new_current_oldway_menutype_id = $(e.target).data("menutype-id");
-									console.log('---- new_current_oldway_menutype_id ---- ',new_current_oldway_menutype_id);
-									this.new_current_oldway_menutype_id(new_current_oldway_menutype_id);
+									let new_current_nomenclature_type = $(e.target).data("menutype-id");
+									console.log('---- new_current_nomenclature_type ---- ',new_current_nomenclature_type);
+									this.new_current_nomenclature_type(new_current_nomenclature_type);
 								}						
 							}
 						}});
 						e.originalEvent.cancelable && e.preventDefault();						
 					});
 					
-					if(current_oldway_menutype_id==menutype.id){
+					if(current_nomenclature_type==menutype.id){
 						$btnMenu.addClass("checked");
 					};
 					this.$oldway_menutypes_list.append($btnMenu);
@@ -631,7 +630,7 @@ export var VIEW_IIKO_CUSTOMIZATION = {
 				current_terminal_group_id:this.NEW_TERMINAL_GROUP_ID,
 				current_extmenu_id:this.NEW_EXTMENU_ID,
 				current_oldway_menu_id:this.NEW_OLDWAY_MENU_ID,
-				current_oldway_menutype_id:this.NEW_OLDWAY_MENUTYPE_ID,
+				current_nomenclature_type:this.NEW_NOMENCLATURE_TYPE,
 			};
 
 			console.log('data',data);
