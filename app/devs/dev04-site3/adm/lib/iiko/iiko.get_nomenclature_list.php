@@ -61,13 +61,16 @@ $NOMCL = new Iiko_nomenclature($orgId, $key);
 $NOMCL->reload();
 $iiko_response = $NOMCL->get_data();
 
+// -------------------------------------------------------
+// используем папки как категории (false, если PIZZAIOLO)
+// -------------------------------------------------------
+define("GROUPS_AS_CATEGORIES", ($IIKO_PARAMS->get())->current_nomenclature_type=='groups_as_categories'); 
+
 // ------------------------------------
 //  Преобразуем ответ в формат UNIMENU
 // ------------------------------------
-// используем папки как категории
-define("FOLDERS_AS_CATEGORY", false); 
 $UNIMENU = new Iiko_parser_to_unimenu_v2($iiko_response);
-$UNIMENU->parse(FOLDERS_AS_CATEGORY); 
+$UNIMENU->parse(GROUPS_AS_CATEGORIES); 
 $data = $UNIMENU->get_data();
 
 $menus = [];
@@ -79,7 +82,7 @@ foreach ($data["Menus"] as $menu) {
 }
 
 $current_oldway_menu_id = $menus[0]["id"] ?? null;
-$current_nomenclature_type = "real_category";
+$current_nomenclature_type = ($IIKO_PARAMS->get())->current_nomenclature_type; 
 
 
 save_menus_to_iiko_params($id_cafe, $menus, $current_oldway_menu_id, $current_nomenclature_type);
@@ -109,41 +112,41 @@ function get_menus($array) {
     return $menus;
 }
 
-function getting_nomenc_from_test_file($file_path): array {
+// function getting_nomenc_from_test_file($file_path): array {
 
-    $error = null;
+//     $error = null;
 
-    // Проверяем существование файла
-    if (!file_exists($file_path)) {
-        $error = "Ошибка: Файл не найден.";        
-    }
+//     // Проверяем существование файла
+//     if (!file_exists($file_path)) {
+//         $error = "Ошибка: Файл не найден.";        
+//     }
 
-    // Читаем содержимое файла
-    $json_data = file_get_contents($file_path);
-    if ($json_data === false) {
-        $error = "Ошибка: Не удалось прочитать файл.";        
-    }
+//     // Читаем содержимое файла
+//     $json_data = file_get_contents($file_path);
+//     if ($json_data === false) {
+//         $error = "Ошибка: Не удалось прочитать файл.";        
+//     }
 
-    // Декодируем JSON в ассоциативный массив
-    $array = json_decode($json_data, true);
+//     // Декодируем JSON в ассоциативный массив
+//     $array = json_decode($json_data, true);
 
-    // Проверяем на ошибки декодирования
-    if (json_last_error() !== JSON_ERROR_NONE) {
-        $error = "Ошибка в формате JSON: " . json_last_error_msg();        
-    }
+//     // Проверяем на ошибки декодирования
+//     if (json_last_error() !== JSON_ERROR_NONE) {
+//         $error = "Ошибка в формате JSON: " . json_last_error_msg();        
+//     }
 
-    // Проверяем на ошибки
-    if( empty($array) || 
-        !count($array) || 
-        isset($array["error"]) ||
-        !isset($array["groups"])
-        ){
-        $error = "Что-то пошло не так";
-    }
+//     // Проверяем на ошибки
+//     if( empty($array) || 
+//         !count($array) || 
+//         isset($array["error"]) ||
+//         !isset($array["groups"])
+//         ){
+//         $error = "Что-то пошло не так";
+//     }
 
-    return [$error, $array];
+//     return [$error, $array];
 
-}
+// }
 
 function save_menus_to_iiko_params($id_cafe, $menus, $current_oldway_menu_id, $current_nomenclature_type): void {
     $iiko_params_collect = new Smart_collect("iiko_params", "where id_cafe='".$id_cafe."'");

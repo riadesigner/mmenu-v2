@@ -48,10 +48,13 @@ $id_cafe = (int) $_POST['id_cafe'];
 $cafe = new Smart_object("cafe",$id_cafe);
 if(!$cafe->valid())__errorjsonp("Unknown cafe, ".__LINE__);
 
-$iiko_params_collect = new Smart_collect("iiko_params", "where id_cafe='".$cafe->id."'");
-if(!$iiko_params_collect || !$iiko_params_collect->full()) __errorjsonp("--cant find iiko params for cafe ".$cafe->id);
-$iiko_params = $iiko_params_collect->get(0);
-$organization_id = $iiko_params->current_organization_id;
+// $iiko_params_collect = new Smart_collect("iiko_params", "where id_cafe='".$cafe->id."'");
+// if(!$iiko_params_collect || !$iiko_params_collect->full()) __errorjsonp("--cant find iiko params for cafe ".$cafe->id);
+// $iiko_params = $iiko_params_collect->get(0);
+// $organization_id = $iiko_params->current_organization_id;
+$key = $cafe->iiko_api_key;
+$IIKO_PARAMS = new Iiko_params($id_cafe, $key);
+$orgId = ($IIKO_PARAMS->get())->current_organization_id;
 
 // -------------------------------------------------------
 // загружаем номенклатуру из тестового файла
@@ -64,30 +67,32 @@ $organization_id = $iiko_params->current_organization_id;
 // -------------------------------------------------------
 // получаем номенклатуру с сервера iiko
 // -------------------------------------------------------
-$NOMCL = new Iiko_nomenclature($organization_id, "", $token);    
+$NOMCL = new Iiko_nomenclature($orgId, "", $token);    
 $NOMCL->reload();
 $iiko_response = $NOMCL->get_data();
+
+glog("IIKO_RESPONSE  ========== ".print_r($iiko_response,1));
+
 
 // -------------------------------------------------------
 // используем папки как категории (false, если PIZZAIOLO)
 // -------------------------------------------------------
-define("GROUPS_AS_CATEGORIES", $iiko_params->current_nomenclature_type=='GROUPS_AS_CATEGORIES'); 
-
-$current_type = GROUPS_AS_CATEGORIES?'GROUPS_AS_CATEGORIES':'PIZZAIOLO';
+define("GROUPS_AS_CATEGORIES", ($IIKO_PARAMS->get())->current_nomenclature_type=='groups_as_categories'); 
 
 // преобразуем ее в формат UNIMENU
 $UNIMENU = new Iiko_parser_to_unimenu_v2($iiko_response);
 $UNIMENU->parse(GROUPS_AS_CATEGORIES); 
 $data = $UNIMENU->get_data();
 
-glog("----------- UNIMENU -----------");
-glog(print_r($data,true));
+glog("UNIMENU  ========== ".print_r($data,1));
 
 // конвертим ее в текущий формат CHEFSMENU
 $CHEFS_CONVERTER = new Conv_unimenu_to_chefs($data);
 $chefsdata = $CHEFS_CONVERTER->convert()->get_data();
 
 $menu = $chefsdata["Menus"][$externalMenuId]??null;
+
+glog("CHEFSDATA ========== ".print_r($chefsdata,1));
 
 // $res = iiko_get_info($url,$headers,$params);
 // $newExtmenuHash = md5(json_encode($res, JSON_UNESCAPED_UNICODE));

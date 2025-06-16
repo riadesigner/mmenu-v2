@@ -393,11 +393,11 @@ App&&App();
 					<div class="choosing-nomenclature-section">
 						<p>Выберите меню, загруженное из номерклатурного списка:</p>
 						<div class="iiko-oldway_menu-list"><p>Не загружено</p></div>
-						<br>
-						<p>Какой тип меню у вас:</p>
-						<div class="iiko-oldway_menutypes-list"><p>Не загружено</p></div>
-
 					</div>
+
+						<br>
+						<p>Какой тип структуры меню у вас (при использовании номенклатуры):</p>
+						<div class="iiko-oldway_menutypes-list"><p>Не загружено</p></div>					
 					
 					<h2>Синхронизация</h2>
 					<p>Время автоматической синхронизации ChefsMenu c Внешним Меню iiko.</p>					
