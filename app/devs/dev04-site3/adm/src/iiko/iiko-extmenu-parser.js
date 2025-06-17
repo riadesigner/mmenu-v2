@@ -71,6 +71,7 @@ export var ExtMenuParser = {
 									var modifier = arr[i].items[a];
 									m.items.push({
 										modifierId: modifier.itemId,
+										modifierGroupId:arr[i].itemGroupId,
 										name: modifier.name,
 										description: modifier.description,
 										portionWeightGrams: modifier.portionWeightGrams,

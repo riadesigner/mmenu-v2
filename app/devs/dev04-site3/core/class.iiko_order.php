@@ -72,6 +72,9 @@ class Iiko_order{
 			$orderItemType = $row['item_data']['iiko_order_item_type'];
 			$chosenModifiers = isset($row['chosen_modifiers'])?$row['chosen_modifiers']:false;
 		
+			glog("--------------- preparing modifiers for order row ---------------");
+			glog("chosenModifiers", print_r($chosenModifiers,1)); 
+
 			$item = [
 					"type"=>"{$orderItemType}",
 					"amount"=>"{$amount}",			
