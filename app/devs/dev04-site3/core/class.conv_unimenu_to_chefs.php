@@ -1,8 +1,10 @@
 <?php
 /**
- * ПРЕОБРАЗУЕМ ФОРМАТ UNIMENU В CHEFSMENU (v-2.1.1)
+ * ПРЕОБРАЗУЕМ ФОРМАТ UNIMENU В CHEFSMENU (v-2.2.1)
  * 
- * - добавлено поле originalPrice (для виртуального размерного ряда)
+ * для виртуального размерного ряда:
+ * - добавлено поле originalPrice (из modifier->sizes[0]->price) 
+ * - добавлено поле sizeGroupId (из modifierGroupId)
  * (для возможности перед отправкой заказа в iiko  
  * распарсить размерный ряд обратно в модификатор размера, 
  * из которого он был собран)
@@ -168,6 +170,7 @@ class Conv_unimenu_to_chefs {
                     "isDefault"=> $isDefault,
                     "price" => (int) $item["price"] + $mainPrice,
                     "originalPrice" => (int) $item["price"],
+                    "sizeGroupId"=> $item["modifierGroupId"],
                     "measureUnitType"=> $measureUnitType,
                     "portionWeightGrams" => (int) $item["portionWeightGrams"] + $weightGrams,
                 ];
@@ -182,6 +185,7 @@ class Conv_unimenu_to_chefs {
                 "isDefault"=> false,
                 "price" => $e["price"],
                 "originalPrice" => null,
+                "sizeGroupId"=> "",
                 "measureUnitType"=>$e["measureUnitType"],
                 "portionWeightGrams" => $e["weightGrams"],
             ], $sizes);

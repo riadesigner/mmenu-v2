@@ -51,6 +51,70 @@ class Iiko_order{
 		return $order;
 	}
 
+	// ---------------------------------------------------
+	// extract sizes to modifiers of size (like pizzaiolo)
+	// ---------------------------------------------------
+	public function remake_for_nomenclature($order_items): array{		
+		
+		$re_order_items = array_map(function($item){
+
+			$res = [
+				"itemId" => $item["itemId"],
+				"uniq_name" => $item["uniq_name"],				
+				"count" => $item["count"],
+				"volume" => $item["volume"],
+				"units" => $item["units"],
+				"item_data"	=> $item["item_data"],
+			];			
+
+			if((int) $item["originalPrice"] > 0){
+				
+				// --------------------------------------------------------
+				// преобразуем размерный ряд обратно в модификатор размеров
+				// --------------------------------------------------------
+				// убираем размерный ряд				
+				$originalPrice = (int) $item["originalPrice"];
+				$price =  (int) $item["price"] - $originalPrice;
+				$chosen_modifiers = $item["chosen_modifiers"] ?? [];
+				// добавляем модификатор размера				
+				$chosen_modifiers[] = 
+					[
+					"modifierId" => $item["sizeId"],
+					"name" => $item["name"],
+					"description" => $item["description"],
+					"imageUrl" => $item["imageUrl"],
+					"portionWeightGrams" => $item["portionWeightGrams"],
+					"price" => $originalPrice,															
+					];	
+				$res["price"] = $price;	
+				$res["chosen_modifiers"] = $chosen_modifiers;	
+
+				$res["sizeName"] = "";
+				$res["sizeId"] = "";
+				$res["sizeCode"] = "";
+				$res["originalPrice"] = $item["originalPrice"];
+
+			}else{
+
+				
+				$res["price"] = $item["price"];	
+				
+				if(isset($item["chosen_modifiers"])){
+					$res["chosen_modifiers"] = $item["chosen_modifiers"];
+				}
+				
+				$res["sizeName"] = $item["sizeName"];
+				$res["sizeId"] = $item["sizeId"];
+				$res["sizeCode"] = $item["sizeCode"];
+				$res["originalPrice"] = $item["originalPrice"];				
+			}
+			return $res;
+
+		}, $order_items);
+
+		return $re_order_items;
+	} 	
+
 	private function load_iiko_params(): void{
 		$iiko_params_collect = new Smart_collect("iiko_params","where id_cafe='".$this->cafe->id."'"); 
 		if(!$iiko_params_collect->full()) throw new Exception("--iiko psrams not found for the cafe ".$cafe->id);
