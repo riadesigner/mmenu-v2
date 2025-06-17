@@ -70,9 +70,7 @@ class Order_sender{
 			'organizationId' => $organization_id, 
 			'terminalGroupId' => $terminal_group_id, 
 			'order' => $order
-		]; 			
-
-		glog("=============== SEND IIKO ORDER TO TABLE =============== \n".print_r($params,1));
+		];
 
 		$res = iiko_get_info($url, $headers, $params);		
 		glog("iiko answer: ".print_r($res,1));

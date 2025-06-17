@@ -24,11 +24,17 @@ class Iiko_order{
 	 */
 	public function prepare_order_for_table(int $table_number, array $order_rows): array{
 						
+		glog("-------PREPARE_ORDER_FOR_TABLE------- \n".print_r($order_rows,1));
+		
+
 		$menu_id = $this->iiko_params->current_extmenu_id;
 		$table_id = $this->get_table_id_by_number($table_number);
 		if($table_id===null){throw new Exception("--cant calculate iiko table_id");}		
 
 		$order_items = $this->prepare_items($order_rows);		
+
+		glog("-------NEW_ORDER_ITEMS------- \n".print_r($order_items,1));		
+
 		$order_type_id = $this->get_id_for_tables_type_order();
 
 		$order = [
@@ -51,6 +57,71 @@ class Iiko_order{
 		return $order;
 	}
 
+	public function remake_for_nomenclature($order_items): array{
+		
+		glog("-------ORDER ITEMS BEFORE 1------- \n".print_r($order_items,1));
+		
+		$re_order_items = array_map(function($item){
+
+			$res = [
+				"itemId" => $item["itemId"],
+				"uniq_name" => $item["uniq_name"],				
+				"count" => $item["count"],
+				"volume" => $item["volume"],
+				"units" => $item["units"],
+				"item_data"	=> $item["item_data"],
+			];			
+
+			if((int) $item["originalPrice"] > 0){
+				
+				// --------------------------------------------------------
+				// преобразуем размерный ряд обратно в модификатор размеров
+				// --------------------------------------------------------
+				// убираем размерный ряд				
+				$originalPrice = (int) $item["originalPrice"];
+				$price =  (int) $item["price"] - $originalPrice;
+				$chosen_modifiers = $item["chosen_modifiers"] ?? [];
+				// добавляем модификатор размера				
+				$chosen_modifiers[] = 
+					[
+					"modifierId" => $item["sizeId"],
+					"name" => $item["name"],
+					"description" => $item["description"],
+					"imageUrl" => $item["imageUrl"],
+					"portionWeightGrams" => $item["portionWeightGrams"],
+					"price" => $originalPrice,															
+					];	
+				$res["price"] = $price;	
+				$res["chosen_modifiers"] = $chosen_modifiers;	
+
+				$res["sizeName"] = "";
+				$res["sizeId"] = "";
+				$res["sizeCode"] = "";
+				$res["originalPrice"] = $item["originalPrice"];
+
+			}else{
+
+				
+				$res["price"] = $item["price"];	
+				
+				if(isset($item["chosen_modifiers"])){
+					$res["chosen_modifiers"] = $item["chosen_modifiers"];
+				}
+				
+				$res["sizeName"] = $item["sizeName"];
+				$res["sizeId"] = $item["sizeId"];
+				$res["sizeCode"] = $item["sizeCode"];
+				$res["originalPrice"] = $item["originalPrice"];				
+			}
+			return $res;
+
+		}, $order_items);		
+
+		glog("-------RE_ORDER_ITEMS 1------- \n".print_r($re_order_items,1));
+
+		return $re_order_items;
+	} 
+	
 	private function load_iiko_params(): void{
 		$iiko_params_collect = new Smart_collect("iiko_params","where id_cafe='".$this->cafe->id."'"); 
 		if(!$iiko_params_collect->full()) throw new Exception("--iiko psrams not found for the cafe ".$cafe->id);
@@ -63,13 +134,17 @@ class Iiko_order{
 	 */
 	private function prepare_items($order_rows): array{
 		
+
 		$order_items = [];
 
 		foreach($order_rows as $row){
+
+			glog("-------ORDER_ROW------- \n".print_r($row,1));
+
 			$amount = $row['count'];
 			$productSizeId = $row['sizeId'];
 			$productId =  $row['item_data']['id_external'];
-			$orderItemType = $row['item_data']['iiko_order_item_type'];
+			$orderItemType = $row['item_data']['iiko_order_item_type']||"Product";
 			$chosenModifiers = isset($row['chosen_modifiers'])?$row['chosen_modifiers']:false;
 		
 			$item = [
@@ -78,7 +153,7 @@ class Iiko_order{
 				];
 		
 			if(!empty($productSizeId)) $item["productSizeId"]=$productSizeId;
-			
+			///xxx
 			$modifiers = [];
 			if($chosenModifiers && count($chosenModifiers)){		
 				foreach($chosenModifiers as $m){
