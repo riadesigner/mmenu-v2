@@ -33,9 +33,7 @@ class Iiko_order{
 
 		$order_items = $this->prepare_items($order_rows);		
 
-		glog("-------NEW_ORDER_ITEMS------- \n".print_r($order_items,1));
-
-		die("10000");
+		glog("-------NEW_ORDER_ITEMS------- \n".print_r($order_items,1));		
 
 		$order_type_id = $this->get_id_for_tables_type_order();
 
