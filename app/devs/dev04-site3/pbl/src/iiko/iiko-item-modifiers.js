@@ -171,23 +171,25 @@ export const IIKO_ITEM_MODIFIERS = {
 				let radioMode = false;
 				if(g['restrictions']){					
 					radioMode = g['restrictions']['maxQuantity']==1 
-					&& g['restrictions']['minQuantity'] == 1;
+					// && g['restrictions']['minQuantity'] == 1;
 				}
 				let params = `data-group-id="${groupId}" data-group-name="${groupName}" data-radio-mode="${radioMode}"`;
 				let strGroupName=`<div class="modifiers-group-name">${groupName}</div>`;
 				let $m_group_wrapper = $(`<div class="modif-group-wrapper" ${params}>${strGroupName}</div>`);
 				
+				console.log('g', g);
+
 				let $m_list_group = $('<ul></ul>');				
 				const type_radio = radioMode?'type-radio':'';
 				const mode_radio = radioMode?'mode-radio':'';
-				let byDefault = g['restrictions']['byDefault'] || 0;
-				byDefault = parseInt(byDefault,10);				
 				let m_counter = 0; 
 				for(let m in g.items ){					
 					let modifier = g.items[m];
 					let chosen = '';
-					let chosenByDefault = ''
-					if(radioMode && m_counter===byDefault){  chosen = 'chosen'; chosenByDefault = 'chosen-by-default'}
+					let chosenByDefault = '';
+					// if(radioMode && m_counter===byDefault){  
+					// 	chosen = 'chosen'; chosenByDefault = 'chosen-by-default'
+					// }
 					const modif_price = modifier.price>0?'+ '+modifier.price+' руб.':'';
 					$m_list_group.append([
 						`<li class="btn-modifier ${mode_radio} ${chosen} ${chosenByDefault}" data-modifier-id="${modifier.modifierId}">`,

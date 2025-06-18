@@ -14,7 +14,7 @@ require_once WORK_DIR.APP_DIR.'core/class.smart_collect.php';
 require_once WORK_DIR.APP_DIR.'core/class.user.php';
 require_once WORK_DIR.APP_DIR.'core/class.iiko_params.php';
 require_once WORK_DIR.APP_DIR.'core/class.iiko_nomenclature.php';
-require_once WORK_DIR.APP_DIR.'core/class.iiko_parser_to_unimenu_v2.php';
+require_once WORK_DIR.APP_DIR.'core/class.iiko_parser_to_unimenu.php';
 
 session_start();
 SQL::connect();
@@ -66,10 +66,11 @@ $iiko_response = $NOMCL->get_data();
 // -------------------------------------------------------
 define("GROUPS_AS_CATEGORIES", ($IIKO_PARAMS->get())->current_nomenclature_type=='groups_as_categories'); 
 
+
 // ------------------------------------
 //  Преобразуем ответ в формат UNIMENU
 // ------------------------------------
-$UNIMENU = new Iiko_parser_to_unimenu_v2($iiko_response);
+$UNIMENU = new iiko_parser_to_unimenu("", $iiko_response);
 $UNIMENU->parse(GROUPS_AS_CATEGORIES); 
 $data = $UNIMENU->get_data();
 
