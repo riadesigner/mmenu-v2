@@ -187,9 +187,10 @@ export const IIKO_ITEM_MODIFIERS = {
 					let modifier = g.items[m];
 					let chosen = '';
 					let chosenByDefault = '';
-					// if(radioMode && m_counter===byDefault){  
-					// 	chosen = 'chosen'; chosenByDefault = 'chosen-by-default'
-					// }
+					if( parseInt(modifier['restrictions']['byDefault'],10) > 0){
+						chosen = 'chosen'; 
+						chosenByDefault = 'chosen-by-default';
+					}
 					const modif_price = modifier.price>0?'+ '+modifier.price+' руб.':'';
 					$m_list_group.append([
 						`<li class="btn-modifier ${mode_radio} ${chosen} ${chosenByDefault}" data-modifier-id="${modifier.modifierId}">`,
@@ -199,6 +200,10 @@ export const IIKO_ITEM_MODIFIERS = {
 						`</li>`
 						].join(''));
 					m_counter++;
+					if(radioMode && m_counter==g.items.length && chosen!=='chosen'){
+						console.log(`m_counter = ${m_counter}, g.items.length = ${g.items.length}, chosen!='chosen', ${chosen!=='chosen'}`);
+						$m_list_group.find('li:first').addClass('chosen').addClass('chosen-by-default');
+					}
 				}				
 				$m_group_wrapper.append($m_list_group);
 				return $m_group_wrapper;
