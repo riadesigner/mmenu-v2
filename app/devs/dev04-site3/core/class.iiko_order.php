@@ -82,10 +82,10 @@ class Iiko_order{
 					[
 					"modifierId" => $item["sizeId"],
 					"modifierGroupId" => $item["sizeGroupId"]??"",
-					"name" => $item["name"]??"Размер",
+					"name" => $item["sizeName"]??"Размер",
 					"description" => $item["description"]??"",
 					"imageUrl" => $item["imageUrl"]??"",
-					"portionWeightGrams" => $item["portionWeightGrams"]??"",
+					"portionWeightGrams" => $item["volume"]??"",
 					"price" => $originalPrice,
 					];	
 				$res["price"] = $price;	
