@@ -20,7 +20,9 @@ exceptList = [
 	'package-lock.json',
 	'rollup.config.mjs',
 	'prod-rollup.config.js',
-	'package.json'
+	'package.json',
+	'readme.md',
+	'README.md'
 	]
 
 # get number of app-version
