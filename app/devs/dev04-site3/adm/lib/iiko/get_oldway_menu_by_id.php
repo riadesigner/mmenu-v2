@@ -16,7 +16,7 @@ require_once WORK_DIR.APP_DIR.'core/class.smart_object.php';
 require_once WORK_DIR.APP_DIR.'core/class.smart_collect.php';
 require_once WORK_DIR.APP_DIR.'core/class.user.php';
 require_once WORK_DIR.APP_DIR.'core/class.iiko_params.php';
-require_once WORK_DIR.APP_DIR.('core/class.Iiko_nomenclature.php');
+require_once WORK_DIR.APP_DIR.('core/class.iiko_nomenclature.php');
 require_once WORK_DIR.APP_DIR.('core/class.iiko_parser_to_unimenu.php');
 require_once WORK_DIR.APP_DIR.('core/class.conv_unimenu_to_chefs.php');
 
