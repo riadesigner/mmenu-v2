@@ -37,6 +37,24 @@ export const IIKO_ITEM = {
 		const modifiers_cost = this.IIKO_MODIFIERS.get_cost();
 		const total_price = (this.get_price() + modifiers_cost);
 
+	/**
+	 * preorderObject = { 
+	 *   chosen_modifiers: array; // (IIKO only)
+	 *   count: number;
+	 *   itemId: string;
+	 *   item_data: object;
+	 *   originalPrice: number; // (IIKO only) for virtual size (from modifier->sizes[0]->price)
+	 *   sizeGroupId: string; // (IIKO only) for virtual size (from modifier->modifierGroupId )
+	 *   price: number;
+	 *	 sizeCode: string; // (IIKO only)
+	 *	 sizeId: string; // (IIKO only)	 
+	 *	 sizeName: string; // (IIKO only)	 
+	 *   uniq_name: string; // (chefs|iiko)-order-7330-930162801
+	 *	 units: string; // г|мл|л|кг
+	 *   sizeName:string;
+	 *	 volume: number;
+	 * }
+	*/	
 		const pre_order = {
 		itemId: this.item_data.id,
 			uniq_name: uniq_name,
@@ -51,8 +69,9 @@ export const IIKO_ITEM = {
 			sizeName: s.sizeName,
 			sizeId: s.sizeId||'',
 			sizeCode: s.sizeCode||'',
-			originalPrice: s.originalPrice||'', // for nomenclature (oldway menu)
-			
+			originalPrice: s.originalPrice||'',
+			sizeGroupId: s.sizeGroupId||'',
+
 			chosen_modifiers:chosen_modifiers
 		};			
 		

@@ -31,18 +31,20 @@ export var CART = {
 	/**
 	 * @param preorder: preorderObject
 	 * preorderObject = { 
-	 *   itemId:string;
-	 *   uniq_name: string;
+	 *   chosen_modifiers: array; / optional (IIKO)
+	 *   count: number;
+	 *   itemId: string;
+	 *   item_data: object;
+	 *   originalPrice: number; // for virtual size (from modifier->sizes[0]->price)
+	 *   sizeGroupId: string; // for virtual size (from modifier->modifierGroupId )
 	 *   price: number;
-	 *   count:number;
+	 *	 sizeCode: string; // optional (IIKO)			
+	 *	 sizeId: string; // optional (IIKO)	 
+	 *	 sizeName: string; // optional (IIKO)	 
+	 *   uniq_name: string; // (chefs|iiko)-order-7330-930162801
+	 *	 units: string; // г|мл|л|кг
 	 *   sizeName:string;
-	 *   item_data:object;
-	 *	 sizeName: string; / optional (IIKO)
-	 *	 volume: number
-	 *	 units: string (г|мл|л|кг)
-	 *	 sizeId: string; / optional (IIKO)
-	 *	 sizeCode: string; / optional (IIKO)			
-	 *	 chosen_modifiers: array; / optional (IIKO)
+	 *	 volume: number;
 	 * }
 	*/
 	add_preorder:function(preorder){						

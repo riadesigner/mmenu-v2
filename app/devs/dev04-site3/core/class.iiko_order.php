@@ -76,15 +76,17 @@ class Iiko_order{
 				$originalPrice = (int) $item["originalPrice"];
 				$price =  (int) $item["price"] - $originalPrice;
 				$chosen_modifiers = $item["chosen_modifiers"] ?? [];
+				glog("добавляем модификатор размера / item=".print_r($item,true));
 				// добавляем модификатор размера				
 				$chosen_modifiers[] = 
 					[
 					"modifierId" => $item["sizeId"],
-					"name" => $item["name"],
-					"description" => $item["description"],
-					"imageUrl" => $item["imageUrl"],
-					"portionWeightGrams" => $item["portionWeightGrams"],
-					"price" => $originalPrice,															
+					"modifierGroupId" => $item["sizeGroupId"]??"",
+					"name" => $item["name"]??"Размер",
+					"description" => $item["description"]??"",
+					"imageUrl" => $item["imageUrl"]??"",
+					"portionWeightGrams" => $item["portionWeightGrams"]??"",
+					"price" => $originalPrice,
 					];	
 				$res["price"] = $price;	
 				$res["chosen_modifiers"] = $chosen_modifiers;	
@@ -107,6 +109,7 @@ class Iiko_order{
 				$res["sizeId"] = $item["sizeId"];
 				$res["sizeCode"] = $item["sizeCode"];
 				$res["originalPrice"] = $item["originalPrice"];				
+
 			}
 			return $res;
 
@@ -134,6 +137,7 @@ class Iiko_order{
 			$productSizeId = $row['sizeId'];
 			$productId =  $row['item_data']['id_external'];
 			$orderItemType = $row['item_data']['iiko_order_item_type'];
+			if(empty($orderItemType)) $orderItemType="Product";
 			$chosenModifiers = isset($row['chosen_modifiers'])?$row['chosen_modifiers']:false;
 		
 			glog("--------------- preparing modifiers for order row ---------------");
