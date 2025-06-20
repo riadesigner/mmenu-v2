@@ -91,9 +91,10 @@ export const VIEW_CAFE_TABLES = {
 						.then(()=>{
 							_this._now_loading();
 							_this.sa_reset_all_codes_asynq()					
-							.then((vars)=>{						
+							.then((tables_uniq_names)=>{						
 								_this._show_message("Qr-коды всех столов созданы заново");
-								console.log(vars);
+								console.log(tables_uniq_names);
+								_this.update_tables_uniq_names_localy(tables_uniq_names);
 								_this._end_loading();
 							})
 							.catch((vars)=>{						
@@ -114,6 +115,13 @@ export const VIEW_CAFE_TABLES = {
 			return false;
 		});		
 
+	},
+	// после сброса номеров столов
+	// обновляем локально сохраненные знаячения
+	update_tables_uniq_names_localy:function(tables_uniq_names){
+		const CAFE = GLB.THE_CAFE.get();
+		CAFE.tables_uniq_names = JSON.stringify(tables_uniq_names);
+		GLB.THE_CAFE.update(CAFE);
 	},
 	goto_tables_qr_codes:function(){
 		// this.reset();
