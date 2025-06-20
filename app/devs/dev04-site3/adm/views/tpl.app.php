@@ -1219,7 +1219,7 @@ App&&App();
 			<div class="app-view-page-container overflow-y">				
 				<div class="std-form">
 					<div class="std-form__section-description" lang="lng_view_cafe_link__hard_link"><!-- link --></div>
-					<div class="std-form__bright-link"><a href="#" target="_blank">[menu-home-link]</a></div>
+					<div class="std-form__bright-link menu-home-link"><a href="#" target="_blank">[menu-home-link]</a></div>
 
 					<div class="std-form__section-description" lang="lng_view_cafe_link__qrcode"><!-- Get to email and print this QR code ... --></div>
 					<div class="view-cafe-link__qr-code"></div>

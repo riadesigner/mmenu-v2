@@ -9,7 +9,7 @@ export var VIEW_CAFE_LINK = {
 		this.$btnBack = this.$footer.find('.back, .close, .cancel');
 		this.$btnGetQRcode = this.$footer.find('.btn-get-qrcode');
 
-		this.$home_menu_link = this.$form.find('.std-form__bright-link a');		
+		this.$home_menu_link = this.$form.find('.menu-home-link a');		
 		this.$qrCode = this.$form.find('.view-cafe-link__qr-code');
 
 		this.USER_EMAIL = CFG.user_email; 

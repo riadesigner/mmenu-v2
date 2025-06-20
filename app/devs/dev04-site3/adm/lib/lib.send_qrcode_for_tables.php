@@ -43,7 +43,7 @@
 		!is_array($_POST['arr_tables']) ||
 		!count($_POST['arr_tables'])) __errorjsonp("Empty list of tables");
 
-	$arr_tables = $_POST['arr_tables'];
+	$arr_tables = $_POST['arr_tables'];	
 
 	if(!isset($_POST['user_email']) || !checkemail( post_clean($_POST['user_email'])) ) {
 		__errorjsonp("Unknown email to send");
@@ -81,8 +81,8 @@
 			$m->add_title2("Столик номер ".$table['table_number']." (".$table['table_name']."):");
 			$m->add_paragraph("<maxwidth 272px><img>".$table['table_qr_image']."</img></maxwidth>",true);	
 			$m->add_paragraph(implode("", [
-			"В qr-код зашифрована ссылка: ",
-			"<nmlink>".$CFG->http.$table['table_link']."</nmlink>"
+			"В qr-код зашифрована ссылка: <br>",
+			"<nmlink>".$table['table_link_url']."|".$table['table_link_name']."</nmlink>",
 			]));
 			$m->add_space();
 		}		 

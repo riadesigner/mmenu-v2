@@ -50,24 +50,34 @@ class Qr_tables{
 
 		$tables_uniq_names = $CAFE->tables_uniq_names ? json_decode((string) $CAFE->tables_uniq_names, 1) : [];
 		if($arr_tables && count($arr_tables)){
+
+			if(!empty($CAFE->subdomain)){
+				$link_pre = $CAFE->subdomain.".".$CFG->wwwroot;
+			}else{
+				$link_pre = $CFG->wwwroot."/cafe/".mb_strtolower($CAFE->uniq_name);
+			}
+								
 			foreach($arr_tables as $table_number){
 				$num = (int) $table_number;
 				if(isset($tables_uniq_names[$num-1])){
+					
 					$table_name = "Стол {$num}";
 					$table_uniq_name = $tables_uniq_names[$num-1];
-					$link = $CFG->wwwroot."/cafe/".mb_strtolower($CAFE->uniq_name)."/table/".$table_uniq_name;
-					$qr_image = rds_qrcode_create_from($link);
+
+					$link_name = $link_pre."/table/".$table_uniq_name;
+					$link_url = $CFG->http.$link_name;
+
+					$qr_image = rds_qrcode_create_from($link_url);
 					$arr[] = [
 						"table_number"=>$num,
 						"table_name"=>$table_name,				
-						"table_link"=>$link,
+						"table_link_name"=>$link_name,
+						"table_link_url"=>$link_url,
 						"table_qr_image"=>$qr_image
 					];
 				}
 			}
 		}		
-
-		glog("\$arr=============\n ".print_r ($arr,true));
 
 		return $arr;
 	}

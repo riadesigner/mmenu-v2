@@ -127,13 +127,13 @@ function iiko_tables_res_parse(array $restaurantSections): array{
 
 ----------------------------------------------------- */
 // return qecode as imagedata or imagesource;
-function rds_qrcode_create_from($link="http://chefsmenu.ru/unknown", $asImageData = false ){		
+function rds_qrcode_create_from($link="https://chefsmenu.ru/unknown", $asImageData = false ){		
 	$options = new QROptions([
 		'outputType'   => QRCode::OUTPUT_IMAGE_PNG,
 		'returnResource'=> true,
 		'scale' => 30,
 		'quietzoneSize'=> 1,
-	]);
+	]);	
 	$im = (new QRCode($options))->render($link);
 	ob_start();		
 	imagepng($im);
