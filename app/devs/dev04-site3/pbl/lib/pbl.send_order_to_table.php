@@ -19,13 +19,15 @@ require_once WORK_DIR.APP_DIR.'core/class.iiko_params_reader.php';
 require_once WORK_DIR.APP_DIR.'pbl/lib/pbl.class.order_parser.php';
 
 
-
 session_start();
 SQL::connect();
 
 // --------------------------------
 // SEND ORDER TO TABLE 
 // --------------------------------
+
+glog("============= SEND ORDER TO TABLE _POST ============ ".print_r($_POST,1));
+
 
 if(!isset($_POST['id_cafe']) || empty($_POST['id_cafe']) ) __errorjsonp("--it needs to know id_cafe");
 if(!isset($_POST['order'])) __errorjsonp("--empty order");

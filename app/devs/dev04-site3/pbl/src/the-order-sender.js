@@ -69,7 +69,7 @@ export const THE_ORDER_SENDER = {
             const PATH = 'pbl/lib/';
             const url = GLB_APP_URL + PATH + 'pbl.send_order_to_table.php';
             const id_cafe = GLB.CAFE.get().id;
-
+            
             const data = {
                 id_cafe,
                 order,
