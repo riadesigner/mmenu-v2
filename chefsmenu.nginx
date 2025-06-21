@@ -61,7 +61,7 @@ server {
         }
 }
 
-# adminer
+# adminer - добавляем SSL
 server {
     listen 8585 ssl;
     server_name chefsmenu.ru;
