@@ -28,9 +28,11 @@ SQL::connect();
 
 glog("============= SEND ORDER TO TABLE _POST ============ ".print_r($_POST,1));
 
+$path = $CFG->dirroot.$CFG->log_path.'/post_debug.log';		
+
 // Временная отладка
 file_put_contents(
-    '/tmp/post_debug.log',
+    $path,
     "=== HEADERS ===\n" . 
     print_r(getallheaders(), true) . 
     "\n=== POST ===\n" . 
