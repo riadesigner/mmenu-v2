@@ -28,6 +28,19 @@ SQL::connect();
 
 glog("============= SEND ORDER TO TABLE _POST ============ ".print_r($_POST,1));
 
+// Временная отладка
+file_put_contents(
+    '/tmp/post_debug.log',
+    "=== HEADERS ===\n" . 
+    print_r(getallheaders(), true) . 
+    "\n=== POST ===\n" . 
+    print_r($_POST, true) . 
+    "\n=== INPUT ===\n" . 
+    file_get_contents('php://input') . 
+    "\n\n",
+    FILE_APPEND
+);
+
 
 if(!isset($_POST['id_cafe']) || empty($_POST['id_cafe']) ) __errorjsonp("--it needs to know id_cafe");
 if(!isset($_POST['order'])) __errorjsonp("--empty order");

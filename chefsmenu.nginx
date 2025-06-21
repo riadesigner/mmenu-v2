@@ -77,29 +77,37 @@ server {
 }
 
 
-# пробный тест перенаправления с поддомена другого сервера
 server {
     listen 443 ssl;
     server_name menu.riadesign.ru;
 
-    # SSL-сертификат для оригинального домена
-    ssl_certificate /etc/letsencrypt/live/menu.riadesign.ru/fullchain.pem; # managed by Certbot
-    ssl_certificate_key /etc/letsencrypt/live/menu.riadesign.ru/privkey.pem; # managed by Certbot
+    ssl_certificate /etc/letsencrypt/live/menu.riadesign.ru/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/menu.riadesign.ru/privkey.pem;
 
+    # Увеличиваем буферы для передачи тела запроса
+    client_max_body_size 100M;
+    proxy_buffering off;
+    proxy_request_buffering off;
 
     location / {
-        # Проксирование на целевой домен
-        proxy_pass https://testo.chefsmenu.ru;
+        proxy_pass https://pizzavl.chefsmenu.ru;
 
-        # Установка заголовков для корректной работы прокси
-        proxy_set_header Host testo.chefsmenu.ru;
+        # Критически важные заголовки
+        proxy_set_header Host pizzavl.chefsmenu.ru;
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
         proxy_set_header X-Forwarded-Proto $scheme;
         proxy_set_header Referer $http_referer;
 
-        # Отключение проверки SSL сертификата целевого сервера (опционально)
+        # Заголовки для передачи тела запроса
+        proxy_set_header Content-Type $content_type;
+        proxy_set_header Content-Length $content_length;
+        
+        # Передача тела запроса
+        proxy_pass_request_body on;
+        proxy_pass_request_headers on;
+
+        # Отключение проверки SSL
         proxy_ssl_verify off;
     }
-
 }
