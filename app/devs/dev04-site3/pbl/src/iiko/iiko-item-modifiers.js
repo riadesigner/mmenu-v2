@@ -122,13 +122,17 @@ export const IIKO_ITEM_MODIFIERS = {
 	//   total_modif_price: integer;
 	// }	
 	_do_recalc_with_groups:function(){
-
+		
 		const fn = {
 			// @return integer
 			calc_price:()=>{
 				const arr = [];
 				let total_price = 0;
-				if(!this.get() || !this.$MODIFIERS_ROWS.length){return};
+
+				if(!this.get() || !this.$MODIFIERS_ROWS || !this.$MODIFIERS_ROWS.length){
+					return [arr, 0];
+				};
+			
 				this.$MODIFIERS_ROWS.each((i,el)=>{
 					if($(el).hasClass('chosen')){
 						const id = $(el).data('modifier-id');
@@ -147,10 +151,12 @@ export const IIKO_ITEM_MODIFIERS = {
 
 		this.arr_usr_chosen = arr_usr_chosen;	
 		this.total_modif_price = parseInt(total_modif_price,10);	
+
 		return {
 			arr_usr_chosen:this.arr_usr_chosen,
 			total_modif_price:this.total_modif_price,
 		}
+	
 	},	
 
 	// @return void
