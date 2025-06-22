@@ -23,6 +23,15 @@ require_once WORK_DIR.APP_DIR.('core/class.conv_unimenu_to_chefs.php');
 session_start();
 SQL::connect();
 
+// нужна новая архитектура решения
+
+// log:  ===== Размер iiko_response: ~2 MB
+// log:  Переменных в iiko_response: 79978
+// log:  Размер UNIMENU: ~0.91 MB
+// log:  Переменных в UNIMENU: 44338
+// log:  Размер chefsdata: ~1.28 MB
+// log:  Переменных в chefsdata: 46101
+
 
 // GETTING OLDWAY MENU BY ID / API 1, (FROM NOMENCLATURE) 
 
@@ -48,21 +57,9 @@ $id_cafe = (int) $_POST['id_cafe'];
 $cafe = new Smart_object("cafe",$id_cafe);
 if(!$cafe->valid())__errorjsonp("Unknown cafe, ".__LINE__);
 
-// $iiko_params_collect = new Smart_collect("iiko_params", "where id_cafe='".$cafe->id."'");
-// if(!$iiko_params_collect || !$iiko_params_collect->full()) __errorjsonp("--cant find iiko params for cafe ".$cafe->id);
-// $iiko_params = $iiko_params_collect->get(0);
-// $organization_id = $iiko_params->current_organization_id;
 $key = $cafe->iiko_api_key;
 $IIKO_PARAMS = new Iiko_params($id_cafe, $key);
 $orgId = ($IIKO_PARAMS->get())->current_organization_id;
-
-// -------------------------------------------------------
-// загружаем номенклатуру из тестового файла
-// (реальный ответ от iiko, API 1, получение номенклатуры)
-// -------------------------------------------------------
-// $file_path = WORK_DIR.'/files/json-info-formated-full-new.json';
-// $iiko_response = get_response_from_test_file($file_path);
-// $menu_id = "9da77ff8-862d-45e4-a7f2-a5117910fa66";
 
 // -------------------------------------------------------
 // получаем номенклатуру с сервера iiko
@@ -71,8 +68,15 @@ $NOMCL = new Iiko_nomenclature($orgId, "", $token);
 $NOMCL->reload();
 $iiko_response = $NOMCL->get_data();
 
-glog("IIKO_RESPONSE  ========== ".print_r($iiko_response,1));
-
+//-------------------------------------------------------
+// размер исходных данных от iiko:
+$size_iiko = strlen(serialize($iiko_response)); 
+$size_iiko = round($size_iiko / 1024 / 1024 ) . " MB";
+$vars_iiko = count_recursive($iiko_response);
+glog("===== Размер iiko_response: ~" . $size_iiko);
+glog('Переменных в iiko_response: ' . $vars_iiko);
+unset($NOMCL);
+//-------------------------------------------------------
 
 // -------------------------------------------------------
 // используем папки как категории (false, если PIZZAIOLO)
@@ -81,18 +85,40 @@ define("GROUPS_AS_CATEGORIES", ($IIKO_PARAMS->get())->current_nomenclature_type=
 
 // преобразуем ее в формат UNIMENU
 $UNIMENU = new iiko_parser_to_unimenu("", $iiko_response);
+unset($iiko_response);
 $UNIMENU->parse(GROUPS_AS_CATEGORIES); 
 $data = $UNIMENU->get_data();
 
-glog("UNIMENU  ========== ".print_r($data,1));
+//-------------------------------------------------------
+// Размер промежуточных данных (UNIMENU):
+$size_unimenu = strlen(json_encode($data, JSON_UNESCAPED_UNICODE));
+$size_unimenu = round($size_unimenu / 1048576, 2) . " MB";
+$vars_unimenu = count_vars($data);
+glog("Размер UNIMENU: ~" . $size_unimenu);
+glog('Переменных в UNIMENU: ' . $vars_unimenu);
+//-------------------------------------------------------
 
 // конвертим ее в текущий формат CHEFSMENU
 $CHEFS_CONVERTER = new Conv_unimenu_to_chefs($data);
 $chefsdata = $CHEFS_CONVERTER->convert()->get_data();
+unset($CHEFS_CONVERTER, $data);
+
+//-------------------------------------------------------
+// Размер финальных данных:
+$size_chefs = strlen(json_encode($chefsdata));
+$size_chefs = round($size_chefs / 1048576, 2) . " MB";
+$vars_chefs = count_vars($chefsdata);
+glog("Размер chefsdata: ~" . $size_chefs);
+glog('Переменных в chefsdata: ' . $vars_chefs);
+//-------------------------------------------------------
 
 $menu = $chefsdata["Menus"][$externalMenuId]??null;
 
-glog("CHEFSDATA ========== ".print_r($chefsdata,1));
+$size_menu = strlen(json_encode($menu));
+$size_menu = round($size_menu / 1048576, 2) . " MB";
+$vars_menu = count_vars($menu);
+glog("Размер menu ".$menu["name"].": ~" . $size_menu);
+glog('Переменных в menu: ' . $vars_menu);
 
 // $res = iiko_get_info($url,$headers,$params);
 // $newExtmenuHash = md5(json_encode($res, JSON_UNESCAPED_UNICODE));
@@ -101,27 +127,42 @@ glog("CHEFSDATA ========== ".print_r($chefsdata,1));
 $answer = [
         "menu"=>$menu,
         "menu-hash"=>"1",
-        "need-to-update"=>true
+        "need-to-update"=>true,
+        "summary_data"=>[
+            "size_iiko"=>$size_iiko,
+            "vars_iiko"=>$vars_iiko." переменных",            
+            "size_unimenu"=>$size_unimenu,
+            "vars_unimenu"=>$vars_unimenu." переменных",
+            "size_chefs"=>$size_chefs,
+            "vars_chefs"=>$vars_chefs." переменных",
+            "size_menu"=>$size_menu,
+            "vars_menu"=>$vars_menu." переменных",            
+        ],
     ];
 
 __answerjsonp($answer);
 
-
-
-function get_response_from_test_file($file_path): array{
-    // Проверяем существование файла
-    if (!file_exists($file_path)) {
-        __errorjsonp("Ошибка: Файл не найден.");
-    }
-    // Читаем содержимое файла
-    $json_data = file_get_contents($file_path);
-    if ($json_data === false) {
-        __errorjsonp("Ошибка: Не удалось прочитать файл.");
-    }
-    // Декодируем JSON в ассоциативный массив
-    $iiko_response = json_decode($json_data, true);
-
-    return $iiko_response;
+// Для глубокого подсчёта переменных в res from iiko:
+function count_recursive(array $arr) {
+    $count = 0;
+    array_walk_recursive($arr, function() use (&$count) {
+        $count++;
+    });
+    return $count;
 }
+
+// Подсчет переменных:
+function count_vars($data) {
+    $count = 0;
+    foreach ($data as $key => $value) {
+        $count++;
+        if (is_array($value)) {
+            $count += count_vars($value);
+        }
+    }
+    return $count;
+}
+
+
 
 ?>

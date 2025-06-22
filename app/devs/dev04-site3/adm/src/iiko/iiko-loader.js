@@ -42,10 +42,13 @@ export var IikoLoader = {
                 .then((vars)=>{                            
                     this.NOW_LOADING = false;
 
+                    console.log('vars and summary = ', vars);
+
                     res([
                         vars['menu'],
                         vars['menu-hash'],
-                        vars['need-to-update']
+                        vars['need-to-update'],
+                        vars['summary_data'],
                     ]);
 
                 })

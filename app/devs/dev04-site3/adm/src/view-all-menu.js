@@ -180,6 +180,8 @@ export var VIEW_ALL_MENU = {
 		Loader.load_extmenu_asynq(id_menu_for_loading, EXTERNALMENU_MODE)
 		.then((vars)=>{
 
+			console.log('vars = ', vars);
+
 			const [roughMenu, roughMenuHash, need2update] = vars;
 
 			// --------------------
@@ -227,7 +229,6 @@ export var VIEW_ALL_MENU = {
 					setTimeout(()=>{ this.end_loading(); this._page_show();},200);
 					return false;
 				}			
-
 
 				console.log('loaded menu',roughMenu);
 				console.log('parsed menu',newMenu);
@@ -296,7 +297,7 @@ export var VIEW_ALL_MENU = {
 		
 		console.log('cafe = ', cafe);
 		console.log('newMenu = ', newMenu);
-		console.log('roughMenuHash = ', roughMenuHash);
+		console.log('roughMenuHash = ', roughMenuHash);		
 
 		const opt = {
 			id_cafe:cafe.id,
