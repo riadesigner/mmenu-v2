@@ -182,60 +182,46 @@ export var VIEW_ALL_MENU = {
 
 			console.log('vars = ', vars);
 
-			const [roughMenu, roughMenuHash, need2update] = vars;
+			// const [roughMenu, roughMenuHash, need2update] = vars;
+			const [idMenuSaved, roughMenuHash, need2update] = vars;
 
 			// --------------------
 			//  IF MENU DATA WRONG
 			// --------------------
-			if(!roughMenu || !roughMenuHash){
+			if(!idMenuSaved || !roughMenuHash){
 				this.error_message();
 				setTimeout(()=>{ this.end_loading(); this._page_show();},200);
 				return false
 			}
 			
-			// --------------------
-			//  IF MENU HAS ERROR
-			// --------------------
-			if(roughMenu.error){
-				let msg = 'Возникла ошибка загрузки внешнего меню.';
-				if(roughMenu.error=='EXTERNAL_MENU_DATA_MISSED'){
-					msg += [
-						`Чтобы исправить, выберите в настройках iikoweb `,
-						`<b>источник цен: "Внешнее меню"</b>`
-					].join(' ');					
+			if(idMenuSaved && roughMenuHash && need2update){
+				
+				// --------------------------------------
+				//  IF MENU WAS IMPORTED AND SAVED IN DB
+				// --------------------------------------
+				
+				let newIdMenuSaved;
+
+				if(EXTERNALMENU_MODE){
+					// если режим внешнего меню, 
+					// то нужно его еще преобразовать в формат CHEFS
+					// TODO - не реализовано в данной версии!
+					newIdMenuSaved = GLB.IIKO_EXT_MENU_PARSER.parse(idMenuSaved);
+
 				}else{
-					msg += [
-						`Код: ${roughMenu.error}. `,
-						`Ответ сервера: ${roughMenu.errorDescription}`
-					].join(' ');
-				};				
-				this.error_message(msg);
-				setTimeout(()=>{ this.end_loading(); this._page_show();},200);
-				return false				
-			};
-			
-			if(roughMenu && roughMenuHash && need2update){
+					// если меню из номенклатуры, то оно уже в нужном формате, 
+					// поэтому парсить не нужно  
+					newIdMenuSaved = idMenuSaved;
+				}				 
 				
-				// ---------------------
-				//  IF MENU WAS UPDATED
-				// ---------------------								
-				// меню из номенклатуры уже в нужном формате, поэтому парсить не нужно  
-				const newMenu = EXTERNALMENU_MODE ? GLB.IIKO_EXT_MENU_PARSER.parse(roughMenu) : roughMenu; 
-				
-				const total_categories = Object.keys(newMenu.categories).length;				
-
-				if(!total_categories){
-					this.error_message('Внешнее меню пустое.');
-					setTimeout(()=>{ this.end_loading(); this._page_show();},200);
-					return false;
-				}			
-
-				console.log('loaded menu',roughMenu);
-				console.log('parsed menu',newMenu);
-				// console.log('loaded menu -> json',JSON.stringify(roughMenu));
-				// console.log('parsed menu -> json',JSON.stringify(newMenu));
+				// const total_categories = Object.keys(newMenu.categories).length;				
+				// if(!total_categories){
+				// 	this.error_message('Внешнее меню пустое.');
+				// 	setTimeout(()=>{ this.end_loading(); this._page_show();},200);
+				// 	return false;
+				// }
 								
-				this.do_update_iiko_menu(cafe, newMenu, roughMenuHash);
+				this.do_update_iiko_menu(cafe, newIdMenuSaved, roughMenuHash);
 
 			}else{
 
@@ -292,16 +278,12 @@ export var VIEW_ALL_MENU = {
 			this._page_show();
 		})
 	},
-	do_update_iiko_menu:function(cafe, newMenu,roughMenuHash){
+	do_update_iiko_menu:function(cafe, idMenuSaved,roughMenuHash){
 		const _this=this;
-		
-		console.log('cafe = ', cafe);
-		console.log('newMenu = ', newMenu);
-		console.log('roughMenuHash = ', roughMenuHash);		
 
 		const opt = {
 			id_cafe:cafe.id,
-			newMenu:newMenu,
+			idMenuSaved:idMenuSaved,
 			roughMenuHash:roughMenuHash,
 			onReady:function() {											
 				console.log("Menu was updated!");							

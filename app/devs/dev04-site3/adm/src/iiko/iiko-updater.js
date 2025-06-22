@@ -1,7 +1,7 @@
 
 export var IikoUpdater = {
     init:function(opt) {        
-        this.NEW_MENU = opt.newMenu;        
+        this.idMenuSaved = opt.idMenuSaved;        
         this.ID_CAFE = opt.id_cafe;
         this.roughMenuHash = opt.roughMenuHash;
                 
@@ -21,12 +21,9 @@ export var IikoUpdater = {
         
         var data ={
             id_cafe:this.ID_CAFE,
-            new_menu:this.NEW_MENU,
+            id_menu_saved:this.idMenuSaved,
             rough_menu_hash: this.roughMenuHash
         };
-
-        console.log('starting update with opt',opt);
-        console.log('data = ',data);
 
         var errMsg = "cant upgrading to menu from iiko"; 
 

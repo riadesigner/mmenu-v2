@@ -28,7 +28,7 @@ class SQL {
 
     static public function query($query){
         if(!self::connect()) return false;        
-        glog($query);
+        // glog($query);
         $result = self::$db->query($query);
         if($result){            
             return $result;            
@@ -39,25 +39,25 @@ class SQL {
     }
 
     static public function update($query){   
-        glog($query);     
+        // glog($query);     
         $result = self::query($query);
         return $result ? self::$db->affected_rows: false;
     }
 
     static public function insert($query){
-        glog($query);
+        // glog($query);
         $result = self::query($query);
         return $result ? self::$db->insert_id : false;
     }
 
     static public function delete($query){  
-        glog($query);
+        // glog($query);
         $result = self::query($query);
         return $result;
     }
 
     static public function first($query){
-        glog($query);
+        // glog($query);
         $result = self::query($query);
         return  ($result && $result->num_rows) ? $result->fetch_assoc(): false; 
     }

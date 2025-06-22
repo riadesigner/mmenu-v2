@@ -127,10 +127,7 @@ glog('Переменных в menu: ' . $vars_menu);
 // $newExtmenuHash = md5(json_encode($res, JSON_UNESCAPED_UNICODE));
 // $need2update = $currentExtmenuHash!==$newExtmenuHash;
 
-$answer = [
-        "menu"=>$menu,
-        "menu-hash"=>"1",
-        "need-to-update"=>true,
+$menu_description = [
         "summary_data"=>[
             "size_iiko"=>$size_iiko,
             "vars_iiko"=>$vars_iiko." переменных",            
@@ -140,7 +137,55 @@ $answer = [
             "vars_chefs"=>$vars_chefs." переменных",
             "size_menu"=>$size_menu,
             "vars_menu"=>$vars_menu." переменных",            
-        ],
+        ]    
+];
+
+
+// Проверка кодирования
+$json_menu_data = json_encode($menu, JSON_UNESCAPED_UNICODE | JSON_INVALID_UTF8_SUBSTITUTE);
+
+if($json_menu_data === false) {
+    $error = "JSON Error: " . json_last_error_msg();
+    error_log($error);
+    glogError($error);
+    echo $callback.'('.json_encode(['error' => $error]).')';
+    __errorjsonp($error);
+}
+
+// Проверка размера
+if(strlen($json_menu_data) > 10000000) { // >10MB
+    $error = "Oversized JSON: ".strlen($json_menu_data)." bytes";
+    glogError($error);
+    error_log($error);
+    __errorjsonp($error);
+}
+
+// Перед сохранением в БД
+// file_put_contents('before_db.json', $json_menu_data);
+
+
+$menu_hash = md5($json_menu_data);
+
+// сохраняем меню в базу данных
+$m = new Smart_object("menu_imported");
+$m->id_cafe = $id_cafe;
+$m->id_external = $externalMenuId;
+$m->source = "iiko_nomenclature";
+$m->description = json_encode($menu_description, JSON_UNESCAPED_UNICODE);
+$m->menu_hash = $menu_hash;
+$m->formated = "original";
+$m->data = base64_encode($json_menu_data);
+$m->date_created = 'now()';
+if(!$id_menu_saved = $m->save()){
+    __errorjsonp("Ошибка сохранения меню в базу данных");
+}
+
+$answer = [
+        "id-external"=>$externalMenuId, 
+        "id-menu-saved"=>$id_menu_saved,
+        "menu-hash"=>$menu_hash,
+        "need-to-update"=>true,
+        "description"=>$menu_description,
     ];
 
 __answerjsonp($answer);
