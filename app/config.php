@@ -1,5 +1,6 @@
 <?php
 
+
 if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 require_once 'vendor/autoload.php';
@@ -12,7 +13,6 @@ define("J_ENV_LOCAL", $_ENV['CURRENT_ENV_LOCAL']==='true'? true : false);
 define("J_ENV_TEST", $_ENV['CURRENT_ENV_TEST']==='true'? true : false); // maximum writes logs to file;
 define("J_ENV_BETA", $_ENV['CURRENT_ENV_BETA']==='true'? true : false); // show string 'beta version' on top site;
 define("J_ENV_MAINTENANCE", $_ENV['CURRENT_ENV_MAINTENANCE']==='true'? true : false); 
-
 
 #[AllowDynamicProperties]
 class glb_object{};
@@ -29,3 +29,14 @@ require_once WORK_DIR.APP_DIR.'core/config-site-links.php';
 require_once WORK_DIR.APP_DIR.'core/config-limits.php';
 require_once WORK_DIR.APP_DIR.'core/config-public-skins.php';
 require_once WORK_DIR.APP_DIR.'core/config-inputs-length.php';
+
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
+// Перед обработкой данных
+ini_set('memory_limit', '1024M'); // Увеличьте до 1ГБ или больше
+
+// путь для логов
+$path_to_php_log = WORK_DIR.'/logs/php_errors.log';		
+ini_set('error_log', $path_to_php_log);
