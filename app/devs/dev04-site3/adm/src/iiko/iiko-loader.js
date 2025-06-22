@@ -148,14 +148,17 @@ export var IikoLoader = {
                 dataType: "jsonp",
                 method:"POST",
                 error:(err)=> {
+                    console.log('err after loading nomencl',err);
                     rej(err);                    
                 }
             });
 
             AJAX.then((result)=>{                            
                 if(res(result) && !result['error']){
+                    console.log('result ok after loading nomencl',result);
                     res[result];
                 }else{
+                    console.log('err 2 after loading nomencl',result);
                     rej[result];
                 }
             });
