@@ -26,22 +26,22 @@ SQL::connect();
 // SEND ORDER TO TABLE 
 // --------------------------------
 
-glog("============= SEND ORDER TO TABLE _POST ============ ".print_r($_POST,1));
+// glog("============= SEND ORDER TO TABLE _POST ============ ".print_r($_POST,1));
 
-$path = $CFG->dirroot.$CFG->log_path.'/post_debug.log';		
+// $path = $CFG->dirroot.$CFG->log_path.'/post_debug.log';		
 
 // Временная отладка
-file_put_contents(
-    $path,
-    "=== HEADERS ===\n" . 
-    print_r(getallheaders(), true) . 
-    "\n=== POST ===\n" . 
-    print_r($_POST, true) . 
-    "\n=== INPUT ===\n" . 
-    file_get_contents('php://input') . 
-    "\n\n",
-    FILE_APPEND
-);
+// file_put_contents(
+//     $path,
+//     "=== HEADERS ===\n" . 
+//     print_r(getallheaders(), true) . 
+//     "\n=== POST ===\n" . 
+//     print_r($_POST, true) . 
+//     "\n=== INPUT ===\n" . 
+//     file_get_contents('php://input') . 
+//     "\n\n",
+//     FILE_APPEND
+// );
 
 
 if(!isset($_POST['id_cafe']) || empty($_POST['id_cafe']) ) __errorjsonp("--it needs to know id_cafe");
