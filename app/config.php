@@ -1,5 +1,8 @@
 <?php
 
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
 
 if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
@@ -30,13 +33,3 @@ require_once WORK_DIR.APP_DIR.'core/config-limits.php';
 require_once WORK_DIR.APP_DIR.'core/config-public-skins.php';
 require_once WORK_DIR.APP_DIR.'core/config-inputs-length.php';
 
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
-
-// Перед обработкой данных
-ini_set('memory_limit', '1024M'); // Увеличьте до 1ГБ или больше
-
-// путь для логов
-$path_to_php_log = WORK_DIR.'/logs/php_errors.log';		
-ini_set('error_log', $path_to_php_log);
