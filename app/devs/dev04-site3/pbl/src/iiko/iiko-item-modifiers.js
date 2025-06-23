@@ -173,13 +173,16 @@ export const IIKO_ITEM_MODIFIERS = {
 				if(!g.items || !g.items.length) return null;							
 				
 				let groupId = g['modifierGroupId']??"";
-				let groupName = g['name']??"–";				
+				let groupName = g['name']??"–";	
+				let maxQuantity = parseInt(g['restrictions']['maxQuantity'],10);
 				let radioMode = false;
 				if(g['restrictions']){					
-					radioMode = g['restrictions']['maxQuantity']==1 
-					// && g['restrictions']['minQuantity'] == 1;
+					radioMode = maxQuantity==1 && g['items'].length > 1;					
 				}
-				let params = `data-group-id="${groupId}" data-group-name="${groupName}" data-radio-mode="${radioMode}"`;
+				let params = `data-group-id="${groupId}" 
+					data-group-name="${groupName}" 
+					data-max-quantity="${maxQuantity}" 
+					data-radio-mode="${radioMode}"`;
 				let strGroupName=`<div class="modifiers-group-name">${groupName}</div>`;
 				let $m_group_wrapper = $(`<div class="modif-group-wrapper" ${params}>${strGroupName}</div>`);
 				
