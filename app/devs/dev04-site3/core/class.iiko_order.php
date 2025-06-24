@@ -24,7 +24,7 @@ class Iiko_order{
 	 */
 	public function prepare_order_for_table(int $table_number, array $order_rows): array{
 
-		if((int) $this->nomenclature_mode === 1){
+		if((int) $this->iiko_params->nomenclature_mode === 1){
 			$menu_id = null;
 		}else{
 			$menu_id = (string) $this->iiko_params->current_extmenu_id;
