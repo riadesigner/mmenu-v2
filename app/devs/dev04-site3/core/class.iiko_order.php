@@ -23,8 +23,13 @@ class Iiko_order{
 	 * @return array;
 	 */
 	public function prepare_order_for_table(int $table_number, array $order_rows): array{
-						
-		$menu_id = $this->iiko_params->current_extmenu_id;
+
+		if((int) $this->nomenclature_mode === 1){
+			$menu_id = null;
+		}else{
+			$menu_id = (string) $this->iiko_params->current_extmenu_id;
+		}		
+
 		$table_id = $this->get_table_id_by_number($table_number);
 		if($table_id===null){throw new Exception("--cant calculate iiko table_id");}		
 
@@ -39,7 +44,7 @@ class Iiko_order{
 			"phone"=>"",
 			"guests"=>"",
 			"tabName"=>"",
-			"menuId"=>"{$menu_id}",
+			"menuId"=>$menu_id,
 			"items"=>$order_items,
 			"combos"=>"",
 			"payments"=>"",
