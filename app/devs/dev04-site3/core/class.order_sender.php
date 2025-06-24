@@ -400,7 +400,7 @@ class Order_sender{
 				$order_data["externalNumber"] = $ORDER->id_uniq;
 				$order_data["comment"] = $comment;
 
-				glog("=========== ORDER_DATA =========== ".print_r($order_data,1));
+				glog("=========== ORDER_DATA =========== ".capture_var_dump($order_data));
 
 				try{
 					// ---------------------------------------------

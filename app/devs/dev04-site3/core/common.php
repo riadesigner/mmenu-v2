@@ -280,6 +280,13 @@ function getMinutesWord(int $n): string {
     }
 }
 
+
+function capture_var_dump($data) {
+    ob_start();
+    var_dump($data);
+    return ob_get_clean();
+}
+
 /* for remember and TODO */
 
 // try {
