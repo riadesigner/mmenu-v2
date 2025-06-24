@@ -30,8 +30,9 @@ class Iiko_order{
 			$menu_id = (string) $this->iiko_params->current_extmenu_id;
 		}		
 
-		$table_id = $this->get_table_id_by_number($table_number);
-		if($table_id===null){throw new Exception("--cant calculate iiko table_id");}		
+		// $table_id = $this->get_table_id_by_number($table_number);
+		// if($table_id===null){throw new Exception("--cant calculate iiko table_id");}		
+		$table_id = "44dd4519-bd71-4e04-bf1c-1cef615683bb";
 
 		$order_items = $this->prepare_items($order_rows);		
 		$order_type_id = $this->get_id_for_tables_type_order();

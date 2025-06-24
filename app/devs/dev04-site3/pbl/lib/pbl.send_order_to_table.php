@@ -57,8 +57,9 @@ define('DEMO_MODE', (int) $cafe->cafe_status !== 2);
 define("ORDER_TARGET", Order_sender::ORDER_TABLE);
 
 $order_data = $_POST['order'];
-// $table_number = (int) $_POST['table_number'];
-$table_number = "44dd4519-bd71-4e04-bf1c-1cef615683bb";
+$table_number = (int) $_POST['table_number'];
+$table_number = 2;
+
 
 glog("----------------- ORDER DATA ----------------- \n".print_r($order_data,1));
 glog("----------------- ORDER TARGET ----------------- \n".print_r(ORDER_TARGET,1));
