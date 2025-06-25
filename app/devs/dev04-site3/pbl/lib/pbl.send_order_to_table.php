@@ -58,8 +58,6 @@ define("ORDER_TARGET", Order_sender::ORDER_TABLE);
 
 $order_data = $_POST['order'];
 $table_number = (int) $_POST['table_number'];
-$table_number = 2;
-
 
 glog("----------------- ORDER DATA ----------------- \n".print_r($order_data,1));
 glog("----------------- ORDER TARGET ----------------- \n".print_r(ORDER_TARGET,1));

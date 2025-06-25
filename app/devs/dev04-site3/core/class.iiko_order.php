@@ -30,9 +30,9 @@ class Iiko_order{
 			$menu_id = (string) $this->iiko_params->current_extmenu_id;
 		}		
 
-		// $table_id = $this->get_table_id_by_number($table_number);
-		// if($table_id===null){throw new Exception("--cant calculate iiko table_id");}		
-		$table_id = "44dd4519-bd71-4e04-bf1c-1cef615683bb";
+		$table_id = $this->get_table_id_by_number($table_number);
+		if($table_id===null){throw new Exception("--cant calculate iiko table_id");}		
+		// $table_id = "44dd4519-bd71-4e04-bf1c-1cef615683bb";
 
 		$order_items = $this->prepare_items($order_rows);		
 		$order_type_id = $this->get_id_for_tables_type_order();
@@ -183,29 +183,30 @@ class Iiko_order{
 
 	}
 
-	private function get_table_id_by_number($table_number): string{		
+	private function get_table_id_by_number( int $table_number ): string{		
 
 		$tbls = $this->iiko_params->tables;
 		$tbls = !empty($tbls)?json_decode($tbls,true):false;
-		if(!$tbls) throw new Exception("--cant find iiko tableIds for the cafe");
 
-		$table_id = null;
-		$stop_search = false;	
-		if(gettype($tbls)=='array' && count($tbls)){
-			foreach($tbls as $section){
-				if($stop_search) break;			
-				$arr_tbls = $section['tables'];
-				if(gettype($arr_tbls)=='array' && count($arr_tbls)){
-					foreach($arr_tbls as $tbl){
-						if((int)$tbl['number']==(int)$table_number){
-							$table_id = $tbl['id'];
-							$stop_search = true;
-							break;
-						}
-					}
-				}
-			}
-		}
+		$current_terminal_group_id = $this->iiko_params->current_terminal_group_id;		
+
+		if(!$tbls || empty($current_terminal_group_id)) throw new Exception("--cant find iiko tableIds for the cafe, 1");
+		if(mb_strtolower(gettype($tbls))!=='array' || !count($tbls)) throw new Exception("--cant find iiko tableIds for the cafe, 2");		
+
+		$section = array_filter($tbls, function($section) use ($current_terminal_group_id) {
+			return $section['terminalGroupId'] == $current_terminal_group_id;
+		});
+
+		if(!count($section)) throw new Exception("--cant find iiko tableIds for the cafe, 3");
+
+		
+		$table = array_filter($section, function($table) use ($table_number) {
+			return $table['number'] == $table_number;
+		});
+		
+		if(!count($table)) throw new Exception("--cant find iiko tableIds for the cafe, 4");
+
+		$table_id = $table[0]['id'];		
 		return $table_id;
 	}	
 
