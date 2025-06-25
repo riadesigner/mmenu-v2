@@ -59,15 +59,7 @@ define("ORDER_TARGET", Order_sender::ORDER_TABLE);
 $order_data = $_POST['order'];
 $table_number = (int) $_POST['table_number'];
 
-glog("----------------- ORDER DATA ----------------- \n".print_r($order_data,1));
-glog("----------------- ORDER TARGET ----------------- \n".print_r(ORDER_TARGET,1));
-glog("----------------- TABLE NUMBER ----------------- \n".print_r($table_number,1));
-glog("----------------- DEMO MODE ----------------- \n".print_r(DEMO_MODE,1));
-
 if(DEMO_MODE) __errorjsonp("--demo mode");
-
-
-
 
 $params = [
 	"order_data"=>$order_data,
@@ -77,9 +69,7 @@ $params = [
 
 try{
 	$ORDER_TXT = (new Order_parser($params))
-	->build_tg_txt()->get();	
-	
-	glog("-------ORDER FOR TABLE------- \n".print_r($ORDER_TXT,1));
+	->build_tg_txt()->get();
 
 }catch( Exception $e){
 	glogError($e->getMessage());
@@ -92,28 +82,17 @@ define('IIKO_MODE', !empty($cafe->iiko_api_key)); // bool
 define('PENDING_MODE', (int) $cafe->order_way ); // int
 define('NOMENCLATURE_MODE', (int) $IIKO_PARAMS->nomenclature_mode ); // int)
 
-glog("----------- IIKO_PARAMS -----------");
-glog(print_r($IIKO_PARAMS,1));
-glog("NOMENCLATURE_MODE = ".NOMENCLATURE_MODE.";");
-
 if(IIKO_MODE){
 
 	$Iiko_order = new Iiko_order($cafe);
 
 	if(NOMENCLATURE_MODE){
-
-		glog("-------ORDER ITEMS BEFORE REMAKE------- \n".print_r($order_data['order_items'],1));
-
 		// разворачиваем размерный ряд опять 
 		// в модификаторы размеров
 		$order_items = $Iiko_order->remake_for_nomenclature($order_data['order_items']);
-		glog("-------ORDER ITEMS AFTER REMAKE------- \n".print_r($order_items,1));
-		
 
 	}else{
 		$order_items = $order_data['order_items'];
-		glog("-------ORDER ITEMS NOT REMAKED------- \n".print_r($order_items,1));
-		
 	}
 
 	$ARR_ORDER_FOR_IIKO = "";
@@ -129,12 +108,6 @@ if(IIKO_MODE){
 	$ARR_ORDER_FOR_IIKO = "";
 }
 
-glog("TYPE OF ARR_ORDER_FOR_IIKO === ".gettype($ARR_ORDER_FOR_IIKO));
-
-glog(print_r($ARR_ORDER_FOR_IIKO,1));
-
-
-// __errorjsonp("PAUSED 2!");
 // ----------------------------------------
 //  - SAVE ORDER IN DB
 //	- GETTING ORDER_ID_UNIQ
@@ -163,7 +136,6 @@ $ORDER_TXT = "Заказ №: {$short_number}\n".$ORDER_TXT;
 // IF HAS NOT ACTIVE WAITERS
 define('NOTG_MODE', !Order_sender::total_tg_users_for($cafe->uniq_name, ORDER_TARGET));
 NOTG_MODE && __answerjsonp(["short_number"=>$short_number,"demo_mode"=>DEMO_MODE, "notg_mode"=>true]);
-
 
 // ---------------------------
 //  SENDING THE ORDER TO TG

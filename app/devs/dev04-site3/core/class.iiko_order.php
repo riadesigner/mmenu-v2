@@ -29,10 +29,10 @@ class Iiko_order{
 		}else{
 			$menu_id = (string) $this->iiko_params->current_extmenu_id;
 		}		
-
+		
 		$table_id = $this->get_table_id_by_number($table_number);
+		
 		if($table_id===null){throw new Exception("--cant calculate iiko table_id");}		
-		// $table_id = "44dd4519-bd71-4e04-bf1c-1cef615683bb";
 
 		$order_items = $this->prepare_items($order_rows);		
 		$order_type_id = $this->get_id_for_tables_type_order();
@@ -191,22 +191,34 @@ class Iiko_order{
 		$current_terminal_group_id = $this->iiko_params->current_terminal_group_id;		
 
 		if(!$tbls || empty($current_terminal_group_id)) throw new Exception("--cant find iiko tableIds for the cafe, 1");
-		if(mb_strtolower(gettype($tbls))!=='array' || !count($tbls)) throw new Exception("--cant find iiko tableIds for the cafe, 2");		
+		if(mb_strtolower(gettype($tbls))!=='array' || !count($tbls)) throw new Exception("--cant find iiko tableIds for the cafe, 2");				
 
-		$section = array_filter($tbls, function($section) use ($current_terminal_group_id) {
-			return $section['terminalGroupId'] == $current_terminal_group_id;
-		});
+		$section = array_filter($tbls, function($s) use ($current_terminal_group_id) {
+			return $s['terminalGroupId'] == $current_terminal_group_id;
+		});				
 
-		if(!count($section)) throw new Exception("--cant find iiko tableIds for the cafe, 3");
 
-		
-		$table = array_filter($section, function($table) use ($table_number) {
+		if(!count($section)) throw new Exception("--cant find iiko tableIds for the cafe, 3");		
+
+		// UNION ALL TABLES FROM ALL FOUND SECTIONS
+		$all_tables = [];		
+		foreach($section as $s){
+			$all_tables = array_merge($all_tables, $s['tables']);
+		}
+
+		$current_table = array_filter($all_tables, function($table) use ($table_number) {
 			return $table['number'] == $table_number;
 		});
 		
-		if(!count($table)) throw new Exception("--cant find iiko tableIds for the cafe, 4");
+		glog("CURRENT_TABLE", print_r($current_table,1));
 
-		$table_id = $table[0]['id'];		
+		if(!count($current_table)) throw new Exception("--cant find iiko tableIds for the cafe, 4");
+
+		$firstKey = array_key_first($current_table);
+		$table_id = $current_table[$firstKey]['id'];
+
+		glog("TABLE_ID = ".$table_id);
+
 		return $table_id;
 	}	
 
