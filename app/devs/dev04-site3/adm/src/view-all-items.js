@@ -497,7 +497,10 @@ export var VIEW_ALL_ITEMS = {
 		var PATH = 'adm/lib/';
 		var url = PATH + 'lib.get_all_items.php';		
 
-		var data ={id_menu:id_menu};
+		var data ={
+			id_menu:id_menu,
+			except_fields:['iiko_modifiers', 'description'],
+		};
 
         this.AJAX = $.ajax({
             url: url+"?callback=?",
@@ -505,6 +508,7 @@ export var VIEW_ALL_ITEMS = {
             data:data,
             method:"POST",
             success: function (response) {            	
+				console.log('response', response);
             	if(!response.error){
             		var NEW_APP_VERSION = response['app-version'];
             		var all_items = response['all-items'];

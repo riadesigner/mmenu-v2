@@ -39,9 +39,21 @@
 	
 	if($cafe->id_user!==$user->id)__errorjsonp("Not allowed");	
 
+	$except_fields = $_POST['except_fields'] ?? [];	
+
 	$all_items = new Smart_collect("items","where id_menu = {$id_menu}","ORDER BY pos");
 
-	$answer = ["app-version"=>$CFG->version, "all-items"=>$all_items->export()];	
+	$export_items = $all_items->export();
+	if(count($except_fields)){
+		foreach($export_items as $key => $item){
+			foreach($except_fields as $field){
+				unset($item[$field]);
+			}
+			$export_items[$key] = $item;
+		}
+	}
+
+	$answer = ["app-version"=>$CFG->version, "all-items"=>$export_items];	
 
 	if($all_items){		
 		__answerjsonp($answer);	
