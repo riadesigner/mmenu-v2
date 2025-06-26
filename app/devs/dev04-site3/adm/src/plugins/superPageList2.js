@@ -17,7 +17,15 @@ $.extend({
 
 		var REPOS_DIRECTION_FORWARD = false;
 
-		if(Pages) {ALLITEMS = Pages.get();}
+		if(Pages) {
+			// --------------------------------------------------------
+			// ссылки на все собранные и заполненные контентом страницы
+			// --------------------------------------------------------
+			ALLITEMS = Pages.get();
+		}
+
+		console.log("ALLITEMS", ALLITEMS);
+		console.log("Pages", Pages);
 		
 		var CLASS_NAME = "super-pagelist";
 		var bhvLayerClass = CLASS_NAME+"-bhv-layer";
@@ -88,8 +96,26 @@ $.extend({
 			prevent_bhvr:function(){				
 				return LOCKED_BEHAVIORS;
 			},
+			// -------------------------------------
+			// добавляем в список сразу все страницы
+			// -------------------------------------
+			// insert_pages:function(){				
+			// 	for(var i=0;i<fn.get_total();i++){
+			// 		var current_class = i==CURRENT_PAGE ? " current ":"";
+			// 		var zIndex = i==CURRENT_PAGE ? 10000:i*10;
+			// 		var newX = fn.get_x_for_pos(i);
+			// 		var $page = $("<div>",{class:CLASS_NAME+"-page"+current_class,'data-pos':i})
+			// 		.css({width:PAGE_WIDTH,transform:"translateX("+newX+"px) translateZ(0)",zIndex:zIndex})
+			// 		.append(ALLITEMS[i]);
+			// 		$pagesLayer.append($page);						
+			// 	};
+			// 	ARR_PAGES = $pagesLayer.find("."+CLASS_NAME+"-page").toArray();								
+			// },
+			// -------------------------------------------
+			// добавляем в список первые несколько страниц
+			// -------------------------------------------
 			insert_pages:function(){				
-				for(var i=0;i<fn.get_total();i++){
+				for(var i=0;i<3;i++){
 					var current_class = i==CURRENT_PAGE ? " current ":"";
 					var zIndex = i==CURRENT_PAGE ? 10000:i*10;
 					var newX = fn.get_x_for_pos(i);
@@ -98,11 +124,12 @@ $.extend({
 					.append(ALLITEMS[i]);
 					$pagesLayer.append($page);						
 				};
-				ARR_PAGES = $pagesLayer.find("."+CLASS_NAME+"-page").toArray();
-				
-				
-			},
-			add_new_page:function(doAfter) {
+				ARR_PAGES = $pagesLayer.find("."+CLASS_NAME+"-page").toArray();								
+			},			
+			// ---------------------------------
+			// добавляем в список новую страницу
+			// ---------------------------------
+			add_new_page:function(doAfter) {				
 				var i = ALLITEMS.length-1;
 				var zIndex = i*10;
 				var newX = fn.get_x_for_pos(i-CURRENT_PAGE);
@@ -455,7 +482,7 @@ $.extend({
 				if(deleteTail){
 					// for speed animation reason
 					var $pages = $pagesLayer.find("."+CLASS_NAME+"-page");
-					var eq = [CURRENT_PAGE-1,CURRENT_PAGE,CURRENT_PAGE+1];
+					var eq = [ CURRENT_PAGE-1, CURRENT_PAGE, CURRENT_PAGE+1 ];
 					$pages = $pages.not(':eq('+eq[0]+'), :eq('+eq[1]+'), :eq('+eq[2]+')');					
 					$pages.size() && $pages.remove();					
 				};

@@ -110,7 +110,7 @@ export var VIEW_ALL_ITEMS = {
 		var move2end = opt&&opt.move2end ? true : false;        
         var $tpl = this._update_lng(_this.$tpl_item.clone());
         var managedByIiko = GLB.THE_CAFE.is_iiko_mode();        
-   
+
 		this.PAGES = $.menuItems({
 			arr:ARR,
 			tpl:$tpl,						
