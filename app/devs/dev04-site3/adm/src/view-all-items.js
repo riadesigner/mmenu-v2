@@ -216,6 +216,7 @@ export var VIEW_ALL_ITEMS = {
 		var menu_id = this.CURRENT_MENU.id;
 		var ALLITEMS = GLB.ITEMS.get(menu_id);		
 
+		
 		var opt = {			
 			menu:this.CURRENT_MENU,
 			item:item,

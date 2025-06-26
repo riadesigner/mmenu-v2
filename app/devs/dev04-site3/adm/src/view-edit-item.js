@@ -54,23 +54,27 @@ export var VIEW_EDIT_ITEM = {
 		this._update_tabindex();
 		this._page_hide();
 
-		this.CURRENT_MENU = opt.menu;		
-		this.ITEM = opt.item;
-		this.POS_ORDER = opt.pos;						
-		this.DO_AFTER_SAVE = opt.doAfterSave;
-		this.reset();
+		this.load_item_async(opt.item.id).then((vars)=>{
+			this.ITEM = vars.item;			
+			this.CURRENT_MENU = opt.menu;			
+			this.POS_ORDER = opt.pos;						
+			this.DO_AFTER_SAVE = opt.doAfterSave;
+			this.reset();
+			this._update_item();
+		});		
+	},	
+
+	_update_item:function(){
 
 		this.LTABS = $.extend({},LNG_TABS).init(this,this.$page,GLB.THE_CAFE.get());
 		$(this.LTABS).on("change",(e,code)=>{
 			this.change_current_lang(code);
 		});
-		
-		this.rebuild_data_sections();
 
 		const MODE_CLASS = GLB.THE_CAFE.is_iiko_mode()?'iiko-mode-only':'chefsmenu-mode-only';
 		this.$view.addClass(MODE_CLASS);
 
-		console.log('=== this.ITEM ====', this.ITEM)
+		console.log('=== this.ITEM ====', this.ITEM)				
 
 		if(!this.ITEM){	
 
@@ -97,7 +101,7 @@ export var VIEW_EDIT_ITEM = {
 
 			// FILLING FIELDS WITH RUSSIAN VALUES			
 			this.set_data("item-title",this.ITEM.title,'ru');
-			this.set_data("item-description",this.ITEM.description,'ru');
+			this.set_data("item-description",this.ITEM.description,'ru');			
 
 			// FILLING EXTRA DATA WITH OTHER LANGUAGES
 			const ALL_LANGS = this.LTABS.get_langs();
@@ -109,8 +113,8 @@ export var VIEW_EDIT_ITEM = {
 						extra_data[lang].description && this.set_data("item-description",extra_data[lang].description,lang);				
 					}
 				}
-			};			
-			
+			};						
+
 			if(GLB.THE_CAFE.is_iiko_mode()){
 				this.update_part_iiko_modifiers();
 				this.update_part_iiko_sizes();
@@ -123,10 +127,11 @@ export var VIEW_EDIT_ITEM = {
 		}
 
 		setTimeout(()=>{ 
+			this._end_loading(); 
 			this._page_show();
-		},350);		
-		
-	},	
+		},350);	
+
+	},
 
 	// SHOWING IIKO MODIFIERS
 	// @return void;
@@ -149,9 +154,7 @@ export var VIEW_EDIT_ITEM = {
 
 		for(var m in iiko_modifiers){							
 			
-			var mod_group_title = iiko_modifiers[m].name;
-			
-			console.log(`${m} . ${mod_group_title}`)
+			var mod_group_title = iiko_modifiers[m].name;			
 
 			var modifiers = iiko_modifiers[m].items;
 			if(modifiers.length>0){
@@ -574,6 +577,28 @@ export var VIEW_EDIT_ITEM = {
 	        });
 		});		
 
+	},
+	load_item_async(id_item){
+		return new Promise((res,rej)=>{
+			var PATH = 'adm/lib/';
+			var url = PATH + 'lib.get_item_by_id.php';
+
+			this._now_loading();
+
+			this.AJAX = $.ajax({
+				url: url+"?callback=?",
+				dataType: "jsonp",
+				data:{id_item:id_item},
+				method:"POST",
+				success: function (result){
+					res(result);					
+				},
+				error:function(result) {					
+					rej(result);
+				}
+				
+			});
+		});
 	},
 	error_message:function(msg){		
 		GLB.VIEWS.modalMessage({
