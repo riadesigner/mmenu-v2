@@ -99,23 +99,8 @@ $.extend({
 			// -------------------------------------
 			// добавляем в список сразу все страницы
 			// -------------------------------------
-			// insert_pages:function(){				
-			// 	for(var i=0;i<fn.get_total();i++){
-			// 		var current_class = i==CURRENT_PAGE ? " current ":"";
-			// 		var zIndex = i==CURRENT_PAGE ? 10000:i*10;
-			// 		var newX = fn.get_x_for_pos(i);
-			// 		var $page = $("<div>",{class:CLASS_NAME+"-page"+current_class,'data-pos':i})
-			// 		.css({width:PAGE_WIDTH,transform:"translateX("+newX+"px) translateZ(0)",zIndex:zIndex})
-			// 		.append(ALLITEMS[i]);
-			// 		$pagesLayer.append($page);						
-			// 	};
-			// 	ARR_PAGES = $pagesLayer.find("."+CLASS_NAME+"-page").toArray();								
-			// },
-			// -------------------------------------------
-			// добавляем в список первые несколько страниц
-			// -------------------------------------------
 			insert_pages:function(){				
-				for(var i=0;i<3;i++){
+				for(var i=0;i<fn.get_total();i++){
 					var current_class = i==CURRENT_PAGE ? " current ":"";
 					var zIndex = i==CURRENT_PAGE ? 10000:i*10;
 					var newX = fn.get_x_for_pos(i);
