@@ -410,7 +410,7 @@ $.extend({
 
 						CURRENT_PAGE +=1;							
 						Pages&& Pages.updatePosition(CURRENT_PAGE);
-
+						fn.render_actual_range();
 					});
 				}else{					
 					fn.cant_next();
@@ -435,7 +435,7 @@ $.extend({
 
 						CURRENT_PAGE -=1;
 						Pages&& Pages.updatePosition(CURRENT_PAGE);						
-
+						fn.render_actual_range();
 					});
 				}else{
 					fn.cant_prev();
@@ -504,10 +504,10 @@ $.extend({
 				},pause);
 			},
 			change_pos_next:function(){
-				fn.change_pos_next();
+				fn.change_pos_next();				
 			},
 			change_pos_prev:function(){
-				fn.change_pos_prev();
+				fn.change_pos_prev();				
 			},			
 			removeCurrentPage:function(opttions) {
 				var _this=this;
