@@ -12,6 +12,7 @@ $.extend({
 		var Pages = opt.Pages || "";		
 		var MOVE_TO_END = opt.move2end;	
 		var WINDOW_WIDTH = $(window).width();	
+		var SAFE_NUMBER = 5;
 
 		var CURRENT_PAGE = 0;
 
@@ -77,6 +78,7 @@ $.extend({
 					$pagesLayer = $("<div>",{class:pagesLayerClass});
 
 					fn.insert_pages();
+					fn.render_actual_range();
 
 					$pagesLayer.appendTo($wrapperLayer);
 					$pagesLayer.css({left:START_POS+'px'});
@@ -96,6 +98,68 @@ $.extend({
 			prevent_bhvr:function(){				
 				return LOCKED_BEHAVIORS;
 			},
+			render_actual_range:function() {
+				const range = this.calc_actual_range();
+				console.log(`range=`,range);			
+				for(let i=0;i< fn.get_total();i++){					
+					if(i>=range.start && i<=range.end){				
+						fn._item_render(i);
+					}else{				
+						fn._item_unmount(i);
+					}
+				}	
+			},
+			_item_render:function(i){				
+				if(!(ALLITEMS[i].hasClass('now-in-viewport'))){
+					console.log(`render now ${i}`);
+					$(ARR_PAGES[i]).append(ALLITEMS[i]);
+					ALLITEMS[i].addClass('now-in-viewport');
+				}				
+			},
+			_item_unmount:function(i){				
+				if((ALLITEMS[i].hasClass('now-in-viewport'))){
+					console.log(`unmount now ${i}`);
+					ALLITEMS[i].detach();
+					ALLITEMS[i].removeClass('now-in-viewport');
+				}				
+			},			
+			/**
+			 * calculating range items 
+			 * what maximum can rendered in the listitems
+			 * at the same time,
+			 * max_on_page = sn * 2 + 1
+			 */
+			calc_actual_range:function() {		
+				let current = CURRENT_PAGE;
+				let total = fn.get_total();
+				let safe_number = SAFE_NUMBER;
+				const max_on_page = safe_number*2+1;
+				if(total<=max_on_page){
+					let range = {
+						start:0,
+						end:total
+					};
+					console.log('range = 0 to total: ',range, `curr: ${current}`);
+					return range;
+				}else{
+					const range = {
+						start:current-safe_number,
+						end:current+safe_number
+					};
+					if(range.start<0){
+						range.end+=Math.abs(current-safe_number);
+						range.start=0;
+					}
+					if(range.end>total){
+						let new_start = range.start-Math.abs(total-range.end);
+						if(new_start >= 0) {range.start=new_start;} 			
+						range.end=total;
+					};
+					console.log('calculated new range',range, `curr: ${current}`);
+					return range;
+				}
+
+			},						
 			// -------------------------------------
 			// добавляем в список сразу все страницы
 			// -------------------------------------
@@ -105,8 +169,9 @@ $.extend({
 					var zIndex = i==CURRENT_PAGE ? 10000:i*10;
 					var newX = fn.get_x_for_pos(i);
 					var $page = $("<div>",{class:CLASS_NAME+"-page"+current_class,'data-pos':i})
-					.css({width:PAGE_WIDTH,transform:"translateX("+newX+"px) translateZ(0)",zIndex:zIndex})
-					.append(ALLITEMS[i]);
+					.css({width:PAGE_WIDTH,transform:"translateX("+newX+"px) translateZ(0)",zIndex:zIndex});
+					// .append(ALLITEMS[i]);
+					console.log(`ALLITEMS[${i}], `, ALLITEMS[i]);
 					$pagesLayer.append($page);						
 				};
 				ARR_PAGES = $pagesLayer.find("."+CLASS_NAME+"-page").toArray();								
@@ -322,7 +387,7 @@ $.extend({
 					$(this).removeClass('current').css({transform:"translateX("+newX+"px) translateZ(0)",zIndex:i*10});
 				});
 				$(ARR_PAGES[CURRENT_PAGE]).addClass('current').css({zIndex:1000});
-				
+				fn.render_actual_range();
 			},
 			get_x_for_pos:function(pos){
 				return pos*PAGE_WIDTH + pos*SPACE_WIDTH;		

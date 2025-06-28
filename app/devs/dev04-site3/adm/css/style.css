@@ -676,6 +676,8 @@ textarea:focus.length-limit-reached{ animation: ani_limit_reached .3s linear;}
 .super-pagelist-pages-layer {position: absolute;top:0;left:0;height: 100%;}
 .super-pagelist-page{position: absolute;height: 100%;transform:translateZ(0); transition:.3s;}
 
+.super-pagelist-page{border:2px solid green;}
+
 
 /*  
     	____   ______   ______   __  ___   _____
