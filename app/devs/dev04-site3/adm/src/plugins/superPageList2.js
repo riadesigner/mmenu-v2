@@ -12,7 +12,7 @@ $.extend({
 		var Pages = opt.Pages || "";		
 		var MOVE_TO_END = opt.move2end;	
 		var WINDOW_WIDTH = $(window).width();	
-		var SAFE_NUMBER = 5;
+		var SAFE_NUMBER = 3;
 
 		var CURRENT_PAGE = 0;
 
