@@ -548,7 +548,7 @@ class Tg_hook {
                     if($TG_USER->state==='active')
                     $empl[$TG_USER->role]['active']+=1;
                 }
-                glog("\$empl = ".print_r($empl,1));
+                // glog("\$empl = ".print_r($empl,1));
                 $str = "*Сейчас в чате: *";     
                 $str.="\n- официантов: ".$empl['waiter']['active']." из ".$empl['waiter']['total'];
                 $str.="\n- менеджеров: ".$empl['manager']['active']." из ".$empl['manager']['total'];

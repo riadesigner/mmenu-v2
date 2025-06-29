@@ -37,7 +37,7 @@ class Account{
 		$password = generate_password();
 		$user_id = self::add_new_user_to_db(self::$email,$password,$lang);
 			
-		glog("CLASSS_ACCOUNT:activate, $password, $user_id");		
+		// glog("CLASSS_ACCOUNT:activate, $password, $user_id");		
 
 		if($user_id){
 

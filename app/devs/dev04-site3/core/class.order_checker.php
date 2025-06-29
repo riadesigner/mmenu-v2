@@ -35,7 +35,6 @@ class Order_checker{
 	static public function init(int $reminder_delay, int $forgotten_delay): void{
 		self::$ORDER_WAITING_DELAY = $reminder_delay;
 		self::$ORDER_FORGOTTEN_DELAY = $forgotten_delay;
-		glog('vars: $ORDER_WAITING_DELAY, $ORDER_FORGOTTEN_DELAY = '.self::$ORDER_WAITING_DELAY.", ".self::$ORDER_FORGOTTEN_DELAY);
 	}
 
 	static public function find_forgotten(string $order_target): void{

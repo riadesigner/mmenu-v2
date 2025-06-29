@@ -50,7 +50,7 @@ class Order_sender{
 		]; 	 	
 		$params  = ['organizationId' => $organization_id, 'terminalGroupId' => $terminal_group_id, 'order' => $order]; 	
 
-		glog("order = ".print_r($order,1));
+		// glog("order = ".print_r($order,1));
 
 		$res = iiko_get_info($url,$headers,$params);
 		return $res;
@@ -400,7 +400,7 @@ class Order_sender{
 				$order_data["externalNumber"] = $ORDER->id_uniq;
 				$order_data["comment"] = $comment;
 
-				glog("=========== ORDER_DATA =========== ".capture_var_dump($order_data));
+				// glog("=========== ORDER_DATA =========== ".capture_var_dump($order_data));
 
 				try{
 					// ---------------------------------------------
@@ -502,7 +502,7 @@ class Order_sender{
 			];
 			if(!empty($keyboard)){ $send_data["reply_markup"] = $keyboard; }
 			$res = send_telegram($method, $send_data, $tg_token);			
-			glog("tg response: ".print_r($res, 1).__FILE__.", ".__LINE__);
+			// glog("tg response: ".print_r($res, 1).__FILE__.", ".__LINE__);
 		}			
 	}	
 	

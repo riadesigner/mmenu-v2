@@ -115,7 +115,7 @@ class Order_parser{
             $item_units = !empty($row["units"])?$row["units"] : "";
             $volume_str = !empty($item_volume)?$item_volume." ".$item_units : "";
         
-            $item_price = $row["count"]."x".$row["price"]." ".$this->str_currency;
+            $item_price = $row["count"]."x".$row["price_with_modifiers"]." ".$this->str_currency;
         
             $str .= "_{$item_title}_\n";
             $str .= "{$item_size} / {$volume_str}\n";	

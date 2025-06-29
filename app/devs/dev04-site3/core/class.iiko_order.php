@@ -102,7 +102,6 @@ class Iiko_order{
 				$res["originalPrice"] = $item["originalPrice"];
 
 			}else{
-
 				
 				$res["price"] = $item["price"];	
 				
@@ -135,7 +134,7 @@ class Iiko_order{
 	 */
 	private function prepare_items($order_rows): array{
 		
-		glog("=== prepare_items === ". print_r($order_rows,1));
+		// glog("=== prepare_items === ". print_r($order_rows,1));
 
 		$order_items = [];
 
@@ -144,32 +143,11 @@ class Iiko_order{
 			$productSizeId = $row['sizeId']??false;
 			$productId =  $row['item_data']['id_external'];
 			$orderItemType = $row['item_data']['iiko_order_item_type'];
-			
-			if($productSizeId){
-				// если есть размер, то берем цену из размера
-				$sizes = $row['item_data']['iiko_sizes_parsed'];
-				$current_size = array_filter($sizes, function($size) use ($productSizeId){
-					return $size['sizeId']==$productSizeId;
-				});
-				if(count($current_size)){
-					glog("current_size = ". print_r($current_size,1));
-					$first_key = array_key_first($current_size);
-					$productPrice = (int) $current_size[$first_key]['price'] - (int) $current_size[$first_key]['originalPrice'];
-				}else{
-					// если размер не найден, то берем цену из товара
-					$productPrice = 3000000;
-				}
-			}else{
-				// иначе берем цену из товара
-				$productPrice = (int) $row["price"];				
-			}
+
+			$productPrice = (int) $row["price"] ;
 						
 			if(empty($orderItemType)) $orderItemType="Product";
-			$chosenModifiers = $row['chosen_modifiers']??false;
-					
-			if($chosenModifiers){
-				glog("=== chosenModifiers === ". print_r($chosenModifiers,1)); 
-			}	
+			$chosenModifiers = $row['chosen_modifiers']??false;				
 
 			$item = [
 					"type"=>"{$orderItemType}",
@@ -237,14 +215,14 @@ class Iiko_order{
 			return $table['number'] == $table_number;
 		});
 		
-		glog("CURRENT_TABLE", print_r($current_table,1));
+		// glog("CURRENT_TABLE", print_r($current_table,1));
 
 		if(!count($current_table)) throw new Exception("--cant find iiko tableIds for the cafe, 4");
 
 		$firstKey = array_key_first($current_table);
 		$table_id = $current_table[$firstKey]['id'];
 
-		glog("TABLE_ID = ".$table_id);
+		// glog("TABLE_ID = ".$table_id);
 
 		return $table_id;
 	}	

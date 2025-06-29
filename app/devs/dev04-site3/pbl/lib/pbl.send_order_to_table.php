@@ -89,8 +89,7 @@ if(IIKO_MODE){
 	if(NOMENCLATURE_MODE){
 		// разворачиваем размерный ряд опять 
 		// в модификаторы размеров
-		// $order_items = $Iiko_order->remake_for_nomenclature($order_data['order_items']);
-		$order_items = $order_data['order_items'];
+		$order_items = $Iiko_order->remake_for_nomenclature($order_data['order_items']);		
 
 	}else{
 		$order_items = $order_data['order_items'];
@@ -100,6 +99,7 @@ if(IIKO_MODE){
 
 	try{		
 		$ARR_ORDER_FOR_IIKO = $Iiko_order->prepare_order_for_table( $table_number, $order_items );
+		// glog("================================");
 		// glog("ARR_ORDER_FOR_IIKO dump: ".capture_var_dump($ARR_ORDER_FOR_IIKO));
 		glog("================================");
 		glog("ORDER TO TABLE / SEND TO IIKO");
