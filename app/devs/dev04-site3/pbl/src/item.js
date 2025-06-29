@@ -209,12 +209,15 @@ export var ITEM = {
 			this.$btnAddToCart.removeClass("this-cart-full");	
 		}
 	},
-	update_price_and_volume:function(vars) {	
-		// console.log('update_price_and_volume',vars);		
+	update_price_and_volume:function(vars) {			
 		var currency_symbol = GLB.CAFE.get('cafe_currency').symbol;
 		this.$item_price.html(vars.price + " " + currency_symbol);		
-		const sizeNameStr = vars.sizeName ? `${vars.sizeName}<br>` : '';
-		const str_volume = `${sizeNameStr} ${vars.volume} ${vars.units}`;
+		const sizeNameStr = vars.sizeName ? `${vars.sizeName}<br>` : '';		
+		const volume = parseInt(vars.volume, 10);
+		let str_volume = `${sizeNameStr} ${vars.volume} ${vars.units}`;
+		if(volume===0 || volume===1000){
+			str_volume = '';
+		}
 		this.$item_volume.html(str_volume);						
 		this.$item_volume2.html(str_volume);
 	},
