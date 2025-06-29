@@ -108,17 +108,18 @@ class Order_parser{
         $count = 0;
         foreach ($this->order_items as $row) {		
             $count++;        
-            $item_modifiers = $row['chosen_modifiers'] ?? false;	
+            $item_modifiers = $row['chosen_modifiers'] ?? false;
+            $item_price = ", ".$row["price"]." ".$this->str_currency;	
             $item_title = $count.". ".$row["item_data"]["title"];	
             $item_size = !empty($row["sizeName"])?$row["sizeName"] : "";
             $item_volume = !empty($row["volume"])?$row["volume"] : "";
             $item_units = !empty($row["units"])?$row["units"] : "";
             $volume_str = !empty($item_volume)?$item_volume." ".$item_units : "";
         
-            $item_price = $row["count"]."x".$row["price_with_modifiers"]." ".$this->str_currency;
+            $item_price_with_modifiers = $row["count"]."x".$row["price_with_modifiers"]." ".$this->str_currency;
         
             $str .= "_{$item_title}_\n";
-            $str .= "{$item_size} / {$volume_str}\n";	
+            $str .= "{$item_size} / {$volume_str}{$item_price}\n";	
         
             if($item_modifiers){
                 foreach($item_modifiers as $m){
@@ -127,7 +128,7 @@ class Order_parser{
                     $str .= "+ {$mod_title}, {$mod_price}\n";
                 }
             }
-            $str .= "= {$item_price}\n";
+            $str .= "= {$item_price_with_modifiers}\n";
             $separator = $count < count($this->order_items) ?"---------\n":"--------- //\n";
             $str .= $separator;
         }       
