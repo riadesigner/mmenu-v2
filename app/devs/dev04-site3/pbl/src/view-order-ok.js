@@ -230,20 +230,22 @@ export var VIEW_ORDER_OK = {
 				
 				const title_str = row.item_data.title;
 				const count = row.count;
-				const price = row.price_with_modifiers;				
+				const price_with_modifiers = parseInt(row.price_with_modifiers, 10);				
+				const price = parseInt(row.price, 10); 
 
 				const weight = `${row.volume} ${row.units}`;
-				const volume_str = IIKO_MODE ? `${row.sizeName} / ${weight}` : weight;
+				let volume_str = IIKO_MODE ? `${row.sizeName} / ${weight}` : weight;
+				volume_str+= `, ${price} ₽`;
 
 				const modifiers = row.chosen_modifiers;
 				let modifiers_str = "";
 				if(IIKO_MODE && modifiers && modifiers.length){
 					for (let i in modifiers){
-						let mod_str = "+ "+modifiers[i].name+"<br>";
+						let mod_str = `+ ${modifiers[i].name}, ${modifiers[i].price} ₽<br>`;
 						modifiers_str += mod_str;
 					}
 				};				
-				const price_str = count+" x "+price+" "+currency;
+				const price_str = `${count} x ${price_with_modifiers}  ₽`;
 				const $row = this.$tplOrderedItem.clone();
 				$row.find(this._CN+"ordered-title__item").html(title_str);
 				$row.find(this._CN+"ordered-title__volume").html(volume_str);				

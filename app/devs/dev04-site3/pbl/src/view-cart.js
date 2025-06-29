@@ -173,8 +173,7 @@ export var VIEW_CART = {
 		var _this=this;
 
 		const ALL_ORDERS = GLB.CART.get_all();			
-		const IIKO_MODE = GLB.CAFE.is_iiko_mode();
-		const currency = GLB.CAFE.get('cafe_currency').symbol;				
+		const IIKO_MODE = GLB.CAFE.is_iiko_mode();		
 
 		let totalPrice = GLB.CART.get_total_price();
 
@@ -208,17 +207,19 @@ export var VIEW_CART = {
 				// BUILDING ORDER ROW	
 				const title_str = order.item_data.title;
 				const count = order.count;
-				const price = order.price_with_modifiers;
+				const price_with_modifiers = parseInt(order.price_with_modifiers, 10);
+				const price = parseInt(order.price, 10);
 				const uniq_name = order.uniq_name;
 				const weight = `${order.volume} ${order.units}`;
-				const volume_str = IIKO_MODE ? `${order.sizeName} / ${weight}` : weight;
-				const price_str = count+" x "+price+" "+currency;
+				let  volume_str = IIKO_MODE ? `${order.sizeName} / ${weight}` : weight;				
+				volume_str+=`, ${price}&nbsp;₽`;
+				const price_str = `${count} x ${price_with_modifiers}&nbsp;₽`;
 								
 				const modifiers = order.chosen_modifiers;
 				let modifiers_str = "";				
 				if(IIKO_MODE && modifiers && modifiers.length){
-					for (let i in modifiers){
-						let mod_str = "+ "+modifiers[i].name+"<br>";
+					for (let i in modifiers){						
+						let mod_str = `+ ${modifiers[i].name}, ${modifiers[i].price}&nbsp;₽<br>`;
 						modifiers_str += mod_str;
 					}
 				};				
@@ -250,9 +251,9 @@ export var VIEW_CART = {
 					}
 				}else{
 					const count = order.count;
-					const price = order.price_with_modifiers;
-					const str = count+" x "+price+" "+GLB.CAFE.get_currency().symbol;
-					this.ALL_ROWS[uniq_name].find(this._CN+"cart-quantity").html(str);
+					const price_with_modifiers = order.price_with_modifiers;					
+					const price_str = `${count} x ${price_with_modifiers}&nbsp;₽`;
+					this.ALL_ROWS[uniq_name].find(this._CN+"cart-quantity").html(price_str);
 				}
 			}						
 		};	
