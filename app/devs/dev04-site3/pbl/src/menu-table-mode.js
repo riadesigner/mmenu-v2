@@ -41,12 +41,9 @@ export var MENU_TABLE_MODE = {
         let data_table_uniq = $("body").data("table-uniq");
         let tables_uniq_names = GLB.CAFE.get().tables_uniq_names;
         let table_number_veryfied = false;
-        console.log(`data_table_uniq,tables_uniq_names = ${data_table_uniq}, ${tables_uniq_names}`);
+
         if(data_table_uniq && tables_uniq_names){
-            tables_uniq_names = JSON.parse(tables_uniq_names);          
-            
-            console.log(`tables_uniq_names = ${tables_uniq_names}`);
-            console.log(`data_table_uniq = ${data_table_uniq}`);
+            tables_uniq_names = JSON.parse(tables_uniq_names);                      
 
             for(let i in tables_uniq_names){
                 if(tables_uniq_names.hasOwnProperty(i)){                        

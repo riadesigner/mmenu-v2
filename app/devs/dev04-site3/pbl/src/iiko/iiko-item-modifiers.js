@@ -183,7 +183,8 @@ export const IIKO_ITEM_MODIFIERS = {
 					data-group-name="${groupName}" 
 					data-max-quantity="${maxQuantity}" 
 					data-radio-mode="${radioMode}"`;
-				let strGroupName=`<div class="modifiers-group-name">${groupName}</div>`;
+				const strUpToNum = maxQuantity > 1 ? `( до ${maxQuantity} )` : ''; 	
+				let strGroupName=`<div class="modifiers-group-name">${groupName} ${strUpToNum}</div>`;
 				let $m_group_wrapper = $(`<div class="modif-group-wrapper" ${params}>${strGroupName}</div>`);
 				
 				console.log('g', g);
@@ -220,12 +221,25 @@ export const IIKO_ITEM_MODIFIERS = {
 			behaviors:($rows)=>{
 				const fn = {
 					toggleCheckbox:($el)=>{
-						$el.toggleClass('chosen');
+						if($el.hasClass('chosen')){
+							$el.removeClass('chosen');
+						}else{							
+							fn.canEncrease($el) && $el.addClass('chosen');
+						}						
 					},
 					toggleRadioButton:($el)=>{				
 						$el.siblings().removeClass('chosen');
 						$el.addClass('chosen');				
-					}			
+					},
+					canEncrease:($el)=>{
+						const countChosen = $el.siblings().filter('.chosen').length;
+						const maxQuantity = parseInt($el.closest('.modif-group-wrapper').data('max-quantity'),10);
+						if(countChosen >= maxQuantity){
+							console.log('countChosen', countChosen, 'maxQuantity', maxQuantity);
+							return false;
+						}
+						return true;						
+					}							
 				};
 						
 				$rows.on('touchend click',(e)=>{
