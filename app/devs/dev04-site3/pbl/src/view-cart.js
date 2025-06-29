@@ -208,7 +208,7 @@ export var VIEW_CART = {
 				// BUILDING ORDER ROW	
 				const title_str = order.item_data.title;
 				const count = order.count;
-				const price = order.price;
+				const price = order.price_with_modifiers;
 				const uniq_name = order.uniq_name;
 				const weight = `${order.volume} ${order.units}`;
 				const volume_str = IIKO_MODE ? `${order.sizeName} / ${weight}` : weight;
@@ -250,7 +250,7 @@ export var VIEW_CART = {
 					}
 				}else{
 					const count = order.count;
-					const price = order.price;
+					const price = order.price_with_modifiers;
 					const str = count+" x "+price+" "+GLB.CAFE.get_currency().symbol;
 					this.ALL_ROWS[uniq_name].find(this._CN+"cart-quantity").html(str);
 				}

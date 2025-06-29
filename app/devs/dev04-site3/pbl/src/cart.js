@@ -51,6 +51,7 @@ export var CART = {
 		
 		console.log('add_preorder!',preorder);
 
+		// количество товара в корзине
 		let total_in_cart = this.get_total_orders(preorder.itemId);
 		const order = this.ALL_ORDERS[preorder.uniq_name];
 		if(order){
@@ -66,6 +67,7 @@ export var CART = {
 		return order;
 	},
 	get_all:function(){
+		console.log('get_all',this.ALL_ORDERS);
 		return this.ALL_ORDERS;
 	},
 	get_total_orders:function(itemId) {
@@ -100,7 +102,7 @@ export var CART = {
 			if(this.ALL_ORDERS.hasOwnProperty(i)){
 				let order = this.ALL_ORDERS[i];
 				if(order){
-					total_price += (parseInt(order.price,10) * order.count);
+					total_price += (parseInt(order.price_with_modifiers,10) * order.count);
 				}
 			}
 		};				

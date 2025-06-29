@@ -26,9 +26,7 @@
 	$id_menu = (int) trim((string) $_REQUEST['menu']);
 
 	$all_items = new Smart_collect("items","WHERE id_menu={$id_menu}","ORDER BY pos");
-	if(!$all_items) __answerjsonp([]); // error
-
-	glog(json_encode($all_items->export(), JSON_UNESCAPED_UNICODE));
+	if(!$all_items) __answerjsonp([]); // error	
 
 	__answerjsonp($all_items->export());
 

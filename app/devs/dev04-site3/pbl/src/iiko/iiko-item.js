@@ -35,7 +35,8 @@ export const IIKO_ITEM = {
 		const uniq_name = this.calc_order_uniq_name(`iiko-order-${this.item_data.id}`);
 		const chosen_modifiers = this.IIKO_MODIFIERS.get_selected();
 		const modifiers_cost = this.IIKO_MODIFIERS.get_cost();
-		const total_price = (this.get_price() + modifiers_cost);
+		const item_price = this.get_price();
+		const price_with_modifiers = (item_price + modifiers_cost);
 
 	/**
 	 * preorderObject = { 
@@ -58,7 +59,8 @@ export const IIKO_ITEM = {
 		const pre_order = {
 		itemId: this.item_data.id,
 			uniq_name: uniq_name,
-			price: total_price,
+			price: item_price,
+			price_with_modifiers: price_with_modifiers,
 			
 			count: count,
 
@@ -118,7 +120,8 @@ export const IIKO_ITEM = {
 			// update behaviors
 			this.MODIF_PANEL.on_pressed_cart(()=>{ 				
 				const preorder = this.get_preorder(this.TOTAL_ADD_TO_CART);
-				let total_in_cart = GLB.CART.add_preorder(preorder);		
+				// количество товара в корзине
+				let total_in_cart = GLB.CART.add_preorder(preorder);				
 				this.on_update_total_in_cart && this.on_update_total_in_cart(total_in_cart);									
 				this.MODIF_PANEL.close();
 			});

@@ -20,8 +20,8 @@
 
 	SQL::connect();
 
-	glog(print_r($_REQUEST,1));
-	glog(print_r($_POST,1));
+	// glog(print_r($_REQUEST,1));
+	// glog(print_r($_POST,1));
 
 	if(!isset($_REQUEST['cafe']) || empty(trim((string) $_REQUEST['cafe'])))__errorjsonp("0. unknown cafe");
 

@@ -82,7 +82,6 @@ class Iiko_order{
 				$originalPrice = (int) $item["originalPrice"];
 				$price =  (int) $item["price"] - $originalPrice;
 				$chosen_modifiers = $item["chosen_modifiers"] ?? [];
-				glog("добавляем модификатор размера / item=".print_r($item,true));
 				// добавляем модификатор размера				
 				$chosen_modifiers[] = 
 					[
@@ -136,22 +135,46 @@ class Iiko_order{
 	 */
 	private function prepare_items($order_rows): array{
 		
+		glog("=== prepare_items === ". print_r($order_rows,1));
+
 		$order_items = [];
 
 		foreach($order_rows as $row){
-			$amount = $row['count'];
-			$productSizeId = $row['sizeId'];
+			$amount = (int) $row['count'];
+			$productSizeId = $row['sizeId']??false;
 			$productId =  $row['item_data']['id_external'];
 			$orderItemType = $row['item_data']['iiko_order_item_type'];
+			
+			if($productSizeId){
+				// если есть размер, то берем цену из размера
+				$sizes = $row['item_data']['iiko_sizes_parsed'];
+				$current_size = array_filter($sizes, function($size) use ($productSizeId){
+					return $size['sizeId']==$productSizeId;
+				});
+				if(count($current_size)){
+					glog("current_size = ". print_r($current_size,1));
+					$first_key = array_key_first($current_size);
+					$productPrice = (int) $current_size[$first_key]['price'] - (int) $current_size[$first_key]['originalPrice'];
+				}else{
+					// если размер не найден, то берем цену из товара
+					$productPrice = 3000000;
+				}
+			}else{
+				// иначе берем цену из товара
+				$productPrice = (int) $row["price"];				
+			}
+						
 			if(empty($orderItemType)) $orderItemType="Product";
-			$chosenModifiers = isset($row['chosen_modifiers'])?$row['chosen_modifiers']:false;
-		
-			glog("--------------- preparing modifiers for order row ---------------");
-			glog("chosenModifiers", print_r($chosenModifiers,1)); 
+			$chosenModifiers = $row['chosen_modifiers']??false;
+					
+			if($chosenModifiers){
+				glog("=== chosenModifiers === ". print_r($chosenModifiers,1)); 
+			}	
 
 			$item = [
 					"type"=>"{$orderItemType}",
-					"amount"=>"{$amount}",			
+					"amount"=> (int) $amount,
+					"price"=> (int) $productPrice,					
 				];
 		
 			if(!empty($productSizeId)) $item["productSizeId"]=$productSizeId;
@@ -159,7 +182,11 @@ class Iiko_order{
 			$modifiers = [];
 			if($chosenModifiers && count($chosenModifiers)){		
 				foreach($chosenModifiers as $m){
-					$mod = [ 'productId'=>$m['modifierId'], 'amount'=>1 ];
+					$mod = [ 
+						'productId'=>$m['modifierId'], 
+						'amount' => 1,
+						'price' => (int) $m['price'],				
+					 ];
 					if(!empty($m['modifierGroupId'])) $mod['productGroupId'] = $m['modifierGroupId'];				
 					$modifiers[] = $mod;			
 				}		

@@ -230,7 +230,7 @@ export var VIEW_ORDER_OK = {
 				
 				const title_str = row.item_data.title;
 				const count = row.count;
-				const price = row.price;				
+				const price = row.price_with_modifiers;				
 
 				const weight = `${row.volume} ${row.units}`;
 				const volume_str = IIKO_MODE ? `${row.sizeName} / ${weight}` : weight;

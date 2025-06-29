@@ -48,6 +48,8 @@ if(!isset($_POST['id_cafe']) || empty($_POST['id_cafe']) ) __errorjsonp("--it ne
 if(!isset($_POST['order'])) __errorjsonp("--empty order");
 if(!isset($_POST['table_number'])) __errorjsonp("--it needs to table_number");
 
+
+
 // CHECK IS REAL CAFE
 $id_cafe = (int) $_POST['id_cafe'];
 $cafe = new Smart_object("cafe",$id_cafe);
@@ -97,8 +99,13 @@ if(IIKO_MODE){
 
 	$ARR_ORDER_FOR_IIKO = "";
 
+	glog("TEST!!!!");
+
 	try{		
 		$ARR_ORDER_FOR_IIKO = $Iiko_order->prepare_order_for_table( $table_number, $order_items );
+		glog("================= ARR_ORDER_FOR_IIKO ==================");
+		glog(capture_var_dump($ARR_ORDER_FOR_IIKO));
+		
 	}catch( Exception $e){
 		glogError($e->getMessage());
 		__errorjsonp("--fail preparing order for table");
