@@ -76,7 +76,7 @@ export const IIKO_ITEM_SIZER = {
 					'KILOGRAM':'кг',
 					'LITER':'л',
 					'GRAM':'г',
-					'ПОРЦ':'порц',
+					'ПОРЦ':'г',
 				};	
 				return unitTypes[unit_type_name] || '';
 			}			
