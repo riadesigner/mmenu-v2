@@ -141,7 +141,7 @@ export const IIKO_ITEM = {
 		}
 	},
 	build_modifiers:function(){
-		// this.MODIF_PANEL.add(this.IIKO_MODIFIERS);
+		this.MODIF_PANEL.add(this.IIKO_MODIFIERS);
 	},
 	calc_order_uniq_name:function(prefix){		
 		// if item has sizes more than one

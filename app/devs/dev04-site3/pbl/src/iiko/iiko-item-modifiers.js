@@ -6,8 +6,7 @@ import {GLB} from '../glb.js';
 */
 export const IIKO_ITEM_MODIFIERS = {
 	init:function(item_data) {
-		console.log('IIKO_ITEM_MODIFIERS.init() canceled');
-		return this;
+
 		this.item_data = item_data;
 		this.MODIFIERS = [];
 		this.OBJ_MODIFIERS = {};
