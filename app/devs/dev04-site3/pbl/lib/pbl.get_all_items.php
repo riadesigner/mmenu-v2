@@ -28,6 +28,9 @@
 	$all_items = new Smart_collect("items","WHERE id_menu={$id_menu}","ORDER BY pos");
 	if(!$all_items) __answerjsonp([]); // error	
 
+	$all_items_export = $all_items->export();
+	
+	// glog("==== all_items =====: ".print_r($all_items_export,1));
 	__answerjsonp($all_items->export());
 
 

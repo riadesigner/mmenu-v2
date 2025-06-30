@@ -80,11 +80,15 @@ export var VIEW_ALLITEMS = {
 			},600);
 
 		}else{
+			let ITEMS_LOADED_OK = false;
+
 			setTimeout(()=>{
 				
 				console.log("start items loading")
 				this.load_items_async()
 				.then((arr_items)=>{
+
+					ITEMS_LOADED_OK = true;
 					console.log('arr_items loaded',arr_items)
 					
 					this.ALL_ITEMS = fn.arr2obj(arr_items);					
@@ -96,8 +100,19 @@ export var VIEW_ALLITEMS = {
 					fn.start_items_build();
 				})
 				.catch((err)=>{
+					this._show_modal_win("Ой, не удалось загрузить. Меню будет перезагружено.",{onClose:()=>{
+						window.location.reload();
+					}});
 					console.log("error loading items",err);
 				});
+
+				setTimeout(() => {
+					if (! ITEMS_LOADED_OK) {												
+						this._show_modal_win("Ой, не удалось загрузить. Меню будет перезагружено.",{onClose:()=>{
+							window.location.reload();
+						}});
+					}
+				}, 3000); 
 
 			},400);
 		};
@@ -249,8 +264,8 @@ export var VIEW_ALLITEMS = {
 		return new Promise((res, rej)=>{			
 		
 			var url = GLB_APP_URL+"pbl/lib/pbl.get_all_items.php";	
-			var data = {menu:this.MENU.id};
-	
+			var data = {menu:this.MENU.id};			
+
 			this.AJX_ITEMS = $.ajax({
 				url: url + "?callback=?",
 				jsonpCallback:GLB.CALLBACK_RANDOM.get(),
@@ -260,11 +275,12 @@ export var VIEW_ALLITEMS = {
 				success: (arr_items)=> {        
 					res(arr_items);
 				},
-				error:(response)=> {
+				error:(response)=> {					
 					console.log("err response",response);
 					rej("ошибка загрузки");
 				}
 			});		
+						
 		})		
 	},
 	build_instances_async:function() {
