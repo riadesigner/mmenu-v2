@@ -115,8 +115,8 @@ export const IIKO_ITEM = {
 		this.IIKO_MODIFIERS.on_change(()=>{	this.update_modif_panel_ui(); });		
 
 		// SETUP MODIFIERS PANEL
-		if(this.has_modifiers() && this.MODIF_PANEL){
-			this.MODIF_PANEL.add(this.IIKO_MODIFIERS);
+		if(this.has_modifiers() && this.MODIF_PANEL){			
+			this.build_modifiers();
 			// update behaviors
 			this.MODIF_PANEL.on_pressed_cart(()=>{ 				
 				const preorder = this.get_preorder(this.TOTAL_ADD_TO_CART);
@@ -139,6 +139,9 @@ export const IIKO_ITEM = {
 			});
 			this.update_modif_panel_ui();;
 		}
+	},
+	build_modifiers:function(){
+		// this.MODIF_PANEL.add(this.IIKO_MODIFIERS);
 	},
 	calc_order_uniq_name:function(prefix){		
 		// if item has sizes more than one
