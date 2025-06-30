@@ -114,8 +114,8 @@ export const IIKO_ITEM_MODIFIERS = {
 		};
 
 		this.OBJ_MODIFIERS = fn.make_object(this.MODIFIERS);		
-		console.log(" ====== this.MODIFIERS ====== ", this.MODIFIERS);
-		console.log(" ====== this.OBJ_MODIFIERS ====== ", this.OBJ_MODIFIERS);
+		// console.log(" ====== this.MODIFIERS ====== ", this.MODIFIERS);
+		// console.log(" ====== this.OBJ_MODIFIERS ====== ", this.OBJ_MODIFIERS);
 	},
 
 	// @return { 
@@ -188,7 +188,7 @@ export const IIKO_ITEM_MODIFIERS = {
 				let strGroupName=`<div class="modifiers-group-name">${groupName} ${strUpToNum}</div>`;
 				let $m_group_wrapper = $(`<div class="modif-group-wrapper" ${params}>${strGroupName}</div>`);
 				
-				console.log('g', g);
+				// console.log('g', g);
 
 				let $m_list_group = $('<ul></ul>');				
 				const type_radio = radioMode?'type-radio':'';
