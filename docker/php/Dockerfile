@@ -1,12 +1,8 @@
 # From
 FROM php:8.3.4-fpm-alpine3.19
 
-# Labels
-LABEL creatorName="Vagner dos Santos Cardoso"
-LABEL creatorEmail="vagnercardosoweb@gmail.com"
-
 # Set timezone
-ENV TZ=${TZ:-UTC}
+ENV TZ=UTC
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
 # Install non-dev dependencies

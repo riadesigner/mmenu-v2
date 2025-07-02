@@ -1,5 +1,4 @@
 services:
-
   php:
     build: ./docker/php
     restart: unless-stopped
@@ -7,6 +6,8 @@ services:
     tty: true
     expose:
       - ${PROD_PHP_EXPOSE}
+    environment:
+      - TZ=UTC
     depends_on:
       - db
     volumes:
@@ -22,6 +23,7 @@ services:
     ports:
       - ${PROD_APACHE_HTTP}:80
     environment:
+      - TZ=UTC
       - VIRTUAL_HOST=${PROD_WWWROOT}      
     volumes:
       - ./app:/var/www/app      
@@ -33,6 +35,7 @@ services:
     ports:
       - ${PROD_DB_EXPOSE}:3306    
     environment:
+      - TZ=UTC
       - MARIADB_ROOT_PASSWORD=${PROD_DBPASS}
       - HOSTNAME=localhost
     volumes:
@@ -45,15 +48,5 @@ services:
     restart: always
     ports:
       - ${PROD_ADMINER_EXPOSE}:8080
-
-  # phpmyadmin:
-  #   image: phpmyadmin
-  #   container_name: docker.phpmyadmin
-  #   tty: true
-  #   depends_on:
-  #     - db
-  #   ports:
-  #     - 8181:80
-  #   environment:
-  #     PMA_ARBITRARY: 1
-  #     PMA_PORT: 3308
+    environment:
+      - TZ=UTC      

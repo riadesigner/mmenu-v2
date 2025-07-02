@@ -6,8 +6,8 @@ export var IikoLoader = {
 
         this.EXTERNALMENU_MODE = true; 
         this.TOKEN = false;
-        this.ORGANIZATION_ID = false;
-        this.TERMINAL_GROUP_ID = false;
+        this.ORGANIZATION_ID = null;
+        this.TERMINAL_GROUP_ID = null;
         this.ARR_MENU_IDS = [];
         this.PRICE_CATEGORIES = null;   
         this.CURRENT_MENU = 0;        
@@ -15,10 +15,12 @@ export var IikoLoader = {
         return this;
 
     },
+    // @param extmenu_id: string
+    // @param externalmenu_mode: boolean
+    // @return Promise
     load_extmenu_asynq: function(extmenu_id, externalmenu_mode = true) {
         return new Promise((res,rej)=>{        
             
-
             if(this.NOW_LOADING){
                 rej("Идет загрузка меню, попробуйте позже");
                 return;
@@ -27,9 +29,6 @@ export var IikoLoader = {
             this.NOW_LOADING = true;        
             this.EXTERNALMENU_MODE = externalmenu_mode;
             this.EXTMENU_ID = extmenu_id;
-
-            console.log('EXTERNALMENU_MODE = ', this.EXTERNALMENU_MODE);
-		    console.log('id_menu_for_loading = ', this.EXTMENU_ID);
 
             // GETTING TOKEN
             this.get_token_asynq()

@@ -1,5 +1,4 @@
 services:
-
   php:
     build: ./docker/php
     restart: unless-stopped
@@ -7,6 +6,8 @@ services:
     tty: true
     expose:
       - ${LOCAL_PHP_EXPOSE}
+    environment:
+      - TZ=UTC      
     depends_on:
       - db
     volumes:
@@ -21,7 +22,8 @@ services:
       - php
     ports:
       - ${LOCAL_APACHE_HTTP}:80      
-    environment:
+    environment:        
+      - TZ=UTC      
       - VIRTUAL_HOST=${LOCAL_WWWROOT}
     volumes:
       - ./app:/var/www/app  
@@ -33,6 +35,7 @@ services:
     ports:
       - ${LOCAL_DB_EXPOSE}:3306    
     environment:
+      - TZ=UTC          
       - MARIADB_ROOT_PASSWORD=${LOCAL_DBPASS}
       - HOSTNAME=localhost
     volumes:
@@ -45,3 +48,5 @@ services:
     restart: always
     ports:
       - ${LOCAL_ADMINER_EXPOSE}:8080
+    environment:
+      - TZ=UTC        
