@@ -388,7 +388,7 @@ App&&App();
 					<h2>Номенклатура</h2>
 					<div class="download-nomenclature-section">
 						<p>При невозможности работы с внешними меню, загрузите его из номенклатуры. Этот способ предполагает предварительную выгрузку в его iiko ofiice.</p>
-						<button class="std-special-single-button btn-iiki-load-nomenclature">Загрузить</button>
+						<button class="std-special-single-button btn-iiko-load-nomenclature">Загрузить</button>
 					</div>
 					<div class="choosing-nomenclature-section">
 						<p>Выберите меню, загруженное из номерклатурного списка:</p>

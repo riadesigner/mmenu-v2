@@ -12,7 +12,7 @@ export var VIEW_IIKO_CUSTOMIZATION = {
 		this.$inputDelKey =  this.$form.find('input[name=iiko-del-key]');
 		this.$btnIikoKey = this.$form.find('button[name=iiko-api-key]');
 		this.$btnIikoVarsUpdate = this.$form.find('.btn-iiko-vars-update');
-		this.btnDownloadNomenclature = this.$form.find('.btn-iiki-load-nomenclature');
+		this.btnDownloadNomenclature = this.$form.find('.btn-iiko-load-nomenclature');
 
 		this.$linkIikoQRCodeTablesHelp = this.$form.find('a[name=link-iiko-qrcode-tables]');
 
@@ -301,9 +301,15 @@ export var VIEW_IIKO_CUSTOMIZATION = {
 		this.$terminal_status_info.html(terminal_groups_status);
 	},
 	
-	update_oldway_menus_list:function(menus, current_oldway_menu_id){
+	update_oldway_menus_list:function(menus, current_oldway_menu_id=null){
 		
-		console.log('====== current_oldway_menu_id ===== ', current_oldway_menu_id);		
+		if(current_oldway_menu_id==null){
+			console.log(`current_oldway_menu_id = неизвестно`);
+			console.log(`невозможно обновить список oldway меню`);
+			return;
+		}else{
+			console.log(`current_oldway_menu_id = ${current_oldway_menu_id}`);
+		}
 				
 		if(menus && menus.length>0){	
 			

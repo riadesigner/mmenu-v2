@@ -1,9 +1,6 @@
 <?php
 /**
- * ПРЕОБРАЗУЕМ ФОРМАТ UNIMENU В CHEFSMENU (v-2.4.0)
- *  
- * убрали конвертирование сразу нескольких меню 
- * теперь на вход конструктор принимает только одно меню
+ * ПРЕОБРАЗУЕМ ФОРМАТ UNIMENU В CHEFSMENU (v-2.3.1)
  * 
  * для виртуального размерного ряда:
  * - добавлено поле originalPrice (из modifier->sizes[0]->price) 
@@ -24,28 +21,42 @@
 
 class Conv_unimenu_to_chefs {
     
-    private array $DATA; 
+    private array $UNIMENU;    
+    private array $DATA;    
 
-	function __construct(array $unimenu){				        
-        $this->DATA = $this->convert_menu($unimenu);
+
+	function __construct(array $unimenu){				
+        $this->UNIMENU = $unimenu;
 		return $this;
 	}
 
-    public function get_data(): array {
-          return [
-            "SourceMenu" => "NOMENCLATURE",
-            "TypeMenu" => "CHEFSMENU",
-            "Menu" => $this->DATA,            
-        ];
+    public function convert(): Conv_unimenu_to_chefs {
+        $ready_menus = array(); 
+
+        $menus = $this->UNIMENU['Menus'];
+
+        foreach($menus as $menu){
+            $ready_menus[$menu["menuId"]] = $this->convert_menu($menu);
+        }
+
+        $this->DATA = $ready_menus;
+        return $this;
     }
 
-    // ----------------
-    // PRIVATE METHODS
-    // ----------------
+    public function get_data(): array {
+        return [
+            "SourceMenus" => "NOMENCLATURE",
+            "TypeMenus" => "CHEFSMENU",
+            "TotalMenus" => count($this->DATA),
+            "Menus" => $this->DATA,            
+        ];        
+    }
+
     private function convert_menu(array $menu): array {
         $data = array();
         $data['id'] = $menu['menuId'];
-        $data['name'] = $menu['name'];        
+        $data['name'] = $menu['name'];
+        $data['description'] = $menu['description'];
         $data['categories'] = $this->get_categoties($menu['groups']);        
         $counter = 0;
         foreach($data['categories'] as &$category){

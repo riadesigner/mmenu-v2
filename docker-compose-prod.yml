@@ -29,7 +29,7 @@ services:
       - ./app:/var/www/app      
 
   db:
-    image: mariadb
+    image: mariadb:lts-ubi9
     container_name: docker.mariadb    
     restart: always    
     ports:
@@ -43,7 +43,7 @@ services:
       - ./docker/mysql/mariadb.cnf:/etc/mysql/conf.d/custom.cnf:ro
 
   adminer:
-    image: adminer
+    image: adminer:5.3.0
     container_name: docker.adminer    
     restart: always
     ports:

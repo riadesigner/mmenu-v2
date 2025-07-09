@@ -13,7 +13,9 @@ require_once WORK_DIR.APP_DIR.'core/class.smart_object.php';
 require_once WORK_DIR.APP_DIR.'core/class.smart_collect.php';
 require_once WORK_DIR.APP_DIR.'core/class.user.php';
 require_once WORK_DIR.APP_DIR.'core/class.iiko_params.php';
-require_once WORK_DIR.APP_DIR.'core/class.iiko_nomenclature.php';
+
+require_once WORK_DIR.APP_DIR.'core/class.iiko_nomenclature_divider.php';
+require_once WORK_DIR.APP_DIR.'core/class.iiko_nomenclature_loader.php';
 require_once WORK_DIR.APP_DIR.'core/class.iiko_parser_to_unimenu.php';
 
 session_start();
@@ -31,48 +33,40 @@ $cafe = new Smart_object("cafe",$id_cafe);
 if(!$cafe->valid())__errorjsonp("Unknown cafe, ".__LINE__);	
 if($cafe->id_user !== $user->id) __errorjsonp("Not allowed, ".__LINE__);
 
-$key = $cafe->iiko_api_key;
-$IIKO_PARAMS = new Iiko_params($id_cafe, $key);
-$orgId = ($IIKO_PARAMS->get())->current_organization_id;
+$api_key = $cafe->iiko_api_key;
+$IIKO_PARAMS = new Iiko_params($id_cafe, $api_key);
+$id_org = ($IIKO_PARAMS->get())->current_organization_id;
 
-// GETTING TOKEN FROM IIKO 
-$url     = 'api/1/access_token';
-$headers = ["Content-Type"=>"application/json"];
-$params  = ["apiLogin" => $key];
-$res = iiko_get_info($url,$headers,$params);
-$token = $res['token'];
+if( empty($id_org) ) __errorjsonp("not valid data, ".__LINE__);
 
-if( empty($orgId) || empty($token) ) __errorjsonp("not valid data, ".__LINE__);
-
-
-// ---------------------------------------------------------------------
-//  Загрузка номенклатуры из тестового файла (реальной выгрузки из iiko) 
-// ---------------------------------------------------------------------
-// $file_path = WORK_DIR.'/files/json-info-formated-full-new.json';
-// [$error, $array] = getting_nomenc_from_test_file($file_path);
-// if($error!==null ){ __errorjsonp($error); }
-// $menus = get_menus($array);
-
+// require_once WORK_DIR.APP_DIR.'core/class.lng_prefer.php';
 
 // --------------------------------
 //  GETTING NOMENCLATURE FROM IIKO
 // --------------------------------
-$NOMCL = new Iiko_nomenclature($orgId, $key);    
-$NOMCL->reload();
-$iiko_response = $NOMCL->get_data();
+$path_to_temp_exports = WORK_DIR.APP_DIR.'adm/iiko-temp-exports';
+$NOMCL_LOADER = new Iiko_nomenclature_loader($id_org, $api_key, $path_to_temp_exports);    
+$NOMCL_LOADER->reload(true, true);
+$json_file_path = $NOMCL_LOADER->get_file_path();        
+
+glog("IIKO. Загружена номенклатура, и сохранена в файл: $json_file_path");
+
+$NOMENCL_DIVIDER = new Iiko_nomenclature_divider($json_file_path);
+$temp_file_names = $NOMENCL_DIVIDER->get();
+
+glog("IIKO. Номенклатура разделена на файлы: ".print_r($temp_file_names, true));
 
 // -------------------------------------------------------
 // используем папки как категории (false, если PIZZAIOLO)
 // -------------------------------------------------------
 define("GROUPS_AS_CATEGORIES", ($IIKO_PARAMS->get())->current_nomenclature_type=='groups_as_categories'); 
 
+$groups_as_categories = (bool) GROUPS_AS_CATEGORIES;
+$PARSER_TO_UNIMENU = new Iiko_parser_to_unimenu($temp_file_names);    
+$PARSER_TO_UNIMENU->parse($groups_as_categories);
+$data = $PARSER_TO_UNIMENU->get_data();
 
-// ------------------------------------
-//  Преобразуем ответ в формат UNIMENU
-// ------------------------------------
-$UNIMENU = new iiko_parser_to_unimenu("", $iiko_response);
-$UNIMENU->parse(GROUPS_AS_CATEGORIES); 
-$data = $UNIMENU->get_data();
+glog("IIKO. Парсинг и перевод в UNIMENU выполнен, всего меню: ".$data['TotalMenus']);
 
 $menus = [];
 foreach ($data["Menus"] as $menu) {
@@ -82,74 +76,32 @@ foreach ($data["Menus"] as $menu) {
     ];
 }
 
+glog('IIKO. Все меню из номенклатуры: ');
+glog(print_r($menus, 1));
+
 $current_oldway_menu_id = $menus[0]["id"] ?? null;
+
+// get type: real_categories or groups_as_categories
 $current_nomenclature_type = ($IIKO_PARAMS->get())->current_nomenclature_type; 
 
+save_menus_info_to_iiko_params($id_cafe, $menus, $current_oldway_menu_id, $current_nomenclature_type);
 
-save_menus_to_iiko_params($id_cafe, $menus, $current_oldway_menu_id, $current_nomenclature_type);
+glog('IIKO. Информция о меню сохранена в базу данных.');
 
-__answerjsonp([
+$NOMENCL_DIVIDER->clean();
+$NOMCL_LOADER->clean(); 
+
+$answer = [
     "menus"=>$menus, 
     "current_oldway_menu_id"=>$current_oldway_menu_id,
     "current_nomenclature_type"=>$current_nomenclature_type,    
     "nomenclature_mode"=>1,
-]);
+];
 
-// -----------------
-//  LOCAL FUNCTIONS
-// -----------------
-// this function only for testing
-function get_menus($array) {
-    $menus = [];
-    foreach ($array["groups"] as $group) {
-        if($group["parentGroup"]===null &&
-        $group["isGroupModifier"]===false){
-            $menus[] = [
-                'id' => $group['id'],
-                'name' => $group['name'],
-            ];
-        }
-    }
-    return $menus;
-}
+glog("answer: ".print_r($answer, 1));
+__answerjsonp($answer);
 
-// function getting_nomenc_from_test_file($file_path): array {
-
-//     $error = null;
-
-//     // Проверяем существование файла
-//     if (!file_exists($file_path)) {
-//         $error = "Ошибка: Файл не найден.";        
-//     }
-
-//     // Читаем содержимое файла
-//     $json_data = file_get_contents($file_path);
-//     if ($json_data === false) {
-//         $error = "Ошибка: Не удалось прочитать файл.";        
-//     }
-
-//     // Декодируем JSON в ассоциативный массив
-//     $array = json_decode($json_data, true);
-
-//     // Проверяем на ошибки декодирования
-//     if (json_last_error() !== JSON_ERROR_NONE) {
-//         $error = "Ошибка в формате JSON: " . json_last_error_msg();        
-//     }
-
-//     // Проверяем на ошибки
-//     if( empty($array) || 
-//         !count($array) || 
-//         isset($array["error"]) ||
-//         !isset($array["groups"])
-//         ){
-//         $error = "Что-то пошло не так";
-//     }
-
-//     return [$error, $array];
-
-// }
-
-function save_menus_to_iiko_params($id_cafe, $menus, $current_oldway_menu_id, $current_nomenclature_type): void {
+function save_menus_info_to_iiko_params($id_cafe, $menus, $current_oldway_menu_id, $current_nomenclature_type): void {
     $iiko_params_collect = new Smart_collect("iiko_params", "where id_cafe='".$id_cafe."'");
     if($iiko_params_collect->full()){
         $iiko_params = $iiko_params_collect->get(0);			        

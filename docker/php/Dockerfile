@@ -12,7 +12,8 @@ RUN set -eux \
   c-client make ca-certificates imap gmp gettext libssh2 yaml \
   libintl libxslt libpng libwebp imap \
   linux-headers oniguruma libxslt libpq vips \
-  gmp libzip libxml2 freetds
+  gmp libzip libxml2 freetds \
+  jq
 
 # Install dependencies
 RUN set -eux \

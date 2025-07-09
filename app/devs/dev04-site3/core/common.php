@@ -287,6 +287,51 @@ function capture_var_dump($data) {
     return ob_get_clean();
 }
 
+function saveArrayToUniqueJson(array $data, string $directory = 'exports'): ?string {
+
+    // Создаем директорию, если её нет
+    if (!is_dir($directory) && !mkdir($directory, 0755, true)) {
+        throw new RuntimeException("Failed to create directory: $directory");
+    }
+
+    // Генерируем уникальное имя для финального файла
+    do {
+        $finalFilename = sprintf(
+            '%s/%s_%s.json',
+            $directory,
+            date('Y-m-d_H-i-s'),
+            bin2hex(random_bytes(4))
+        );
+    } while (file_exists($finalFilename));
+
+    // Кодируем данные
+    $json = json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
+    if ($json === false) {
+        throw new RuntimeException('JSON encoding failed');
+    }
+
+    // Создаем временный файл
+    $tempFile = tempnam(sys_get_temp_dir(), 'json_');
+    if ($tempFile === false) {
+        throw new RuntimeException('Failed to create temporary file');
+    }
+
+    // Записываем JSON во временный файл
+    if (file_put_contents($tempFile, $json, LOCK_EX) === false) {
+        unlink($tempFile); // удаляем временный файл в случае неудачи
+        throw new RuntimeException("Failed to write to temporary file");
+    }
+
+    // Перемещаем временный файл в финальное место
+    if (!rename($tempFile, $finalFilename)) {
+        unlink($tempFile);
+        throw new RuntimeException("Failed to move file to: $finalFilename");
+    }
+
+    return $finalFilename;
+}
+
+
 /* for remember and TODO */
 
 // try {

@@ -56,7 +56,7 @@ class Iiko_params{
 		$this->read_iiko_tables_info();
 		$this->read_order_types();	
 		$this->read_status_current_terminal_group();	
-		glog("-- IIKO LOADED ROUGH_DATA -- \n".print_r($this->ROUGH_DATA,1));
+		// glog("-- IIKO LOADED ROUGH_DATA -- \n".print_r($this->ROUGH_DATA,1));
 						
 		return $this->update_db();		
 	}
