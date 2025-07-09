@@ -21,27 +21,12 @@ require_once WORK_DIR.APP_DIR.('core/class.iiko_nomenclature.php');
 require_once WORK_DIR.APP_DIR.('core/class.iiko_parser_to_unimenu.php');
 require_once WORK_DIR.APP_DIR.('core/class.conv_unimenu_to_chefs.php');
 
-
-
 session_start();
 SQL::connect();
-
-// нужна новая архитектура решения
-
-// log:  ===== Размер iiko_response: ~2 MB
-// log:  Переменных в iiko_response: 79978
-// log:  Размер UNIMENU: ~0.91 MB
-// log:  Переменных в UNIMENU: 44338
-// log:  Размер chefsdata: ~1.28 MB
-// log:  Переменных в chefsdata: 46101
 
 
 // GETTING OLDWAY MENU BY ID / API 1, (FROM NOMENCLATURE) 
 
-if(!isset($_POST['token'])){
-	__errorjsonp(["error"=>"unknown token"]);
-	exit();
-}
 if(!isset($_POST['externalMenuId'])){
     __errorjsonp(["error"=>"unknown external menu id"]);
     exit();
@@ -51,18 +36,93 @@ if(!isset($_POST['id_cafe']) || empty($_POST['id_cafe']) ){
     exit();
 }
 
-$token = $_POST['token'];
+
 $externalMenuId = $_POST['externalMenuId'];
 // $currentExtmenuHash = $_POST['currentExtmenuHash'];
-$id_cafe = post_clean($_POST['id_cafe']);
 
 $id_cafe = (int) $_POST['id_cafe'];
 $cafe = new Smart_object("cafe",$id_cafe);
 if(!$cafe->valid())__errorjsonp("Unknown cafe, ".__LINE__);
 
-$key = $cafe->iiko_api_key;
-$IIKO_PARAMS = new Iiko_params($id_cafe, $key);
-$orgId = ($IIKO_PARAMS->get())->current_organization_id;
+$api_key = $cafe->iiko_api_key;
+$IIKO_PARAMS = new Iiko_params($id_cafe, $api_key);
+$id_org = ($IIKO_PARAMS->get())->current_organization_id;
+
+if( empty($id_org) ) __errorjsonp("not valid data, ".__LINE__);
+
+new_full_nomencl_parser($id_org, $api_key, $externalMenuId);
+
+
+
+
+function new_full_nomencl_parser($id_org, $api_key, $current_menu_id){
+    
+    glog("IIKO. Загрузка и парсинг номенклатуры");
+
+    // --------------------------------
+    //  GETTING NOMENCLATURE FROM IIKO
+    // --------------------------------
+    $path_to_temp_exports = WORK_DIR.APP_DIR.'adm/iiko-temp-exports';
+    $NOMCL_LOADER = new Iiko_nomenclature_loader($id_org, $api_key, $path_to_temp_exports);    
+    $NOMCL_LOADER->reload(true, true);
+    $json_file_path = $NOMCL_LOADER->get_file_path();        
+
+    glog("IIKO. Загружена номенклатура, и сохранена в файл: $json_file_path");
+
+    $NOMENCL_DIVIDER = new Iiko_nomenclature_divider($json_file_path);
+    $temp_file_names = $NOMENCL_DIVIDER->get();
+
+    glog("IIKO. Номенклатура разделена на файлы: ".print_r($temp_file_names, true));
+
+    // -------------------------------------------------------
+    // используем папки как категории (false, если PIZZAIOLO)
+    // -------------------------------------------------------
+    define("GROUPS_AS_CATEGORIES", ($IIKO_PARAMS->get())->current_nomenclature_type=='groups_as_categories'); 
+
+    $PARSER_TO_UNIMENU = new Iiko_parser_to_unimenu($temp_file_names);    
+    $PARSER_TO_UNIMENU->parse(GROUPS_AS_CATEGORIES);
+    $data = $PARSER_TO_UNIMENU->get_data();
+
+    glog("IIKO. Парсинг и перевод в UNIMENU выполнен, всего меню: ".$data['TotalMenus']);  
+    
+    $NOMENCL_DIVIDER->clean();
+    $NOMCL_LOADER->clean();     
+
+    glog('IIKO. Все меню из номенклатуры: ');
+    $menus = [];
+    foreach ($data["Menus"] as $menu) {
+        $menus[] = [
+            "id" => $menu["menuId"],
+            "name" => $menu["name"],
+        ];
+    }     
+    glog(print_r($menus, 1));    
+
+    // get type menu structure: REAL_CATEGORIES or GROUPS_AS_CATEGORIES
+    $current_nomenclature_type = ($IIKO_PARAMS->get())->current_nomenclature_type; 
+    
+    $selected_unimenu = $data["Menus"][$current_menu_id]?? null;
+    if($selected_unimenu === null) {
+        $errMsg = "IIKO. Не найдено меню с id: $current_menu_id";
+        glog($errMsg);
+        __errorjsonp($errMsg);
+        return;
+    }
+    $CHEFS_CONVERTER = new Conv_unimenu_to_chefs($selected_unimenu);
+    $chefsdata = $CHEFS_CONVERTER->get_data();
+    
+    echo sprintf("<p>Конвертирование меню <strong>%s</strong> в CHEFS выполнено</p>", $data["Menus"][$current_menu_id]['name']);
+    echo "<pre>";
+    print_r($chefsdata);
+    echo "</pre>";    
+        
+    // $current_menu_id
+
+
+}
+
+
+
 
 // -------------------------------------------------------
 // получаем номенклатуру с сервера iiko

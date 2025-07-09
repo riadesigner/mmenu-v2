@@ -30,97 +30,26 @@ export var IikoLoader = {
             this.EXTERNALMENU_MODE = externalmenu_mode;
             this.EXTMENU_ID = extmenu_id;
 
-            // GETTING TOKEN
-            this.get_token_asynq()
-            .then((token)=>{
+            // GETTING EXTMENU ID
+            this.get_menu_by_id_asynq(this.EXTMENU_ID)
+            .then((vars)=>{                            
+                this.NOW_LOADING = false;
 
-                this.TOKEN = token;
-
-                // GETTING EXTMENU ID
-                this.get_menu_by_id_asynq(this.EXTMENU_ID)
-                .then((vars)=>{                            
-                    this.NOW_LOADING = false;
-
-                    res([
-                        vars['id-menu-saved'],
-                        vars['menu-hash'],
-                        vars['need-to-update'],                    
-                    ]);
-
-                })
-                .catch((vars)=>{
-                    this.NOW_LOADING = false;
-                    rej(vars);
-                });           
+                res([
+                    vars['id-menu-saved'],
+                    vars['menu-hash'],
+                    vars['need-to-update'],                    
+                ]);
 
             })
             .catch((vars)=>{
-                console.log('err get token',vars);
+                this.NOW_LOADING = false;
                 rej(vars);
-            });
+            }); 
 
         });
     },
 
-    get_token_asynq:function() {
-        return new Promise((res,rej)=>{
-
-            let cafe = GLB.THE_CAFE.get();
-
-            // try get token localy first
-            let token = this.get_token_localy();
-            if(token){ res(token); return; };
-
-            const _this = this;
-            const PATH = './adm/lib/iiko/';
-            const url = PATH + 'get_token_for_cafe.php';
-            const data = { id_cafe:cafe.id };
-            
-            const AJAX = $.ajax({
-                url: url+"?callback=?",
-                data:data,
-                dataType: "jsonp",
-                method:"POST",
-                error:(err)=> {
-                    rej(err);
-                }
-            });
-
-            AJAX.then((result)=>{
-                if(result&&result["token"]){
-                    token = result["token"];
-                    this.save_token_localy(token);                
-                    res(token);
-                }else{
-                    rej(result);
-                }
-            });
-
-        });
-    },
-
-    get_token_localy:function(){        
-        var token = GLB._IIKO_TOKEN;        
-        var token_date = GLB._IIKO_TOKEN_DATE;
-        if(!token || !token_date){
-            console.log("unknown token, will be get new");            
-            return false;
-        }else{                        
-            var duration = (new Date().getTime()-token_date)/3600000;
-            console.log("duration",duration);
-            if(!duration || duration>.5){
-                // if more than 30 minutes
-                console.log("token too old, and will be get new");                
-                return false;                
-            }else{
-                return token;
-            }     
-        }
-    },
-    save_token_localy:function(token) {        
-        GLB._IIKO_TOKEN = token;
-        GLB._IIKO_TOKEN_DATE = new Date().getTime();
-    },
     get_menu_by_id_asynq:function(menu_id){
         return new Promise((res,rej)=>{
  
@@ -132,7 +61,6 @@ export var IikoLoader = {
             const iiko_params = GLB.THE_CAFE.get('iiko_params');
 
             const data = {
-                token:this.TOKEN,
                 id_cafe:cafe.id,
                 externalMenuId: menu_id,
                 currentExtmenuHash: this.EXTERNALMENU_MODE ? iiko_params['current_extmenu_hash']: "",
@@ -150,12 +78,12 @@ export var IikoLoader = {
             });
 
             AJAX.then((result)=>{                            
-                if(res(result) && !result['error']){
-                    console.log('result ok after loading nomencl',result);
-                    res[result];
+                if(result && !result['error']){
+                    console.log('result ok after loading nomencl', result);
+                    res(result);
                 }else{
-                    console.log('err 2 after loading nomencl',result);
-                    rej[result];
+                    console.log('err 2 after loading nomencl', result);
+                    rej(result);
                 }
             });
 

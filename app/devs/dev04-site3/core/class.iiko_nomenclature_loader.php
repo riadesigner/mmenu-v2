@@ -2,7 +2,7 @@
 
 if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 /**
- * 	ПОЛУЧАЕМ НОМЕНКЛАТУРУ ИЗ IIKO v-1.2.0
+ * 	ПОЛУЧАЕМ НОМЕНКЛАТУРУ ИЗ IIKO v-1.4.0
  * 
  *  @param <string> $id_organization
  *  @param <string> $iiko_api_key
@@ -17,6 +17,7 @@ class Iiko_nomenclature_loader{
 	private string $TOKEN;
 	private string $PATH_TO_SAVE_FILE;
 	private string $FULL_PATH_TO_SAVED_FILE;
+	private string $INFO;
 	
 	/**
 	 * @param <string> $id_org / required
@@ -35,8 +36,12 @@ class Iiko_nomenclature_loader{
 	// @param <bool> $create_temp_file // если true, то создаем временный файл
 	// @param <bool> $auto_clear_data // если true, то очищаем данные сразу после сохранения файла
 	public function reload(bool $create_temp_file = false, bool $auto_clear_data = false): void{		
+
 		if(empty($this->TOKEN)){ $this->TOKEN = $this->reload_token(); }
 		$this->DATA = $this->load_nomenclature();
+		// collecting a meta information about the datamenu
+		$this->INFO = $this->calc_meta_info($this->DATA);
+
 		if($create_temp_file){
 			// SAVING TO TEMP FILE
 			$pre_ = $this->PATH_TO_SAVE_FILE;
@@ -49,6 +54,10 @@ class Iiko_nomenclature_loader{
 
 	public function get_data(): array{
 		return $this->DATA;
+	}
+
+	public function get_info(): string{
+		return $this->INFO;
 	}
 	
 	public function get_file_path(): string{
@@ -85,8 +94,27 @@ class Iiko_nomenclature_loader{
 			"organizationId"=> $this->ID_ORG,
 			"startRevision"=> "0",    
 		];
-		$res = iiko_get_info($url,$headers,$params);		
+		$res = iiko_get_info($url,$headers,$params);
 		return $res;
+	}
+
+	private function calc_meta_info(array $iiko_response): string{		
+		// размер исходных данных от iiko:
+		$size_iiko = strlen(serialize($iiko_response)); 
+		$size_iiko = round($size_iiko / 1024 / 1024 ) . " MB";
+		$vars_iiko = $this->count_recursive($iiko_response);
+		$infoMsg = "Размер исходных данных от iiko: ~" . $size_iiko . ", ";
+		$infoMsg .= 'Переменных в исходных данных от iiko: ' . $vars_iiko;
+		return $infoMsg;
+	}
+
+	// Для глубокого подсчёта переменных в res from iiko:
+	private function count_recursive(array $arr) {
+		$count = 0;
+		array_walk_recursive($arr, function() use (&$count) {
+			$count++;
+		});
+		return $count;
 	}
 
 }

@@ -102,7 +102,7 @@ export var VIEW_ALL_MENU = {
 
 	ask_to_reload_iiko_menu:function() {
 
-		const menu_for_loading = this.get_current_menu_for_loading_from_iiko();
+		const menu_for_loading = this.get_current_menu_id_for_loading();
 
 		console.log('menu_for_loading = ', menu_for_loading);
 
@@ -122,7 +122,7 @@ export var VIEW_ALL_MENU = {
 
 	},	
 
-	get_current_menu_for_loading_from_iiko:function(){
+	get_current_menu_id_for_loading:function(){
 		const EXTERNALMENU_MODE = this.get_externalmenu_mode();
 		const id_menu_for_loading = this.get_current_extmenu_id(EXTERNALMENU_MODE);
 		const fn = {
@@ -162,9 +162,7 @@ export var VIEW_ALL_MENU = {
 
 	do_reload_iiko_menu:function(){				
 				
-		const cafe = GLB.THE_CAFE.get();
-
-		console.log("starting reload iiko menu")
+		const cafe = GLB.THE_CAFE.get();		
 				
 		const EXTERNALMENU_MODE = this.get_externalmenu_mode();
 		const id_menu_for_loading = this.get_current_extmenu_id(EXTERNALMENU_MODE);
@@ -189,7 +187,8 @@ export var VIEW_ALL_MENU = {
 			//  IF MENU DATA WRONG
 			// --------------------
 			if(!idMenuSaved || !roughMenuHash){
-				this.error_message();
+				const msg = 'Не удалось загрузить меню.';
+				this.error_message(msg);
 				setTimeout(()=>{ this.end_loading(); this._page_show();},200);
 				return false
 			}

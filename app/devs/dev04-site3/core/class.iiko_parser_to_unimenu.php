@@ -1,6 +1,6 @@
 <?php
 /**
- * ДВА ВАРИАНТА ПАРСИНГА МЕНЮ (v-3.0.0)
+ * ДВА ВАРИАНТА ПАРСИНГА МЕНЮ (v-3.2.0)
  * 
  * добавлена возможность выбора, что парсить
  * 
@@ -29,6 +29,7 @@ class Iiko_parser_to_unimenu {
     private array $groupsModifiersById;
     private array $categoriesById;          
     private bool $GROUPS_AS_CATEGORY;
+    private string $INFO;
 
     // НА ВХОД ПРИНИМАЕТ ТРИ ВАРИАНТА ДАННЫХ.
     // действует в зависимости от того, что передали в конструктор:
@@ -67,13 +68,19 @@ class Iiko_parser_to_unimenu {
             
         // иначе предполагаем, что передали ответ от iiko
         }else{
-            $this->DATA = $this->build_all_menus($this->IIKO_RESPONSE);        
+            $this->DATA = $this->build_all_menus($this->IIKO_RESPONSE); 
+            // collecting a meta information about the datamenu
+            $this->INFO = $this->calc_meta_info($this->DATA);                   
         }
     }
 
     public function get_data(): array {
         return $this->DATA;
     }
+
+    public function get_info(): string {
+        return $this->INFO;
+    }    
 
     // на вход принимает массив имен файлов (частей номенклатуры) в формате .jsonl    
     // возможные: categories, groups, dish, modifiers, service
@@ -534,7 +541,25 @@ class Iiko_parser_to_unimenu {
         fclose($handle);
     }    
 
+    private function calc_meta_info($data){
+        // Размер промежуточных данных (UNIMENU):
+        $size_unimenu = strlen(json_encode($data, JSON_UNESCAPED_UNICODE));
+        $size_unimenu = round($size_unimenu / 1048576, 2) . " MB";
+        $vars_unimenu = $this->count_vars($data);
+        $this->INFO = "Размер UNIMENU: ~" . $size_unimenu . " Переменных в UNIMENU: " . $vars_unimenu;
+    }
 
+    // Подсчет переменных:
+    private function count_vars($data) {
+        $count = 0;
+        foreach ($data as $key => $value) {
+            $count++;
+            if (is_array($value)) {
+                $count += $this->count_vars($value);
+            }
+        }
+        return $count;
+    }  
    
 }
 

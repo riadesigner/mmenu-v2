@@ -3,7 +3,7 @@
 if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 /**
- * 	ПАРСИМ НОМЕНКЛАТУРУ ИЗ IIKO v-1.0.0
+ * 	ПАРСИМ НОМЕНКЛАТУРУ ИЗ IIKO v-1.1.0
  *  
  *  1. получаем на вход json-файл (номенклатуру) 
  *  2. разбиваем этот json файл на части 

@@ -39,8 +39,6 @@ $id_org = ($IIKO_PARAMS->get())->current_organization_id;
 
 if( empty($id_org) ) __errorjsonp("not valid data, ".__LINE__);
 
-// require_once WORK_DIR.APP_DIR.'core/class.lng_prefer.php';
-
 // --------------------------------
 //  GETTING NOMENCLATURE FROM IIKO
 // --------------------------------
@@ -61,13 +59,16 @@ glog("IIKO. Номенклатура разделена на файлы: ".print
 // -------------------------------------------------------
 define("GROUPS_AS_CATEGORIES", ($IIKO_PARAMS->get())->current_nomenclature_type=='groups_as_categories'); 
 
-$groups_as_categories = (bool) GROUPS_AS_CATEGORIES;
 $PARSER_TO_UNIMENU = new Iiko_parser_to_unimenu($temp_file_names);    
-$PARSER_TO_UNIMENU->parse($groups_as_categories);
+$PARSER_TO_UNIMENU->parse(GROUPS_AS_CATEGORIES);
 $data = $PARSER_TO_UNIMENU->get_data();
 
 glog("IIKO. Парсинг и перевод в UNIMENU выполнен, всего меню: ".$data['TotalMenus']);
 
+$NOMENCL_DIVIDER->clean();
+$NOMCL_LOADER->clean(); 
+
+glog('IIKO. Все меню из номенклатуры: ');
 $menus = [];
 foreach ($data["Menus"] as $menu) {
     $menus[] = [
@@ -75,21 +76,16 @@ foreach ($data["Menus"] as $menu) {
         "name" => $menu["name"],
     ];
 }
-
-glog('IIKO. Все меню из номенклатуры: ');
 glog(print_r($menus, 1));
 
 $current_oldway_menu_id = $menus[0]["id"] ?? null;
 
-// get type: real_categories or groups_as_categories
+// get type menu structure: REAL_CATEGORIES or GROUPS_AS_CATEGORIES
 $current_nomenclature_type = ($IIKO_PARAMS->get())->current_nomenclature_type; 
 
 save_menus_info_to_iiko_params($id_cafe, $menus, $current_oldway_menu_id, $current_nomenclature_type);
 
 glog('IIKO. Информция о меню сохранена в базу данных.');
-
-$NOMENCL_DIVIDER->clean();
-$NOMCL_LOADER->clean(); 
 
 $answer = [
     "menus"=>$menus, 

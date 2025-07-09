@@ -287,9 +287,11 @@ function capture_var_dump($data) {
     return ob_get_clean();
 }
 
-function saveArrayToUniqueJson(array $data, string $directory = 'exports'): ?string {
+function saveArrayToUniqueJson(array $data, string $directory = ""): ?string {
 
-    // Создаем директорию, если её нет
+	$directory = empty($directory)?'exports':$directory;
+    	
+	// Создаем директорию, если её нет
     if (!is_dir($directory) && !mkdir($directory, 0755, true)) {
         throw new RuntimeException("Failed to create directory: $directory");
     }
@@ -330,7 +332,6 @@ function saveArrayToUniqueJson(array $data, string $directory = 'exports'): ?str
 
     return $finalFilename;
 }
-
 
 /* for remember and TODO */
 
