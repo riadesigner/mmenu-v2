@@ -179,48 +179,38 @@ export var VIEW_ALL_MENU = {
 		.then((vars)=>{
 
 			console.log('vars = ', vars);
-
-			// const [roughMenu, roughMenuHash, need2update] = vars;
-			const [idMenuSaved, roughMenuHash, need2update] = vars;
+			
+			const [idMenuSaved, newMenuHash] = vars;						
+			const need2update = 1;
 
 			// --------------------
 			//  IF MENU DATA WRONG
 			// --------------------
-			if(!idMenuSaved || !roughMenuHash){
+			if(!idMenuSaved || !newMenuHash){
 				const msg = 'Не удалось загрузить меню.';
 				this.error_message(msg);
 				setTimeout(()=>{ this.end_loading(); this._page_show();},200);
 				return false
 			}
 			
-			if(idMenuSaved && roughMenuHash && need2update){
+			if(idMenuSaved && newMenuHash && need2update){
 				
 				// --------------------------------------
 				//  IF MENU WAS IMPORTED AND SAVED IN DB
-				// --------------------------------------
-				
-				let newIdMenuSaved;
+				// --------------------------------------				
 
-				if(EXTERNALMENU_MODE){
-					// если режим внешнего меню, 
+				const recalcIdMenu = (idMenu)=>{					
+					// Если режим внешнего меню, 
 					// то нужно его еще преобразовать в формат CHEFS
-					// TODO - не реализовано в данной версии!
-					newIdMenuSaved = GLB.IIKO_EXT_MENU_PARSER.parse(idMenuSaved);
-
-				}else{
-					// если меню из номенклатуры, то оно уже в нужном формате, 
+					// TODO - не реализовано ...!
+					// -------------------------------------------------------
+					// Если меню из Номенклатуры, то оно уже в нужном формате, 
 					// поэтому парсить не нужно  
-					newIdMenuSaved = idMenuSaved;
-				}				 
-				
-				// const total_categories = Object.keys(newMenu.categories).length;				
-				// if(!total_categories){
-				// 	this.error_message('Внешнее меню пустое.');
-				// 	setTimeout(()=>{ this.end_loading(); this._page_show();},200);
-				// 	return false;
-				// }
+					return EXTERNALMENU_MODE ? GLB.IIKO_EXT_MENU_PARSER.parse(idMenuSaved) : idMenu;
+				}
+				const newIdMenuSaved = recalcIdMenu(idMenuSaved);
 								
-				this.do_update_iiko_menu(cafe, newIdMenuSaved, roughMenuHash);
+				this.do_update_iiko_menu(cafe, newIdMenuSaved, newMenuHash);
 
 			}else{
 
@@ -277,13 +267,13 @@ export var VIEW_ALL_MENU = {
 			this._page_show();
 		})
 	},
-	do_update_iiko_menu:function(cafe, idMenuSaved,roughMenuHash){
+	do_update_iiko_menu:function(cafe, idMenuSaved, newMenuHash){
 		const _this=this;
 
 		const opt = {
 			id_cafe:cafe.id,
 			idMenuSaved:idMenuSaved,
-			roughMenuHash:roughMenuHash,
+			newMenuHash: newMenuHash,
 			onReady:function() {											
 				console.log("Menu was updated!");							
 				setTimeout(()=>{

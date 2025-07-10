@@ -11,16 +11,12 @@
 	define("BASEPATH",__file__);
 	
 	require_once getenv('WORKDIR').'/config.php';
-
-	require_once WORK_DIR.APP_DIR.'core/common.php';	
-	
-	require_once WORK_DIR.APP_DIR.'core/class.sql.php';
-	 
+	require_once WORK_DIR.APP_DIR.'core/common.php';		
+	require_once WORK_DIR.APP_DIR.'core/class.sql.php';	 
 	require_once WORK_DIR.APP_DIR.'core/class.smart_object.php';
 	require_once WORK_DIR.APP_DIR.'core/class.smart_collect.php';
 	require_once WORK_DIR.APP_DIR.'core/class.user.php';
 	
-
 	session_start();
 	SQL::connect();
 
@@ -36,10 +32,9 @@
 	if(!isset($_POST['id_menu_saved']) || empty($_POST['id_menu_saved'])) __errorjsonp("id_menu_saved is empty, ".__LINE__);
 	$id_menu_saved = $_POST['id_menu_saved'];
 
-	if(!isset($_POST['rough_menu_hash'])) __errorjsonp("require a rough_menu_hash to update menu");
-	$rough_menu_hash = post_clean($_POST['rough_menu_hash']);
+	if(!isset($_POST['new_menu_hash'])) __errorjsonp("require a new_menu_hash to update menu");
+	$new_menu_hash = post_clean($_POST['new_menu_hash']);
 	
-
 	// ================================================
 	// LOADING FROM DB THE JUST IMPORTED MENU FROM IIKO
 	// ================================================		
@@ -47,33 +42,6 @@
 	if(!$sm->valid())__errorjsonp("Unknown menu, ".__LINE__);	
 	$menu_data = base64_decode($sm->data);
 	$new_menu = json_decode($menu_data, true);
-
-
-	// --------------- NO NEEDS SO FAR -----------------------
-	
-	// SAVE JSON BACKUP	
-	// $menu_saved = new Smart_object('menu_saved');
-	// $menu_saved->id_cafe = $id_cafe;
-	// $menu_saved->updated_date = 'now()';
-	// $menu_saved->menu_json = json_encode($all_menu->export(), JSON_UNESCAPED_UNICODE);
-
-	// PROTECT JSON FROM QUOTERS
-	// then, before use, its need to strip slashes
-	// json_decode(stripslashes($item['iiko_modifiers']));	
-	// $arr_items_backup = $all_items->export();
-	// if(count($arr_items_backup)){
-	// 	foreach($arr_items_backup as $item){
-	// 		if($item['created_by']=="iiko"){				
-	// 			$item['iiko_modifiers'] = str_replace(["'", '"'], ["\'", '\"'], (string) $item['iiko_modifiers']);
-	// 			$item['iiko_sizes'] = str_replace(["'", '"'], ["\'", '\"'], (string) $item['iiko_sizes']);
-	// 		}
-	// 	}
-	// }		
-	// $menu_saved->items_json =  mysqli_real_escape_string(SQL::get(),json_encode($arr_items_backup, JSON_UNESCAPED_UNICODE));
-	
-	// if(!$menu_saved->save()){
-	// 	__errorjsonp("Something wrong. Cant make backup the menu, ".__LINE__);
-	// }
 
 	// ============================================
 	// COLLECCTING ALL MENUS AND ITEMS FOR THE CAFE
@@ -260,7 +228,7 @@
 	if(!$iiko_params_collect || !$iiko_params_collect->full()) __errorjsonp("Not found iiko_params for cafe {$cafe->id}.");
 	$iiko_params = $iiko_params_collect->get(0);
 
-	$iiko_params->current_extmenu_hash = $rough_menu_hash;	
+	$iiko_params->current_extmenu_hash = $new_menu_hash;	
 	$iiko_params->updated_date = 'now()';	
 
 	if($iiko_params->save()){

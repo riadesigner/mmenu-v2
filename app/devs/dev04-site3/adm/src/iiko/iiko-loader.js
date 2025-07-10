@@ -37,14 +37,15 @@ export var IikoLoader = {
 
                 res([
                     vars['id-menu-saved'],
-                    vars['menu-hash'],
-                    vars['need-to-update'],                    
+                    vars['new-menu-hash'],
+                    vars['need-to-update'],
+                    vars['meta-info'],                    
                 ]);
 
             })
-            .catch((vars)=>{
+            .catch((err)=>{
                 this.NOW_LOADING = false;
-                rej(vars);
+                rej(err);
             }); 
 
         });
@@ -71,8 +72,7 @@ export var IikoLoader = {
                 data:data,
                 dataType: "jsonp",
                 method:"POST",
-                error:(err)=> {
-                    console.log('err after loading nomencl',err);
+                error:(err)=> {                    
                     rej(err);                    
                 }
             });

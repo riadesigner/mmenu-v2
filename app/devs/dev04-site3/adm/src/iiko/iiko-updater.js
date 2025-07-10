@@ -3,7 +3,7 @@ export var IikoUpdater = {
     init:function(opt) {        
         this.idMenuSaved = opt.idMenuSaved;        
         this.ID_CAFE = opt.id_cafe;
-        this.roughMenuHash = opt.roughMenuHash;
+        this.newMenuHash = opt.newMenuHash;
                 
         this.start_update({
             onReady:function(res) {
@@ -17,12 +17,12 @@ export var IikoUpdater = {
     start_update:function(opt){
 
         var PATH = 'adm/lib/iiko/';
-        var url = PATH + 'iiko.upgrade_to_menu_from_iiko.php';
+        var url = PATH + 'iiko.upgrade_menu_to_iiko.php';
         
         var data ={
             id_cafe:this.ID_CAFE,
             id_menu_saved:this.idMenuSaved,
-            rough_menu_hash: this.roughMenuHash
+            new_menu_hash: this.newMenuHash
         };
 
         var errMsg = "cant upgrading to menu from iiko"; 
