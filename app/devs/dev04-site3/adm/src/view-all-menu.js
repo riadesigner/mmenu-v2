@@ -91,7 +91,12 @@ export var VIEW_ALL_MENU = {
 			if(!this.LOADING){
 				this.now_loading();
 				this._page_hide();				
+
+				// const cafe = GLB.THE_CAFE.get();	
+				// this.do_update_iiko_menu(cafe, 20, "12345");
+
 				this.ask_to_reload_iiko_menu();
+				
 			}else{
 				console.log("try later, please")
 			};

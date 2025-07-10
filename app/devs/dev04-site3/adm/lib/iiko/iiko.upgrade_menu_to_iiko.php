@@ -41,7 +41,8 @@
 	$sm = new Smart_object('menu_imported',$id_menu_saved);
 	if(!$sm->valid())__errorjsonp("Unknown menu, ".__LINE__);	
 	$menu_data = base64_decode($sm->data);
-	$new_menu = json_decode($menu_data, true);
+	$chefs_menu_data = json_decode($menu_data, true);
+	$new_menu = $chefs_menu_data["Menu"];
 
 	// ============================================
 	// COLLECCTING ALL MENUS AND ITEMS FOR THE CAFE
@@ -107,7 +108,6 @@
     // TO REMOVE FROM ARCHIVE AFTER UPDATING  
     $arr_items_to_remove = [];
 
-
 	// =====================
     // ADDING NEW CATEGORIES
 	// =====================
@@ -116,6 +116,7 @@
 	$pos = (int) $pos['pos'];
 
     $categories = $new_menu['categories'];
+
     if(count($categories)){
 	    foreach ($categories as $cat) {
 	    	
