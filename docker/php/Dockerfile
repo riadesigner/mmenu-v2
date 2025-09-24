@@ -5,123 +5,71 @@ FROM php:8.3.4-fpm-alpine3.19
 ENV TZ=UTC
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
-# Install non-dev dependencies
+# Install runtime dependencies
 RUN set -eux \
-  && apk add --no-cache \
-  git vim zip unzip bash curl tzdata icu-libs \
-  c-client make ca-certificates imap gmp gettext libssh2 yaml \
-  libintl libxslt libpng libwebp imap \
-  linux-headers oniguruma libxslt libpq vips \
-  gmp libzip libxml2 freetds \
-  jq
+    && apk add --no-cache \
+    git vim zip unzip bash curl tzdata icu-libs \
+    c-client make ca-certificates gmp gettext libssh2 yaml \
+    libintl libxslt libpng libwebp libjpeg-turbo freetype \
+    linux-headers oniguruma libpq vips \
+    libzip libxml2 freetds jq logrotate
 
-# Install dependencies
+# Install build dependencies
 RUN set -eux \
-  && apk add --no-cache --virtual .build_deps \
-  libpng-dev libwebp-dev imap-dev \
-  linux-headers oniguruma-dev libxslt-dev postgresql-dev vips-dev \
-  libssh2-dev gmp-dev libzip-dev libxml2-dev freetds-dev yaml-dev \
-  $PHPIZE_DEPS
-  
-# Php extensions
-RUN set -eux \  
-  && docker-php-ext-install \
-  mysqli \
-  pdo_mysql \
-  pdo_pgsql \
-  pgsql\
-  bcmath \
-  mbstring \
-  xml \
-  exif \
-  zip \
-  soap \
-  intl \
-  xsl \
-  pcntl \
-  sockets \
-  sysvmsg \
-  sysvsem \
-  sysvshm \
-  imap \
-  gmp
+    && apk add --no-cache --virtual .build_deps \
+    libpng-dev libwebp-dev imap-dev libjpeg-turbo-dev freetype-dev \
+    linux-headers oniguruma-dev libxslt-dev postgresql-dev vips-dev \
+    libssh2-dev gmp-dev libzip-dev libxml2-dev freetds-dev yaml-dev \
+    zlib-dev \
+    $PHPIZE_DEPS
 
-# additional supports
-
-# Install xdebug
-# RUN set -eux \
-  # && pecl install -o -f xdebug \
-  # && docker-php-ext-enable xdebug
-
-# Install YML
+# Configure and install GD (ДО очистки!)
 RUN set -eux \
-  && pecl install -o -f yaml \
-  && docker-php-ext-enable yaml
+    && docker-php-ext-configure gd --with-jpeg --with-webp --with-freetype \
+    && docker-php-ext-install -j$(nproc) gd
 
-# Install redis
+# Install PHP extensions
 RUN set -eux \
-  && pecl install -o -f redis \
-  && docker-php-ext-enable redis
+    && docker-php-ext-install \
+    mysqli \
+    pdo_mysql \
+    pdo_pgsql \
+    pgsql \
+    bcmath \
+    mbstring \
+    xml \
+    exif \
+    zip \
+    soap \
+    intl \
+    xsl \
+    pcntl \
+    sockets \
+    sysvmsg \
+    sysvsem \
+    sysvshm \
+    imap \
+    gmp \
+    opcache
 
-# Install mongodb
-# RUN set -eux \
-  # && pecl install -o -f mongodb \
-  # && docker-php-ext-enable mongodb 
-
-# Install apcu
+# Install PECL extensions
 RUN set -eux \
-  && pecl install -o -f apcu \
-  && docker-php-ext-enable apcu
+    && pecl install -o -f ssh2 \
+    && docker-php-ext-enable ssh2
 
-# Install ssh2
+# Cleanup
 RUN set -eux \
-  && pecl install -o -f ssh2 \
-  && docker-php-ext-enable ssh2
-
-# Clean php extensions
-RUN set -eux \
-  && rm -rf /tmp/pear \
-  && docker-php-source delete
-
-# Clean up
-RUN set -eux \
-  && apk del --purge .build_deps \
-  && rm -rf /var/cache/apk/*
-
-# install opcache
-RUN set -eux \
-  opcache
-
-# GD with jpeg support
-RUN set -eux \  
-  && apk add --no-cache \  
-  zlib-dev \
-  libpng-dev \
-  libjpeg-turbo \
-  libjpeg-turbo-dev \
-  libwebp-dev \ 
-  freetype \ 
-  freetype-dev \   
-  && docker-php-ext-configure gd --with-jpeg --with-webp --with-freetype \
-  && docker-php-ext-install -j$(nproc) gd
-
-RUN set -eux \
-  && apk add --no-cache logrotate
+    && apk del --purge .build_deps \
+    && rm -rf /tmp/pear /var/cache/apk/* \
+    && docker-php-source delete
 
 # Install composer
 COPY --from=composer:2.7.2 /usr/bin/composer /usr/local/bin/composer
 
-# Copy php settings
-# COPY ./php.ini ${PHP_INI_DIR}/conf.d/99-php.ini
+# Copy configurations
 COPY ./php.ini ${PHP_INI_DIR}/conf.d/custom.ini
-
-# install cron
 COPY crontab.txt /etc/crontab.txt
-
-# install logrotate
-COPY logrotate-cron.txt /etc/logrotate.d/cron
-COPY logrotate-menu.txt /etc/logrotate.d/menu
-COPY logrotate-iiko-hook.txt /etc/logrotate.d/iiko-hook
+COPY logrotate-*.txt /etc/logrotate.d/
 
 # Copy entrypoint
 COPY ./entrypoint /usr/local/bin/docker-entrypoint
@@ -132,5 +80,4 @@ ENV WORKDIR=/var/www/app
 RUN mkdir -p ${WORKDIR}
 WORKDIR ${WORKDIR}
 
-# Run entrypoint
 CMD ["docker-entrypoint"]
