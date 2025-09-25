@@ -11,7 +11,7 @@ services:
     depends_on:
       - db
     volumes:
-      - ./app:/var/www/app
+      - ./:/var/www
 
   apache:
     build: ./docker/apache
@@ -26,7 +26,7 @@ services:
       - TZ=UTC
       - VIRTUAL_HOST=${PROD_WWWROOT}      
     volumes:
-      - ./app:/var/www/app      
+      - ./app:/var/www/app
 
   db:
     image: mariadb:lts-ubi9
