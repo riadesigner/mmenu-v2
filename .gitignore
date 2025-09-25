@@ -2,7 +2,8 @@ node_modules
 vendor
 video
 .DS_Store
-logs
+logs/*
+!logs/.gitkeep
 db
 db-backup
 .env
