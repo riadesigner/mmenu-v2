@@ -11,7 +11,7 @@ services:
     depends_on:
       - db
     volumes:
-      - .:/var/www
+      - ./app:/var/www/app
 
   apache:
     build: ./docker/apache
