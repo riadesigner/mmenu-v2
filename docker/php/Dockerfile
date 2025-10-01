@@ -52,7 +52,7 @@ RUN set -eux \
     gmp \
     opcache
 
-# Install PECL extensions
+# Install ssh2
 RUN set -eux \
     && pecl install -o -f ssh2 \
     && docker-php-ext-enable ssh2
