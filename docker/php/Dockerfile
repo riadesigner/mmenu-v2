@@ -28,26 +28,27 @@ RUN set -eux \
     && docker-php-ext-configure gd --with-jpeg --with-webp --with-freetype \
     && docker-php-ext-install -j$(nproc) gd
 
-# Install PHP extensions (только MySQL + общее)
+# Install PHP extensions (только MySQL + общее, opcache без JIT)
 RUN set -eux \
     && docker-php-ext-install -j$(nproc) \
-    mysqli \
-    pdo_mysql \
-    bcmath \
-    mbstring \
-    xml \
-    exif \
-    zip \
-    soap \
-    intl \
-    xsl \
-    pcntl \
-    sockets \
-    sysvmsg \
-    sysvsem \
-    sysvshm \
-    gmp \
-    opcache
+        mysqli \
+        pdo_mysql \
+        bcmath \
+        mbstring \
+        xml \
+        exif \
+        zip \
+        soap \
+        intl \
+        xsl \
+        pcntl \
+        sockets \
+        sysvmsg \
+        sysvsem \
+        sysvshm \
+        gmp \
+    && docker-php-ext-configure opcache --disable-opcache-jit \
+    && docker-php-ext-install -j$(nproc) opcache
 
 # Install ssh2
 RUN set -eux \
