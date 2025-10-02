@@ -38,6 +38,7 @@ services:
       - TZ=UTC
       - MARIADB_ROOT_PASSWORD=${PROD_DBPASS}
       - HOSTNAME=localhost
+    command: --innodb-buffer-pool-size=128M
     volumes:
       - ./db:/var/lib/mysql 
       - ./docker/mysql/mariadb.cnf:/etc/mysql/conf.d/custom.cnf:ro
