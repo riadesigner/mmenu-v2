@@ -1,4 +1,19 @@
-### note
+### UPDATING
 
-- From Dev01-127 – started with MULTI-LANGS   
-- From Dev02-001 – started with php 8   
+чтобы получить обновление - запускаем:   
+```bash
+bash update.sh
+```  
+
+Эта инструкция запустит ряд комманд:
+```bash
+git restore .
+git fetch -a
+git pull
+chmod -R 777 ./app/tmp
+```
+
+Причина использования - необходимость выдавать права 777 на папку tmp.   
+git такие права не запоминает. Он по умолчанию ставит 755.   
+
+
