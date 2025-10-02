@@ -9,32 +9,30 @@ RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 RUN set -eux \
     && apk add --no-cache \
     git vim zip unzip bash curl tzdata icu-libs \
-    c-client make ca-certificates gmp gettext libssh2 yaml \
+    make ca-certificates gmp gettext libssh2 yaml \
     libintl libxslt libpng libwebp libjpeg-turbo freetype \
-    linux-headers oniguruma libpq vips \
+    linux-headers oniguruma vips \
     libzip libxml2 freetds jq logrotate
 
 # Install build dependencies
 RUN set -eux \
     && apk add --no-cache --virtual .build_deps \
-    libpng-dev libwebp-dev imap-dev libjpeg-turbo-dev freetype-dev \
-    linux-headers oniguruma-dev libxslt-dev postgresql-dev vips-dev \
+    libpng-dev libwebp-dev libjpeg-turbo-dev freetype-dev \
+    linux-headers oniguruma-dev libxslt-dev vips-dev \
     libssh2-dev gmp-dev libzip-dev libxml2-dev freetds-dev yaml-dev \
     zlib-dev \
     $PHPIZE_DEPS
 
-# Configure and install GD (ДО очистки!)
+# Configure and install GD
 RUN set -eux \
     && docker-php-ext-configure gd --with-jpeg --with-webp --with-freetype \
     && docker-php-ext-install -j$(nproc) gd
 
-# Install PHP extensions
+# Install PHP extensions (только MySQL + общее)
 RUN set -eux \
-    && docker-php-ext-install \
+    && docker-php-ext-install -j$(nproc) \
     mysqli \
     pdo_mysql \
-    pdo_pgsql \
-    pgsql \
     bcmath \
     mbstring \
     xml \
@@ -48,7 +46,6 @@ RUN set -eux \
     sysvmsg \
     sysvsem \
     sysvshm \
-    imap \
     gmp \
     opcache
 
