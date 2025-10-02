@@ -42,7 +42,7 @@ if( empty($id_org) ) __errorjsonp("not valid data, ".__LINE__);
 // --------------------------------
 //  GETTING NOMENCLATURE FROM IIKO
 // --------------------------------
-$path_to_temp_exports = WORK_DIR.APP_DIR.'adm/iiko-temp-exports';
+$path_to_temp_exports = WORK_DIR.'tmp';
 $NOMCL_LOADER = new Iiko_nomenclature_loader($id_org, $api_key, $path_to_temp_exports);    
 $NOMCL_LOADER->reload(true, true);
 $json_file_path = $NOMCL_LOADER->get_file_path();        

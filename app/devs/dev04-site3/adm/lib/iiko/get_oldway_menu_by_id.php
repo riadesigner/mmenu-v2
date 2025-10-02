@@ -88,7 +88,7 @@ function parse_nomenclature($id_org, $api_key, $current_menu_id, $groups_as_cate
     // ---------------------------------
     // 1. GETTING NOMENCLATURE FROM IIKO
     // ---------------------------------
-    $path_to_temp_exports = WORK_DIR.APP_DIR.'adm/iiko-temp-exports';
+    $path_to_temp_exports = WORK_DIR.'tmp';
 
     // Проверяем, существует ли директория
     // if (!is_dir($path_to_temp_exports)) {
