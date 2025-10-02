@@ -93,8 +93,7 @@ function parse_nomenclature($id_org, $api_key, $current_menu_id, $groups_as_cate
     // Проверяем, существует ли директория
     if (!is_dir($path_to_temp_exports)) {
         // Рекурсивно создаём директорию и устанавливаем права 0755
-        mkdir($path_to_temp_exports, 0755, true);
-        chown($path, 'www-data'); // Если PHP запущен под root, иначе не нужно
+        mkdir($path_to_temp_exports, 0777, true);
     }
 
     $NOMCL_LOADER = new Iiko_nomenclature_loader($id_org, $api_key, $path_to_temp_exports);    
