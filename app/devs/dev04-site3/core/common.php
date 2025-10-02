@@ -292,9 +292,9 @@ function saveArrayToUniqueJson(array $data, string $directory = ""): ?string {
 	$directory = empty($directory)?'exports':$directory;
     	
 	// Создаем директорию, если её нет
-    if (!is_dir($directory) && !mkdir($directory, 0755, true)) {
-        throw new RuntimeException("Failed to create directory: $directory");
-    }
+    // if (!is_dir($directory) && !mkdir($directory, 0777, true)) {
+    //     throw new RuntimeException("Failed to create directory: $directory");
+    // }
 
     // Генерируем уникальное имя для финального файла
     do {
