@@ -91,10 +91,10 @@ function parse_nomenclature($id_org, $api_key, $current_menu_id, $groups_as_cate
     $path_to_temp_exports = WORK_DIR.APP_DIR.'adm/iiko-temp-exports';
 
     // Проверяем, существует ли директория
-    if (!is_dir($path_to_temp_exports)) {
-        // Рекурсивно создаём директорию и устанавливаем права 0755
-        mkdir($path_to_temp_exports, 0777, true);
-    }
+    // if (!is_dir($path_to_temp_exports)) {
+    //     // Рекурсивно создаём директорию и устанавливаем права 0755
+    //     mkdir($path_to_temp_exports, 0777, true);
+    // }
 
     $NOMCL_LOADER = new Iiko_nomenclature_loader($id_org, $api_key, $path_to_temp_exports);    
     $NOMCL_LOADER->reload(true, true);
