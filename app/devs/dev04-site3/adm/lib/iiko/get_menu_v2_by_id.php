@@ -14,6 +14,7 @@ require_once WORK_DIR.APP_DIR.'core/class.smart_collect.php';
 require_once WORK_DIR.APP_DIR.'core/class.user.php';
 require_once WORK_DIR.APP_DIR.'core/class.iiko_params.php';
 require_once WORK_DIR.APP_DIR.'core/class.iiko_extmenu_loader.php';
+require_once WORK_DIR.APP_DIR.'core/class.Iiko_extmenu_to_chefs.php';
 
 session_start();
 SQL::connect();
@@ -31,7 +32,7 @@ if(!isset($_POST['id_cafe']) || empty($_POST['id_cafe']) ){
 }
 
 $current_menu_id = $_POST['externalMenuId'];
-$currentExtmenuHash = $_POST['currentExtmenuHash'];
+$currentExtmenuHash = $_POST['currentExtmenuHash'] ?? "";
 
 $id_cafe = (int) $_POST['id_cafe'];
 $cafe = new Smart_object("cafe",$id_cafe);
@@ -64,11 +65,7 @@ if(!$id_menu_saved = $m->save()){
     __errorjsonp("Ошибка сохранения меню в базу данных");
 }
 
-// glog("== external menu loaded =");
-// glog(print_r($json_menu_data,1));
-
-__answerjsonp([
-    "menu"=>$json_menu_data,
+__answerjsonp([    
     "need-to-update"=>$need2update,
     "id-menu-saved"=>$id_menu_saved,
     "new-menu-hash"=>$new_menu_hash,
@@ -82,7 +79,14 @@ function load_and_parse_menu($id_org, $api_key, $current_menu_id, $currentExtmen
     // ----------------------------    
     $EXTMENU_LOADER = new Iiko_extmenu_loader($id_org, $api_key, $current_menu_id);    
     $EXTMENU_LOADER->reload();
-    $res = $EXTMENU_LOADER->get_data();
+    $extmenu_data = $EXTMENU_LOADER->get_data();
+
+    $chefs_data = Iiko_extmenu_to_chefs::parse($extmenu_data);
+    $chefs_data_export = [
+            "SourceMenu" => "EXT_MENU",
+            "TypeMenu" => "CHEFSMENU",
+            "Menu" => $chefs_data,            
+        ];
 
     // ------------------
     // 2. CONVERT TO JSON
@@ -91,7 +95,7 @@ function load_and_parse_menu($id_org, $api_key, $current_menu_id, $currentExtmen
                 "iiko_loaded"=>$EXTMENU_LOADER->get_info(),
             ], JSON_UNESCAPED_UNICODE);
    
-    $json_menu_data = json_encode($EXTMENU_LOADER->get_data(), JSON_UNESCAPED_UNICODE | JSON_INVALID_UTF8_SUBSTITUTE);
+    $json_menu_data = json_encode($chefs_data_export, JSON_UNESCAPED_UNICODE | JSON_INVALID_UTF8_SUBSTITUTE);
 
     // Проверка кодирования json
     if($json_menu_data === false) {

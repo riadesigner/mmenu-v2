@@ -12,6 +12,7 @@ export var IikoUpdater = {
             },onError:function(errMsg) {
                 opt.onError&&opt.onError(errMsg);
             }});
+
         return this;
     },
     start_update:function(opt){

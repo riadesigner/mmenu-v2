@@ -11,16 +11,12 @@
 	define("BASEPATH",__file__);
 	
 	require_once getenv('WORKDIR').'/config.php';
-
 	require_once WORK_DIR.APP_DIR.'core/common.php';	
-	
 	require_once WORK_DIR.APP_DIR.'core/class.sql.php';
-	 
 	require_once WORK_DIR.APP_DIR.'core/class.smart_object.php';
 	require_once WORK_DIR.APP_DIR.'core/class.smart_collect.php';
 	require_once WORK_DIR.APP_DIR.'core/class.user.php';
 	
-
 	session_start();
 	SQL::connect();
 

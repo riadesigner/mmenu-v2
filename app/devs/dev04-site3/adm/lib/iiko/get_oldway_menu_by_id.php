@@ -35,7 +35,7 @@ if(!isset($_POST['id_cafe']) || empty($_POST['id_cafe']) ){
 }
 
 $current_menu_id = $_POST['externalMenuId'];
-// $currentExtmenuHash = $_POST['currentExtmenuHash'];
+$currentExtmenuHash = $_POST['currentExtmenuHash'] ?? "";
 
 $id_cafe = (int) $_POST['id_cafe'];
 $cafe = new Smart_object("cafe",$id_cafe);
@@ -54,7 +54,7 @@ define("GROUPS_AS_CATEGORIES", ($IIKO_PARAMS->get())->current_nomenclature_type=
 [ $json_menu_data, $json_meta_info ] = load_and_parse_menu( $id_org, $api_key, $current_menu_id, GROUPS_AS_CATEGORIES );
 
 $new_menu_hash = md5($json_menu_data);
-// $need2update = $currentExtmenuHash!==$new_menu_hash;
+$need2update = $currentExtmenuHash!==$new_menu_hash;
 
 // -----------------
 // SAVING MENU TO DB
@@ -72,11 +72,11 @@ if(!$id_menu_saved = $m->save()){
     __errorjsonp("Ошибка сохранения меню в базу данных");
 }
 
-__answerjsonp([
+__answerjsonp([    
+    "need-to-update"=>$need2update,
     "id-menu-saved"=>$id_menu_saved,
     "new-menu-hash"=>$new_menu_hash,
 ]);
-
 
 function load_and_parse_menu($id_org, $api_key, $current_menu_id, $groups_as_categories){    
 

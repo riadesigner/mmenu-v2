@@ -39,7 +39,6 @@ export var IikoLoader = {
                     idMenuSaved:vars['id-menu-saved'],
                     newMenuHash:vars['new-menu-hash'],
                     needToUpdate:vars['need-to-update'],
-                    menu:vars['menu'],
                 });
 
             })

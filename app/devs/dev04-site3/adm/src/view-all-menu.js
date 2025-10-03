@@ -185,14 +185,11 @@ export var VIEW_ALL_MENU = {
 
 			console.log('vars = ', vars);
 			
-			let {
-				idMenuSaved, 
+			const {
+				idMenuSaved,
 				newMenuHash,
 				needToUpdate,
-				menu,
-			} = vars;									
-
-			needToUpdate = 1;
+			} = vars;
 
 			// --------------------
 			//  IF MENU DATA WRONG
@@ -204,26 +201,11 @@ export var VIEW_ALL_MENU = {
 				return false
 			}
 			
-			if(idMenuSaved && newMenuHash && needToUpdate){
-				
+			if(idMenuSaved && newMenuHash && needToUpdate){				
 				// --------------------------------------
 				//  IF MENU WAS IMPORTED AND SAVED IN DB
-				// --------------------------------------				
-
-				const recalcIdMenu = (idMenu)=>{					
-					// Если режим внешнего меню, 
-					// то нужно его еще преобразовать в формат CHEFS
-					// TODO - не реализовано ...!
-					// -------------------------------------------------------
-					// Если меню из Номенклатуры, то оно уже в нужном формате, 
-					// поэтому парсить не нужно  
-					return EXTERNALMENU_MODE ? GLB.IIKO_EXT_MENU_PARSER.parse(menu) : idMenu;
-				}
-				const newIdMenuSaved = recalcIdMenu(idMenuSaved);
-				console.log('newIdMenuSaved ====== ', newIdMenuSaved);
-
-								
-				this.do_update_iiko_menu(cafe, newIdMenuSaved, newMenuHash);
+				// --------------------------------------								
+				this.do_update_iiko_menu(cafe, idMenuSaved, newMenuHash);
 
 			}else{
 
