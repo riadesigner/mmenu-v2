@@ -35,12 +35,12 @@ export var IikoLoader = {
             .then((vars)=>{                            
                 this.NOW_LOADING = false;
 
-                res([
-                    vars['id-menu-saved'],
-                    vars['new-menu-hash'],
-                    vars['need-to-update'],
-                    vars['meta-info'],                    
-                ]);
+                res({
+                    idMenuSaved:vars['id-menu-saved'],
+                    newMenuHash:vars['new-menu-hash'],
+                    needToUpdate:vars['need-to-update'],
+                    menu:vars['menu'],
+                });
 
             })
             .catch((err)=>{
@@ -54,8 +54,8 @@ export var IikoLoader = {
     get_menu_by_id_asynq:function(menu_id){
         return new Promise((res,rej)=>{
  
-            const PATH = "./adm/lib/iiko/";
-            
+            const PATH = "./adm/lib/iiko/";                        
+
             const url = this.EXTERNALMENU_MODE ? PATH + "get_menu_v2_by_id.php" : PATH + "get_oldway_menu_by_id.php";
 
             const cafe = GLB.THE_CAFE.get();
@@ -65,7 +65,7 @@ export var IikoLoader = {
                 id_cafe:cafe.id,
                 externalMenuId: menu_id,
                 currentExtmenuHash: this.EXTERNALMENU_MODE ? iiko_params['current_extmenu_hash']: "",
-            };            
+            };
 
             const AJAX = $.ajax({
                 url: url+"?callback=?",

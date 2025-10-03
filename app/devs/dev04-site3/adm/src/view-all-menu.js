@@ -185,8 +185,14 @@ export var VIEW_ALL_MENU = {
 
 			console.log('vars = ', vars);
 			
-			const [idMenuSaved, newMenuHash] = vars;						
-			const need2update = 1;
+			let {
+				idMenuSaved, 
+				newMenuHash,
+				needToUpdate,
+				menu,
+			} = vars;									
+
+			needToUpdate = 1;
 
 			// --------------------
 			//  IF MENU DATA WRONG
@@ -198,7 +204,7 @@ export var VIEW_ALL_MENU = {
 				return false
 			}
 			
-			if(idMenuSaved && newMenuHash && need2update){
+			if(idMenuSaved && newMenuHash && needToUpdate){
 				
 				// --------------------------------------
 				//  IF MENU WAS IMPORTED AND SAVED IN DB
@@ -211,9 +217,11 @@ export var VIEW_ALL_MENU = {
 					// -------------------------------------------------------
 					// Если меню из Номенклатуры, то оно уже в нужном формате, 
 					// поэтому парсить не нужно  
-					return EXTERNALMENU_MODE ? GLB.IIKO_EXT_MENU_PARSER.parse(idMenuSaved) : idMenu;
+					return EXTERNALMENU_MODE ? GLB.IIKO_EXT_MENU_PARSER.parse(menu) : idMenu;
 				}
 				const newIdMenuSaved = recalcIdMenu(idMenuSaved);
+				console.log('newIdMenuSaved ====== ', newIdMenuSaved);
+
 								
 				this.do_update_iiko_menu(cafe, newIdMenuSaved, newMenuHash);
 

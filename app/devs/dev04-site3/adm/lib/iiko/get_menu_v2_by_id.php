@@ -7,15 +7,13 @@ if (!preg_match('/^[a-z0-9_-]+$/i', (string) $callback)) {  $callback = 'alert';
 define("BASEPATH",__file__);
 
 require_once getenv('WORKDIR').'/config.php';
-
 require_once WORK_DIR.APP_DIR.'core/common.php';    
-
 require_once WORK_DIR.APP_DIR.'core/class.sql.php';
- 
 require_once WORK_DIR.APP_DIR.'core/class.smart_object.php';
 require_once WORK_DIR.APP_DIR.'core/class.smart_collect.php';
 require_once WORK_DIR.APP_DIR.'core/class.user.php';
 require_once WORK_DIR.APP_DIR.'core/class.iiko_params.php';
+require_once WORK_DIR.APP_DIR.'core/class.iiko_extmenu_loader.php';
 
 session_start();
 SQL::connect();
@@ -23,10 +21,6 @@ SQL::connect();
 
 // GETTING EXTERNAL MENU BY ID / API 2 
 
-if(!isset($_POST['token'])){
-	__errorjsonp(["error"=>"unknown token"]);
-	exit();
-}
 if(!isset($_POST['externalMenuId'])){
     __errorjsonp(["error"=>"unknown external menu id"]);
     exit();
@@ -36,45 +30,86 @@ if(!isset($_POST['id_cafe']) || empty($_POST['id_cafe']) ){
     exit();
 }
 
-
-$token = $_POST['token'];
-$externalMenuId = $_POST['externalMenuId'];
+$current_menu_id = $_POST['externalMenuId'];
 $currentExtmenuHash = $_POST['currentExtmenuHash'];
-$id_cafe = post_clean($_POST['id_cafe']);
 
 $id_cafe = (int) $_POST['id_cafe'];
 $cafe = new Smart_object("cafe",$id_cafe);
 if(!$cafe->valid())__errorjsonp("Unknown cafe, ".__LINE__);
 
-$iiko_params_collect = new Smart_collect("iiko_params", "where id_cafe='".$cafe->id."'");
-if(!$iiko_params_collect || !$iiko_params_collect->full()) __errorjsonp("--cant find iiko params for cafe ".$cafe->id);
-$iiko_params = $iiko_params_collect->get(0);
-$organization_id = $iiko_params->current_organization_id;
+$api_key = $cafe->iiko_api_key;
+$IIKO_PARAMS = new Iiko_params($id_cafe, $api_key);
+$id_org = ($IIKO_PARAMS->get())->current_organization_id;
 
-$url     = 'api/2/menu/by_id';
-$headers = [
-    "Content-Type"=>"application/json",
-    "Authorization" => 'Bearer '.$token
-]; 
+if( empty($id_org) ) __errorjsonp("not valid data");
 
-$params  = [
-    'externalMenuId' => $externalMenuId,
-    'organizationIds' => [$organization_id], 
-    'priceCategoryId' => null, 
-    'version' => 2
-];
+[ $json_menu_data, $json_meta_info ] = load_and_parse_menu( $id_org, $api_key, $current_menu_id, $currentExtmenuHash );
 
-$res = iiko_get_info($url,$headers,$params);
-$newExtmenuHash = md5(json_encode($res, JSON_UNESCAPED_UNICODE));
-$need2update = $currentExtmenuHash!==$newExtmenuHash;
+$new_menu_hash = md5($json_menu_data);
+$need2update = $currentExtmenuHash!==$new_menu_hash;
 
-$answer = [
-        "menu"=>$res,
-        "menu-hash"=>$newExtmenuHash,
-        "need-to-update"=>$need2update
-    ];
+// -----------------
+// SAVING MENU TO DB
+// -----------------
+$m = new Smart_object("menu_imported");
+$m->id_cafe = $id_cafe;
+$m->id_external = $current_menu_id;
+$m->source = "iiko_external_menu";
+$m->description = $json_meta_info;
+$m->menu_hash = $new_menu_hash;
+$m->formated = "original";
+$m->data = base64_encode($json_menu_data);
+$m->date_created = 'now()';
+if(!$id_menu_saved = $m->save()){
+    __errorjsonp("Ошибка сохранения меню в базу данных");
+}
 
-__answerjsonp($answer);
+// glog("== external menu loaded =");
+// glog(print_r($json_menu_data,1));
 
+__answerjsonp([
+    "menu"=>$json_menu_data,
+    "need-to-update"=>$need2update,
+    "id-menu-saved"=>$id_menu_saved,
+    "new-menu-hash"=>$new_menu_hash,
+]);
+
+
+function load_and_parse_menu($id_org, $api_key, $current_menu_id, $currentExtmenuHash){
+
+    // ----------------------------
+    // 1. GETTING EXTMENU FROM IIKO
+    // ----------------------------    
+    $EXTMENU_LOADER = new Iiko_extmenu_loader($id_org, $api_key, $current_menu_id);    
+    $EXTMENU_LOADER->reload();
+    $res = $EXTMENU_LOADER->get_data();
+
+    // ------------------
+    // 2. CONVERT TO JSON
+    // ------------------    
+    $json_meta_info = json_encode([
+                "iiko_loaded"=>$EXTMENU_LOADER->get_info(),
+            ], JSON_UNESCAPED_UNICODE);
+   
+    $json_menu_data = json_encode($EXTMENU_LOADER->get_data(), JSON_UNESCAPED_UNICODE | JSON_INVALID_UTF8_SUBSTITUTE);
+
+    // Проверка кодирования json
+    if($json_menu_data === false) {
+        $error = "JSON Error: " . json_last_error_msg();
+        glogError($error);        
+        __errorjsonp($error);
+    }
+
+    // Проверка размера
+    if(strlen($json_menu_data) > 10000000) { // >10MB
+        $error = "Oversized JSON: ".strlen($json_menu_data)." bytes";
+        glogError($error);
+        __errorjsonp($error);
+    }
+
+
+    return [$json_menu_data, $json_meta_info];
+
+}
 
 ?>

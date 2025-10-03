@@ -1,6 +1,5 @@
 <?php
 
-
 header('content-type: application/json; charset=utf-8');
 $callback = $_REQUEST['callback'] ?? 'alert';
 if (!preg_match('/^[a-z0-9_-]+$/i', (string) $callback)) {  $callback = 'alert'; }   
@@ -8,19 +7,16 @@ if (!preg_match('/^[a-z0-9_-]+$/i', (string) $callback)) {  $callback = 'alert';
 define("BASEPATH",__file__);
 
 require_once getenv('WORKDIR').'/config.php';
-
 require_once WORK_DIR.APP_DIR.'core/common.php';    
-
 require_once WORK_DIR.APP_DIR.'core/class.sql.php';
- 
 require_once WORK_DIR.APP_DIR.'core/class.smart_object.php';
 require_once WORK_DIR.APP_DIR.'core/class.smart_collect.php';
 require_once WORK_DIR.APP_DIR.'core/class.user.php';
 require_once WORK_DIR.APP_DIR.'core/class.iiko_params.php';
-require_once WORK_DIR.APP_DIR.('core/class.iiko_nomenclature_loader.php');
-require_once WORK_DIR.APP_DIR.('core/class.iiko_nomenclature_divider.php');
-require_once WORK_DIR.APP_DIR.('core/class.iiko_parser_to_unimenu.php');
-require_once WORK_DIR.APP_DIR.('core/class.conv_unimenu_to_chefs.php');
+require_once WORK_DIR.APP_DIR.'core/class.iiko_nomenclature_loader.php';
+require_once WORK_DIR.APP_DIR.'core/class.iiko_nomenclature_divider.php';
+require_once WORK_DIR.APP_DIR.'core/class.iiko_parser_to_unimenu.php';
+require_once WORK_DIR.APP_DIR.'core/class.conv_unimenu_to_chefs.php';
 
 
 session_start();
@@ -55,9 +51,10 @@ if( empty($id_org) ) __errorjsonp("not valid data");
 // REAL_CATEGORIES or GROUPS_AS_CATEGORIES
 define("GROUPS_AS_CATEGORIES", ($IIKO_PARAMS->get())->current_nomenclature_type=='groups_as_categories');
 
-[ $json_menu_data, $json_meta_info ] = parse_nomenclature( $id_org, $api_key, $current_menu_id, GROUPS_AS_CATEGORIES );
+[ $json_menu_data, $json_meta_info ] = load_and_parse_menu( $id_org, $api_key, $current_menu_id, GROUPS_AS_CATEGORIES );
 
 $new_menu_hash = md5($json_menu_data);
+// $need2update = $currentExtmenuHash!==$new_menu_hash;
 
 // -----------------
 // SAVING MENU TO DB
@@ -81,7 +78,7 @@ __answerjsonp([
 ]);
 
 
-function parse_nomenclature($id_org, $api_key, $current_menu_id, $groups_as_categories){    
+function load_and_parse_menu($id_org, $api_key, $current_menu_id, $groups_as_categories){    
 
     glog("IIKO. Загрузка и парсинг номенклатуры");
 
