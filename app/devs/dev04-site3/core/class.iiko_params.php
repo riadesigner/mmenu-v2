@@ -140,7 +140,7 @@ class Iiko_params{
 	// обновляем БД chefsmenu - таблицу iiko_params	
 	private function update_db(): bool{
 		
-		$this->iiko_params->organizations = json_encode($this->arr_organizations, JSON_UNESCAPED_UNICODE);			
+		$this->iiko_params->organizations = json_encode($this->arr_organizations, JSON_UNESCAPED_UNICODE);	
 		$this->iiko_params->terminal_groups = json_encode($this->arr_terminals, JSON_UNESCAPED_UNICODE);	
 		$this->iiko_params->tables = json_encode($this->arr_tables, JSON_UNESCAPED_UNICODE);	
 		$this->iiko_params->order_types = json_encode($this->arr_order_types, JSON_UNESCAPED_UNICODE);	
@@ -165,7 +165,7 @@ class Iiko_params{
 
 	public function save(): bool {
 		$this->iiko_params->updated_date = 'now()';
-		return $this->iiko_params->save();
+		return $this->iiko_params->save();		 
 	}
 	
 	private function check_iiko_key(string $api_key):bool{
@@ -273,8 +273,11 @@ class Iiko_params{
 
 	private function read_order_types(): void{
 		$the_order_types = $this->iiko_get_order_types_info($this->token, $this->current_organization_id);
-		if(!count($the_order_types)) throw  new Exception("--cant receive order types");		
-		$this->arr_order_types = $the_order_types[0]['items'];	
+		if(!count($the_order_types)) {
+			$this->arr_order_types = [];
+		}else{
+			$this->arr_order_types = $the_order_types[0]['items'];	
+		}		
 		$ROUGH_DATA["ORDER_TYPES"] = $the_order_types;		
 	}
 

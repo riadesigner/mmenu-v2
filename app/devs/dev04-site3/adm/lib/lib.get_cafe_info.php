@@ -38,7 +38,6 @@
 		}else{
 			$arr_iiko_params = [];
 		}
-
 		__answerjsonp( [
 			"cafe"=>[...$cafe->export(), ...["iiko_params"=>$arr_iiko_params]]
 		]);		

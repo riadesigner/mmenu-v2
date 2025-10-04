@@ -63,15 +63,14 @@ export var VIEW_IIKO_CUSTOMIZATION = {
 		const iiko_api_key = CAFE.iiko_api_key;
 		this.$btnIikoKey.html(iiko_api_key);		
 
-		const iiko_params = GLB.THE_CAFE.get("iiko_params");
-		console.log(' ----------- iiko_params = ',iiko_params);		
+		const iiko_params = GLB.THE_CAFE.get("iiko_params");		
 
 		// SHOW ORGANIZATIONS INFO (WITH CURRENT)
 		this.DATA.orgs = iiko_params['organizations']!==''?JSON.parse(iiko_params['organizations']):{};		
 		this.CURRENT_ORGANIZATION_ID = iiko_params['current_organization_id'];
 		this.NEW_ORGANIZATION_ID = this.CURRENT_ORGANIZATION_ID;
 		this.update_organizations_list(this.DATA.orgs, this.CURRENT_ORGANIZATION_ID);	
-		
+
 		this.update_current_organization_title(this.CURRENT_ORGANIZATION_ID, this.DATA.orgs);				
 		
 		// SHOW TERMINAL INFO

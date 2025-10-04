@@ -259,6 +259,11 @@ public function import($smart_object): void{
 
 */
 
+private static function escape($v): string {
+    if (!SQL::get()) SQL::connect();
+    return SQL::get()->real_escape_string($v);
+}
+
 // Построение запросов в БД;
 private function create_query($action){   
 
@@ -362,17 +367,18 @@ private function correct_value($v,$nm){
     }
 
     // если строка
-    if($type=='s'){
-        if($v){
-            $v="'$v'";
-        }else{
+    if($type == 's'){
+        if($v !== null && $v !== ''){
+            $v = self::escape($v); // <--- экранируем все спецсимволы
+            $v = "'$v'";
+        } else {
             if($default){
                 $v = "'$default'";
-            }else{
-                $v = !$not_null_flag?'null':"''";    
+            } else {
+                $v = !$not_null_flag ? 'null' : "''";    
             }
         }
-    }     
+    }
 
     // если число
     // only UNSIGNED in this version
