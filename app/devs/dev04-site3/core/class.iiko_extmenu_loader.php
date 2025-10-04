@@ -59,6 +59,21 @@ class Iiko_extmenu_loader{
 	}
 
 	private function load_extmenu(): array{
+		// --------------------------------------------
+		// получаем все меню с ценовыми категориями
+		// TODO: надо сделать выбор в админке на случай, 
+		// если вообще есть ценовые категории
+		// --------------------------------------------
+		// $url     = 'api/2/menu';
+		// $headers = [
+		// 	"Content-Type"=>"application/json",
+		// 	"Authorization" => 'Bearer '.$this->TOKEN
+		// ]; 
+		// $params  = [];
+
+		// ----------------------------------------------------
+		// получаем Меню по его Id с Базовой ценовой категорией
+		// ----------------------------------------------------
 		$url     = 'api/2/menu/by_id';
 		$headers = [
 			"Content-Type"=>"application/json",
@@ -67,11 +82,10 @@ class Iiko_extmenu_loader{
 		$params  = [
 			'externalMenuId' => $this->EXTERNAL_MENU_ID,
 			'organizationIds' => [$this->ID_ORG], 
-			'priceCategoryId' => null, 
-			'version' => 2
-		];
+			'priceCategoryId' => '00000000-0000-0000-0000-000000000000'
+		];		
 		$res = iiko_get_info($url,$headers,$params);
-		return $res;
+		return $res;		
 	}
 
 	private function calc_meta_info(array $iiko_response): string{		
