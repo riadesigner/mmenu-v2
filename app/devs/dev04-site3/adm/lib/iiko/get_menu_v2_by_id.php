@@ -14,7 +14,7 @@ require_once WORK_DIR.APP_DIR.'core/class.smart_collect.php';
 require_once WORK_DIR.APP_DIR.'core/class.user.php';
 require_once WORK_DIR.APP_DIR.'core/class.iiko_params.php';
 require_once WORK_DIR.APP_DIR.'core/class.iiko_extmenu_loader.php';
-require_once WORK_DIR.APP_DIR.'core/class.Iiko_extmenu_to_chefs.php';
+require_once WORK_DIR.APP_DIR.'core/class.iiko_extmenu_to_chefs.php';
 
 session_start();
 SQL::connect();
