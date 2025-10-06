@@ -58,13 +58,13 @@
 	// ---------------------------------
 	// THIS PART ONLY FOR CHEFMENU MODE
 	// ---------------------------------
-	$sizes = !isset($_POST['sizes']) ? [] : json_encode($_POST['sizes'], JSON_UNESCAPED_UNICODE);
+	$sizes = !isset($_POST['sizes']) ? "" : json_encode($_POST['sizes'], JSON_UNESCAPED_UNICODE);
 
 	// ------------------------------------
 	// SAVING EXTRA DATA (OTHER LANGUAGES)
 	// ------------------------------------
 	unset($text_inputs['ru']);
-	$extra_data = count($text_inputs)? json_encode($text_inputs, JSON_UNESCAPED_UNICODE):"";	
+	$extra_data = count($text_inputs)? json_encode($text_inputs, JSON_UNESCAPED_UNICODE):"";
 	
 
 	if(isset($_POST['id_item']) && !empty($_POST['id_item'])){
