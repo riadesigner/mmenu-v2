@@ -130,6 +130,7 @@ export var VIEW_EDIT_MENU = {
 	},
 	rebuild_data_sections:function() {
 		// MULTI-LANGUAGE SECTIONS BUILDING		
+		console.log('MULTI-LANGUAGE SECTIONS BUILDING');
 		this.$langsSections.html("");
 		const fn = {
 			build_inputs:(lang_code)=>{				

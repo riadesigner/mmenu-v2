@@ -21,8 +21,8 @@ export const IIKO_ITEM = {
 		return this.item_data;
 	},
 	// @return boolean
-	has_modifiers:function() {		
-		return this.item_data.iiko_modifiers!=="";
+	has_modifiers:function() {
+		return this.item_data.iiko_modifiers_parsed && this.item_data.iiko_modifiers_parsed.length > 0;
 	},	
 	// @return boolean
 	has_sizes:function() {		

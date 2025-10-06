@@ -74,6 +74,8 @@ export var VIEW_EDIT_ITEM = {
 		const MODE_CLASS = GLB.THE_CAFE.is_iiko_mode()?'iiko-mode-only':'chefsmenu-mode-only';
 		this.$view.addClass(MODE_CLASS);
 
+		this.rebuild_data_sections();
+		
 		console.log('=== this.ITEM ====', this.ITEM)				
 
 		if(!this.ITEM){	
@@ -323,6 +325,7 @@ export var VIEW_EDIT_ITEM = {
 			}
 		};
 		const ALL_LANGS = this.LTABS.get_langs();
+		console.log('ALL_LANGS = ', ALL_LANGS)
 		// build inputs for each lang
 		// even, if we have only russian
 		for(let lang_code in ALL_LANGS){				

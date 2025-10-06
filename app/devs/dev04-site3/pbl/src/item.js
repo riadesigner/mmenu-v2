@@ -143,6 +143,9 @@ export var ITEM = {
 	},
 	add_item_to_cart:function() {		
 
+		console.log('---this.MODEL_ITEM---', this.MODEL_ITEM)
+		console.log('---this.MODEL_ITEM.has_modifiers---', this.MODEL_ITEM.has_modifiers())
+
 		if(this.MODEL_ITEM.has_modifiers()){
 			// SHOW MODAL WINDOW WITH MODIFIERS OPTIONS		
 			this.MODIF_PANEL.reset();
