@@ -81,6 +81,11 @@ function load_and_parse_menu($id_org, $api_key, $current_menu_id, $currentExtmen
     $EXTMENU_LOADER->reload();
     $extmenu_data = $EXTMENU_LOADER->get_data();
 
+    if(isset($extmenu_data['error'])){
+        glog('errorDescription '. $extmenu_data['errorDescription']);
+         __errorjsonp($extmenu_data['errorDescription']);
+    }
+
     $chefs_data = Iiko_extmenu_to_chefs::parse($extmenu_data);
     $chefs_data_export = [
             "SourceMenu" => "EXT_MENU",

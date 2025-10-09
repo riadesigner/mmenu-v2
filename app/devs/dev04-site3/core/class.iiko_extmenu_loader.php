@@ -64,13 +64,16 @@ class Iiko_extmenu_loader{
 		// TODO: надо сделать выбор в админке на случай, 
 		// если вообще есть ценовые категории
 		// --------------------------------------------
-		// $url     = 'api/2/menu';
-		// $headers = [
-		// 	"Content-Type"=>"application/json",
-		// 	"Authorization" => 'Bearer '.$this->TOKEN
-		// ]; 
-		// $params  = [];
-
+		$url     = 'api/2/menu';
+		$headers = [
+			"Content-Type"=>"application/json",
+			"Authorization" => 'Bearer '.$this->TOKEN
+		]; 
+		$params  = [];
+		$res = iiko_get_info($url,$headers,$params);
+		$priceCategories = $res['priceCategories']??[];
+		$currentPriceCategory = count($priceCategories)>0 ? $priceCategories[0]['id'] : null;
+		
 		// ----------------------------------------------------
 		// получаем Меню по его Id с Базовой ценовой категорией
 		// ----------------------------------------------------
@@ -82,7 +85,7 @@ class Iiko_extmenu_loader{
 		$params  = [
 			'externalMenuId' => $this->EXTERNAL_MENU_ID,
 			'organizationIds' => [$this->ID_ORG], 
-			'priceCategoryId' => '00000000-0000-0000-0000-000000000000'
+			'priceCategoryId' => $currentPriceCategory
 		];		
 		$res = iiko_get_info($url,$headers,$params);
 		return $res;		
