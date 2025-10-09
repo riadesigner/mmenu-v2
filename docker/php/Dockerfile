@@ -48,7 +48,8 @@ RUN set -eux \
         sysvshm \
         gmp \
     && docker-php-ext-configure opcache --disable-opcache-jit \
-    && docker-php-ext-install -j$(nproc) opcache
+    && docker-php-ext-install -j$(nproc) opcache \
+    && rm -f /usr/local/etc/php/conf.d/docker-php-ext-opcache.ini
 
 # Install ssh2
 RUN set -eux \
