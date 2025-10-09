@@ -6,16 +6,13 @@ if (!preg_match('/^[a-z0-9_-]+$/i', (string) $callback)) {  $callback = 'alert';
 
 define("BASEPATH",__file__);
 
-
 require_once getenv('WORKDIR').'/config.php';
-
 require_once WORK_DIR.APP_DIR.'core/common.php';	
-
 require_once WORK_DIR.APP_DIR.'core/class.sql.php';
- 
 require_once WORK_DIR.APP_DIR.'core/class.smart_object.php';
 require_once WORK_DIR.APP_DIR.'core/class.smart_collect.php';
 require_once WORK_DIR.APP_DIR.'core/class.user.php';
+require_once WORK_DIR.APP_DIR.'core/class.iiko_params.php';
 
 
 session_start();
@@ -30,22 +27,17 @@ $id_cafe = (int) $_POST['id_cafe'];
 $cafe = new Smart_object("cafe",$id_cafe);
 if(!$cafe->valid())__errorjsonp("Unknown cafe, ".__LINE__);
 
-$k = $cafe->iiko_api_key;
-if(empty($k)) __errorjsonp("Cant find iiko api for the cafe, ".__LINE__);
+$api_key = $cafe->iiko_api_key;
+if(empty($api_key)) __errorjsonp("Cant find iiko api for the cafe, ".__LINE__);
 
 $token = $_POST['token'];
 
-$orgs = $cafe->iiko_organizations;
-$orgs = !empty($orgs)?json_decode((string) $orgs,true):false;
-if(!$orgs) __errorjsonp("--cant find iiko organization_id for the cafe, ".__LINE__);
-$organization_id = $orgs['current_organization_id'];
+$IIKO_PARAMS = new Iiko_params($id_cafe, $api_key);
+$id_org = ($IIKO_PARAMS->get())->current_organization_id;
 
-$vladivostok_id = "b090de0b-8550-6e17-70b2-bbba152bcbd3"; 
+$vladivostok_id = "b090de0b-8550-6e17-70b2-bbba152bcbd3";
 
-
-// $res = get_iiko_cities($token, $organization_id);
-
-$res = get_streets_by_city($token, $organization_id, $vladivostok_id);
+$res = get_streets_by_city($token, $id_org, $vladivostok_id);
 
 if(isset($res['streets']) && count($res['streets'])){
 	$streets = [];
@@ -54,7 +46,8 @@ if(isset($res['streets']) && count($res['streets'])){
 	}
 	__answerjsonp(["streets"=>$streets]);
 }else{
-	__errorjsonp($res);	
+	glog('нет улиц в городе!'.print_r($res,1));
+	__answerjsonp(["streets"=>[]]);
 }
 
 
@@ -65,14 +58,14 @@ if(isset($res['streets']) && count($res['streets'])){
 //      GET CITIES
 // -----------------------------------
 
-// function get_iiko_cities($token, $organization_id){	
+// function get_iiko_cities($token, $id_org){	
 // 	$url     = 'api/1/cities';
 // 	$headers = [
 // 	    "Content-Type"=>"application/json",
 // 	    "Authorization" => 'Bearer '.$token
 // 	]; 	 	
 // 	$params  = array(
-// 	    'organizationIds' => [$organization_id],
+// 	    'organizationIds' => [$id_org],
 // 	    'includeDeleted' => false	    
 // 	); 	
 // 	$res = iiko_get_info($url,$headers,$params);
@@ -83,13 +76,13 @@ if(isset($res['streets']) && count($res['streets'])){
 //      GET STREETS BY CITY
 // -----------------------------------
 
-function get_streets_by_city($token, $organization_id, $city){	
+function get_streets_by_city($token, $id_org, $city){	
 	$url     = 'api/1/streets/by_city';
 	$headers = [
 	    "Content-Type"=>"application/json",
 	    "Authorization" => 'Bearer '.$token
 	]; 	 	
-	$params  = ['organizationId' => $organization_id, 'cityId' => $city, 'includeDeleted'=>false]; 	
+	$params  = ['organizationId' => $id_org, 'cityId' => $city, 'includeDeleted'=>false]; 	
 	$res = iiko_get_info($url,$headers,$params);
 	return $res;
 }
