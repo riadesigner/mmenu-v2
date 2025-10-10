@@ -1,5 +1,6 @@
 import {GLB} from './glb.js';
 import $ from 'jquery';
+import { ScrollManager } from './scroll-manager.js';
 
 export var VIEW_ALLMENU = {
 	init:function(options) {
@@ -17,6 +18,7 @@ export var VIEW_ALLMENU = {
 		this.$tplMenuItem  = this.$tpl.find(this._CN+"allmenu-row");
 		this.$cafeDescription = this.$view.find(this._CN+"cafe-description");		
 		this.$btnSlideUpAbout = this.$view.find(this._CN+"btn-slideup");		
+		this.$btnScrollDown = this.$view.find(this._CN+"btn-scroll-down");		
 		
 		// mobile version ui
 		this.$btnsLangContainer = this.$view.find(this._CN+"langs__buttons");		
@@ -175,7 +177,8 @@ export var VIEW_ALLMENU = {
 			this.$btnClose,
 			//
 			this.$headerTitle,
-			this.$btnSlideUpAbout
+			this.$btnSlideUpAbout,
+			this.$btnScrollDown,
 		];
 
 		this._behavior(arrMobileButtons);		
@@ -189,6 +192,19 @@ export var VIEW_ALLMENU = {
 			_this.$view.removeClass(_this.CLASS_SHOWED_ABOUT);
 			e.originalEvent.cancelable && e.preventDefault();
 		});
+
+		// this.$btnScrollDown.on("touchend click",function(e){
+		// 	// _this.$view.removeClass(_this.CLASS_SHOWED_ABOUT);
+		// 	const el_list =  _this.$menuListContainer[0];
+		// 	    el_list.scrollTo({
+		// 			top: el_list.scrollHeight,
+		// 			behavior: 'smooth'
+    	// 		});
+		// 	e.originalEvent.cancelable && e.preventDefault();
+		// });		
+
+		new ScrollManager(this.$menuListContainer, this.$btnScrollDown);		
+		
 
 		this.$btnBasket.on("touchend click",function(e) {
 			GLB.VIEW_CART.update();
