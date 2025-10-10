@@ -1,0 +1,19 @@
+<svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 36">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: none;
+        stroke: #000;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        stroke-width: 2.1px;
+      }
+    </style>
+  </defs>
+  <title>chefs-logoArtboard 1</title>
+  <g>
+    <rect class="cls-1" x="5.07" y="12.55" width="25.86" height="20.53" rx="7.35" ry="7.35"/>
+    <path class="cls-1" d="M9.38,13.06V9.48a6.56,6.56,0,0,1,6.56-6.56h4.12a6.56,6.56,0,0,1,6.56,6.56v3.58"/>
+    <line class="cls-1" x1="18" y1="22.44" x2="18" y2="27"/>
+  </g>
+</svg>
