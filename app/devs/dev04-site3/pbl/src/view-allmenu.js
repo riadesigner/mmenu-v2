@@ -191,17 +191,7 @@ export var VIEW_ALLMENU = {
 		this.$btnSlideUpAbout.on("touchend click",function(e){
 			_this.$view.removeClass(_this.CLASS_SHOWED_ABOUT);
 			e.originalEvent.cancelable && e.preventDefault();
-		});
-
-		// this.$btnScrollDown.on("touchend click",function(e){
-		// 	// _this.$view.removeClass(_this.CLASS_SHOWED_ABOUT);
-		// 	const el_list =  _this.$menuListContainer[0];
-		// 	    el_list.scrollTo({
-		// 			top: el_list.scrollHeight,
-		// 			behavior: 'smooth'
-    	// 		});
-		// 	e.originalEvent.cancelable && e.preventDefault();
-		// });		
+		});	
 
 		new ScrollManager(this.$menuListContainer, this.$btnScrollDown);		
 		
