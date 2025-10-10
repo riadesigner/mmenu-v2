@@ -32,11 +32,12 @@ $id_cafe = (int) $_POST['id_cafe'];
 $cafe = new Smart_object("cafe",$id_cafe);
 if(!$cafe->valid())__errorjsonp("Unknown cafe, ".__LINE__);
 
-define('DEMO_MODE', (int) $cafe->cafe_status !== 2);
-define('PICKUPSELF_MODE',filter_var($_POST['pickupself'], FILTER_VALIDATE_BOOLEAN));
-define("ORDER_TARGET", Order_sender::ORDER_DELIVERY);
-
 $order_data = $_POST['order'];
+
+define('DEMO_MODE', (int) $cafe->cafe_status !== 2);
+define('PENDING_MODE', (int) $cafe->order_way ); // int
+define("ORDER_TARGET", Order_sender::ORDER_DELIVERY);
+define('PICKUPSELF_MODE',filter_var($_POST['pickupself'], FILTER_VALIDATE_BOOLEAN));
 
 $params = [
 	"order_data"=>$order_data,
@@ -59,14 +60,19 @@ try{
 //	- GETTING ORDER_SHORT_NUMBER
 // ----------------------------------------
 
-$short_number = Order_sender::save_order_to_db(
+$order_id_uniq = Order_sender::save_order_to_db(
 	ORDER_TARGET,
 	$cafe, 
-	["ORDER_TEXT"=>$ORDER_TXT], 
-	null, 
-	DEMO_MODE
+	[
+		"ORDER_TEXT"=>$ORDER_TXT
+	], 
+	null,  
+	PENDING_MODE,
+	DEMO_MODE	
 );
-if(!$short_number)__errorjsonp("--cant save order");
+if(!$order_id_uniq)__errorjsonp("--cant save order");
+
+$short_number = Order_sender::get_short_number($order_id_uniq);
 
 DEMO_MODE && __answerjsonp(["short_number"=>$short_number,"demo_mode"=>DEMO_MODE]);
 

@@ -329,6 +329,7 @@ export var VIEW_ORDERING = {
 		};
 
 		console.log('order_params = ', order_params)
+		console.log('order_params cached = ', $.extend({},order_params));
 
 		this.do_order_send(order_params);
 
@@ -454,11 +455,15 @@ export var VIEW_ORDERING = {
 		const order_items = GLB.CART.get_all();
 		const order = $.extend(order_params,{order_items});
 
+
+		console.log('--- order_items ---', order_items)
+		console.log('--- order_params ---', order_params)
+
 		this.ORDER_SENDER = $.extend({},THE_ORDER_SENDER);	
 		this.ORDER_SENDER.send_async(order, this.PICKUPSELF_MODE)
 		.then((vars)=>{	
 
-			console.log('--vars--',vars)	
+			console.log('------- order vars -------',vars)	
 			order.short_number = vars['short_number'];
 			order.demo_mode = vars['demo_mode'];
 			order.notg_mode = vars['notg_mode']?true:false;
