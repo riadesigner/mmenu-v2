@@ -37,16 +37,20 @@ export const IIKO_ITEM_SIZER = {
 		return this.ITEM_DATA.iiko_sizes_parsed;
 	},
 	get_from_modifiers:function(){		
-		
+		// console.log('this.ITEM_DATA', this.ITEM_DATA)
+		const basePrice = parseInt(this.ITEM_DATA.iiko_sizes_parsed[0].price, 10);
+		const baseValue = parseInt(this.ITEM_DATA.iiko_sizes_parsed[0].portionWeightGrams, 10);
+
 		const search_sizes = ()=>{
 			const s = this.ITEM_DATA.iiko_modifiers_parsed.filter((mGroup)=>mGroup.name?.toLowerCase().includes("размер"));			
-			const virtualSizes = s.length ? (s[0].items).map((modif_size)=>{
+			const virtualSizes = s.length ? (s[0].items).map((modif_size)=>{				
 				return {
-					price: modif_size.price,
+					price: parseInt(modif_size.price,10) + basePrice,
 					sizeId: modif_size.modifierId,
 					sizeName: modif_size.name,
-					volume: modif_size.portionWeightGrams,
-					sizeGroupId: s[0].modifierGroupId, 
+					volume: parseInt(modif_size.portionWeightGrams, 10) + baseValue,
+					sizeGroupId: s[0].modifierGroupId,
+					isVirtual:true, // calculated from Modifier
 				}
 			}) : null;
 
@@ -91,7 +95,7 @@ export const IIKO_ITEM_SIZER = {
 					const sizeId = s.sizeId || "";
 					const sizeCode = s.sizeCode || "";
 
-					$btn.html(`${sizeName}<br>${volume} ${units}`);
+					$btn.html(`<div>${sizeName}</div><div>${volume} ${units}</div>`);
 
 					(function($btn, index, price, originalPrice, sizeGroupId, sizeName) {
 						$btn.on('touchend click',function(e){														

@@ -724,6 +724,8 @@ a.mm2-home-link:hover{ color: %[color-home-link-hover]%; }
   min-width: 20vw;
   text-align: center;
 }
+.mm2-item-size-btn div:last-child{font-size:.8rem;}
+
 .mm2-item-size-btn.active {color:#ffffff;border:2px solid %[color-bright]%;}
 .mm2-item-btns-sizes-desktop .mm2-item-size-btn:hover{background: #3b3b3b;}
 .mm2-item-btns-sizes-desktop .mm2-item-size-btn:active{transition: 0s;background: #777777;}
@@ -1568,6 +1570,7 @@ a.mm2-home-link:hover{ color: %[color-home-link-hover]%; }
 
   .mm2-btn-basket .mm2-btn-basket__text{font-size: 1.1rem;}
   .mm2-item-size-btn {font-size: .8rem;}
+  .mm2-item-size-btn div:last-child {font-size: .6rem;}
 
   /* --- TABLE INFO ---  */
   .mm2-header__table-number_number{font-size:1.1rem;}
