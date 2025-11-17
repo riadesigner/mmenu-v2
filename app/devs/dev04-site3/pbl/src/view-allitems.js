@@ -35,14 +35,16 @@ export var VIEW_ALLITEMS = {
 		this.upade_header();
 		this._content_hide();		
 
-		var allitems = this.chefsmenu.get_allitems_for_menu(this.MENU);		
+		var allitems = this.chefsmenu.get_allitems_for_menu(this.MENU);	
+		
+		//xxx
 		console.log("allitems",allitems);		
 		
 		var fn = {
 			start_items_build:()=>{
 
-				const sizeInBytes = new TextEncoder().encode(JSON.stringify(this.ALL_ITEMS)).length;
-				console.log(`Размер объекта this.ALL_ITEMS: ${GLB.CMN.formatBytes(sizeInBytes)} байт`);				
+				// const sizeInBytes = new TextEncoder().encode(JSON.stringify(this.ALL_ITEMS)).length;
+				// console.log(`Размер объекта this.ALL_ITEMS: ${GLB.CMN.formatBytes(sizeInBytes)} байт`);				
 
 				console.log("start items build")
 				this.$itemsContainer.html("");		
@@ -95,6 +97,7 @@ export var VIEW_ALLITEMS = {
 					this.TOTAL_ITEMS = arr_items.length;							
 					this.chefsmenu.set_allitems_for_menu(this.MENU,this.ALL_ITEMS);					
 					
+					//xxx
 					console.log('created all_items object',this.ALL_ITEMS);					
 					
 					fn.start_items_build();

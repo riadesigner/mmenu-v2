@@ -212,7 +212,7 @@ export const IIKO_ITEM_MODIFIERS = {
 						].join(''));
 					m_counter++;
 					if(radioMode && m_counter==g.items.length && chosen!=='chosen'){
-						console.log(`m_counter = ${m_counter}, g.items.length = ${g.items.length}, chosen!='chosen', ${chosen!=='chosen'}`);
+						// console.log(`m_counter = ${m_counter}, g.items.length = ${g.items.length}, chosen!='chosen', ${chosen!=='chosen'}`);
 						$m_list_group.find('li:first').addClass('chosen').addClass('chosen-by-default');
 					}
 				}				

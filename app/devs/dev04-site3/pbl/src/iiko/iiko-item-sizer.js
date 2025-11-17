@@ -4,6 +4,7 @@ export const IIKO_ITEM_SIZER = {
 	init:function(item,opt) {
 		this.ITEM_DATA = item;
 		this.onUpdate = opt.onUpdate;
+		this.sizeMode = opt.sizeMode; // undefined | 'FROM_MODIFIERS'
 		this.CN = "mm2-";
 		this._CN = "."+this.CN;
 		this.reset();
@@ -28,7 +29,15 @@ export const IIKO_ITEM_SIZER = {
 	},
 	get_all:function(){
 		return this.ITEM_DATA.iiko_sizes_parsed;
-	},	
+	},
+	get_from_modifiers:function(){
+		const has_size_from_modifiers = true;
+		if(has_size_from_modifiers){
+			return null;
+		}else{
+			this.get_all();
+		}		
+	},
 	// private
 	set_current_vars:function(vars) {		
 		this.VARS = vars;
@@ -36,9 +45,11 @@ export const IIKO_ITEM_SIZER = {
 	build:function() {
 
 		var _this=this;
-		const sizes =  this.get_all();
+				
+		const sizes = this.sizeMode==='FROM_MODIFIERS' ? this.get_from_modifiers() : this.get_all();		
+
 		const foo = {
-			create_btns:($btns)=>{
+			create_btns:($btns, sizes)=>{
 				for(var i=0; i<sizes.length;i++){
 					
 					const s = sizes[i];					
@@ -89,8 +100,8 @@ export const IIKO_ITEM_SIZER = {
 
 		if(sizes){
 			if(sizes.length>1){								
-				foo.create_btns(this.$arr_btns['mobile']);
-				foo.create_btns(this.$arr_btns['desktop']);
+				foo.create_btns(this.$arr_btns['mobile'], sizes);
+				foo.create_btns(this.$arr_btns['desktop'], sizes);
 			}else{								
 				const s = sizes[0];				
 				const price = s.price;

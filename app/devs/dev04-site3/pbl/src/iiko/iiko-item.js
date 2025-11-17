@@ -107,7 +107,7 @@ export const IIKO_ITEM = {
 
 		// BUILDING SIZES UI
 		this.IIKO_SIZER = $.extend({},IIKO_ITEM_SIZER);			
-		this.IIKO_SIZER.init(this.item_data,{onUpdate:this.on_update_size});
+		this.IIKO_SIZER.init(this.item_data,{onUpdate:this.on_update_size, sizeMode:'FROM_MODIFIERS'});
 
 		// BUILDING IIKO MODIFIERS UI
 		this.IIKO_MODIFIERS = $.extend({},IIKO_ITEM_MODIFIERS);	
