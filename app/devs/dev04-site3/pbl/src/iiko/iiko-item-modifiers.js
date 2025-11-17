@@ -1,13 +1,13 @@
 import {GLB} from '../glb.js';
 
 /**
- * @param item_data: Object
- * 
+ * @param modifiers_data: Array (iiko modifiers parsed)
+ * @param virtual_sizes: String[]|null // название размеров
 */
 export const IIKO_ITEM_MODIFIERS = {
-	init:function(item_data) {
-
-		this.item_data = item_data;
+	init:function(modifiers_data, virtual_sizes=null) {
+		
+		this.modifiers_data = modifiers_data;
 		this.MODIFIERS = [];
 		this.OBJ_MODIFIERS = {};
 		this.arr_usr_chosen = [];
@@ -16,7 +16,7 @@ export const IIKO_ITEM_MODIFIERS = {
 		this.MODIF_SCROLLED = false;		
 		this.HAS_GROUPS_MODE = true;
 		
-		this.$m_list_all = $('<div class="all-modifs-list"></div>');
+		this.$m_list_all = $('<div class="all-modifs-list"></div>');		
 
 		this._init_modif_with_groups();
 		this._build_list_ui_with_groups();		
@@ -49,6 +49,12 @@ export const IIKO_ITEM_MODIFIERS = {
 	// @return array
 	get_selected:function(){
 		return this.arr_usr_chosen;
+	},
+
+	// for virtual sizes (extracted from modifiers)
+	// @param size_name: string
+	switch_virtual_size_to:function(size_name){
+		console.log(`switch to size ${size_name}`);
 	},
 
 	reset:function(){
@@ -88,14 +94,9 @@ export const IIKO_ITEM_MODIFIERS = {
 	},
 
 	// @return void
-	_init_modif_with_groups:function(){
-		// the parsed modifier groups
-		let modifs = this.item_data.iiko_modifiers_parsed; 
+	_init_modif_with_groups:function(){				
 
-		// console.log('modifs', modifs);
-		// console.log('modifs JSON', JSON.stringify(modifs));
-
-		this.MODIFIERS = [...modifs];		
+		this.MODIFIERS = [...this.modifiers_data];		
 
 		const fn = {
 			make_object:(modifs)=>{

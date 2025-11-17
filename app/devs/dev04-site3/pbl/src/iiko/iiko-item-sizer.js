@@ -4,7 +4,7 @@ export const IIKO_ITEM_SIZER = {
 	init:function(item,opt) {
 		this.ITEM_DATA = item;
 		this.onUpdate = opt.onUpdate;
-		this.sizeMode = opt.sizeMode; // undefined | 'FROM_MODIFIERS'
+		this.sizeFromModifiers = opt.sizeFromModifiers; // undefined | true
 		this.virtualSizes = null; // null | [{...size},]
 		this.CN = "mm2-";
 		this._CN = "."+this.CN;
@@ -75,9 +75,7 @@ export const IIKO_ITEM_SIZER = {
 
 		var _this=this;
 				
-		const sizes = this.sizeMode==='FROM_MODIFIERS' ? this.get_from_modifiers() : this.get_all();		
-		
-		console.log('sizes = ', sizes);
+		const sizes = this.sizeFromModifiers ? this.get_from_modifiers() : this.get_all();
 
 		const foo = {
 			create_btns:($btns, sizes)=>{

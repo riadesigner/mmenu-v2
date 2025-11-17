@@ -107,11 +107,17 @@ export const IIKO_ITEM = {
 
 		// BUILDING SIZES UI
 		this.IIKO_SIZER = $.extend({},IIKO_ITEM_SIZER);			
-		this.IIKO_SIZER.init(this.item_data,{onUpdate:this.on_update_size, sizeMode:'FROM_MODIFIERS'});
+		this.IIKO_SIZER.init(this.item_data,{
+			onUpdate:(vars)=>{
+				// console.log('update size', vars); 
+				this.on_update_size(vars)
+			}, 
+			sizeFromModifiers: true,
+		});
 
 		// BUILDING IIKO MODIFIERS UI
 		this.IIKO_MODIFIERS = $.extend({},IIKO_ITEM_MODIFIERS);	
-		this.IIKO_MODIFIERS.init(this.item_data);
+		this.IIKO_MODIFIERS.init(this.item_data.iiko_modifiers_parsed);
 		this.IIKO_MODIFIERS.on_change(()=>{	this.update_modif_panel_ui(); });		
 
 		// SETUP MODIFIERS PANEL
