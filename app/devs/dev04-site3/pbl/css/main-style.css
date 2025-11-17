@@ -718,16 +718,16 @@ a.mm2-home-link:hover{ color: %[color-home-link-hover]%; }
 } 
 .mm2-show-large-image .mm2-item-btns-sizes-mobile{ bottom:0; }
 .mm2-item-size-btn {
-  float:right;background:#000000;border-radius: 8px;color:#aeaeae;
+  float:right;background:%[color-bg]%;border-radius: 8px;color:%[color-front]%;
   font-size:1rem;border:2px solid transparent;margin:0 0 0 6px;
-  padding:5px 10px;transition: .3s;cursor: pointer;
-  min-width: 20vw;
+  padding:5px 10px;transition: .3s;cursor: pointer;  
   text-align: center;
 }
 .mm2-item-size-btn div:last-child{font-size:.8rem;}
+.mm2-item-size-btn div { white-space: nowrap; }
 
 .mm2-item-size-btn.active {color:#ffffff;border:2px solid %[color-bright]%;}
-.mm2-item-btns-sizes-desktop .mm2-item-size-btn:hover{background: #3b3b3b;}
+.mm2-item-btns-sizes-desktop .mm2-item-size-btn:hover{background: %[color-second]%;}
 .mm2-item-btns-sizes-desktop .mm2-item-size-btn:active{transition: 0s;background: #777777;}
 
 .mm2-item-btns-sizes-desktop { position: absolute;  width: 100%;z-index: 15; transition: .5s;left: 0; bottom:100px;}

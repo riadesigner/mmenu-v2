@@ -90,8 +90,8 @@ $CFG->public_skins = [
             'name'=>['ru'=>'Темный Бронза', 'en'=>'Dark Bronze'], 
             'group'=>'dark', 
             'params'=>[
-                'color-menu-around-from' => '#130d09ff',
-                'color-menu-around-to' => '#130d09ff',
+                'color-menu-around-from' => '#130d09',
+                'color-menu-around-to' => '#130d09',
                 'color-bg' => '#26160d',
                 'color-front'=>'#ffffff',
                 'color-second'=>'#5c443e',
