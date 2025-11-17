@@ -72,8 +72,11 @@ class Iiko_extmenu_loader{
 		$params  = [];
 		$res = iiko_get_info($url,$headers,$params);
 		$priceCategories = $res['priceCategories']??[];
-		$currentPriceCategory = count($priceCategories)>0 ? $priceCategories[0]['id'] : null;
+		$currentPriceCategory = count($priceCategories)>0 ? $priceCategories[0]['id'] : null;		
 		
+		glog('получаем все меню с ценовыми категориями'.print_r($res,1)); 
+		glog('currentPriceCategory = '.$currentPriceCategory);
+
 		// ----------------------------------------------------
 		// получаем Меню по его Id с Базовой ценовой категорией
 		// ----------------------------------------------------
@@ -85,9 +88,16 @@ class Iiko_extmenu_loader{
 		$params  = [
 			'externalMenuId' => $this->EXTERNAL_MENU_ID,
 			'organizationIds' => [$this->ID_ORG], 
-			'priceCategoryId' => $currentPriceCategory
-		];		
+		];	
+
+		if($currentPriceCategory!==null){
+			$params['priceCategoryId'] = $currentPriceCategory;
+		}
+
 		$res = iiko_get_info($url,$headers,$params);
+
+		glog('menu = '.print_r($res,1));
+
 		return $res;		
 	}
 

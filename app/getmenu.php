@@ -1,8 +1,10 @@
 <?php
 // php8
 
+$start = microtime(true);
 
-$key = "bc4abe7044f6447eac7deb36d4531f6c";
+$key = "bc4abe7044f6447eac7deb36d4531f6c"; // ЭТО ПИЦЦАЙОЛО (получаем пустое меню)
+// $key = "06515b33726d4ae3a3eb04edda4e5b07"; // ЭТО КАФЕ WALLSTREET (все работает)
 
 // ------------------------
 // GETTING TOKEN FROM IIKO 
@@ -13,7 +15,7 @@ $params  = ["apiLogin" => $key];
 $res = iiko_get_info($url,$headers,$params);
 $token = $res['token'];
 
-echo "TOKEN = $token<br><br>";
+echo "TOKEN = $token<br><hr>";
 
 // -------------------------------
 // GETTING ORGANIZATIONS FROM IIKO
@@ -23,7 +25,11 @@ $headers = [
     "Content-Type"=>"application/json",
     "Authorization" => 'Bearer '.$token
 ]; 
-$params  = ['organizationIds' => null, 'returnAdditionalInfo' => true, 'includeDisabled' => true];
+$params  = [
+    'organizationIds' => null, 
+    'returnAdditionalInfo' => true, 
+    'includeDisabled' => true
+];
 $res = iiko_get_info($url,$headers,$params);
 $ARR_ORGS = $res["organizations"] ?? [];
 
@@ -35,83 +41,66 @@ echo "</pre>";
 $orgId = $ARR_ORGS[0]["id"]; // 0c6f6201-c526-4096-a096-d7602e3f2cfd
 echo "<br><br>CURRENT ORGANIZATION ID = $orgId<br><br>";
 
-exit();
+echo "<hr>";
 
+// --------------------------------------------
+// получаем все меню с ценовыми категориями
+// --------------------------------------------
+$url     = 'api/2/menu';
+$headers = [
+    "Content-Type"=>"application/json",
+    "Authorization" => 'Bearer '.$token
+]; 
+$params  = [];
+$res = iiko_get_info($url,$headers,$params);
+$priceCategories = $res['priceCategories']??[];
+$currentPriceCategory = count($priceCategories)>0 ? $priceCategories[0]['id'] : null;		
 
-// GETTING TERMINAL GROUPS FROM IIKO 
-// $url     = 'api/1/terminal_groups';
-// $headers = [
-//     "Content-Type"=>"application/json",
-//     "Authorization" => 'Bearer '.$token
-// ]; 
-// $params  = [
-//     'organizationIds' => [$orgId], 
-//     'includeDisabled' => true
-// ];
-// $res = iiko_get_info($url,$headers,$params);
+echo '<p>получаем все меню с ценовыми категориями</p>';
+echo "<pre>";
+print_r($res);
+echo "</pre>";
+echo '<p>currentPriceCategory = '.$currentPriceCategory.'</p>';
 
-// $ARR_TERMINALS = $res["terminalGroups"] ?? [];
+$EXTERNAL_MENU_ID = $res["externalMenus"][0]["id"];
+echo "<p>EXTERNAL MENU ID = $EXTERNAL_MENU_ID</p>";
+echo "<hr>";
 
-// echo "terminals:";
-// echo "<pre>";
-// echo json_encode($res);
-// echo "</pre>";
+$end = microtime(true);
+$execution_time = $end - $start;
 
-// GETTING MENU FROM IIKO 
-// $url     = 'api/2/menu';
-// $headers = [
-//     "Content-Type"=>"application/json",
-//     "Authorization" => 'Bearer '.$token
-// ]; 
-// $params  = [];
-// $res = iiko_get_info($url,$headers,$params);
-// $ARR_MENUS = $res["externalMenus"] ?? [];
+echo "Часть Скрипта выполнлась за: " . $execution_time . " секунд<br>";
 
-// echo  "menus:";
-// echo  "<pre>";
-// echo json_encode($res);
-// echo  "</pre>";   
-
-
-$externalMenuId = "9da77ff8-862d-45e4-a7f2-a5117910fa66";
-
+// ------------------------------
+// получаем Меню по его Id 
+// с Базовой ценовой категорией, 
+// если вообще категория выбрана
+// ------------------------------
 $url     = 'api/2/menu/by_id';
 $headers = [
     "Content-Type"=>"application/json",
     "Authorization" => 'Bearer '.$token
 ]; 
-
 $params  = [
-    'externalMenuId' => $externalMenuId,
+    'externalMenuId' => $EXTERNAL_MENU_ID,
     'organizationIds' => [$orgId], 
-    'priceCategoryId' => null, 
-    'version' => 2
-];
+];	
+
+if($currentPriceCategory!==null){
+    $params['priceCategoryId'] = $currentPriceCategory;
+}
 
 $res = iiko_get_info($url,$headers,$params);
-echo "menu?? ";
-echo  "<pre>";
-echo json_encode($res);
-echo  "</pre>"; 
 
+$end = microtime(true);
+$execution_time = $end - $start;
 
-// GETTING NOMENCLATURE FROM IIKO
-// $url     = 'api/1/nomenclature';
-// $headers = [
-//     "Content-Type"=>"application/json",
-//     "Authorization" => 'Bearer '.$token
-// ]; 
-// $params  = [
-//     "organizationId"=> $orgId,
-//     "startRevision"=> "0",    
-// ];
+echo "Скрипт выполнился за: " . $execution_time . " секунд<br>";
 
-// $res = iiko_get_info($url,$headers,$params);
-
-// echo  "nomenclature:";
-// echo  "<pre>";
-// echo json_encode($res);
-// echo  "</pre>";   
+echo 'menu = ';
+echo "<pre>";
+print_r($res);
+echo "<pre>";
 
 
 

@@ -123,7 +123,7 @@ class Iiko_params{
 		$res = iiko_get_info($url,$headers,$params);
 		
 		if(!isset($res["isAliveStatus"]) || !count($res["isAliveStatus"])) {
-			glogError(print_r($res,1));	
+			glog('Unknown isAliveStatus = '.print_r($res,1));
 			$this->current_terminal_group_status = "Unknown";
 		}else{
 			$this->current_terminal_group_status = $res["isAliveStatus"][0]["isAlive"];
@@ -178,12 +178,13 @@ class Iiko_params{
 		$headers = ["Content-Type"=>"application/json"];
 		$params  = ["apiLogin" => $api_key];
 		$res = iiko_get_info($url,$headers,$params);
+		
 		if( isset($res["errorDescription"]) ) {
 			if(str_contains((string) $res["errorDescription"], "is not authorized")){				
 				glogError("--unknown login");	
 				return false;
 			}else{
-				glogError(print_r($res,1));
+				glogError('errorDescription, = '.print_r($res,1));
 				return false;
 			}		
 		}
