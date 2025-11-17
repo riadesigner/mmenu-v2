@@ -5,6 +5,7 @@ export const IIKO_ITEM_SIZER = {
 		this.ITEM_DATA = item;
 		this.onUpdate = opt.onUpdate;
 		this.sizeMode = opt.sizeMode; // undefined | 'FROM_MODIFIERS'
+		this.virtualSizes = null; // null | [{...size},]
 		this.CN = "mm2-";
 		this._CN = "."+this.CN;
 		this.reset();
@@ -21,6 +22,11 @@ export const IIKO_ITEM_SIZER = {
 			units:""
 		};
 	},
+	// @return boolean
+	has_sizes:function(){		
+		return (this.virtualSizes && this.virtualSizes.length > 1) 
+			|| (this.ITEM_DATA.iiko_sizes_parsed && this.ITEM_DATA.iiko_sizes_parsed.length > 1);			
+	},
 	get_ui:function() {
 		return [this.$arr_btns['mobile'],this.$arr_btns['desktop']];		
 	},
@@ -34,7 +40,7 @@ export const IIKO_ITEM_SIZER = {
 		
 		const search_sizes = ()=>{
 			const s = this.ITEM_DATA.iiko_modifiers_parsed.filter((mGroup)=>mGroup.name?.toLowerCase().includes("размер"));			
-			const ret_sizes = s.length ? (s[0].items).map((modif_size)=>{
+			const virtualSizes = s.length ? (s[0].items).map((modif_size)=>{
 				return {
 					price: modif_size.price,
 					sizeId: modif_size.modifierId,
@@ -42,12 +48,19 @@ export const IIKO_ITEM_SIZER = {
 					volume: modif_size.portionWeightGrams,
 					sizeGroupId: s[0].modifierGroupId, 
 				}
-			}) : null; 						
-			return ret_sizes; 			
+			}) : null;
+
+			if(virtualSizes){
+				const sortedAsc = [...virtualSizes].sort((a, b) => a.price - b.price) ;		
+				sortedAsc[0].isDefault = 'true';
+				return sortedAsc;
+			}else{
+				return null;
+			}
 		}
-		
-		const sizes = search_sizes();		
-		return sizes ? sizes: this.get_all();
+				
+		this.virtualSizes = search_sizes();
+		return this.virtualSizes ?? this.ITEM_DATA.iiko_sizes_parsed;
 		
 	},
 	// private
@@ -59,6 +72,7 @@ export const IIKO_ITEM_SIZER = {
 		var _this=this;
 				
 		const sizes = this.sizeMode==='FROM_MODIFIERS' ? this.get_from_modifiers() : this.get_all();		
+		
 		console.log('sizes = ', sizes);
 
 		const foo = {
@@ -72,8 +86,8 @@ export const IIKO_ITEM_SIZER = {
 					const originalPrice = s.originalPrice || 0;
 					const sizeGroupId = s.sizeGroupId || "";					
 					const sizeName = s.sizeName || "";
-					const volume = s.portionWeightGrams || 0;
-					const units = foo.units_to_strings(s.measureUnitType);					
+					const volume = s.portionWeightGrams || s.volume;
+					const units = foo.units_to_strings(s.measureUnitType || 'GRAM');					
 					const sizeId = s.sizeId || "";
 					const sizeCode = s.sizeCode || "";
 
@@ -119,8 +133,8 @@ export const IIKO_ITEM_SIZER = {
 				const price = s.price;
 				const originalPrice = s.originalPrice;
 				const sizeGroupId = s.sizeGroupId;
-				const volume = s.portionWeightGrams;
-				const units = foo.units_to_strings(s.measureUnitType);				
+				const volume = s.portionWeightGrams || s.volume;
+				const units = foo.units_to_strings(s.measureUnitType || 'GRAM');				
 				const sizeName = s.sizeName;				
 				const sizeId = s.sizeId || "";
 				const sizeCode = s.sizeCode || "";

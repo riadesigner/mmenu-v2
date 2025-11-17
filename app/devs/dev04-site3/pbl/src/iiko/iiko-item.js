@@ -21,13 +21,12 @@ export const IIKO_ITEM = {
 		return this.item_data;
 	},
 	// @return boolean
-	has_modifiers:function() {
-		// добавить, если размеры виртуальные (из модификаторов)
+	has_modifiers:function() {		
 		return this.item_data.iiko_modifiers_parsed && this.item_data.iiko_modifiers_parsed.length > 0;
 	},	
 	// @return boolean
-	has_sizes:function() {		
-		return this.item_data.iiko_sizes_parsed && this.item_data.iiko_sizes_parsed.length > 1;
+	has_sizes:function() {	
+		return this.IIKO_SIZER ? this.IIKO_SIZER.has_sizes() : false;
 	},
 	get_preorder:function(count){
 		
