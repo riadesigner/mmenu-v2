@@ -134,7 +134,7 @@ export var ITEM = {
 
 		// BUILD UI SIZE BUTTONS
 		if(this.MODEL_ITEM.has_sizes()){
-			const [$btns_mobiles,$btns_desktop] = this.MODEL_ITEM.get_ui_price_buttons();		
+			const [$btns_mobiles,$btns_desktop] = this.MODEL_ITEM.get_ui_price_buttons();			
 			this.$item.addClass('item-sized');
 			this.$item_btns_sizes_wrapper_mobile.prepend($btns_mobiles);	
 			this.$item_btns_sizes_wrapper_desktop.prepend($btns_desktop);	

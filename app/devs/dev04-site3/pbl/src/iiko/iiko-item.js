@@ -22,6 +22,7 @@ export const IIKO_ITEM = {
 	},
 	// @return boolean
 	has_modifiers:function() {
+		// добавить, если размеры виртуальные (из модификаторов)
 		return this.item_data.iiko_modifiers_parsed && this.item_data.iiko_modifiers_parsed.length > 0;
 	},	
 	// @return boolean

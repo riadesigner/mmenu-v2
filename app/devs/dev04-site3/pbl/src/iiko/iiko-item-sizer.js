@@ -30,13 +30,25 @@ export const IIKO_ITEM_SIZER = {
 	get_all:function(){
 		return this.ITEM_DATA.iiko_sizes_parsed;
 	},
-	get_from_modifiers:function(){
-		const has_size_from_modifiers = true;
-		if(has_size_from_modifiers){
-			return null;
-		}else{
-			this.get_all();
-		}		
+	get_from_modifiers:function(){		
+		
+		const search_sizes = ()=>{
+			const s = this.ITEM_DATA.iiko_modifiers_parsed.filter((mGroup)=>mGroup.name?.toLowerCase().includes("размер"));			
+			const ret_sizes = s.length ? (s[0].items).map((modif_size)=>{
+				return {
+					price: modif_size.price,
+					sizeId: modif_size.modifierId,
+					sizeName: modif_size.name,
+					volume: modif_size.portionWeightGrams,
+					sizeGroupId: s[0].modifierGroupId, 
+				}
+			}) : null; 						
+			return ret_sizes; 			
+		}
+		
+		const sizes = search_sizes();		
+		return sizes ? sizes: this.get_all();
+		
 	},
 	// private
 	set_current_vars:function(vars) {		
@@ -47,13 +59,13 @@ export const IIKO_ITEM_SIZER = {
 		var _this=this;
 				
 		const sizes = this.sizeMode==='FROM_MODIFIERS' ? this.get_from_modifiers() : this.get_all();		
+		console.log('sizes = ', sizes);
 
 		const foo = {
 			create_btns:($btns, sizes)=>{
 				for(var i=0; i<sizes.length;i++){
 					
-					const s = sizes[i];					
-					// console.log('s',s)
+					const s = sizes[i];										
 					const currentClass = s.isDefault=='true'? " active":"";
 					const $btn = $('<div></div>',{class: this.CN+"item-size-btn "+currentClass});
 					const price = s.price || 0;
@@ -74,7 +86,7 @@ export const IIKO_ITEM_SIZER = {
 						});
 					})($btn, i, price, originalPrice, sizeGroupId, sizeName, volume, units, sizeId, sizeCode);
 				
-					s.isDefault=='true' && this.set_current_vars({price, originalPrice, sizeGroupId, sizeName, volume, units, sizeId, sizeCode});							
+					s.isDefault=='true' && this.set_current_vars({price, originalPrice, sizeGroupId, sizeName, volume, units, sizeId, sizeCode});
 					$btns.append($btn);
 
 				};							
