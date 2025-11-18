@@ -15,10 +15,13 @@ export const IIKO_ITEM_MODIFIERS = {
 		
 		this.MODIF_SCROLLED = false;		
 		this.HAS_GROUPS_MODE = true;
-		
-		this.$m_list_all = $('<div class="all-modifs-list"></div>');		
+		this.VIRTUAL_SIZES = virtual_sizes;
+
+		this.$m_list_all = $('<div class="all-modifs-list"></div>');
+		this.M_GROUPS_BY_SIZES_LINKS = {}		
 
 		this._init_modif_with_groups();
+		this.VIRTUAL_SIZES && this._add_virtual_sizes(this.VIRTUAL_SIZES);				
 		this._build_list_ui_with_groups();		
 		this.behavior();
 		return this;
@@ -52,9 +55,19 @@ export const IIKO_ITEM_MODIFIERS = {
 	},
 
 	// for virtual sizes (extracted from modifiers)
-	// @param size_name: string
-	switch_virtual_size_to:function(size_name){
-		console.log(`switch to size ${size_name}`);
+	// @param sizeName: string
+	switch_to_size:function(sizeName){		
+		const links = this.M_GROUPS_BY_SIZES_LINKS;
+		for (let i in links){
+			for(let n=0; n<links[i].length; n++){
+				const mGroup = links[i][n];				
+				if(sizeName==i){
+					mGroup.show();
+				}else{
+					mGroup.hide();
+				}				
+			}			
+		}		
 	},
 
 	reset:function(){
@@ -93,11 +106,36 @@ export const IIKO_ITEM_MODIFIERS = {
 		});	
 	},
 
+	_add_virtual_sizes:function(sizes){
+		if(sizes && sizes.length>0){
+			// updating modifiers groups
+			this.MODIFIERS.map((modifGroup)=>{
+				const virtualSizes = [];
+				sizes.map((s)=>{
+					const groupName = modifGroup.name.toLowerCase();  
+					const sizeName = s.sizeName.toLowerCase();					
+					if(groupName.includes(sizeName)){
+						// показывать группу только для данного размера 
+						virtualSizes.push(sizeName)
+					}					
+				});
+				// показывать группу для всех размеров 
+				if(virtualSizes.length === 0){
+					// Создаем массив со всеми названиями размеров
+					modifGroup.virtualSizes = sizes.map(s => s.sizeName.toLowerCase());
+				} else {
+					modifGroup.virtualSizes = virtualSizes;
+				}				
+				return modifGroup;
+			})
+		}
+	},
+
 	// @return void
 	_init_modif_with_groups:function(){				
 
 		this.MODIFIERS = [...this.modifiers_data];		
-
+		
 		const fn = {
 			make_object:(modifs)=>{
 				const obj = {};
@@ -259,12 +297,25 @@ export const IIKO_ITEM_MODIFIERS = {
 		
 		for(let i=0;i<arr.length;i++){
 			const $group_el = fn.build_group(arr[i]);
+			this.VIRTUAL_SIZES && this._add_sized_group(arr[i].virtualSizes, $group_el);			
 			$group_el && this.$m_list_all.prepend($group_el);
 		}
 
 		this.$MODIFIERS_ROWS = this.$m_list_all.find('li');		
-		fn.behaviors(this.$MODIFIERS_ROWS);
-		
+		fn.behaviors(this.$MODIFIERS_ROWS);				
+	},
+
+	_add_sized_group:function(virtualSizes, $linkToSizedGroup){
+		// сохраняем ссылки на все группы модификаторов,
+		// отсортированные по размерному ряду
+		for(let i in virtualSizes){
+			const sizeName = virtualSizes[i];
+			if(!this.M_GROUPS_BY_SIZES_LINKS[sizeName]){
+				this.M_GROUPS_BY_SIZES_LINKS[sizeName] = [];
+			}
+			this.M_GROUPS_BY_SIZES_LINKS[sizeName].push($linkToSizedGroup);
+		}		
 	}
+	
 
 };

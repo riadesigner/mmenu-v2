@@ -110,6 +110,7 @@ export const IIKO_ITEM = {
 		this.IIKO_SIZER.init(this.item_data,{
 			onUpdate:(vars)=>{
 				// console.log('update size', vars); 
+				this.IIKO_MODIFIERS && this.IIKO_MODIFIERS.switch_to_size(vars.sizeName);
 				this.on_update_size(vars)
 			}, 
 			sizeFromModifiers: true,
@@ -117,7 +118,9 @@ export const IIKO_ITEM = {
 
 		// BUILDING IIKO MODIFIERS UI
 		this.IIKO_MODIFIERS = $.extend({},IIKO_ITEM_MODIFIERS);	
-		this.IIKO_MODIFIERS.init(this.item_data.iiko_modifiers_parsed);
+		const modifiers = this.item_data.iiko_modifiers_parsed;
+		const virtualSizes = this.IIKO_SIZER.get_virtual();
+		this.IIKO_MODIFIERS.init(modifiers, virtualSizes);
 		this.IIKO_MODIFIERS.on_change(()=>{	this.update_modif_panel_ui(); });		
 
 		// SETUP MODIFIERS PANEL

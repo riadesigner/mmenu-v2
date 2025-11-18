@@ -36,7 +36,12 @@ export const IIKO_ITEM_SIZER = {
 	get_all:function(){
 		return this.ITEM_DATA.iiko_sizes_parsed;
 	},
-	get_from_modifiers:function(){		
+	get_virtual:function(){
+		return this.virtualSizes;
+	},	
+	
+	// private
+	_calc_from_modifiers:function(){		
 		// console.log('this.ITEM_DATA', this.ITEM_DATA)
 		const basePrice = parseInt(this.ITEM_DATA.iiko_sizes_parsed[0].price, 10);
 		const baseValue = parseInt(this.ITEM_DATA.iiko_sizes_parsed[0].portionWeightGrams, 10);
@@ -67,15 +72,15 @@ export const IIKO_ITEM_SIZER = {
 		return this.virtualSizes ?? this.ITEM_DATA.iiko_sizes_parsed;
 		
 	},
-	// private
-	set_current_vars:function(vars) {		
+
+	set_current_vars:function(vars) {	
 		this.VARS = vars;
 	},
 	build:function() {
 
 		var _this=this;
 				
-		const sizes = this.sizeFromModifiers ? this.get_from_modifiers() : this.get_all();
+		const sizes = this.sizeFromModifiers ? this._calc_from_modifiers() : this.get_all();
 
 		const foo = {
 			create_btns:($btns, sizes)=>{
