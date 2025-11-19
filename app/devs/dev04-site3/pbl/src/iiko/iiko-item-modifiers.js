@@ -183,7 +183,7 @@ export const IIKO_ITEM_MODIFIERS = {
 				};
 			
 				this.$MODIFIERS_ROWS.each((i,el)=>{
-					if($(el).hasClass('chosen')){
+					if( $(el).hasClass('chosen') && $(el).is(':visible')){
 						const id = $(el).data('modifier-id');
 						const m = this.get_by_id(id);
 						if(m){
@@ -227,7 +227,7 @@ export const IIKO_ITEM_MODIFIERS = {
 				let minQuantity = parseInt(g['restrictions']['minQuantity'],10);
 				let radioMode = false;
 				if(g['restrictions']){					
-					radioMode = maxQuantity==1 && minQuantity==1;
+					radioMode = maxQuantity==1 && g.items.length > 1;
 				}
 				let params = `data-group-id="${groupId}" 
 					data-group-name="${groupName}" 
@@ -313,7 +313,12 @@ export const IIKO_ITEM_MODIFIERS = {
 		this.VIRTUAL_SIZES && this._switch_to_default_size();
 
 		this.$MODIFIERS_ROWS = this.$m_list_all.find('li');		
-		fn.behaviors(this.$MODIFIERS_ROWS);				
+		fn.behaviors(this.$MODIFIERS_ROWS);	
+		
+		setTimeout(() => {
+			this.on_change && this.on_change();
+		}, 0);
+
 	},
 
 	_add_sized_group:function(virtualSizes, $linkToSizedGroup){
