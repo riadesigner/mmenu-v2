@@ -1238,6 +1238,10 @@ a.mm2-home-link:hover{ color: %[color-home-link-hover]%; }
   color:%[color-bright]%;
 }
 
+.modifiers-group-name small{  
+  font:.8rem arial;
+}
+
 /* 
 
       SCREENS

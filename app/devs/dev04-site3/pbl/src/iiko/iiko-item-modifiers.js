@@ -15,7 +15,7 @@ export const IIKO_ITEM_MODIFIERS = {
 		
 		this.MODIF_SCROLLED = false;		
 		this.HAS_GROUPS_MODE = true;
-		this.VIRTUAL_SIZES = virtual_sizes;
+		this.VIRTUAL_SIZES = virtual_sizes;		
 
 		this.$m_list_all = $('<div class="all-modifs-list"></div>');
 		this.M_GROUPS_BY_SIZES_LINKS = {}		
@@ -131,7 +131,7 @@ export const IIKO_ITEM_MODIFIERS = {
 						// Создаем массив со всеми названиями размеров
 						modifGroup.virtualSizes = sizes.map(s => s.sizeName.toLowerCase());
 					}else{
-						// для модификатора 'размерный ряд'
+						// это модификатор 'размерный ряд'
 						modifGroup.virtualSizes = virtualSizes;
 					}
 				} else {
@@ -162,6 +162,7 @@ export const IIKO_ITEM_MODIFIERS = {
 				return obj;
 			}
 		};
+		// console.log('this.MODIFIERS', this.MODIFIERS)
 		this.OBJ_MODIFIERS = fn.make_object(this.MODIFIERS);		
 	},
 
@@ -232,8 +233,8 @@ export const IIKO_ITEM_MODIFIERS = {
 					data-group-name="${groupName}" 
 					data-max-quantity="${maxQuantity}" 
 					data-radio-mode="${radioMode}"`;
-				const strUpToNum = maxQuantity > 1 ? `( до ${maxQuantity} )` : ''; 	
-				let strGroupName=`<div class="modifiers-group-name">${groupName} ${strUpToNum}</div>`;
+				const strUpToNum = maxQuantity > 0 && g.items.length > 1 ? `( максимум ${maxQuantity} )` : ''; 	
+				let strGroupName=`<div class="modifiers-group-name">${groupName} <small>${strUpToNum}</small></div>`;
 				let $m_group_wrapper = $(`<div class="modif-group-wrapper" ${params}>${strGroupName}</div>`);
 				
 				// console.log('g', g);
@@ -259,8 +260,7 @@ export const IIKO_ITEM_MODIFIERS = {
 						`</li>`
 						].join(''));
 					m_counter++;
-					if(radioMode && m_counter==g.items.length && chosen!=='chosen'){
-						// console.log(`m_counter = ${m_counter}, g.items.length = ${g.items.length}, chosen!='chosen', ${chosen!=='chosen'}`);
+					if(radioMode && m_counter==g.items.length && chosen!=='chosen'){						
 						$m_list_group.find('li:first').addClass('chosen').addClass('chosen-by-default');
 					}
 				}				
@@ -283,8 +283,7 @@ export const IIKO_ITEM_MODIFIERS = {
 					canEncrease:($el)=>{
 						const countChosen = $el.siblings().filter('.chosen').length;
 						const maxQuantity = parseInt($el.closest('.modif-group-wrapper').data('max-quantity'),10);
-						if(countChosen >= maxQuantity){
-							console.log('countChosen', countChosen, 'maxQuantity', maxQuantity);
+						if(countChosen >= maxQuantity){							
 							return false;
 						}
 						return true;						
@@ -305,6 +304,7 @@ export const IIKO_ITEM_MODIFIERS = {
 		};
 		
 		for(let i=0;i<arr.length;i++){
+			if(this.VIRTUAL_SIZES && !arr[i].virtualSizes.length) break;			
 			const $group_el = fn.build_group(arr[i]);
 			this.VIRTUAL_SIZES && this._add_sized_group(arr[i].virtualSizes, $group_el);			
 			$group_el && this.$m_list_all.prepend($group_el);
@@ -319,7 +319,7 @@ export const IIKO_ITEM_MODIFIERS = {
 	_add_sized_group:function(virtualSizes, $linkToSizedGroup){
 		if(!virtualSizes.length){
 			// allways hide
-			$linkToSizedGroup.hide();
+			$linkToSizedGroup.hide();			
 			return;
 		}
 		// сохраняем ссылки на все группы модификаторов,
@@ -338,5 +338,5 @@ export const IIKO_ITEM_MODIFIERS = {
 		const sizeName = defaultSize[0]?defaultSize[0]['sizeName']:null;
 		sizeName && this.switch_to_size(sizeName);
 	}
-	
+		
 };

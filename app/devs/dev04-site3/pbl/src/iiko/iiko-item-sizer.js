@@ -52,7 +52,7 @@ export const IIKO_ITEM_SIZER = {
 				return {
 					price: parseInt(modif_size.price,10) + basePrice,
 					sizeId: modif_size.modifierId,
-					sizeName: modif_size.name,
+					sizeName: modif_size.name.split(' ').join(''),
 					volume: parseInt(modif_size.portionWeightGrams, 10) + baseValue,
 					sizeGroupId: s[0].modifierGroupId,
 					isVirtual:true, // calculated from Modifier
