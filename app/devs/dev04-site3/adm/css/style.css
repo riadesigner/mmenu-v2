@@ -596,10 +596,10 @@ textarea:focus.length-limit-reached{ animation: ani_limit_reached .3s linear;}
 .std-form__ui_tags li{display: inline-block;
     background: #f5f5f5;
     border-radius: 18px;
-    padding: 6px 20px;
+    padding: 2px 10px;
     margin: 0 2px 2px 0;
     border: 1px solid #727272;
-    font-size: 0.9em;
+    font-size: 0.8em;
     color: #727272;
 }
 .std-form__title-special-1{   

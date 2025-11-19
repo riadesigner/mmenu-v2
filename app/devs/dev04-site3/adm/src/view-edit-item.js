@@ -156,7 +156,11 @@ export var VIEW_EDIT_ITEM = {
 
 		for(var m in iiko_modifiers){							
 			
-			var mod_group_title = iiko_modifiers[m].name;			
+			var mod_group_title = iiko_modifiers[m].name;	
+			const restrictions = iiko_modifiers[m].restrictions;		
+			const r_min =  restrictions.minQuantity;
+			const r_max =  restrictions.maxQuantity;
+			// const r_default = restrictions.byDefault;
 
 			var modifiers = iiko_modifiers[m].items;
 			if(modifiers.length>0){
@@ -165,7 +169,8 @@ export var VIEW_EDIT_ITEM = {
 					arr_tags.push(modifiers[nm].name);
 				};
 				var arr_tags_str = '<ul class="std-form__ui_tags"><li>'+arr_tags.join('</li><li>')+'</li></ul>';
-				var str = '<div class="std-form__ul_tags_title">– '+mod_group_title+'</div>'+arr_tags_str;
+				
+				const str = `<div class="std-form__ul_tags_title">– ${mod_group_title}, (min:${r_min}, max:${r_max})</div>${arr_tags_str}`;
 				arr_modifiers.push(str);
 			}
 		};

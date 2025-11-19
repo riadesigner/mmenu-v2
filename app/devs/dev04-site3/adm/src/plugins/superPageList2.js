@@ -24,9 +24,6 @@ $.extend({
 			// --------------------------------------------------------
 			ALLITEMS = Pages.get();
 		}
-
-		console.log("ALLITEMS", ALLITEMS);
-		console.log("Pages", Pages);
 		
 		var CLASS_NAME = "super-pagelist";
 		var bhvLayerClass = CLASS_NAME+"-bhv-layer";
@@ -171,7 +168,6 @@ $.extend({
 					var $page = $("<div>",{class:CLASS_NAME+"-page"+current_class,'data-pos':i})
 					.css({width:PAGE_WIDTH,transform:"translateX("+newX+"px) translateZ(0)",zIndex:zIndex});
 					// .append(ALLITEMS[i]);
-					console.log(`ALLITEMS[${i}], `, ALLITEMS[i]);
 					$pagesLayer.append($page);						
 				};
 				ARR_PAGES = $pagesLayer.find("."+CLASS_NAME+"-page").toArray();								
