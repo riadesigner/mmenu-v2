@@ -21,7 +21,8 @@ export const IIKO_ITEM_MODIFIERS = {
 		this.M_GROUPS_BY_SIZES_LINKS = {}		
 
 		this._init_modif_with_groups();
-		this.VIRTUAL_SIZES && this._add_virtual_sizes(this.VIRTUAL_SIZES);		
+		this.VIRTUAL_SIZES && this._add_virtual_sizes(this.VIRTUAL_SIZES);	
+		this.VIRTUAL_SIZES && this._hide_virtual_sizes_names(this.VIRTUAL_SIZES);
 		this._build_list_ui_with_groups();		
 		this.behavior();
 		return this;
@@ -344,6 +345,23 @@ export const IIKO_ITEM_MODIFIERS = {
 			}
 			this.M_GROUPS_BY_SIZES_LINKS[sizeName].push($linkToSizedGroup);
 		}		
+	},
+
+	// убираем из названий модификаторов виртуальные размеры
+	_hide_virtual_sizes_names:function(virtualSizes){
+		if(virtualSizes && virtualSizes.length){
+			for(let s in virtualSizes){
+				const size = virtualSizes[s].sizeName;
+				for(let m in this.MODIFIERS){
+					const modifGroup = this.MODIFIERS[m];
+					modifGroup.name = modifGroup.name.replace(size, '').trim();
+					for(let i in modifGroup.items){
+						const item = modifGroup.items[i];
+						item.name = item.name.replace(size, '').trim();
+					}
+				}
+			}
+		}
 	},
 
 	_switch_to_default_size:function(){
