@@ -21,7 +21,7 @@ export const IIKO_ITEM_MODIFIERS = {
 		this.M_GROUPS_BY_SIZES_LINKS = {}		
 
 		this._init_modif_with_groups();
-		this.VIRTUAL_SIZES && this._add_virtual_sizes(this.VIRTUAL_SIZES);				
+		this.VIRTUAL_SIZES && this._add_virtual_sizes(this.VIRTUAL_SIZES);		
 		this._build_list_ui_with_groups();		
 		this.behavior();
 		return this;
@@ -145,7 +145,17 @@ export const IIKO_ITEM_MODIFIERS = {
 	// @return void
 	_init_modif_with_groups:function(){				
 
-		this.MODIFIERS = [...this.modifiers_data];		
+		const arr = [...this.modifiers_data];
+		const sortedArr = arr.sort((a, b) => {
+			// Приоритет 1: элементы с items.length > 1 идут первыми
+			if (a.items.length > 1 && b.items.length <= 1) return -1;
+			if (a.items.length <= 1 && b.items.length > 1) return 1;
+			
+			// Приоритет 2: сортировка по maxQuantity по возрастанию
+			return a.restrictions.maxQuantity - b.restrictions.maxQuantity;
+		});
+
+		this.MODIFIERS = arr;		
 		
 		const fn = {
 			make_object:(modifs)=>{
@@ -161,8 +171,7 @@ export const IIKO_ITEM_MODIFIERS = {
 				}
 				return obj;
 			}
-		};
-		// console.log('this.MODIFIERS', this.MODIFIERS)
+		};		
 		this.OBJ_MODIFIERS = fn.make_object(this.MODIFIERS);		
 	},
 
@@ -212,15 +221,17 @@ export const IIKO_ITEM_MODIFIERS = {
 	_build_list_ui_with_groups:function(){
 		
 		let arr = this.get();
+
 		if(!arr.length){ return; }
 
 		const fn = {
 			// @param g object
 			// @return jQueryObject			
-			build_group:(g)=>{			
+			build_groups:(index, g)=>{
 
-				if(!g.items || !g.items.length) return null;							
-				
+				if(!g.items || !g.items.length ) return null;								
+				if(!g.virtualSizes || !g.virtualSizes.length) return null;				
+
 				let groupId = g['modifierGroupId']??"";
 				let groupName = g['name']??"–";	
 				let maxQuantity = parseInt(g['restrictions']['maxQuantity'],10);
@@ -235,9 +246,7 @@ export const IIKO_ITEM_MODIFIERS = {
 					data-radio-mode="${radioMode}"`;
 				const strUpToNum = maxQuantity > 0 && g.items.length > 1 ? `( максимум ${maxQuantity} )` : ''; 	
 				let strGroupName=`<div class="modifiers-group-name">${groupName} <small>${strUpToNum}</small></div>`;
-				let $m_group_wrapper = $(`<div class="modif-group-wrapper" ${params}>${strGroupName}</div>`);
-				
-				// console.log('g', g);
+				let $m_group_wrapper = $(`<div class="modif-group-wrapper" ${params}>${strGroupName}</div>`);				
 
 				let $m_list_group = $('<ul></ul>');				
 				const type_radio = radioMode?'type-radio':'';
@@ -303,11 +312,10 @@ export const IIKO_ITEM_MODIFIERS = {
 			}		
 		};
 		
-		for(let i=0;i<arr.length;i++){
-			if(this.VIRTUAL_SIZES && !arr[i].virtualSizes.length) break;			
-			const $group_el = fn.build_group(arr[i]);
-			this.VIRTUAL_SIZES && this._add_sized_group(arr[i].virtualSizes, $group_el);			
-			$group_el && this.$m_list_all.prepend($group_el);
+		for(let i=0;i<arr.length;i++){							
+			const $group_el = fn.build_groups(i, arr[i]);			
+			this.VIRTUAL_SIZES && $group_el && this._add_sized_group(arr[i].virtualSizes, $group_el);			
+			$group_el && this.$m_list_all.append($group_el);
 		}
 
 		this.VIRTUAL_SIZES && this._switch_to_default_size();

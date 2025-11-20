@@ -218,9 +218,13 @@ export var VIEW_CART = {
 				const modifiers = order.chosen_modifiers;
 				let modifiers_str = "";				
 				if(IIKO_MODE && modifiers && modifiers.length){
-					for (let i in modifiers){						
-						let mod_str = `+ ${modifiers[i].name}, ${modifiers[i].price}&nbsp;₽<br>`;
-						modifiers_str += mod_str;
+					for (let i in modifiers){
+						const pr = parseInt(modifiers[i].price, 10);
+						if(pr>0){
+							modifiers_str += `+ ${modifiers[i].name}, ${modifiers[i].price}&nbsp;₽<br>`;
+						}else{
+							modifiers_str += `${modifiers[i].name}<br>`;
+						}												
 					}
 				};				
 
