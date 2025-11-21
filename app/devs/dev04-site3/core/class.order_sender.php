@@ -81,9 +81,14 @@ class Order_sender{
 		GET SHORT NUMBER FROM ORDER_ID_UNIQ
 	------------------------------------- **/
 	static public function get_short_number(string $order_id_uniq): string{
+		glog('------------- SENDING THE ORDER / order_id_uniq ------------- '.$order_id_uniq);
 		$n = explode("-", $order_id_uniq);
-		$order_id_uniq = $n[2]."-".$n[3];
-		return $order_id_uniq;
+		if(!isset($n[3]) || str_contains($order_id_uniq, "DEMO")){
+			return "DEMO-001";
+		}else{
+			$order_id_uniq = $n[2]."-".$n[3];
+			return $order_id_uniq;
+		}
 	}
 
     /*
