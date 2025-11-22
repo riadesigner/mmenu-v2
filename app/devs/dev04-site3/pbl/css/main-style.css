@@ -1181,7 +1181,7 @@ a.mm2-home-link:hover{ color: %[color-home-link-hover]%; }
 .mm2-order-ok-cart-list li .mm2-ordered-title{width: 70%;color:%[color-front]%;}
 .mm2-order-ok-cart-list li .mm2-ordered-quantity{width: 30%;color:%[color-bright]%;}
 .mm2-order-ok-cart-list li .mm2-ordered-title__volume{opacity: .5;}
-.mm2-order-ok-cart-list li .mm2-ordered-title__modifiers{opacity: .5;}
+.mm2-order-ok-cart-list li .mm2-ordered-title__modifiers{opacity: .5;font-size: .8rem;}
 .mm2-order-ok-total-cost {text-align: right;padding: 10px 0;color:%[color-front]%;font-size: 1.3rem;}
 
 /* --- ORDER PAGE --- */
@@ -1534,7 +1534,7 @@ a.mm2-home-link:hover{ color: %[color-home-link-hover]%; }
   /* --- CART VIEW --- */
   .mm2-cart-title__item {font-size: 1.4rem;line-height: 1.4rem; margin-bottom: 10px;}
   .mm2-cart-title__volume{font-size: 1rem; margin-bottom: 10px;opacity: .5;}
-  .mm2-cart-title__modifiers {font-size: 1rem;line-height: 1.4rem;}
+  .mm2-cart-title__modifiers {font-size: .9rem;line-height: 1.4rem;}
   .mm2-cart-quantity{font-size: 1.4rem; line-height: 1.4rem;}
 
   
@@ -1661,7 +1661,7 @@ a.mm2-home-link:hover{ color: %[color-home-link-hover]%; }
   .mm2-cart-quantity{padding: 5px 10px 10px 0;}
   .mm2-cart-title__item {font-size: 1.1rem;line-height: 1.2; margin-bottom: 3px;}
   .mm2-cart-title__volume{font-size: .9rem; margin-bottom: 3px;opacity: .5;}
-  .mm2-cart-title__modifiers {font-size: .9rem;line-height: 1.2;}
+  .mm2-cart-title__modifiers {font-size: .8rem;line-height: 1.2;}
   .mm2-cart-quantity{font-size: 1.1rem; line-height: 1.2;}
 
   .mm2-cart-more,.mm2-cart-less {width: 36px;height: 36px;}

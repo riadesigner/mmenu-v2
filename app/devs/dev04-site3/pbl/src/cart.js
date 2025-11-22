@@ -21,12 +21,6 @@ export var CART = {
 			this.$menu.removeClass(this.CLASS_CART_SWITCHED_OFF);	
 		}		 
 	},
-	
-	// new 
-	// create_uniq_name:function(prefix) {
-	// 	let uniq_by_time = Math.floor((Date.now() * Math.random()) / 1000).toString();			
-	// 	return prefix+uniq_by_time;
-	// },
 
 	/**
 	 * @param preorder: preorderObject
@@ -35,12 +29,13 @@ export var CART = {
 	 *   count: number;
 	 *   itemId: string;
 	 *   item_data: object;
+	 *   price: number;
 	 *   originalPrice: number; // for virtual size (from modifier->sizes[0]->price)
 	 *   sizeGroupId: string; // for virtual size (from modifier->modifierGroupId )
-	 *   price: number;
-	 *	 sizeCode: string; // optional (IIKO)			
-	 *	 sizeId: string; // optional (IIKO)	 
-	 *	 sizeName: string; // optional (IIKO)	 
+	 *	 sizeId: string; // (IIKO)	 	 
+	 *	 isVirtualSize: boolean; // (IIKO)	 	 	 
+	 *	 sizeCode: string; // (IIKO)			
+	 *	 sizeName: string; // (IIKO)	 
 	 *   uniq_name: string; // (chefs|iiko)-order-7330-930162801
 	 *	 units: string; // г|мл|л|кг
 	 *   sizeName:string;
@@ -66,9 +61,10 @@ export var CART = {
 		let order = this.ALL_ORDERS[orderId];
 		return order;
 	},
-	get_all:function(){
-		console.log('get_all',this.ALL_ORDERS);
-		return this.ALL_ORDERS;
+	get_all:function(sizesToModifiers=false){
+		const orders = !sizesToModifiers ? this.ALL_ORDERS: this._with_recalc_sizes();
+		console.log('this.ALL_ORDERS', this.ALL_ORDERS)
+		return orders;			
 	},
 	get_total_orders:function(itemId) {
 		// total positions in cart
@@ -191,5 +187,23 @@ export var CART = {
 		}else{
 			return GLB.LNG.get("lng_no_items");
 		}		
+	},
+	// convert virtualSizes back to modifiers	
+	_with_recalc_sizes:function(){
+		const orders = this.ALL_ORDERS;
+		for (let i in orders) {
+			const order = orders[i];			
+			if(order.isVirtualSize){
+				const modifier = {
+					modifierId: order.sizeId,
+					name: order.sizeName,
+					price: 0, 
+				}
+				order.chosen_modifiers.push(modifier);
+				order.sizeId = '';
+				order.sizeName = '';
+			}
+		}
+		return orders;
 	}
 };

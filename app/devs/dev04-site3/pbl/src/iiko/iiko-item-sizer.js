@@ -5,7 +5,7 @@ export const IIKO_ITEM_SIZER = {
 		this.ITEM_DATA = item;
 		this.onUpdate = opt.onUpdate;
 		this.sizeFromModifiers = opt.sizeFromModifiers; // undefined | true
-		this.virtualSizes = null; // null | [{...size},]
+		this.arrVirtualSizes = null; // null | [{...size},]
 		this.CN = "mm2-";
 		this._CN = "."+this.CN;
 		this.reset();
@@ -14,17 +14,19 @@ export const IIKO_ITEM_SIZER = {
 	},
 	reset:function() {
 		this.VARS = {
-			price:0,
-			originalPrice:0, // for nomenclature (oldway menu)
-			sizeGroupId:"", // for nomenclature (oldway menu)
-			sizeName:""	,
+			price: 0,
+			originalPrice: 0, // for nomenclature (oldway menu)
+			sizeId: "",
+			sizeGroupId: "",			
+			isVirtualSize: false, // calculated from modifiers
+			sizeName: "",
 			volume:"",
 			units:""
 		};
 	},
 	// @return boolean
 	has_sizes:function(){		
-		return (this.virtualSizes && this.virtualSizes.length > 1) 
+		return (this.arrVirtualSizes && this.arrVirtualSizes.length > 1) 
 			|| (this.ITEM_DATA.iiko_sizes_parsed && this.ITEM_DATA.iiko_sizes_parsed.length > 1);			
 	},
 	get_ui:function() {
@@ -37,7 +39,7 @@ export const IIKO_ITEM_SIZER = {
 		return this.ITEM_DATA.iiko_sizes_parsed;
 	},
 	get_virtual:function(){
-		return this.virtualSizes;
+		return this.arrVirtualSizes;
 	},	
 	
 	// private
@@ -48,19 +50,20 @@ export const IIKO_ITEM_SIZER = {
 
 		const search_sizes = ()=>{
 			const s = this.ITEM_DATA.iiko_modifiers_parsed.filter((mGroup)=>mGroup.name?.toLowerCase().includes("размер"));			
-			const virtualSizes = s.length ? (s[0].items).map((modif_size)=>{				
+			const arrVirtualSizes = s.length ? (s[0].items).map((modif_size)=>{				
 				return {
 					price: parseInt(modif_size.price,10) + basePrice,
+					originalPrice: 0,
 					sizeId: modif_size.modifierId,
+					sizeGroupId: s[0].modifierGroupId,					
+					isVirtualSize:true,
 					sizeName: modif_size.name.split(' ').join(''),
-					volume: parseInt(modif_size.portionWeightGrams, 10) + baseValue,
-					sizeGroupId: s[0].modifierGroupId,
-					isVirtual:true, // calculated from Modifier
+					volume: parseInt(modif_size.portionWeightGrams, 10) + baseValue,					
 				}
 			}) : null;
 
-			if(virtualSizes){
-				const sortedAsc = [...virtualSizes].sort((a, b) => a.price - b.price) ;		
+			if(arrVirtualSizes){
+				const sortedAsc = [...arrVirtualSizes].sort((a, b) => a.price - b.price) ;		
 				sortedAsc[0].isDefault = 'true';
 				return sortedAsc;
 			}else{
@@ -68,8 +71,8 @@ export const IIKO_ITEM_SIZER = {
 			}
 		}
 				
-		this.virtualSizes = search_sizes();
-		return this.virtualSizes ?? this.ITEM_DATA.iiko_sizes_parsed;
+		this.arrVirtualSizes = search_sizes();
+		return this.arrVirtualSizes ?? this.ITEM_DATA.iiko_sizes_parsed;
 		
 	},
 
@@ -89,25 +92,28 @@ export const IIKO_ITEM_SIZER = {
 					const s = sizes[i];										
 					const currentClass = s.isDefault=='true'? " active":"";
 					const $btn = $('<div></div>',{class: this.CN+"item-size-btn "+currentClass});
-					const price = s.price || 0;
-					const originalPrice = s.originalPrice || 0;
-					const sizeGroupId = s.sizeGroupId || "";					
-					const sizeName = s.sizeName || "";
-					const volume = s.portionWeightGrams || s.volume;
-					const units = foo.units_to_strings(s.measureUnitType || 'GRAM');					
-					const sizeId = s.sizeId || "";
-					const sizeCode = s.sizeCode || "";
+					const currentSize = {
+						price: s.price || 0,
+						originalPrice: s.originalPrice || 0,
+						sizeGroupId: s.sizeGroupId || '',
+						sizeName: s.sizeName || '',
+						volume: s.portionWeightGrams || s.volume,
+						units: foo.units_to_strings(s.measureUnitType || 'GRAM'),
+						sizeId: s.sizeId || '',
+						sizeCode: s.sizeCode || '',
+						isVirtualSize: s.isVirtualSize,
+					}
 
-					$btn.html(`<div>${sizeName}</div><div>${volume} ${units}</div>`);
+					$btn.html(`<div>${currentSize.sizeName}</div><div>${currentSize.volume} ${currentSize.units}</div>`);
 
-					(function($btn, index, price, originalPrice, sizeGroupId, sizeName) {
-						$btn.on('touchend click',function(e){														
-							_this.change_current_size({$btn, index, price, originalPrice, sizeGroupId, sizeName, volume, units, sizeId, sizeCode});
+					(function(vars) {
+						vars.$btn.on('touchend click',function(e){														
+							_this.change_current_size(vars);
 							e.originalEvent.cancelable && e.preventDefault();
 						});
-					})($btn, i, price, originalPrice, sizeGroupId, sizeName, volume, units, sizeId, sizeCode);
+					})({$btn, index:i, ...currentSize});
 				
-					s.isDefault=='true' && this.set_current_vars({price, originalPrice, sizeGroupId, sizeName, volume, units, sizeId, sizeCode});
+					s.isDefault=='true' && this.set_current_vars({$btn, index:i, ...currentSize});
 					$btns.append($btn);
 
 				};							

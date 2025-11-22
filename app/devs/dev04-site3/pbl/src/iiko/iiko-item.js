@@ -30,8 +30,7 @@ export const IIKO_ITEM = {
 	},
 	get_preorder:function(count){
 		
-		const s = this.IIKO_SIZER.get();
-						
+		const s = this.IIKO_SIZER.get();						
 		const uniq_name = this.calc_order_uniq_name(`iiko-order-${this.item_data.id}`);
 		const chosen_modifiers = this.IIKO_MODIFIERS.get_selected();
 		const modifiers_cost = this.IIKO_MODIFIERS.get_cost();
@@ -50,6 +49,7 @@ export const IIKO_ITEM = {
 	 *	 sizeCode: string; // (IIKO only)
 	 *	 sizeId: string; // (IIKO only)	 
 	 *	 sizeName: string; // (IIKO only)	 
+	 *	 sizeIsVirtual: boolean; // (IIKO only + virtualSizes enabled)	 	 
 	 *   uniq_name: string; // (chefs|iiko)-order-7330-930162801
 	 *	 units: string; // г|мл|л|кг
 	 *   sizeName:string;
@@ -73,11 +73,10 @@ export const IIKO_ITEM = {
 			sizeCode: s.sizeCode||'',
 			originalPrice: s.originalPrice||'',
 			sizeGroupId: s.sizeGroupId||'',
+			isVirtualSize: s.isVirtualSize,
 
 			chosen_modifiers:chosen_modifiers
-		};			
-		
-		// console.log('pre_order',pre_order)
+		};
 
 		return pre_order;
 	},
