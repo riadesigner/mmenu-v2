@@ -12,6 +12,46 @@ export const THE_ORDER_SENDER = {
  */     
     send_async:function(order, pickupself) {        
         return new Promise((res,rej)=>{
+
+            const PATH = 'pbl/lib/';
+            const url = GLB_APP_URL + PATH + 'pbl.send_order_for_delivery.php';
+
+            const id_cafe = order.id_cafe;
+            const data = {
+                id_cafe,
+                order,
+                pickupself
+            };
+
+            console.log('data=',data)
+
+            const AJAX = $.ajax({
+                url: url,                
+                dataType: "json",
+                method:"POST",
+                data:data,
+                xhrFields: {
+                    withCredentials: true  // Для отправки cookies при CORS
+                },      
+                error:(result)=> {
+                    console.log('err result=', result);
+                    rej(result);
+                }
+            });
+            AJAX.then((result)=>{       
+                console.log('ok result=', result);                 
+                if(result && !result.error){
+                    res(result);
+                }else{
+                    rej(result);
+                }                
+            });            
+
+        });
+    },
+
+    send_async_old:function(order, pickupself) {        
+        return new Promise((res,rej)=>{
             
             console.log('order, pickupself  ==== ',order, pickupself)
 
@@ -46,7 +86,7 @@ export const THE_ORDER_SENDER = {
             });            
 
         });
-    },
+    },    
 
 /**
  * -------------------------------
