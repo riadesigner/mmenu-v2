@@ -1,7 +1,7 @@
 <?php
 define("BASEPATH",__file__);
-
 ini_set('display_errors', 0);
+ini_set('session.cookie_samesite', 'None');
               
 require_once 'config.php';
 
