@@ -23,6 +23,8 @@ SQL::connect();
 // SEND IIKO ORDER FOR DELIVERY
 // --------------------------------
 
+glog(print_r($_POST,1));
+
 if(!isset($_POST['id_cafe']) || empty($_POST['id_cafe']) ) __errorjsonp("--it needs to know id_cafe");
 if(!isset($_POST['order'])) __errorjsonp("--empty order");
 if(!isset($_POST['pickupself'])) __errorjsonp("--need to set pickupself option");

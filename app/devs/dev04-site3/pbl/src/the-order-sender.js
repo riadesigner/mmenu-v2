@@ -25,6 +25,8 @@ export const THE_ORDER_SENDER = {
                 pickupself
             };
 
+            console.log('data=',data)
+
             const AJAX = $.ajax({
                 url: url+"?callback=?",
                 jsonpCallback:GLB.CALLBACK_RANDOM.get(),                
