@@ -231,7 +231,7 @@ export const IIKO_ITEM_MODIFIERS = {
 			build_groups:(index, g)=>{
 
 				if(!g.items || !g.items.length ) return null;								
-				if(!g.virtualSizes || !g.virtualSizes.length) return null;				
+				// if(!g.virtualSizes || !g.virtualSizes.length) return null;				
 
 				let groupId = g['modifierGroupId']??"";
 				let groupName = g['name']??"–";	
