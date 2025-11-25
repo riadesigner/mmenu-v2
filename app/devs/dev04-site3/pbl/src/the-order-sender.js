@@ -23,9 +23,6 @@ export const THE_ORDER_SENDER = {
                 pickupself
             };
 
-            console.log('url = ', url);
-            console.log('data=',data)
-
             const AJAX = $.ajax({
                 url: url,                
                 dataType: "json",
