@@ -67,7 +67,7 @@ $.extend({
 				var _this=this;
 								
 				this.$parent_old.html("");				
-				this.$parent = $('<div></div>').addClass(this.$parent_old.attr('class'));
+				this.$parent = $('<div name="scrollbox"></div>').addClass(this.$parent_old.attr('class'));
 				var $p = this.$parent_old.parent();
 				$p.append(this.$parent);
 				this.$parent_old.html("").remove();
@@ -245,8 +245,8 @@ $.extend({
 		                	_this.START_Y = et.pageY;
 		                	_this.CURR_Y = et.pageY;		                	
 		                	$(_this.ROWS_LINKS[_this.CURRENT_DRAG])
-		                	.addClass(_this.CLASS_NAME+'__row-now-dragging');							
-		                	// event.originalEvent.cancelable && event.preventDefault();
+		                	.addClass(_this.CLASS_NAME+'__row-now-dragging');
+							_this.$parent.css({overflow:'hidden'});
 						},400);
 					},
 					touchMove:function(event) {
@@ -273,7 +273,7 @@ $.extend({
 						_this.TMR_LONG_PRESS && clearTimeout(_this.TMR_LONG_PRESS);	
 						if(_this.ROW_HAVE_TOCHED===null) return false;
 						if(_this.START_DRAG){
-							_this.parking_current();
+							_this.parking_current();							
 						}else{	
 							 if(!_this.TOUCH_MOVED){
 							 	_this.rowCloseAll();
@@ -460,7 +460,8 @@ $.extend({
 
 						console.log("reorder")
 						_this.reorder_all();
-					}
+					}					
+					_this.$parent.css({overflowY:'auto'});
 				},s);
 			},
 			reorder_all:function() {		
