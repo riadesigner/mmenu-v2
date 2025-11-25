@@ -228,8 +228,8 @@ export var VIEW_EDIT_MENU = {
 			});
 		});
 		
-		this.$btn_cat_hide.on('touchend',(e)=>{			
-			this.toggle_visibility();			
+		this.$btn_cat_hide.on('touchend',(e)=>{	
+			!_this.VIEW_SCROLLED && this.toggle_visibility();
 			e.originalEvent.cancelable && e.preventDefault();
 		});	
 
