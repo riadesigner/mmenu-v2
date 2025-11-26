@@ -30,19 +30,24 @@ export var IIKO_STREET_LOADER = {
             const data = {id_cafe,token};
 
             const AJAX = $.ajax({
-                url: url+"?callback=?",
-                data:data,
-                dataType: "jsonp",
+                url: url,
+                dataType: "json",
                 method:"POST",
-                error:(result)=> {
-                    rej(result);
+                data:data,
+                xhrFields: {
+                    withCredentials: true  // Для отправки cookies при CORS
+                },                          
+                error:(err)=> {
+                    console.log('[1] error loading streets = ', err);
+                    rej(err);
                 }
             });
             AJAX.then((result)=>{                        
                 if(result && !result.error){
                     res(result);
                 }else{
-                    rej(result);
+                    console.log('[2] error loading streets = ', result.error);
+                    rej(result.error);
                 }                
             });            
 
@@ -65,11 +70,14 @@ export var IIKO_STREET_LOADER = {
             console.log('data----,url',data, url)
 
             // load new token otherwise
-            const AJAX = $.ajax({
-                url: url+"?callback=?",
-                data:data,
-                dataType: "jsonp",
+            const AJAX = $.ajax({    
+                url: url,                            
+                dataType: "json",
                 method:"POST",
+                data:data,
+                xhrFields: {
+                    withCredentials: true  // Для отправки cookies при CORS
+                },                
                 error:(err)=> {
                     rej(err)
                 }

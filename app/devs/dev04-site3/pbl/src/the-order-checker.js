@@ -66,10 +66,10 @@ check_order_status_async:function(short_number, cafe_uniq_name) {
         console.log('check_order_status_async data', data);
 
         const AJAX = $.ajax({
-            url: url,
-            data:data,
+            url: url,            
             dataType: "json",
             method:"POST",
+            data:data,
             xhrFields: {
                 withCredentials: true  // Для отправки cookies при CORS
             },        
