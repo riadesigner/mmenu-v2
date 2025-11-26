@@ -15,6 +15,11 @@ export var VIEW_CHANGE_SUBDOMAIN = {
 		this.$addressPreview =  this.$form.find('.view-change-subdomain__preview'); 
 		this.$allwaysAddressText = this.$form.find('.view-change-subdomain__allways-address_text');		
 
+		this.$inputExternalURL = this.$view.find('input[name=external-url]');
+		this.$externalURLPreview =  this.$form.find('.view-change-subdomain__external-url-preview'); 
+		
+		this.NEED_TO_SAVE = false;
+
 		this.SITE_URL = CFG.base_url;
 		this.USER_EMAIL = CFG.user_email;
 		
@@ -35,9 +40,11 @@ export var VIEW_CHANGE_SUBDOMAIN = {
 		this.load({onReady:function(cafe){
 	
 			if(cafe.subdomain!==GLB.THE_CAFE.get('subdomain')){
-				// subdomain changed
 				GLB.THE_CAFE.set({subdomain:cafe.subdomain});
 			}
+			if(cafe.external_url!==GLB.THE_CAFE.get('external_url')){
+				GLB.THE_CAFE.set({external_url:cafe.external_url});
+			}			
 
 			_this.CAFE = GLB.THE_CAFE.get();
 			_this.reset();
@@ -53,7 +60,8 @@ export var VIEW_CHANGE_SUBDOMAIN = {
 		this._reset();
 		this._need2save(false);
 		this._page_to_top();		
-		this.update_address_preview();
+		this.update_address_preview(this.CAFE?this.CAFE.subdomain:"");
+		this.update_external_url_preview(this.CAFE?this.CAFE.external_url:"");				
 	},
 	update_content:function(){
 
@@ -99,35 +107,53 @@ export var VIEW_CHANGE_SUBDOMAIN = {
 		this.$btnSave.bind('touchend',function(){
 			_this._blur({onBlur:function(){
 
-				if(_this.NEED_TO_SAVE){				
-					!_this.LOADING && _this.save({onReady:function(){					
+				if(_this.NEED_TO_SAVE && !_this.LOADING){
+									
+					const saving_subdomain = _this.$inputSubdomain.val() !=="";
+					saving_subdomain ? 
+					 _this.save({onReady:function(){					
 						setTimeout(function(){
 							_this._go_back();
 						},300);
-					}});	
+					}}):
+					_this.save_external_url_async()
+					.then(()=>{
+						setTimeout(()=>{
+							_this._go_back();
+						},300);						
+					})	
 				};
 
 			}});
 			return false;
 		});
 
-		this.$inputSubdomain.on('keyup',function(e){
-			_this.is_need_to_save();
-			_this.update_address_preview();
+		this.$inputSubdomain.on('keyup',()=>{
+			this.is_need_to_save();
+			this.update_address_preview(this.$inputSubdomain.val());
 		});
+
+		this.$inputExternalURL.on('keyup',()=>{
+			this.is_need_to_save();
+			this.update_external_url_preview(this.$inputExternalURL.val());
+		});
+
 
 	},
 
 	is_need_to_save:function(){
-		this.$inputSubdomain.val() !=="" ? this._need2save(true): this._need2save(false);
+		this.$inputSubdomain.val() !=="" ||  this.$inputExternalURL.val()!=="" ? this._need2save(true): this._need2save(false);
 	},
-	update_address_preview:function(){		
-		// no need to clear this input, because it will be before saving
-		var new_subdomain = this.$inputSubdomain.val(); 
-		new_subdomain = new_subdomain!==""?new_subdomain:"yourname";
-		var str_preview = '<strong>'+new_subdomain+'</strong>.'+CFG.www_url;
+	update_address_preview:function(new_subdomain=""){				
+		const str_preview = `<strong>${new_subdomain||"yourname"}</strong>.${CFG.www_url}`;
 		this.$addressPreview.html(str_preview);			
 	},
+
+	update_external_url_preview:function(url=""){
+		const defaultExternalUrl = this.CAFE?this.CAFE.external_url:""; 		
+		const str_external_url =  `<strong>${url||defaultExternalUrl||"не указан"}</strong>`;
+		this.$externalURLPreview.html(str_external_url);			
+	},	
 
 	is_correct_input:function(new_subdomain){
 
@@ -339,6 +365,58 @@ export var VIEW_CHANGE_SUBDOMAIN = {
 			}
         });
 
+	},
+	save_external_url_async:function(){
+		return new Promise((res, rej)=>{
+
+			const _this = this;
+			const PATH = 'adm/lib/';
+			const url = PATH + 'usr.external_url_update.php';
+
+			var fn = {
+				errMessage:function(){
+					var msg = 'Не удалось обновить внешний адрес. Попробуйте позже или обратитесь к Администратору Сервиса';
+					GLB.VIEWS.modalMessage({
+						title:GLB.LNG.get("lng_error"),
+						message:msg,
+						btn_title:GLB.LNG.get('lng_close')
+					});
+				}				
+			};
+
+			const data = {
+				id_cafe:this.CAFE.id,
+				new_external_url:this.$inputExternalURL.val(),
+			};	
+
+			this._now_loading();
+
+			this.AJAX = $.ajax({
+				url: url,
+				dataType:"json",
+				data:data,
+				method:"POST",
+                xhrFields: {
+                    withCredentials: true  // Для отправки cookies при CORS
+                },				
+				success:function(result) {                     
+					_this._end_loading();
+					if(result && !result.error){
+						res({success:'ok'});
+					}else{
+						fn.errMessage(result.error);
+						rej(result.error);
+					}
+				},
+				error:function(err) {
+					console.log(err);
+					_this._end_loading();
+					fn.errMessage();
+					rej(err);
+				}
+			});
+			
+		})
 	}
 
 };
