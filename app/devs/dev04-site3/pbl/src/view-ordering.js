@@ -228,7 +228,7 @@ export var VIEW_ORDERING = {
 			var $el = $(this);
 			$el.find('input, textarea, select').on('click',function(){				
 				_this.$fields.removeClass('focused');
-				$el.addClass('focused');	
+				$el.addClass('focused');	 
 			});
 		});
 
