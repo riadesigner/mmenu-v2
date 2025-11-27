@@ -225,43 +225,15 @@ export var VIEW_ORDERING = {
 		this._behavior(arrMobileButtons);
 
 		this.$fields.each(function(){
-			var $el = $(this);
-
-			// $el.find('input, textarea, select').on('click',function(){				
-			// 	_this.$fields.removeClass('focused');
-			// 	$el.addClass('focused');	 
-			// });		
-			
-			$el.find('input, textarea, select').each(function() {
-				let $input = $(this);
-				let isProcessing = false;
-				
-				$input.on('click touchstart', function(e){
-					e.stopPropagation();
-					if (!isProcessing) {
-						isProcessing = true;
-						_this.$fields.removeClass('focused');
-						$el.addClass('focused');
-						setTimeout(() => { isProcessing = false; }, 100);
-					}
-				}).on('focus', function(e){
-					e.stopPropagation();
-					if (!isProcessing) {
-						isProcessing = true;
-						
-						// Принудительно убираем фокус с других полей
-						$el.find('input, textarea, select').not(this).blur();
-						_this.$fields.removeClass('focused');
-						$el.addClass('focused');
-						setTimeout(() => { isProcessing = false; }, 150);
-					}
-				}).on('blur', function(){
-					// $el.removeClass(...); // если нужно убрать класс
+			const $el = $(this);
+			$el.find('input, textarea, select').on('click',function(){			
+				$el.is(":focus") && _this.$fields.each(function(){
+					const $inp = (this); 
+					$inp!==$el && $inp.blur();								
 				});
+				_this.$fields.removeClass('focused');
+				$el.addClass('focused');	 
 			});			
-
-
-			
 		});
 	
 
