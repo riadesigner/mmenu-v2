@@ -9,7 +9,7 @@ export var VIEW_CAFE_LINK = {
 		this.$btnBack = this.$footer.find('.back, .close, .cancel');
 		this.$btnGetQRcode = this.$footer.find('.btn-get-qrcode');
 
-		this.$home_menu_link = this.$form.find('.menu-home-link a');		
+		this.$home_menu_links = this.$form.find('.menu-home-links');		
 		this.$qrCode = this.$form.find('.view-cafe-link__qr-code');
 
 		this.USER_EMAIL = CFG.user_email; 
@@ -29,12 +29,18 @@ export var VIEW_CAFE_LINK = {
 		this._update_tabindex();
 		
 		var cafe = GLB.THE_CAFE.get();
-				
-		this.$home_menu_link.html(GLB.THE_CAFE.get_link('name'))
-		.attr({ href : GLB.THE_CAFE.get_link('url') });
+			
+		const arr_links = GLB.THE_CAFE.get_arr_links();
+		console.log('arr_links',arr_links)
 
-		const qrcodeStr = `${cafe.qrcode}?r=${Math.random()}`;
-		
+		for(let i in arr_links){
+			const link = arr_links[i];
+			console.log('link',link);
+			const $link = $(`<small>${link.title}</small><br><a target="_blank" href="${link.url}">${link.name}</a>`);
+			this.$home_menu_links.append($link);
+		}
+
+		const qrcodeStr = `${cafe.qrcode}?r=${Math.random()}`;		
 		this.$qrCode.html(`<img src='${qrcodeStr}'>`);
 
 		var img = new Image();

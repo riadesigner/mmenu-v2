@@ -51,6 +51,39 @@ export var THE_CAFE = {
 		return !prop ? this.CAFE : this.CAFE[prop];
 	},
 
+	get_arr_links:function(){
+		const arr = [];
+		const tech_link =  {
+			type:'tech',
+			title:'технический адрес:',
+			name:this.get_link_tech('name'), 
+			url:this.get_link_tech('url')
+		};
+		arr.push(tech_link);
+		const subdomain = this.get('subdomain');
+		const subdomain_link_url = CFG.http + this.get('subdomain')+ "."+ CFG.www_url;
+		const subdomain_link_name = this.get('subdomain')+ "."+ CFG.www_url;		
+		const subdomain_link = subdomain ? {
+			type:'subdomain',
+			title:'Подтвержденный адрес:',
+			name:subdomain_link_name, 
+			url:subdomain_link_url
+		}: null;
+		subdomain_link && arr.push(subdomain_link);
+		
+		const external_url = this.get('external_url');
+		if(external_url){
+			 const external_link = {
+				type:'external',
+				title:'Внешний адрес:',
+				name:external_url,
+				url:`https://${external_url}`,
+			}
+		arr.push(external_link);
+		}
+		return arr;	
+	},
+
 	get_link:function(param){
 		
 		// return full link or url or name
