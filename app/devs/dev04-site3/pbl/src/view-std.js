@@ -67,7 +67,14 @@ export var VIEW_STD = {
 		// this.$view.find('input, textarea').each(function(i){
 		// 	$(this).attr('tabindex',i);
 		// });
-		this.$view.find('input, textarea').removeAttr('tabindex');
+		// this.$view.find('input, textarea').removeAttr('tabindex');
+		this.$view.find('input, textarea').attr('tabindex', '-1');
+		this.$view.find('input, textarea').css({
+			'-webkit-tap-highlight-color': 'transparent',
+			'-webkit-user-select': 'text',
+			'user-select': 'text',
+			'font-size': '16px'
+		});		
 	},	
     _update_lng:function($el){
     	var $el = $el||this._get_view();

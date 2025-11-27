@@ -226,7 +226,9 @@ export var VIEW_ORDERING = {
 
 		this.$fields.each(function(){
 			const $el = $(this);
-			$el.find('input, textarea, select').on('click',function(){			
+			$el.find('input, textarea, select').on('click',function(e){		
+				e.stopPropagation();
+				e.preventDefault();					
 				_this.$fields.removeClass('focused');
 				$el.addClass('focused');	 
 			});
