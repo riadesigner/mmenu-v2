@@ -251,8 +251,8 @@ export var VIEW_ORDERING = {
 						
 						// Принудительно убираем фокус с других полей
 						$el.find('input, textarea, select').not(this).blur();
-						
-						$el.addClass(...);
+						_this.$fields.removeClass('focused');
+						$el.addClass('focused');
 						setTimeout(() => { isProcessing = false; }, 150);
 					}
 				}).on('blur', function(){
