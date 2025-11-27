@@ -227,15 +227,11 @@ export var VIEW_ORDERING = {
 		this.$fields.each(function(){
 			const $el = $(this);
 			$el.find('input, textarea, select').on('click',function(){			
-				$el.is(":focus") && _this.$fields.each(function(){
-					const $inp = (this); 
-					$inp!==$el && $inp.blur();								
-				});
 				_this.$fields.removeClass('focused');
 				$el.addClass('focused');	 
-			});			
-		});
-	
+			});
+			
+		});	
 
 		var fn = {
 			go_back:()=> {				

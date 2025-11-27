@@ -63,10 +63,11 @@ export var VIEW_STD = {
 		this.$view.removeClass(this.CN+'content-hidden');
 	},	
 	_update_tabindex:function(){
-		GLB.TABINDEX.clear();
-		this.$view.find('input, textarea').each(function(i){
-			$(this).attr('tabindex',i);
-		});
+		// GLB.TABINDEX.clear();
+		// this.$view.find('input, textarea').each(function(i){
+		// 	$(this).attr('tabindex',i);
+		// });
+		this.$view.find('input, textarea').removeAttr('tabindex');
 	},	
     _update_lng:function($el){
     	var $el = $el||this._get_view();
