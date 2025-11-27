@@ -270,7 +270,15 @@
 						<div class="mm2-ordering-field-name" lang="lng_your_phone">My phone:</div>
 						<div class="mm2-ordering-field">
 							<div class="mm2-ordering-field__container">
-								<input maxlength="20" class="mm2-error" name="u_phone" type="text" placeholder="+7 ...">
+								<input 
+									maxlength="20" 
+									class="mm2-error" 
+									name="u_phone" 
+									type="text" 
+									placeholder="+7 ..."
+									autocomplete="off"
+									inputmode="text"
+									>
 							</div>
 						</div>
 					</div>
@@ -286,8 +294,13 @@
 							<div class="mm2-ordering-field-name" lang="lng_where_to_deliver">Where to deliver:</div>
 							<div class="mm2-ordering-field">
 								<div class="mm2-ordering-field__container">
-									<textarea maxlength="250" class="mm2-error mm2-ordering-address" 
-									name="u_address"></textarea>
+									<textarea 
+									maxlength="250" 
+									class="mm2-error mm2-ordering-address" 
+									name="u_address"
+									autocomplete="off"
+									inputmode="text"
+									></textarea>
 								</div>
 							</div>		
 						</div>				
@@ -300,7 +313,14 @@
 								<div class="mm2-ordering-field__inline">
 									<div class="mm2-ordering-field__label-left mm2-w15">Ул.:</div>
 									<div class="mm2-ordering-field__container mm2-w85 ui-widget">
-										<input maxlength="60" class="mm2-streets mm2-error" name="u_street" type="text">
+										<input 
+											maxlength="60" 
+											class="mm2-streets mm2-error" 
+											name="u_street" 
+											type="text"
+											autocomplete="off"
+											inputmode="text"
+											>
 									</div>									
 								</div>								
 								<hr class="mm2-opacity-line">
@@ -385,7 +405,13 @@
 						</div>
 						<div class="mm2-ordering-field">
 							<div class="mm2-ordering-field__container">
-								<textarea maxlength="250" class="mm2-ordering-comment" name="u_comment"></textarea>
+								<textarea 
+									maxlength="250" 
+									class="mm2-ordering-comment" 
+									name="u_comment"
+									autocomplete="off"
+									inputmode="text"
+									></textarea>
 							</div>														
 						</div>		
 					</div>
