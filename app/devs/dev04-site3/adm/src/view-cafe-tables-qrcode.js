@@ -33,7 +33,7 @@ export var VIEW_CAFE_TABLES_QRCODE = {
 		const TOTAL_TABLE = GLB.THE_CAFE.get('tables_amount');
 		this.$adm_email.html(CFG.user_email);
 		
-		this.TABLE_MENU_LINK = GLB.THE_CAFE.get_link("url")+'/table/';		
+		this.TABLE_MENU_LINK = GLB.THE_CAFE.get_link().url+'/table/';		
 		const tables_uniq_names = CAFE.tables_uniq_names?JSON.parse(CAFE.tables_uniq_names):[];					
 		this.rebuild_menulinks_list(tables_uniq_names, TOTAL_TABLE);				
 		setTimeout(()=>{ 
@@ -57,7 +57,7 @@ export var VIEW_CAFE_TABLES_QRCODE = {
 	rebuild_menulinks_list:function(tables_uniq_names, total_nums=5){	
 		
 		this.$list_of_tables.html("");
-		this.$list_of_menulinks.html("");						
+		this.$list_of_menulinks.html("");
 		const str = this.build_tables_list(tables_uniq_names, total_nums);					
 		if(str){			
 			let $btns;

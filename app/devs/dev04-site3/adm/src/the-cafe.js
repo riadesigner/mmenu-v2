@@ -51,81 +51,52 @@ export var THE_CAFE = {
 		return !prop ? this.CAFE : this.CAFE[prop];
 	},
 
-	get_arr_links:function(){
-		const arr = [];
-		const tech_link =  {
-			type:'tech',
-			title:'технический адрес:',
-			name:this.get_link_tech('name'), 
-			url:this.get_link_tech('url')
+	get_all_links:function(){
+		const links = {
+			tech:null,
+			with_subdomain:null,
+			external:null,
 		};
-		arr.push(tech_link);
+		const tech_link =  {			
+			title:'технический адрес:',
+			name:CFG.www_url + "/cafe/" + this.get('uniq_name'), 
+			url:CFG.http + CFG.www_url + "/cafe/" + this.get('uniq_name'),
+		};
+		links.tech = tech_link;
 		const subdomain = this.get('subdomain');
 		const subdomain_link_url = CFG.http + this.get('subdomain')+ "."+ CFG.www_url;
 		const subdomain_link_name = this.get('subdomain')+ "."+ CFG.www_url;		
 		const subdomain_link = subdomain ? {
-			type:'subdomain',
 			title:'Подтвержденный адрес:',
 			name:subdomain_link_name, 
 			url:subdomain_link_url
 		}: null;
-		subdomain_link && arr.push(subdomain_link);
+		if(subdomain_link){
+			links.with_subdomain = subdomain_link;
+		}
 		
 		const external_url = this.get('external_url');
 		if(external_url){
-			 const external_link = {
-				type:'external',
+			 const external_link = {				
 				title:'Внешний адрес:',
 				name:external_url,
 				url:`https://${external_url}`,
 			}
-		arr.push(external_link);
+			links.external=external_link;
 		}
-		return arr;	
+		return links;	
 	},
 
 	get_link:function(param){
-		
-		// return full link or url or name
-		// if !subdomain return tech link
-
-		var _this=this;
-		var param = param?param:'full';		
-		var arr_allowed_params = ['url','name','full'];
-		if(arr_allowed_params.indexOf(param) == -1 ) return "";
-		
-		if(!this.get('subdomain')){	return this.get_link_tech(param);}
-
-		var url = CFG.http + _this.get('subdomain')+ "."+ CFG.www_url;
-		var name = _this.get('subdomain')+ "."+ CFG.www_url;
-		var full = '<a href="'+url+'">'+name+'<a>';	
-
-		switch (param){
-			case 'full': return full; break; 			
-			case 'url':	return url; break;
-			case 'name': return name; break;
+		const links = this.get_all_links();
+		if(links.external){
+			return links.external;
+		}else if(links.with_subdomain){
+			return links.with_subdomain;
+		}else{
+			return links.tech;
 		}
 	},
-
-	get_link_tech:function(param){
-
-		// return full tech link or tech url or tech name		
-		
-		var _this=this;
-		var param = param?param:'full';
-		var arr_allowed_params = ['url','name','full'];
-		if(arr_allowed_params.indexOf(param) == -1 ) return "";		
-
-		var tech_url = CFG.http + CFG.www_url + "/cafe/" + _this.get('uniq_name');
-		var tech_name = CFG.www_url + "/cafe/" + _this.get('uniq_name');
-		var tech_full = '<a href="'+tech_url+'">'+tech_name+'<a>';	
-
-		switch (param){
-			case 'url':	return tech_url; break;
-			case 'name': return tech_name; break;
-			case 'full': return tech_full; break;
-		}
-	}
 
 };
 

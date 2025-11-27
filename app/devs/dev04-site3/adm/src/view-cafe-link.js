@@ -30,15 +30,16 @@ export var VIEW_CAFE_LINK = {
 		
 		var cafe = GLB.THE_CAFE.get();
 			
-		const arr_links = GLB.THE_CAFE.get_arr_links();
-		console.log('arr_links',arr_links)
-
-		for(let i in arr_links){
-			const link = arr_links[i];
-			console.log('link',link);
-			const $link = $(`<small>${link.title}</small><br><a target="_blank" href="${link.url}">${link.name}</a>`);
-			this.$home_menu_links.append($link);
-		}
+		const fn = {
+			add_link:(link)=>{				
+				const $link = $(`<small>${link.title}</small><br><a target="_blank" href="${link.url}">${link.name}</a>`);
+				this.$home_menu_links.append($link);			
+			}
+		}		
+		const links = GLB.THE_CAFE.get_all_links();
+		links.external && fn.add_link(links.external);
+		links.with_subdomain && fn.add_link(links.with_subdomain);
+		links.tech && fn.add_link(links.tech);
 
 		const qrcodeStr = `${cafe.qrcode}?r=${Math.random()}`;		
 		this.$qrCode.html(`<img src='${qrcodeStr}'>`);
