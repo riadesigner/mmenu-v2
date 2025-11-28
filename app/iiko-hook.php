@@ -2,20 +2,19 @@
 
 define("BASEPATH",__file__);
 require_once 'config.php';
-require_once WORK_DIR.APP_DIR.'core/common.php';
+require_once 'vendor/autoload.php';
+
 require_once WORK_DIR.APP_DIR.'core/class.iiko_hook.php';
 
-
-$data = json_decode(file_get_contents('php://input'), true);
-
-if($data){
-    $IikoHook = new Iiko_hook($data);
-    $IikoHook->parse();
-    echo "ok";
-}else{
-    die("no data");
+$data = file_get_contents('php://input');
+if(!$data){
+    echo "no data";
+    exit();
 }
 
+$decoded = json_decode($data, true);
+$IikoHook = new Iiko_hook($decoded);
+$IikoHook->parse();
 
 
 

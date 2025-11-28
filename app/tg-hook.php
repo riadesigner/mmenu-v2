@@ -1,7 +1,6 @@
 <?php
 
 define("BASEPATH",__file__);
-
 require_once 'config.php';
 require_once 'vendor/autoload.php';
 
