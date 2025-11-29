@@ -9,6 +9,7 @@ export var VIEW_IIKO_WEB_HOOKS = {
 		this.$btnBack = this.$footer.find('.back, .close, .cancel');
 		this.$btnSave = this.$view.find('.save');
 				
+		this.$previewApiLoginName = this.$form.find('.iiko-api-login-name span');
 		this.$previewIikoWebHook = this.$form.find('.iiko-web-hook_preview');
 		this.$inputNewWebHook = this.$form.find('input[name=new-iiko-web-hook]');
 
@@ -28,8 +29,9 @@ export var VIEW_IIKO_WEB_HOOKS = {
 		this._update_tabindex();
 		
 		// SHOW CURRENT IIKO WEB HOOK
-		this.read_iiko_web_hook({onReady:(iiko_web_hook)=>{
-			this.show_iiko_web_hook(iiko_web_hook);
+		this.read_iiko_web_hook({onReady:(webHooksUri, apiLoginName)=>{
+			this.show_iiko_web_hook(webHooksUri, apiLoginName);
+			this._end_loading();
 		}});
 		
 		setTimeout(()=>{							
@@ -38,20 +40,52 @@ export var VIEW_IIKO_WEB_HOOKS = {
 		
 	},
 
-	show_iiko_web_hook:function(webhook){
-		this.$previewIikoWebHook.html(webhook);
+	show_iiko_web_hook:function(webHooksUri, apiLoginName){
+		this.$previewApiLoginName.html(apiLoginName);
+		this.$previewIikoWebHook.html(`<a href="#" target="_blank">${webHooksUri}</a>`);
 	},
 
 	read_iiko_web_hook:function(opt){
-		const webhook = '123';
-		opt && opt.onReady && opt.onReady(webhook);
+
+		this._now_loading();
+
+		let PATH = 'adm/lib/iiko/';
+		let url = PATH + 'lib.iiko_get_webhook_url.php';
+	
+		var data = {
+			id_cafe:GLB.THE_CAFE.get().id,
+		};     		
+		this.AJAX = $.ajax({
+			url:url,
+			dataType:"json",
+			data:data,
+			method:"POST",
+			xhrFields: {
+				withCredentials: true  // Для отправки cookies при CORS
+			},			
+			success:(result)=> {                    
+				console.log('result',result)
+				if(result && !result.error){                                              					
+					const {apiLoginName, webHooksUri} = result.webHooks;
+					console.log(apiLoginName, webHooksUri)
+					opt && opt.onReady && opt.onReady(webHooksUri, apiLoginName);
+				}else{
+					this.show_modal_error(result.error);					
+					this._end_loading();
+				}				
+			},
+			error:(result)=> {
+				console.log('err result',result)
+				this.show_modal_error();
+				this._end_loading();
+			}
+		});
 	},
 		
 	check_if_need2save:function() {
 		
-		let need2save = false;
+		let need2save = true;
 		
-	
 		// SUMMARY		
 		this._need2save(need2save);
 		return need2save;
