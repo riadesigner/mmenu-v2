@@ -16,31 +16,12 @@ require_once WORK_DIR.APP_DIR.'core/class.iiko_params_reader.php';
 
 require_once WORK_DIR.APP_DIR.'pbl/lib/pbl.class.order_parser.php';
 
-
 session_start();
 SQL::connect();
 
 // --------------------------------
 // SEND ORDER TO TABLE 
 // --------------------------------
-
-// glog("============= SEND ORDER TO TABLE _POST ============ ".print_r($_POST,1));
-
-// $path = $CFG->dirroot.$CFG->log_path.'/post_debug.log';		
-
-// Временная отладка
-// file_put_contents(
-//     $path,
-//     "=== HEADERS ===\n" . 
-//     print_r(getallheaders(), true) . 
-//     "\n=== POST ===\n" . 
-//     print_r($_POST, true) . 
-//     "\n=== INPUT ===\n" . 
-//     file_get_contents('php://input') . 
-//     "\n\n",
-//     FILE_APPEND
-// );
-
 
 if(!isset($_POST['id_cafe']) || empty($_POST['id_cafe']) ) __errorjson("--it needs to know id_cafe");
 if(!isset($_POST['order'])) __errorjson("--empty order");
@@ -61,7 +42,6 @@ define('PENDING_MODE', (int) $cafe->order_way ); // int
 define("ORDER_TARGET", Order_sender::ORDER_TABLE);
 define('IIKO_MODE', !empty($cafe->iiko_api_key)); // bool
 define('NOMENCLATURE_MODE', (int) $IIKO_PARAMS->nomenclature_mode ); // int)
-
 
 $params = [
 	"order_data"=>$order_data,
@@ -95,7 +75,7 @@ if(IIKO_MODE){
 	$ARR_ORDER_FOR_IIKO = "";
 
 	try{		
-		$ARR_ORDER_FOR_IIKO = $Iiko_order->prepare_order_for_table( $table_number, $order_items );
+		$ARR_ORDER_FOR_IIKO = $Iiko_order->prepare_order_for_table( $order_items, $table_number );
 		// glog("================================");
 		// glog("ARR_ORDER_FOR_IIKO dump: ".capture_var_dump($ARR_ORDER_FOR_IIKO));
 		glog("================================");

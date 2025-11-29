@@ -18,11 +18,12 @@ class Iiko_order{
 	}
 
 	/**
-	 * BUILDING ORDER ARRAY FOR SENDING TO IIKO
+	 * BUILDING ORDER ARRAY FOR SENDING TO IIKO (FOR TABLE)
 	 * @param array $order_rows;
+	 * @param int $table_number;
 	 * @return array;
 	 */
-	public function prepare_order_for_table(int $table_number, array $order_rows): array{
+	public function prepare_order_for_table(array $order_rows, int $table_number): array{
 
 		if((int) $this->iiko_params->nomenclature_mode === 1){
 			$menu_id = null;
@@ -56,6 +57,44 @@ class Iiko_order{
 
 		return $order;
 	}
+
+	/**
+	 * BUILDING ORDER ARRAY FOR SENDING TO IIKO (FOR DELIVERY)
+	 * @param array $order_rows;
+	 * @param bool $pickupself_mode;
+	 * @return array;
+	 */
+	public function prepare_order_for_delivery(array $order_rows, bool $pickupself_mode = true): array{
+
+		if((int) $this->iiko_params->nomenclature_mode === 1){
+			$menu_id = null;
+		}else{
+			$menu_id = (string) $this->iiko_params->current_extmenu_id;
+		}		
+
+		$order_items = $this->prepare_items($order_rows);		
+		// $order_type_id = $this->get_id_for_tables_type_order();
+
+		// $order = [
+		// 	"id"=>"",
+		// 	"externalNumber"=>"",
+		// 	"tableIds"=>[$table_id],
+		// 	"customer"=>"",
+		// 	"phone"=>"",
+		// 	"guests"=>"",
+		// 	"tabName"=>"",
+		// 	"menuId"=>$menu_id,
+		// 	"items"=>$order_items,
+		// 	"combos"=>"",
+		// 	"payments"=>"",
+		// 	"tips"=>"",
+		// 	"orderTypeId"=>$order_type_id,
+		// 	"chequeAdditionalInfo"=> "",
+		// ];
+
+		// return $order;
+		return [];
+	}	
 
 	// ---------------------------------------------------
 	// extract sizes to modifiers of size (like pizzaiolo)
