@@ -21,6 +21,7 @@ export var VIEW_CUSTOMIZE_ALL = {
 		this.$btnChangeSubdomain = this.$form.find('.btn-change-subdomain');
 		this.$btnAddIiko = this.$form.find('.btn-add-iiko');				
 		this.$btnIikoCustomization = this.$form.find('.btn-iiko-customization');				
+		this.$btnIikoWebHooks = this.$form.find('.btn-iiko-web-hooks');				
 		this.$btnIikoModifDict = this.$form.find('.btn-iiko-modifiers-dictionary');		
 		
 		this.$btnAccountExit = this.$form.find('.btn-account-exit');
@@ -216,6 +217,14 @@ export var VIEW_CUSTOMIZE_ALL = {
 			if(!_this.VIEW_SCROLLED){				
 			GLB.VIEW_IIKO_CUSTOMIZATION.update();
 			GLB.VIEWS.setCurrent(GLB.VIEW_IIKO_CUSTOMIZATION.name);
+			};
+			e.originalEvent.cancelable && e.preventDefault();
+		});	
+		
+		this.$btnIikoWebHooks.on('touchend',function(e){			
+			if(!_this.VIEW_SCROLLED){				
+			GLB.VIEW_IIKO_WEB_HOOKS.update();
+			GLB.VIEWS.setCurrent(GLB.VIEW_IIKO_WEB_HOOKS.name);
 			};
 			e.originalEvent.cancelable && e.preventDefault();
 		});			

@@ -35,6 +35,7 @@ import {VIEW_CHANGE_PASSWORD} from './view-change-password.js';
 import {VIEW_CHANGE_SUBDOMAIN} from './view-change-subdomain.js';
 import {VIEW_IIKO_ADDING_API_KEY} from './view-iiko-adding-api-key.js';
 import {VIEW_IIKO_CUSTOMIZATION} from './view-iiko-customization.js';
+import {VIEW_IIKO_WEB_HOOKS} from './view-iiko-web-hooks.js';
 import {VIEW_IIKO_MODIF_DICTIONARY} from './view-iiko-modif-dictionary.js';
 import {VIEW_CAFE_TABLES_QRCODE} from './view-cafe-tables-qrcode.js';
 
@@ -84,6 +85,7 @@ GLB.VIEW_CHANGE_PASSWORD = $.extend( VIEW_CHANGE_PASSWORD, VIEW_STD);
 GLB.VIEW_CHANGE_SUBDOMAIN = $.extend( VIEW_CHANGE_SUBDOMAIN, VIEW_STD);
 GLB.VIEW_IIKO_ADDING_API_KEY = $.extend( VIEW_IIKO_ADDING_API_KEY, VIEW_STD);
 GLB.VIEW_IIKO_CUSTOMIZATION = $.extend( VIEW_IIKO_CUSTOMIZATION, VIEW_STD);
+GLB.VIEW_IIKO_WEB_HOOKS = $.extend( VIEW_IIKO_WEB_HOOKS, VIEW_STD);
 GLB.VIEW_IIKO_MODIF_DICTIONARY = $.extend( VIEW_IIKO_MODIF_DICTIONARY, VIEW_STD);
 GLB.VIEW_CAFE_TABLES_QRCODE = $.extend( VIEW_CAFE_TABLES_QRCODE, VIEW_STD);
 
@@ -194,6 +196,14 @@ export default function(){
 		VIEW_IIKO_CUSTOMIZATION.init({
 		name:"view-iiko-customization",
 		template:"#templates .view-iiko-customization",
+		anim:'animLeft'
+	}));	
+	
+
+	VIEWS.addView(
+		VIEW_IIKO_WEB_HOOKS.init({
+		name:"view-iiko-web-hooks",
+		template:"#templates .view-iiko-web-hooks",
 		anim:'animLeft'
 	}));		
 

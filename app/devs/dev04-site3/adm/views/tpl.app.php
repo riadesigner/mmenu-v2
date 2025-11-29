@@ -845,6 +845,8 @@ App&&App();
 					<div class="iiko-mode-only">
 						<div class="std-form__section-description">Здесь вы можете изменить настройки iiko</div>					
 						<div class="std-form__wide-button bright-btn btn-iiko-customization">Управляется iiko</div>
+						<div class="std-form__section-description">Здесь вы можете настройить веб-хуки для получения ответов из iiko</div>
+						<div class="std-form__wide-button btn-iiko-web-hooks">Iiko web-hooks</div>											
 						<div class="std-form__section-description">Здесь вы можете добавить названия модификаторов на других языках</div>
 						<div class="std-form__wide-button btn-iiko-modifiers-dictionary">Словарь модификаторов</div>					
 					</div>						
@@ -901,6 +903,41 @@ App&&App();
 			<div class="button-section"></div>
 		</div>
 	</div>
+
+<!-- - - - - - - - VIEW UPDATING IIKO WEB HOOK - - - - - - - -  -->
+
+	<div class="app-view view-iiko-web-hooks">
+		<div class="app-view-header">
+
+			<div class="view-header-title">
+				<div class="view-header-title_icon ico-adm-customizing"></div>
+				<div class="view-header-title_text">Настройка Iiko Web Hooks</div>
+			</div>
+
+			<div class="view-header-buttons">
+				<div class="view-header-buttons__button view-header-buttons__button_help"></div>
+			</div>
+		</div>
+		<div class="app-view-page">
+			<div class="app-view-page-container overflow-y">
+				<div class="std-form">
+					
+					<div class="std-form__section-description" >Введите новый адрес iiko web hook</div>
+					<input class="std-form__input" name="new-iiko-web-hook" type="text" maxlength="555" placeholder="">
+					
+					<div>....</div>
+
+				</div>
+			</div>
+		</div>
+		<div class="app-view-loader"><span></span></div>
+		<div class="app-view-footer">
+			<div class="button-section"><div class="button close"><span lang="lng_close"><!-- Закрыть --></span></div></div>
+			<div class="button-section"></div>
+			<div class="button-section"><div class="button save"><span lang="lng_save"><!-- Сохранить --></span></div></div>
+		</div>
+	</div>
+
 
 <!-- - - - - - - - VIEW CUSTOMIZING CAFE - - - - - - - -  -->
 
