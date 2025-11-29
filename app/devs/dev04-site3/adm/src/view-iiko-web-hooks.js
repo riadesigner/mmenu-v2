@@ -42,7 +42,7 @@ export var VIEW_IIKO_WEB_HOOKS = {
 
 	show_iiko_web_hook:function(webHooksUri, apiLoginName){
 		this.$previewApiLoginName.html(apiLoginName);
-		this.$previewIikoWebHook.html(`<a href="#" target="_blank">${webHooksUri}</a>`);
+		this.$previewIikoWebHook.html(`<a href="${webHooksUri}" target="_blank">${webHooksUri}</a>`);
 	},
 
 	read_iiko_web_hook:function(opt){
@@ -50,12 +50,12 @@ export var VIEW_IIKO_WEB_HOOKS = {
 		this._now_loading();
 
 		let PATH = 'adm/lib/iiko/';
-		let url = PATH + 'lib.iiko_get_webhook_url.php';
+		let url = PATH + 'lib.iiko_get_webhook_uri.php';
 	
 		var data = {
 			id_cafe:GLB.THE_CAFE.get().id,
 		};     		
-		this.AJAX = $.ajax({
+		this.AJAX_GETTING_WEBHOOKS = $.ajax({
 			url:url,
 			dataType:"json",
 			data:data,
@@ -82,11 +82,8 @@ export var VIEW_IIKO_WEB_HOOKS = {
 		});
 	},
 		
-	check_if_need2save:function() {
-		
-		let need2save = true;
-		
-		// SUMMARY		
+	check_if_need2save:function() {		
+		const need2save = this.$inputNewWebHook.val().trim()!=="";
 		this._need2save(need2save);
 		return need2save;
 	},
@@ -94,7 +91,7 @@ export var VIEW_IIKO_WEB_HOOKS = {
 		this._reset();
 		this._need2save(false);
 		this._page_to_top();		
-		// this.$inputDelKey.val("");		
+		this.$inputNewWebHook.val("");		
 	},
 	
 	behavior:function()	{
@@ -126,23 +123,56 @@ export var VIEW_IIKO_WEB_HOOKS = {
  
 	save:function() {
 
-		// // CHECK SPECIAL WORD
-		// if(this.$inputDelKey.val()=="delete"){
-		// 	this.remove_iiko_login()	
-		// }else{
-		// 	this.save_current_params_asynq()
-		// 	.then((vars)=>{
-		// 		this.show_all_updated_and_reload();
-		// 	})
-		// 	.catch((vars)=>{
-		// 		console.log('error',vars);
-		// 		this.show_modal_error();
-		// 		setTimeout(()=>{ this._end_loading();},300);
-		// 	})
-		// };
+		const newWebHooksUri = this.$inputNewWebHook.val().trim();
+		this.save_new_webhooks_uri_asynq(newWebHooksUri)
+		.then((vars)=>{
+			this.show_modal_ok("Новый uri для webhook сохранен",{onClose:()=>{
+				setTimeout(()=>{
+					this._go_back();
+				},0);				
+			}});
+		})
+		.catch((vars)=>{
+			console.log('error',vars);
+			this.show_modal_error();
+			setTimeout(()=>{ this._end_loading();},300);
+		});
 		
 	},
+	save_new_webhooks_uri_asynq:function(webHooksUri){
+		return new Promise((res,rej)=>{
 
+			this._now_loading();
+
+			let PATH = 'adm/lib/iiko/';
+			let url = PATH + 'lib.iiko_update_webhook_uri.php';
+		
+			var data = {
+				id_cafe:GLB.THE_CAFE.get().id,
+				webHooksUri,
+			};     		
+			this.AJAX_UPDATING_WEBHOOKS = $.ajax({
+				url:url,
+				dataType:"json",
+				data:data,
+				method:"POST",
+				xhrFields: {
+					withCredentials: true  // Для отправки cookies при CORS
+				},			
+				success:(result)=> {                    
+					console.log('result',result)
+					if(result && !result.error){
+						res(result);
+					}else{
+						rej(result);
+					}				
+				},
+				error:(result)=> {
+					rej(result);
+				}
+			})
+		})
+	},
 	show_modal_error:function(msg=""){
 		const strMsg = msg!=="" ? msg : "<p>Что-то пошло не так. Попробуйте позже или обратитесь к разработчику Сервиса</p>"; 
 		GLB.VIEWS.modalMessage({
