@@ -13,6 +13,7 @@ export var VIEW_IIKO_CUSTOMIZATION = {
 		this.$btnIikoKey = this.$form.find('button[name=iiko-api-key]');
 		this.$btnIikoVarsUpdate = this.$form.find('.btn-iiko-vars-update');
 		this.btnDownloadNomenclature = this.$form.find('.btn-iiko-load-nomenclature');
+		this.$btnTerminalGroupWakeUp = this.$form.find('.btn-iiko-terminal-wake-up');
 
 		this.$linkIikoQRCodeTablesHelp = this.$form.find('a[name=link-iiko-qrcode-tables]');
 
@@ -26,8 +27,8 @@ export var VIEW_IIKO_CUSTOMIZATION = {
 		this.$tables_list = this.$form.find('.iiko-table-sections');
 		this.$current_organization_title = this.$form.find('.iiko-current-org-title span');		
 		this.$terminal_status_info_name = this.$form.find('.iiko-terminal-status-info-name');
-		this.$terminal_status_info = this.$form.find('.iiko-terminal-status-info');
-		
+		this.$terminal_status_info = this.$form.find('.iiko-terminal-status-info');		
+
 		this.SITE_URL = CFG.base_url;
 		this.USER_EMAIL = CFG.user_email;
 		this.DATA = {};
@@ -83,7 +84,9 @@ export var VIEW_IIKO_CUSTOMIZATION = {
 		let current_terminal_group_name = this.get_terminal_group_name(this.CURRENT_TERMINAL_GROUP_ID, this.DATA.terminal_groups);
 		let terminal_groups_status = iiko_params['current_terminal_group_status']||"Не определен";
 		terminal_groups_status === 1||"true"||true ? terminal_groups_status = "Активен" : terminal_groups_status = "Не активен";
-		this.update_terminal_status_info(current_terminal_group_name, terminal_groups_status);					
+		this.update_terminal_status_info(current_terminal_group_name, terminal_groups_status);
+		
+		//xxx
 
 		// SHOW TABLES INFO
 		this.DATA.table_sections = iiko_params['tables']?JSON.parse(iiko_params['tables']):[];
@@ -207,6 +210,15 @@ export var VIEW_IIKO_CUSTOMIZATION = {
 			e.originalEvent.cancelable && e.preventDefault();
 		});
 
+		this.$btnTerminalGroupWakeUp.bind('touchend',(e)=>{
+			this._blur({onBlur:()=>{
+				if(!this.LOADING && !_this.VIEW_SCROLLED){
+					this.ask_to_terminal_wakeup();
+				}
+			}});			
+			e.originalEvent.cancelable && e.preventDefault();
+		});
+
 		this.btnDownloadNomenclature.bind('touchend',(e)=>{
 			this._blur({onBlur:()=>{
 				if(!this.LOADING && !_this.VIEW_SCROLLED){
@@ -252,9 +264,21 @@ export var VIEW_IIKO_CUSTOMIZATION = {
 				}
 			}});			
 			e.originalEvent.cancelable && e.preventDefault();
-		});			
-
+		});		
+		
 	},	
+
+	ask_to_terminal_wakeup:function(){
+		GLB.VIEWS.modalConfirm({
+			title:'Подтвердите',
+			ask:`<p>Разбудить терминал?</p>`,
+			action:()=>{
+				this.wake_up_terminal();
+			},
+			cancel:()=>{},
+			buttons:["Да","Нет"]
+		});
+	},
 
 	update_oldway_menu_section:function(){
 		if(this.NOMENCLATURE_MODE){
@@ -265,6 +289,58 @@ export var VIEW_IIKO_CUSTOMIZATION = {
 			this.$oldway_choosing_section.hide();			
 		}
 	},
+
+	wake_up_terminal:function(){
+		this._now_loading();
+		console.log('пробую разбудить теримниал');
+		this.do_wake_up_terminal_async()
+		.then((vars)=>{
+			console.log(vars, 'okey!')
+			this.show_modal_ok(`Терминал ${vars.terminalId} успешно разбужен!`);
+			this._end_loading();
+		})
+		.catch((error)=>{
+			this.show_modal_error(error);
+			console.log(error)
+			this._end_loading();
+		});		
+	},
+
+	do_wake_up_terminal_async:function(){
+		return new Promise((res,rej)=>{
+			let PATH = 'adm/lib/iiko/';
+			let url = PATH + 'iiko.wakeup_current_terminal.php';
+		
+			let data = {
+				id_cafe:GLB.THE_CAFE.get().id
+			};
+
+			this.AJAX = $.ajax({
+				url: url,
+				dataType:"json",
+				data:data,
+				method:"POST",
+                xhrFields: {
+                    withCredentials: true  // Для отправки cookies при CORS
+                },	
+				success:(result)=> { 
+					console.log('result', result);
+
+					if(result && !result.error){                        
+						res(result); 
+					}else{
+						rej(result.error);
+					}
+				},
+				error:(result)=> {
+					console.log('result2', result);
+					rej("Что-то пошло не так");                
+				}								
+			});
+		})
+
+	},
+
 	iiko_download_nomenclature_async:function(){
 		return new Promise((res, rej) => {
             let PATH = 'adm/lib/iiko/';
