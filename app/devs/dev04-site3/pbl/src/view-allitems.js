@@ -23,7 +23,7 @@ export var VIEW_ALLITEMS = {
 		this.ALL_ITEMS = {}; // saved items data in two way: associative array and array		
 		this.ITEMS = {}; // GLB.ITEM objects
 		this.CURRENT = 0;
-		this.SAFE_NUMBER = 5;
+		this.SAFE_NUMBER = 2;
 
 		this.behavior();
 
