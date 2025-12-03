@@ -200,9 +200,7 @@ export var CHEFSMENU = {
                         VIEW._update_lng();
                     }
                 } 
-            };
-
-            this._attach_skin(label);
+            };            
 
             this._preload_skin_async(label)
             .then(()=>{
@@ -215,16 +213,16 @@ export var CHEFSMENU = {
                 const MENU_MODE = MENU_IIKO_MODE?this.CLASS_IIKO_MODE:this.CLASS_CHEFSMENU_MODE;
                 this.$menu.addClass(MENU_MODE);                
                 GLB.CAFE.has_delivery() && this.$menu.addClass('cafe-has-delivery');
-                // only for menu page                
+                
+                this._attach_skin(label);
+
                 setTimeout(()=> { 
                     this.$body.removeClass(this.CLASS_SHOW_PRELOAD);
-                    this.$menu.addClass(this.CLASS_READY_TO_USE);    
-                    console.log('1111')                
-                },300);
+                    this.$menu.addClass(this.CLASS_READY_TO_USE);                    
+                },100);
                 setTimeout(()=> {
-                    this.end_loading(); 
-                    console.log('2222')                
-                },500);
+                    this.end_loading();                     
+                },300);
 
             })
             .catch((err)=>{
@@ -235,34 +233,27 @@ export var CHEFSMENU = {
     },
     _attach_skin:function(label){
         var G = window[this.G_DATA]; 
-
         var default_label='light-lemon';
-        var label = label?label: default_label;
-        
+        var label = label?label: default_label;                             
         if(G.CURRSKIN.label&&G.CURRSKIN.label===label){                    
             // console.log("SKIN "+label+" already was attached.");
             return;
         }else{
             G.CURRSKIN.link && this.detach_style(G.CURRSKIN.link);                        
-
             var skin = G.ALLSKINS[label]||G.ALLSKINS[default_label];
-            
             var mainStyle = G.MAINSTYLE;
             var msk;
-
             for(var nm in skin){
                 if (skin.hasOwnProperty(nm)) {                            
                     msk = new RegExp("%\\["+nm+"\\]%",'gi');
                     mainStyle = mainStyle.replace(msk,skin[nm]);
                 }
-            };      
-            
+            };                  
             var nm = 'skin-label';
             var msk = new RegExp("%\\["+nm+"\\]%",'gi');
             mainStyle = mainStyle.replace(msk,label);
-
-            G.CURRSKIN.label=label;
-            G.CURRSKIN.link = this.append_style(mainStyle);                        
+            G.CURRSKIN.label=label;            
+            G.CURRSKIN.link = this.append_style(mainStyle);                                    
         }
     },      
 
@@ -335,7 +326,7 @@ export var CHEFSMENU = {
     },
     append_style:function(style) {
         var css = document.createElement('style');
-        css.type = 'text/css';
+        // css.type = 'text/css';
         if(css.styleSheet){
             css.styleSheet.cssText = style;
         }else{
