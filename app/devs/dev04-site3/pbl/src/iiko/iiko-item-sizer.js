@@ -53,7 +53,7 @@ export const IIKO_ITEM_SIZER = {
 			const arrVirtualSizes = s.length ? (s[0].items).map((modif_size)=>{				
 				return {
 					price: parseInt(modif_size.price,10) + basePrice,
-					originalPrice: 0,
+					originalPrice: basePrice,
 					sizeId: modif_size.modifierId,
 					sizeGroupId: s[0].modifierGroupId,					
 					isVirtualSize:true,

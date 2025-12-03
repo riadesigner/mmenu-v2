@@ -196,9 +196,11 @@ export const IIKO_ITEM_MODIFIERS = {
 					if( $(el).hasClass('chosen') && $(el).is(':visible')){
 						const id = $(el).data('modifier-id');
 						const m = this.get_by_id(id);
-						if(m){
+						if(m  ){
 							arr.push(m);
-							total_price += parseInt(m.price, 10);
+							if(parseInt(m.price, 10) > 0){
+								total_price += parseInt(m.price, 10);
+							}							
 						}						 						
 					}
 				});

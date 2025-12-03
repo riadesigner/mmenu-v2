@@ -91,10 +91,6 @@ export var VIEW_CART = {
 
 		const order_items = GLB.CART.get_all();
 
-		console.log('==== order_items ====', order_items);
-		// console.log("PAUSED IN JS, FOR TEST!!");
-		// return false;
-
 		const order = $.extend(order_params,{order_items});		
 		const table_number = GLB.MENU_TABLE_MODE.get_table_number();		
 		

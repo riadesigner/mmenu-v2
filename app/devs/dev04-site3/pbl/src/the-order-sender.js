@@ -58,16 +58,10 @@ export const THE_ORDER_SENDER = {
 
     send_to_table_async: function(order, table_number ) {
          
-         return new Promise((res,rej)=>{            
-            
+         return new Promise((res,rej)=>{      
+                                    
             console.log('order, table_number  ==== ',order, table_number)
-
-            // const fn = {
-            //     dateExport:function(_date){
-            //         return _date.getDate()+"-"+(_date.getMonth()+1)+"-"+_date.getFullYear()+" "+_date.getHours()+":"+_date.getMinutes();
-            //     }
-            // };
-                            
+            
             const PATH = 'pbl/lib/';
             const url = GLB_APP_URL + PATH + 'pbl.send_order_to_table.php';
             const id_cafe = GLB.CAFE.get().id;
