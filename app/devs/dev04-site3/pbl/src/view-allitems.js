@@ -37,15 +37,10 @@ export var VIEW_ALLITEMS = {
 
 		var allitems = this.chefsmenu.get_allitems_for_menu(this.MENU);	
 		
-		//xxx
-		console.log("allitems",allitems);		
-		
 		var fn = {
 			start_items_build:()=>{
-
 				// const sizeInBytes = new TextEncoder().encode(JSON.stringify(this.ALL_ITEMS)).length;
 				// console.log(`Размер объекта this.ALL_ITEMS: ${GLB.CMN.formatBytes(sizeInBytes)} байт`);				
-
 				console.log("start items build")
 				this.$itemsContainer.html("");		
 				this.CURRENT = 0;
@@ -73,7 +68,6 @@ export var VIEW_ALLITEMS = {
 		};       		
 		
 		if(allitems){
-
 			console.log("items already loaded")
 			this.ALL_ITEMS = allitems;			
 			this.TOTAL_ITEMS = this.ALL_ITEMS.arr.length;
@@ -82,42 +76,31 @@ export var VIEW_ALLITEMS = {
 			},600);
 
 		}else{
-			let ITEMS_LOADED_OK = false;
-
-			setTimeout(()=>{
-				
-				console.log("start items loading")
-				this.load_items_async()
-				.then((arr_items)=>{
-
-					ITEMS_LOADED_OK = true;
-					console.log('arr_items loaded',arr_items)
-					
-					this.ALL_ITEMS = fn.arr2obj(arr_items);					
-					this.TOTAL_ITEMS = arr_items.length;							
-					this.chefsmenu.set_allitems_for_menu(this.MENU,this.ALL_ITEMS);					
-					
-					//xxx
-					console.log('created all_items object',this.ALL_ITEMS);					
-					
-					fn.start_items_build();
-				})
-				.catch((err)=>{
-					this._show_modal_win("Ой, не удалось загрузить. Меню будет перезагружено.",{onClose:()=>{
+			let ITEMS_LOADED_OK = false;				
+			console.log("start items loading")
+			this.load_items_async()
+			.then((arr_items)=>{
+				ITEMS_LOADED_OK = true;					
+				this.ALL_ITEMS = fn.arr2obj(arr_items);					
+				this.TOTAL_ITEMS = arr_items.length;							
+				this.chefsmenu.set_allitems_for_menu(this.MENU,this.ALL_ITEMS);										
+				fn.start_items_build();
+			})
+			.catch((err)=>{
+				this._show_modal_win(
+					'Ой, не удалось загрузить. Меню будет перезагружено.',
+					{onClose:()=>{ 
 						window.location.reload();
 					}});
-					console.log("error loading items",err);
-				});
-
-				setTimeout(() => {
-					if (! ITEMS_LOADED_OK) {												
-						this._show_modal_win("Ой, не удалось загрузить. Меню будет перезагружено.",{onClose:()=>{
-							window.location.reload();
-						}});
-					}
-				}, 3000); 
-
-			},400);
+				console.log("error loading items",err);
+			});
+			// setTimeout(() => {
+			// 	if (! ITEMS_LOADED_OK) {												
+			// 		this._show_modal_win("Очень долгая загрузка. Сейчас исправим.",{onClose:()=>{
+			// 			window.location.reload();
+			// 		}});
+			// 	}
+			// }, 8000);		
 		};
 
 	},	
