@@ -173,108 +173,123 @@ export var CHEFSMENU = {
         return window[this.G_DATA].URL_TO_IMAGES;
     },
     show:function(options) {
-        var _this=this;
+        
 
-        window[_this.G_DATA].SHOWED++;        
+        window[this.G_DATA].SHOWED++;        
 
         // prepare to show
         this.CAFE_UNIQ_NAME = options.cafe;
         
-        _this.$body.addClass(_this.CLASS_MENU_IS_SHOWED);
-        _this.$body.addClass(_this.CLASS_SHOW_PRELOAD);        
-        _this.$menu.show();        
+        this.$body.addClass(this.CLASS_MENU_IS_SHOWED);
+        this.$body.addClass(this.CLASS_SHOW_PRELOAD);        
+        this.$menu.show();        
 
-        setTimeout(function() {_this.now_loading();},50);
+        setTimeout(()=> {this.now_loading();},50);      
 
-        var fn = {
-            attachSkin:function(label){
-                              
-                var G = window[_this.G_DATA]; 
-
-                var default_label='light-lemon';
-                var label = label?label: default_label;
-                
-                if(G.CURRSKIN.label&&G.CURRSKIN.label===label){                    
-                    // console.log("SKIN "+label+" already was attached.");
-                    return;
-                }else{
-                    G.CURRSKIN.link && _this.detach_style(G.CURRSKIN.link);                        
-
-                    var skin = G.ALLSKINS[label]||G.ALLSKINS[default_label];
-                    
-                    var mainStyle = G.MAINSTYLE;
-                    var msk;
-
-                    for(var nm in skin){
-                      if (skin.hasOwnProperty(nm)) {                            
-                            msk = new RegExp("%\\["+nm+"\\]%",'gi');
-                            mainStyle = mainStyle.replace(msk,skin[nm]);
-                      }
-                    };      
-                    
-                    var nm = 'skin-label';
-                    var msk = new RegExp("%\\["+nm+"\\]%",'gi');
-                    mainStyle = mainStyle.replace(msk,label);
-
-                    G.CURRSKIN.label=label;
-                    G.CURRSKIN.link = _this.append_style(mainStyle);                        
-                }
-            }
-        };        
-
-        this.load_all_menu({onReady:function(){
+        this.load_all_menu({onReady:()=>{
             
-            var cafe = _this.get_cafe();            
-            var label = cafe.skin_label;
-
-            fn.attachSkin(label);
-            
-            const ALL_VIEWS = GLB.UVIEWS.get();
-            if(cafe.lang.toLowerCase()!==GLB.LNG.get_current()){
-                GLB.LNG.update(cafe.lang);   
-                for(let i in ALL_VIEWS){
-                    if(ALL_VIEWS.hasOwnProperty(i)){
-                        let VIEW = ALL_VIEWS[i].view;                        
-                        VIEW._update_lng();
-                    }
-                } 
-            };
-
-            _this.show_win({skin:cafe.skin ,onReady:function(){
-                            
-                GLB.CAFE.init(cafe);
-                
-                GLB.VIEW_ALLMENU.update(_this.get_allmenu());
-                GLB.CART.init();
-                GLB.UVIEWS.go_first("fast");
-                
-                const MENU_IIKO_MODE = GLB.CAFE.is_iiko_mode();
-                const MENU_MODE = MENU_IIKO_MODE?_this.CLASS_IIKO_MODE:_this.CLASS_CHEFSMENU_MODE;
-                _this.$menu.addClass(MENU_MODE);
-
-                const HAS_DELIVERY = GLB.CAFE.has_delivery();
-                _this.$menu.addClass('cafe-has-delivery');
-
-                // only for menu page                
-                setTimeout(function() { 
-                    _this.$body.removeClass(_this.CLASS_SHOW_PRELOAD);
-                    _this.$menu.addClass(_this.CLASS_READY_TO_USE);                    
-
-                },50);
-
-                setTimeout(function() {
-                    _this.end_loading(); 
-                },300);
-                
-
-            }});
-
-        }}); 
-
-
-
-    },         
+            var cafe = this.get_cafe();                 
+            var label = cafe.skin_label;            
     
+            this._attach_skin(label);
+
+            this._preload_skin_async(label)
+            .then(()=>{
+                this._show_menu(cafe);
+            })
+            .catch((err)=>{
+                console.log(err); 
+            })
+
+        }})
+    },
+    _attach_skin:function(label){
+        var G = window[this.G_DATA]; 
+
+        var default_label='light-lemon';
+        var label = label?label: default_label;
+        
+        if(G.CURRSKIN.label&&G.CURRSKIN.label===label){                    
+            // console.log("SKIN "+label+" already was attached.");
+            return;
+        }else{
+            G.CURRSKIN.link && this.detach_style(G.CURRSKIN.link);                        
+
+            var skin = G.ALLSKINS[label]||G.ALLSKINS[default_label];
+            
+            var mainStyle = G.MAINSTYLE;
+            var msk;
+
+            for(var nm in skin){
+                if (skin.hasOwnProperty(nm)) {                            
+                    msk = new RegExp("%\\["+nm+"\\]%",'gi');
+                    mainStyle = mainStyle.replace(msk,skin[nm]);
+                }
+            };      
+            
+            var nm = 'skin-label';
+            var msk = new RegExp("%\\["+nm+"\\]%",'gi');
+            mainStyle = mainStyle.replace(msk,label);
+
+            G.CURRSKIN.label=label;
+            G.CURRSKIN.link = this.append_style(mainStyle);                        
+        }
+    },      
+    _show_menu:function(cafe){
+        
+        const ALL_VIEWS = GLB.UVIEWS.get();
+        if(cafe.lang.toLowerCase()!==GLB.LNG.get_current()){
+            GLB.LNG.update(cafe.lang);   
+            for(let i in ALL_VIEWS){
+                if(ALL_VIEWS.hasOwnProperty(i)){
+                    let VIEW = ALL_VIEWS[i].view;                        
+                    VIEW._update_lng();
+                }
+            } 
+        };
+
+        this.show_win({skin:cafe.skin ,onReady:()=>{
+                        
+            GLB.CAFE.init(cafe);
+            
+            GLB.VIEW_ALLMENU.update(this.get_allmenu());
+            GLB.CART.init();
+            GLB.UVIEWS.go_first("fast");
+            
+            const MENU_IIKO_MODE = GLB.CAFE.is_iiko_mode();
+            const MENU_MODE = MENU_IIKO_MODE?this.CLASS_IIKO_MODE:this.CLASS_CHEFSMENU_MODE;
+            this.$menu.addClass(MENU_MODE);
+
+            const HAS_DELIVERY = GLB.CAFE.has_delivery();
+            this.$menu.addClass('cafe-has-delivery');
+
+            // only for menu page                
+            setTimeout(()=> { 
+                this.$body.removeClass(this.CLASS_SHOW_PRELOAD);
+                this.$menu.addClass(this.CLASS_READY_TO_USE);                    
+
+            },50);
+
+            setTimeout(()=> {
+                this.end_loading(); 
+            },300);                
+
+        }});
+
+    },
+    _preload_skin_async:function(skin_label){
+        return new Promise((res,rej)=>{
+
+            const iconsUrl = `${GLB_APP_URL}pbl/i/skins-2/${skin_label}/pbl-icons.svg`;            
+            const img = new Image();
+            img.onload = function(){
+                console.log('icons loaded!')
+                res("ok");
+            }
+            img.src = iconsUrl; 
+        })
+    },
+
     show_win:function(opt){            
         opt&&opt.onReady&&opt.onReady();
     },
@@ -349,7 +364,7 @@ export var CHEFSMENU = {
         return new Promise((res,rej)=>{
 
             const _this = this;        
-            const url = GLB_APP_URL+"pbl/css/style.php";
+            const url = GLB_APP_URL+"pbl/css/style.php";            
             
             const fn = {
                 parseStyle:function(response){
@@ -386,53 +401,11 @@ export var CHEFSMENU = {
 
         });
     },     
-    // load_style:function(opt) {
-
-    //     var _this = this;        
-
-    //     var url = GLB_APP_URL+"pbl/css/style.php";
-
-    //     var fn = {
-    //         parseStyle:function(response){
-    //             var skins = {};
-    //             var allSkins = response['skins']['all-skins'];
-    //             for(var i=0;i<allSkins.length;i++){
-    //                 skins[allSkins[i].label] = allSkins[i].params;                    
-    //             };
-    //             window[_this.G_DATA].ALLSKINS = skins;
-    //             window[_this.G_DATA].MAINSTYLE = response['main-style'];
-    //             _this.append_style(response['head-style']); 
-    //             opt && opt.onReady && opt.onReady();
-    //         }
-    //     };
-
-    //      if(window[_this.G_DATA].ALLSKINS!==null){
-    //             opt && opt.onReady && opt.onReady();
-    //      }else{
-    //         // console.log("--load style--")
-    //         this.AJAX = $.ajax({
-    //             url:url+'?callback=?',            
-    //             jsonpCallback:GLB.CALLBACK_RANDOM.get(),
-    //             dataType:"jsonp",
-    //             data:{},
-    //             method:"POST",
-    //             success: function (response){                
-    //                 fn.parseStyle(response);                
-    //             },
-    //             error:function(response){
-    //                 // console.log("err",response);
-    //             }
-    //         });
-    //      }
-
-    // }, 
     load_all_menu:function(opt){        
         var _this=this;
     
-        var url = GLB_APP_URL+"pbl/lib/pbl.get_all_menu.php";
-        
+        var url = GLB_APP_URL+"pbl/lib/pbl.get_all_menu.php";        
         var cafe_uniq_name = this.get_uniq_name();        
-
         var allmenu =  window[_this.G_DATA].ALLMENU[cafe_uniq_name];            
 
         var fn = {
@@ -447,13 +420,9 @@ export var CHEFSMENU = {
         };
 
         var data = {cafe:cafe_uniq_name};
-
         console.log('data', data);
 
-
-        if(!allmenu){ 
-            
-
+        if(!allmenu){         
             this.AJAX = $.ajax({
                 url: url + "?callback=?",
                 jsonpCallback:GLB.CALLBACK_RANDOM.get(),
@@ -490,10 +459,8 @@ export var CHEFSMENU = {
                 }
             });
 
-
-        }else{
-            
-            // console.log("load from cache");
+        }else{            
+            // LOAD FROM CACHE
             opt.onReady && opt.onReady();
 
         };
