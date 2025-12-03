@@ -190,12 +190,42 @@ export var CHEFSMENU = {
             
             var cafe = this.get_cafe();                 
             var label = cafe.skin_label;            
-    
+
+            const ALL_VIEWS = GLB.UVIEWS.get();
+            if(cafe.lang.toLowerCase()!==GLB.LNG.get_current()){
+                GLB.LNG.update(cafe.lang);   
+                for(let i in ALL_VIEWS){
+                    if(ALL_VIEWS.hasOwnProperty(i)){
+                        let VIEW = ALL_VIEWS[i].view;                        
+                        VIEW._update_lng();
+                    }
+                } 
+            };
+
             this._attach_skin(label);
 
             this._preload_skin_async(label)
             .then(()=>{
-                this._show_menu(cafe);
+                // SHOW WIN
+                GLB.CAFE.init(cafe);                    
+                GLB.VIEW_ALLMENU.update(this.get_allmenu());
+                GLB.CART.init();
+                GLB.UVIEWS.go_first("fast");                    
+                const MENU_IIKO_MODE = GLB.CAFE.is_iiko_mode();
+                const MENU_MODE = MENU_IIKO_MODE?this.CLASS_IIKO_MODE:this.CLASS_CHEFSMENU_MODE;
+                this.$menu.addClass(MENU_MODE);                
+                GLB.CAFE.has_delivery() && this.$menu.addClass('cafe-has-delivery');
+                // only for menu page                
+                setTimeout(()=> { 
+                    this.$body.removeClass(this.CLASS_SHOW_PRELOAD);
+                    this.$menu.addClass(this.CLASS_READY_TO_USE);    
+                    console.log('1111')                
+                },300);
+                setTimeout(()=> {
+                    this.end_loading(); 
+                    console.log('2222')                
+                },500);
+
             })
             .catch((err)=>{
                 console.log(err); 
@@ -235,48 +265,7 @@ export var CHEFSMENU = {
             G.CURRSKIN.link = this.append_style(mainStyle);                        
         }
     },      
-    _show_menu:function(cafe){
-        
-        const ALL_VIEWS = GLB.UVIEWS.get();
-        if(cafe.lang.toLowerCase()!==GLB.LNG.get_current()){
-            GLB.LNG.update(cafe.lang);   
-            for(let i in ALL_VIEWS){
-                if(ALL_VIEWS.hasOwnProperty(i)){
-                    let VIEW = ALL_VIEWS[i].view;                        
-                    VIEW._update_lng();
-                }
-            } 
-        };
 
-        this.show_win({skin:cafe.skin ,onReady:()=>{
-                        
-            GLB.CAFE.init(cafe);
-            
-            GLB.VIEW_ALLMENU.update(this.get_allmenu());
-            GLB.CART.init();
-            GLB.UVIEWS.go_first("fast");
-            
-            const MENU_IIKO_MODE = GLB.CAFE.is_iiko_mode();
-            const MENU_MODE = MENU_IIKO_MODE?this.CLASS_IIKO_MODE:this.CLASS_CHEFSMENU_MODE;
-            this.$menu.addClass(MENU_MODE);
-
-            const HAS_DELIVERY = GLB.CAFE.has_delivery();
-            this.$menu.addClass('cafe-has-delivery');
-
-            // only for menu page                
-            setTimeout(()=> { 
-                this.$body.removeClass(this.CLASS_SHOW_PRELOAD);
-                this.$menu.addClass(this.CLASS_READY_TO_USE);                    
-
-            },50);
-
-            setTimeout(()=> {
-                this.end_loading(); 
-            },300);                
-
-        }});
-
-    },
     _preload_skin_async:function(skin_label){
         return new Promise((res,rej)=>{
 
@@ -289,11 +278,6 @@ export var CHEFSMENU = {
             img.src = iconsUrl; 
         })
     },
-
-    show_win:function(opt){            
-        opt&&opt.onReady&&opt.onReady();
-    },
-
     now_loading:function(){
         this.LOADING = true;
         this.$menu && this.$menu.addClass("now-loading");
