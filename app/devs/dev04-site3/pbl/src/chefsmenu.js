@@ -202,6 +202,8 @@ export var CHEFSMENU = {
                 } 
             };            
 
+            this._attach_skin(label);
+            
             this._preload_skin_async(label)
             .then(()=>{
                 // SHOW WIN
@@ -212,9 +214,7 @@ export var CHEFSMENU = {
                 const MENU_IIKO_MODE = GLB.CAFE.is_iiko_mode();
                 const MENU_MODE = MENU_IIKO_MODE?this.CLASS_IIKO_MODE:this.CLASS_CHEFSMENU_MODE;
                 this.$menu.addClass(MENU_MODE);                
-                GLB.CAFE.has_delivery() && this.$menu.addClass('cafe-has-delivery');
-                
-                this._attach_skin(label);
+                GLB.CAFE.has_delivery() && this.$menu.addClass('cafe-has-delivery');                                
 
                 setTimeout(()=> { 
                     this.$body.removeClass(this.CLASS_SHOW_PRELOAD);
