@@ -253,11 +253,13 @@ export var VIEW_ALLITEMS = {
 			var data = {menu:this.MENU.id};			
 
 			this.AJX_ITEMS = $.ajax({
-				url: url + "?callback=?",
-				jsonpCallback:GLB.CALLBACK_RANDOM.get(),
-				dataType: "jsonp",
+				url: url,				
+				dataType: "json",
 				method:"POST",
 				data:data,
+                xhrFields: {
+                    withCredentials: true  // Для отправки cookies при CORS
+                },
 				success: (arr_items)=> {        
 					res(arr_items);
 				},

@@ -399,11 +399,13 @@ export var CHEFSMENU = {
 
         if(!allmenu){         
             this.AJAX = $.ajax({
-                url: url + "?callback=?",
-                jsonpCallback:GLB.CALLBACK_RANDOM.get(),
-                dataType: "jsonp",
+                url: url,
+                dataType: "json",
                 method:"POST",
                 data:data,
+                xhrFields: {
+                    withCredentials: true  // Для отправки cookies при CORS
+                },                
                 success: function (response) {
 
                     if(response.error){
