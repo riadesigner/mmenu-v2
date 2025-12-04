@@ -195,8 +195,10 @@ export const IIKO_ITEM_MODIFIERS = {
 				this.$MODIFIERS_ROWS.each((i,el)=>{
 					if( $(el).hasClass('chosen') && $(el).is(':visible')){
 						const id = $(el).data('modifier-id');
+						const groupId = $(el).data('modifier-group-id');
 						const m = this.get_by_id(id);
-						if(m  ){
+						m.modifierGroupId = groupId || null;
+						if(m){
 							arr.push(m);
 							if(parseInt(m.price, 10) > 0){
 								total_price += parseInt(m.price, 10);
@@ -256,7 +258,7 @@ export const IIKO_ITEM_MODIFIERS = {
 				const mode_radio = radioMode?'mode-radio':'';
 				let m_counter = 0; 
 				for(let m in g.items ){					
-					let modifier = g.items[m];
+					let modifier = g.items[m];					
 					let chosen = '';
 					let chosenByDefault = '';
 					if( parseInt(modifier['restrictions']['byDefault'],10) > 0){
@@ -265,7 +267,11 @@ export const IIKO_ITEM_MODIFIERS = {
 					}
 					const modif_price = modifier.price>0?'+ '+modifier.price+' руб.':'';
 					$m_list_group.append([
-						`<li class="btn-modifier ${mode_radio} ${chosen} ${chosenByDefault}" data-modifier-id="${modifier.modifierId}">`,
+						`<li class="btn-modifier 
+							${mode_radio} ${chosen} ${chosenByDefault}" 
+								data-modifier-id="${modifier.modifierId}"
+								data-modifier-group-id="${groupId}"
+								>`,
 							`<div class="m-check ${type_radio}"><span></span></div>`,
 							`<div class="m-title">${modifier.name}</div>`,
 							`<div class="m-price">${modif_price}</div>`,
