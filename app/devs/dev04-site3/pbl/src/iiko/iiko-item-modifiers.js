@@ -243,7 +243,7 @@ export const IIKO_ITEM_MODIFIERS = {
 				let minQuantity = parseInt(g['restrictions']['minQuantity'],10);
 				let radioMode = false;
 				if(g['restrictions']){					
-					radioMode = maxQuantity==1 && g.items.length > 1;
+					radioMode = maxQuantity==1 && minQuantity==1 && g.items.length > 1;
 				}
 				let params = `data-group-id="${groupId}" 
 					data-group-name="${groupName}" 
