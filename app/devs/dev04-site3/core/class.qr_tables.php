@@ -52,7 +52,7 @@ class Qr_tables{
 		if($arr_tables && count($arr_tables)){
 
 			if(!empty($CAFE->external_url)){
-				$link_pre = 'https://'.$CAFE->external_url;
+				$link_pre = $CAFE->external_url;
 			}else if(!empty($CAFE->subdomain)){
 				$link_pre = $CAFE->subdomain.".".$CFG->wwwroot;
 			}else{
