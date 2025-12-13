@@ -11,6 +11,7 @@ export var VIEW_ALLMENU = {
 		this.$headerPhone = this.$view.find(this._CN+"header-phone");
 
 		this.$btnBasket = this.$view.find(this._CN+"btn-basket");
+		this.$btnOrdersHistory = this.$view.find(this._CN+"btn-orders-history");		
 		this.$btnClose = this.$view.find(this._CN+"btn-close-menu");
 		this.$btnBack = this.$view.find(this._CN+"btn-back, "+this._CN+"std-header-btn-back, "+this._CN+"btn-close-items");
 				
@@ -38,9 +39,13 @@ export var VIEW_ALLMENU = {
 		var _this=this;		
 
 		GLB.MENU_TABLE_MODE.update();		
-		console.log('allmenu',allmenu)			
+		
+		// console.log('allmenu',allmenu)			
+		// console.log('GLB.MENU_ICONS', GLB.MENU_ICONS)			
+		// console.log('ordersHistory', GLB.ORDERS_HISTORY.get());
 
-		console.log('GLB.MENU_ICONS', GLB.MENU_ICONS)
+		const orders = GLB.ORDERS_HISTORY.get();		
+		orders.length > 0 && this.$btnOrdersHistory.removeClass(this.CN + 'btn-disabled');
 
 		// -----------------------
 		// MULTILANG BUILDING UI
@@ -175,6 +180,7 @@ export var VIEW_ALLMENU = {
 			this.$btnBasket,
 			this.$btnBack,
 			this.$btnClose,
+			this.$btnOrdersHistory,
 			//
 			this.$headerTitle,
 			this.$btnSlideUpAbout,
@@ -201,6 +207,13 @@ export var VIEW_ALLMENU = {
 			GLB.UVIEWS.set_current("the-showcart");
 			e.originalEvent.cancelable && e.preventDefault();
 		});
+
+		this.$btnOrdersHistory.on("touchend click",function(e) {
+			console.log('открыть историю заказов');
+			GLB.VIEW_ORDERS_HISTORY.update();
+			GLB.UVIEWS.set_current("the-orders-history");
+			e.originalEvent.cancelable && e.preventDefault();
+		});				
 
 	}
 };

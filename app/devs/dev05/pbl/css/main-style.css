@@ -1245,11 +1245,26 @@ a.mm2-home-link:hover{ color: %[color-home-link-hover]%; }
   font:.8rem arial;
 }
 
-/* 
+.row-history-order{
+  padding:1.5rem 1rem;
+  color:%[color-front]%;
+  border-bottom:1px dashed %[color-second]%; 
+  font-size:.8rem;
+}
+.row-history-order span{  
+  color:%[color-bright]%; 
+  display: inline-block;
+  border:1px solid %[color-bright]%;
+  padding:.2rem .5rem;
+  margin: 0 .5rem;
+  border-radius:4px;
+}
 
-      SCREENS
+/* - - - - - - - - - - - - - - - - - 
 
-*/
+              SCREENS
+
+ - - - - - - - - - - - - - - - - -  */
 
 @media screen and (max-width: 1100px){
   

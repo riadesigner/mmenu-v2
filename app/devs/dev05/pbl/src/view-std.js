@@ -33,12 +33,13 @@ export var VIEW_STD = {
 		var _this=this;
 
 		GLB.MOBILE_BUTTONS.bhv(arrMobileButtons);
-		this.noclose && this.$btnClose.hide();
+		
+		this.noclose && this.$btnClose && this.$btnClose.hide();
 
 		$(window).on('touchstart',function(){_this.VIEW_SCROLLED=false;}) 
 		.on('touchmove',function(){_this.VIEW_SCROLLED=true;});
 		
-		this.$btnClose.on("touchend click",function() {
+		this.$btnClose && this.$btnClose.on("touchend click",function() {
 			_this._close_menu();
 			return false;
 		});

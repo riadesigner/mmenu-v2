@@ -62,14 +62,11 @@ export var CHEFSMENU = {
     },
 
     init_views:function() {
+        
         var _this=this;        
-
         var PATH_TO_TEMPLATES = "#mm2-templates";
-
         GLB.LNG.init("ru");
-
         GLB.MENU_ICONS.init();
-
         GLB.UVIEWS.init(".mm2-all-views");        
 
         GLB.UVIEWS.addview(
@@ -91,9 +88,9 @@ export var CHEFSMENU = {
         }));
 
         GLB.UVIEWS.addview(
-            GLB.VIEW_TABLE_CHANGE.init({
-            name:"view-table-change",
-            template:PATH_TO_TEMPLATES+" .view-table-change",
+            GLB.VIEW_ORDERS_HISTORY.init({
+            name:"the-orders-history",
+            template:PATH_TO_TEMPLATES+" .view-orders-history",
             chefsmenu:_this,
             noclose:this.NO_CLOSE,
             anim:'animLeft'
@@ -133,16 +130,7 @@ export var CHEFSMENU = {
             chefsmenu:_this,
             noclose:this.NO_CLOSE,
             anim:'animLeft'
-        }));
-
-        GLB.UVIEWS.addview(
-            GLB.VIEW_ORDER_CANCEL.init({
-            name:"the-order-cancel",
-            template:PATH_TO_TEMPLATES+" .view-order-cancel",
-            chefsmenu:_this,
-            noclose:this.NO_CLOSE,
-            anim:'animLeft'
-        }));        
+        }));     
 
         GLB.TABINDEX.init();
 

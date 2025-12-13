@@ -16,6 +16,7 @@ import {ITEM} from './item.js';
 import {CHEFSMENU} from './chefsmenu.js';
 import {TABINDEX} from './tabindex.js';
 import {MENU_TABLE_MODE} from './menu-table-mode.js';
+import {ORDERS_HISTORY} from './orders-history.js';
 
 import {VIEW_STD} from './view-std.js';
 import {VIEW_ALLMENU} from './view-allmenu.js';
@@ -25,13 +26,16 @@ import {VIEW_CHOOSING_MODE} from './view-choosing-mode.js';
 
 import {VIEW_ORDERING} from './view-ordering.js';
 import {VIEW_ORDER_OK} from './view-order-ok.js';
-import {VIEW_ORDER_CANCEL} from './view-order-cancel.js';
-import {VIEW_TABLE_CHANGE} from './view-table-change.js';
+import {VIEW_ORDERS_HISTORY} from './view-orders-history.js';
+
+// import {VIEW_ORDER_CANCEL} from './view-order-cancel.js';
+// import {VIEW_TABLE_CHANGE} from './view-table-change.js';
 
 GLB.META_VIEWPORT = META_VIEWPORT;
 GLB.CALLBACK_RANDOM = CALLBACK_RANDOM;
 GLB.MOBILE_BUTTONS = MOBILE_BUTTONS;
 GLB.CMN = CMN;
+GLB.ORDERS_HISTORY = ORDERS_HISTORY;
 
 GLB.UVIEWS = UVIEWS;
 GLB.CAFE = CAFE;
@@ -49,16 +53,19 @@ GLB.VIEW_CART = $.extend( VIEW_CART, VIEW_STD );
 GLB.VIEW_ORDERING = $.extend( VIEW_ORDERING, VIEW_STD );
 GLB.VIEW_CHOOSING_MODE = $.extend( VIEW_CHOOSING_MODE, VIEW_STD );
 GLB.VIEW_ORDER_OK = $.extend( VIEW_ORDER_OK, VIEW_STD );
-GLB.VIEW_ORDER_CANCEL = $.extend( VIEW_ORDER_CANCEL, VIEW_STD );
+GLB.VIEW_ORDERS_HISTORY = $.extend( VIEW_ORDERS_HISTORY, VIEW_STD );
 
-GLB.VIEW_TABLE_CHANGE = $.extend( VIEW_TABLE_CHANGE, VIEW_STD );
+
+// GLB.VIEW_ORDER_CANCEL = $.extend( VIEW_ORDER_CANCEL, VIEW_STD );
+// GLB.VIEW_TABLE_CHANGE = $.extend( VIEW_TABLE_CHANGE, VIEW_STD );
 
 
 GLB.G_DATA = "CHEFSMENUGLOBALDATA";
 
 export default (function($){    
 
-    GLB.META_VIEWPORT.init();        
+    GLB.META_VIEWPORT.init();     
+    GLB.ORDERS_HISTORY.init();       
        
     /**
     * EXT_MODE – for mobile only.
