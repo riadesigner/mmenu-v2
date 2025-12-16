@@ -1,38 +1,27 @@
 import {GLB} from './glb.js';
-import $ from 'jquery';
-import {THE_ORDER_CHECKER} from './the-order-checker.js';
 
-export var VIEW_ORDER_OK = {
+export var VIEW_ORDER_FROM_HISTORY = {
 	init:function(options){
 		
 		this._init(options);
 		
-		this.$headerPhone = this.$view.find(this._CN+"header-phone");		
-		this.$btnBasket= this.$view.find(this._CN+"btn-basket");
+		this.$headerPhone = this.$view.find(this._CN+"header-phone");				
 		this.$btnClose = this.$view.find(this._CN+"btn-close-menu");
 		this.$btnBack = this.$view.find(this._CN+"btn-back, "+this._CN+"std-header-btn-back, "+this._CN+"btn-close-items");
 
-		this.$msgReport = this.$view.find(this._CN+"order-ok-report-main");
-		this.$msgDemo = this.$view.find(this._CN+"order-ok-demo-message");
-		this.$msgNotFoundTgUsers = this.$view.find(this._CN+"order-ok-notg-message");
-		this.$msgManager = this.$view.find(this._CN+"order-ok-operator-message");		
+		this.$msgReport = this.$view.find(this._CN+"order-ok-report-main");						
 		this.$msgOrderSentInfo = this.$view.find(this._CN+"order-ok-report-info");		
 		this.$msgCartList = this.$view.find(this._CN+"order-ok-cart-list");
 		this.$totalCost =  this.$view.find(this._CN+"order-ok-total-cost");		
-		this.$tplOrderedItem = $("#mm2-templates "+this._CN+"ordered-item");
-
-		this.$operator_message =  this.$view.find(this._CN+'order-ok-operator-message');
-		this.$progressbar = this.$view.find(this._CN+"order-wating-progress-bar");
+		this.$tplOrderedItem = $("#mm2-templates "+this._CN+"ordered-item");				
 
 		this.behavior();
 		return this;
 	},
 
 	behavior:function(){
-		var _this=this;
 
-		var arrMobileButtons = [
-			this.$btnBasket,
+		var arrMobileButtons = [			
 			this.$btnBack,
 			this.$btnClose
 		];
@@ -40,53 +29,44 @@ export var VIEW_ORDER_OK = {
 		this._behavior(arrMobileButtons);		
 
 		this.$btnBack.on("touchend click",function() {
-			GLB.UVIEWS.go_first();
+			GLB.UVIEWS.go_back();
 			return false;
 		});
 
 	},	
 
-	update:function(order, opt){		
+	update:function(order){		
+		this._content_hide();
+		this.chefsmenu.now_loading();	
+		console.log('hello order', order)
 
-		this.set_operator_message_to_start();
-		this.progress_bar_restart();
+		setTimeout(()=>{			
+			this._content_show();
+			setTimeout(()=>{			
+				this.chefsmenu.end_loading();			
+			},500);			
+		},1000);				
+
 		
-		this.TABLE_MODE = opt&&opt.table_number?true:false;
-		this.IIKO_MODE = GLB.CAFE.is_iiko_mode();		
-		this.PICKUPSELF_MODE = opt&&opt.pickupself_mode?true:false;	
-		this.order = order;
-		this.update_template_part_common();
-		!this.TABLE_MODE && this.update_template_part_delivery();		
-		this.build_ordered_list(this.order.order_items);
-
-		GLB.CART.cart_clear();
-		GLB.VIEW_ORDERING.update({clear:true});		
-
-		if(!this.order.demo_mode && !this.order.notg_mode){
-			this.check_the_order_status(this.order.short_number, GLB.CAFE.get('uniq_name'));
-		}
 		
-		this.chefsmenu.end_loading();
+		// this.TABLE_MODE = opt&&opt.table_number?true:false;
+		// this.IIKO_MODE = GLB.CAFE.is_iiko_mode();		
+		// this.PICKUPSELF_MODE = opt&&opt.pickupself_mode?true:false;	
+		// this.order = order;
+		// this.update_template_part_common();
+		// !this.TABLE_MODE && this.update_template_part_delivery();		
+		// this.build_ordered_list(this.order.order_items);		
+		// this.chefsmenu.end_loading();
+		// setTimeout(()=>{
+		// 	// this.end_loading();
+		// 	this.chefsmenu.end_loading();
+		// },3000);
 
 	},
 
 	update_template_part_common(){
-		if(this.order.demo_mode){
-			this.$msgDemo.show();
-			this.$msgManager.hide()
-		}else if(this.order.notg_mode){
-			this.$msgDemo.hide();
-			this.$msgNotFoundTgUsers.show();
-			this.$msgManager.hide()
-		}else{
-			this.$msgDemo.hide();
-			this.$msgNotFoundTgUsers.hide();
-			this.$msgManager.show()
-		}
-
 		var phone = GLB.CAFE.get('cafe_phone');
 		phone!=="" ? this.$headerPhone.find(this._CN+"header-phone__text").html(phone) : this.$headerPhone.hide();
-
 		if(phone){
 			var ph = phone.replace(/[-() ]/g,"");
 			this.$headerPhone.on("touchend click",function(){
@@ -94,15 +74,13 @@ export var VIEW_ORDER_OK = {
 				return false;
 			});
 		};
-
 		var msg = [
 			"<h2>"+GLB.LNG.get("lng_number_of_your_order")+"</h2>",
 			"<h3>"+this.order.short_number+"</h3>"
-		].join("\n");
-				
-		this.$msgReport.html(msg);		
-		
+		].join("\n");				
+		this.$msgReport.html(msg);				
 	},
+
 	update_template_part_delivery:function(){
 
 		var need_time = this.order.order_time_need===this.order.order_time_sent;
@@ -140,61 +118,6 @@ export var VIEW_ORDER_OK = {
 	
 	},
 
-	set_operator_message_to_start:function(){
-		this.$operator_message.removeClass('bright');
-		const waiting_message = 'Отлично! Ваш заказ отправлен и скоро будет принят в работу';
-		this.$operator_message.find('span').html(waiting_message)
-	},
-	set_operator_message_to:function(msg){
-		this.$operator_message.addClass('bright');
-		this.$operator_message.find('span').html(msg);
-	},	
-
-	progress_bar_to_end:function(){
-		this.statusbarIsStopped = true;
-		const $b = this.$progressbar.find('div');
-		$b.css({width:'100%',transition:'1s'});
-	},
-	progress_bar_restart:function(){
-		this.$progressbar.show();		
-		const $b = this.$progressbar.find('div');
-		$b.css({width:'0%',transition:'0s'});
-
-		const overTime = SITE_CFG.order_forgotten_delay*60;
-		this.statusbarIsStopped = false;
-
-		const fn = {
-			animateProgressBar: (n, progressBar)=>{
-								
-				let startTime = performance.now(); // Время начала анимации
-				let duration = n * 1000; // Перевод секунд в миллисекунды
-			
-				this.statusbarIsStopped = false; // Сбрасываем флаг остановки
-				// Запускаем анимацию
-				requestAnimationFrame(fn.update.bind(this, progressBar, startTime, duration)); 
-			},
-			update:(progressBar, startTime, duration) => {
-				if (this.statusbarIsStopped) return; // Прерываем анимацию, если флаг установлен
-		
-				let elapsedTime = performance.now() - startTime; // Прошедшее время
-				let progress = Math.min(elapsedTime / duration, 1); // От 0 до 1
-		
-				progressBar.style.width = (progress * 100) + "%"; // Устанавливаем ширину
-		
-				if (progress < 1) {
-					// Запускаем следующий кадр
-					requestAnimationFrame(fn.update.bind(this, progressBar, startTime, duration)); 
-				}else{
-					this.timeout_for_taking_the_order();
-				}
-			}			
-		}
-
-		console.log('overTime = ',overTime);
-		fn.animateProgressBar(overTime, $b[0]);
-
-
-	},
 	formatLngTime:function(tm,full){
 		var t = tm.split(" ");
 		var d = t[0].split("-");
@@ -265,31 +188,6 @@ export var VIEW_ORDER_OK = {
 		const TOTAL_PRICE = "Итого: "+GLB.CART.get_total_price()+" "+ currency;
 		this.$totalCost.html(TOTAL_PRICE);
 
-	},
-	check_the_order_status:function(short_number, cafe_uniq_name){
-		this.ORDER_CHECKER = $.extend({},THE_ORDER_CHECKER);	
-		this.ORDER_CHECKER.check_if_order_taken_async(short_number, cafe_uniq_name)
-		.then((vars)=>{
-			console.log('--vars--',vars);				
-			if(vars.order_status==='taken'){
-				this.show_successful_message(vars.order_manager_name);
-			}
-		})
-		.catch((vars)=>{
-			console.log('err',vars);
-		});		
-	},
-	timeout_for_taking_the_order:function(){
-		this.statusbarIsStopped = true;
-		this.show_fail_message();
-	},
-	show_fail_message(){
-		this.progress_bar_to_end();
-		this.set_operator_message_to(`Внимание! <br>Заказ не взяли в работу.<br> Обратитесь к администратору!`);		
-	},
-	show_successful_message(order_manager_name){
-		this.progress_bar_to_end();
-		this.set_operator_message_to(`Заказ в работе! <br> Ваш официант – ${order_manager_name}`);		
 	}
 };
 

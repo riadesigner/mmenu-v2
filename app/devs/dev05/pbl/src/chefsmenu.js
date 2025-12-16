@@ -93,8 +93,17 @@ export var CHEFSMENU = {
             template:PATH_TO_TEMPLATES+" .view-orders-history",
             chefsmenu:_this,
             noclose:this.NO_CLOSE,
-            anim:'animLeft'
+            anim:'zoomOut'
         }));
+
+        GLB.UVIEWS.addview(
+            GLB.VIEW_ORDER_FROM_HISTORY.init({
+            name:"the-order-from-history",
+            template:PATH_TO_TEMPLATES+" .view-order-from-history",
+            chefsmenu:_this,
+            noclose:this.NO_CLOSE,
+            anim:'animLeft'
+        }));        
 
         GLB.UVIEWS.addview(
             GLB.VIEW_CART.init({

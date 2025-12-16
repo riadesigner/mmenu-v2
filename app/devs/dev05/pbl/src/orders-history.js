@@ -8,6 +8,10 @@ export var ORDERS_HISTORY = {
 
 	},
 	get:function(){
-		return ['251213-008','251213-012','251215-023'];
+		return [
+			{id_uniq:'1-319-251212-008', short_number:'251212-008', date:'2025-12-12 12:36:17', order_target:'table_order',table:'2'},
+			{id_uniq:'1-319-251212-004', short_number:'251212-004', date:'2025-12-12 12:40:00', order_target:'table_order',table:'2'},
+			{id_uniq:'1-319-251210-011', short_number:'251210-011', date:'2025-12-10 08:36:17', order_target:'table_order',table:'3'},
+		];
 	}
 };

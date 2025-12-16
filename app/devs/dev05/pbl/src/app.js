@@ -27,6 +27,7 @@ import {VIEW_CHOOSING_MODE} from './view-choosing-mode.js';
 import {VIEW_ORDERING} from './view-ordering.js';
 import {VIEW_ORDER_OK} from './view-order-ok.js';
 import {VIEW_ORDERS_HISTORY} from './view-orders-history.js';
+import {VIEW_ORDER_FROM_HISTORY} from './view-order-from-history.js';
 
 // import {VIEW_ORDER_CANCEL} from './view-order-cancel.js';
 // import {VIEW_TABLE_CHANGE} from './view-table-change.js';
@@ -54,7 +55,7 @@ GLB.VIEW_ORDERING = $.extend( VIEW_ORDERING, VIEW_STD );
 GLB.VIEW_CHOOSING_MODE = $.extend( VIEW_CHOOSING_MODE, VIEW_STD );
 GLB.VIEW_ORDER_OK = $.extend( VIEW_ORDER_OK, VIEW_STD );
 GLB.VIEW_ORDERS_HISTORY = $.extend( VIEW_ORDERS_HISTORY, VIEW_STD );
-
+GLB.VIEW_ORDER_FROM_HISTORY = $.extend( VIEW_ORDER_FROM_HISTORY, VIEW_STD );
 
 // GLB.VIEW_ORDER_CANCEL = $.extend( VIEW_ORDER_CANCEL, VIEW_STD );
 // GLB.VIEW_TABLE_CHANGE = $.extend( VIEW_TABLE_CHANGE, VIEW_STD );

@@ -99,6 +99,7 @@ class Order_parser{
         $str .= "   ------------\n";
         
         $str .= $this->build_str_items();
+        $str .= $this->build_str_without_waiter();
         
         return $str;
     }    
@@ -134,6 +135,20 @@ class Order_parser{
         }       
         return  $str;   
     }    
+
+    private function build_str_without_waiter(): string{        
+        if(isset($this->order_data['without_waiter']) && $this->order_data['without_waiter']==="true"){
+            $str = "- - - - - - - - - - - - - - - - - -\n";
+            $str .= "    БЕЗ ОФИЦИАНТА \n";
+            $str .= "- - - - - - - - - - - - - - - - - -\n";
+            return $str;
+        }else{
+            $str = "- - - - - - - - - - - - - - - - - - - - - -\n";
+            $str .= "  ПОЗВАТЬ ОФИЦИАНТА \n";
+            $str .= "- - - - - - - - - - - - - - - - - - - - - -\n";            
+            return $str;
+        }        
+    }
 
     private function verify($params): bool{
 

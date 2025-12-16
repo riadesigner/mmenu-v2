@@ -1175,8 +1175,8 @@ a.mm2-home-link:hover{ color: %[color-home-link-hover]%; }
 .mm2-order-ok-report-main p {line-height: 1.5;font-size: 1.2em;margin: 0;padding: 0 10px 0 0 ; color: %[color-front]%;}
 .mm2-order-ok-report-main p span{color: %[color-bright]%;}
 
-.mm2-order-ok-report-delivery p {line-height: 1.8;font-size: 1.2em;margin: 0 0 5px 0;padding: 0; max-width: 300px;color: %[color-front]%;}
-.mm2-order-ok-report-delivery p span{color: %[color-bright]%;}
+.mm2-order-ok-report-info p {line-height: 1.8;font-size: 1.2em;margin: 0 0 5px 0;padding: 0; max-width: 300px;color: %[color-front]%;}
+.mm2-order-ok-report-info p span{color: %[color-bright]%;}
 
 .mm2-order-ok-cart-list ul{margin: 0;padding: 0;list-style: none;border-top: %[border-style-2]%;}
 .mm2-order-ok-cart-list li {margin: 0;padding: 10px 0;border-bottom:%[border-style-2]%;font-size: 1rem;}
@@ -1291,7 +1291,7 @@ a.mm2-home-link:hover{ color: %[color-home-link-hover]%; }
   .mm2-order-ok-report-main:after{content: "";display: table;clear: both;}
   .mm2-order-ok-report-main h2{float: left;width: 40%;padding: 0 20px 0 0;margin: 0;}
   .mm2-order-ok-report-main h3{float: left;width: 60%;padding: 0; margin: 0;text-align: center;}
-  .mm2-order-ok-report-delivery{padding: 0 0 0 20px;border-left:8px solid %[cart-decor-color]%;}
+  .mm2-order-ok-report-info{padding: 0 0 0 20px;border-left:8px solid %[cart-decor-color]%;}
   .mm2-order-ok-report-main{padding: 0 0 20px 0;margin: 0 0 20px 0;border-bottom:%[border-style-3]%;}
   .mm2-order-ok-params{overflow: hidden;overflow-y:auto; }
   .mm2-order-ok-description{height:auto; overflow: visible;}  
@@ -1698,13 +1698,13 @@ a.mm2-home-link:hover{ color: %[color-home-link-hover]%; }
   .mm2-order-cancel-message{font-size:4.2vw;}
 
   /* --- ORDER OK VIEW --- */  
-  .mm2-order-ok-report-delivery{padding: 0 0 0 15px;}
+  .mm2-order-ok-report-info{padding: 0 0 0 15px;}
   
   .mm2-order-ok-report-main h2, 
   .mm2-order-ok-cart h2{ font-size: 1em;}
 
   .mm2-order-ok-report-main h3{font-size: 6vw; padding: 1vw 5vw; line-height: 1.2;}
-  .mm2-order-ok-report-delivery p{font-size: .9em;}
+  .mm2-order-ok-report-info p{font-size: .9em;}
 
   .mm2-thank-you-cart-list div:nth-child(1),
   .mm2-thank-you-cart-list li div:nth-child(2){font-size: 1em;}

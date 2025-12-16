@@ -19,7 +19,7 @@ export var VIEW_CART = {
 		this.$btnClearCart = this.$view.find(this._CN+"btn-clear, "+this._CN+"header-btn-clear"); 
 		this.$btnOrdering = this.$view.find(this._CN+"btn-ordering"); 		
 		this.$btnOrderingWithWaiter = this.$view.find(this._CN+"btn-ordering-with-waiter"); 		
-		this.$itemsContainer = this.$view.find(this._CN+"cart-allitems"); 		
+		this.$itemsContainer = this.$view.find(this._CN+"cart-allitems"); 				
 		this.update_ui();		
 		this.clear_cart_container();
 		this.behavior();
@@ -55,7 +55,7 @@ export var VIEW_CART = {
 			if(this.READY_TO_ORDERING && !this.chefsmenu.is_loading_now()){				
 				if(GLB.MENU_TABLE_MODE.is_table_mode()){
 					this.chefsmenu.now_loading();
-					this.send_order_to_table();
+					this.send_order_to_table({withoutWaiter:true});
 				}else{
 					this.send_order_to_delivery();
 				}
@@ -66,7 +66,7 @@ export var VIEW_CART = {
 			if(this.READY_TO_ORDERING && !this.chefsmenu.is_loading_now()){				
 				if(GLB.MENU_TABLE_MODE.is_table_mode()){
 					this.chefsmenu.now_loading();
-					this.send_order_to_table();
+					this.send_order_to_table({withoutWaiter:false});
 				}else{
 					this.send_order_to_delivery();
 				}
@@ -82,7 +82,9 @@ export var VIEW_CART = {
 	 * 
 	 * ------------------------------
 	 */
-	send_order_to_table:function(){
+	send_order_to_table:function(opt){
+
+		const {withoutWaiter} = opt;
 
 		const fn = {
 			dateExport:function(_date){
@@ -99,6 +101,7 @@ export var VIEW_CART = {
 			order_time_need: this_time,
 			order_total_price: order_total_price,
 			order_user_comment:"",
+			without_waiter: withoutWaiter,
 		}
 
 		const order_items = GLB.CART.get_all();
@@ -282,12 +285,6 @@ export var VIEW_CART = {
 			
 			fn_cart.buildAll();
 
-			// if(IIKO_MODE){
-			// 	fn_cart.buildAll();
-			// }else{
-			// 	fn.buildAll();
-			// }			
-
 		}else{
 			if(orderId!=='clear'){
 
@@ -332,8 +329,8 @@ export var VIEW_CART = {
 			this.$btnOrderingWithWaiter.html(`<span>ЗАКАЗАТЬ<br><nobr>С ОФИЦИ-</nobr><br>АНТОМ</span>`);
 			this.$btnOrdering.html(`<span>ЗАКАЗАТЬ<br><nobr>БЕЗ ОФИЦИ-</nobr><br>АНТА</span>`);			
 		}else{			
-			this.$btnOrderingWithWaiter.html('<span>ЗАКАЗАТЬ <nobr>С ПОДТВЕ-</nobr><br>РЖДЕНИЕМ</span>');			
-			this.$btnOrdering.html('<span>ЗАКАЗАТЬ <nobr>БЕЗ ПОДТВЕ</nobr>-<br>РЖДЕНИЯ</span>');
+			this.$btnOrderingWithWaiter.hide();
+			this.$btnOrdering.html('<span>ОФОРМИТЬ<br>ЗАКАЗ</span>');
 		}
 	}
 };
