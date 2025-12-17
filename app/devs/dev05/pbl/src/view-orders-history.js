@@ -26,9 +26,14 @@ export var VIEW_ORDERS_HISTORY = {
 
 	update:function(){
 		const orders = GLB.ORDERS_HISTORY.get();
-		orders && orders.length > 0 && this.build_list(orders);
+		if(orders && orders.length > 0){
+			this._build_list(orders);
+		}else{
+			this._show_empty();
+		}		 
 	},
-	build_list:function(orders){
+	
+	_build_list:function(orders){
 		const _this=this;
 		const $list = $('<div class="orders-history-list"></div>');
 		orders.map((order)=>{
@@ -43,6 +48,10 @@ export var VIEW_ORDERS_HISTORY = {
 			$list.append($row);
 		});
 		this.$listOrdersContainer.html($list);
+	},
+	_show_empty:function(){
+		const emptyMessage = `<div class="${this.CN}orders-history-is-empty"><p>У вас нет отправленных заказов</p></div>`;
+		this.$listOrdersContainer.html(emptyMessage);
 	}
 };
 

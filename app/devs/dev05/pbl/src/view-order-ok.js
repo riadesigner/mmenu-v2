@@ -270,7 +270,6 @@ export var VIEW_ORDER_OK = {
 		this.ORDER_CHECKER = $.extend({},THE_ORDER_CHECKER);	
 		this.ORDER_CHECKER.check_if_order_taken_async(short_number, cafe_uniq_name)
 		.then((vars)=>{
-			console.log('--vars--',vars);				
 			if(vars.order_status==='taken'){
 				this.show_successful_message(vars.order_manager_name);
 				this._save_to_local_history(vars);
@@ -297,7 +296,7 @@ export var VIEW_ORDER_OK = {
 			table_number,			
 		}
 
-		console.log('orderHistory', orderHistory);
+		GLB.ORDERS_HISTORY.add_order(orderHistory);		
 
 	},
 	timeout_for_taking_the_order:function(){

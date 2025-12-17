@@ -1187,7 +1187,10 @@ a.mm2-home-link:hover{ color: %[color-home-link-hover]%; }
 .mm2-order-ok-cart-list li .mm2-ordered-title__modifiers{opacity: .5;font-size: .8rem;}
 .mm2-order-ok-total-cost {text-align: right;padding: 10px 0;color:%[color-front]%;font-size: 1.3rem;}
 
-.mm2-order-from-history__text {color: %[color-bright]%;}
+.mm2-order-from-history__text {color: %[color-front]%;font-size:.9rem;}
+.mm2-order-from-history__text span {color: %[color-bright]%;text-transform:uppercase;}
+.mm2-orders-history-is-empty{display: flex;justify-content: center;height: 30vh;align-items: center;}
+.mm2-orders-history-is-empty p{color: %[color-bright]%;font-size: .9rem;}
 
 /* --- ORDER PAGE --- */
 

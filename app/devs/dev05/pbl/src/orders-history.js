@@ -1,17 +1,28 @@
 import {GLB} from './glb.js';
 
 export var ORDERS_HISTORY = {
-	init:function() {			
+	init:function() {	
+		this.STORAGE_KEY = 'chfs_orders';	
+		this.$btnOrdersHistoryFooter = $(this._CN+"btn-orders-history");			
 		return this;
 	},	
-	add_order:function(order){
-
+	_test_clear:function(){
+		// localStorage.setItem(this.STORAGE_KEY, JSON.stringify([]));
 	},
-	get:function(){
-		return [
-			{id_uniq:'69-319-251202-002', short_number:'251202-002', date:'2025-12-02 11:59:22', order_target:'table_order',table_number:'2'},
-			{id_uniq:'70-319-251202-003', short_number:'251202-003', date:'2025-12-02 12:11:48', order_target:'table_order',table_number:'2'},			
-			{id_uniq:'153-321-251217-003', short_number:'251217-003', date:'2025-12-17 10:48:01', order_target:'table_order',table_number:'2'},
-		];
+	add_order:function(order){
+		const orders = JSON.parse(localStorage.getItem(this.STORAGE_KEY) || '[]');
+			orders.push({ ...order, timestamp: new Date().toISOString() });
+			
+			// Проверка на переполнение (≈5MB)
+			const dataSize = JSON.stringify(orders).length * 2; // Байты
+			if (dataSize > 4 * 1024 * 1024) { // 4MB с запасом
+				console.warn('LocalStorage почти заполнен!');
+				orders.shift(); // Удаляем самый старый заказ
+			}			
+			localStorage.setItem(this.STORAGE_KEY, JSON.stringify(orders));
+			GLB.VIEW_ALLMENU.update_orders_history_button(orders.length>0);			
+	},
+	get:function(){		
+		return JSON.parse(localStorage.getItem(this.STORAGE_KEY) || '[]');
 	}
 };

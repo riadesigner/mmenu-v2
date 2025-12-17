@@ -28,10 +28,15 @@ export var VIEW_ALLMENU = {
 		this.LIST_SCROLLED = false;
 		
 		GLB.MENU_TABLE_MODE.init(this);
+		this.update_orders_history_button((GLB.ORDERS_HISTORY.get()).length > 0);
 		
 		this.behavior();
 
 		return this;
+	},
+
+	update_orders_history_button:function(mode){		
+		mode ? this.$btnOrdersHistory.removeClass(this.CN+'btn-disabled') : this.$btnOrdersHistory.addClass(this.CN+'btn-disabled');
 	},
 
 	update:function(allmenu) {

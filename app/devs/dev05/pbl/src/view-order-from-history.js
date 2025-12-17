@@ -96,10 +96,19 @@ export var VIEW_ORDER_FROM_HISTORY = {
 	},
 
 	_show_order:function(loaded_order){
+
+		const fn = {
+			replaceUnderscores:(text)=>{
+				return text.replace(/_([^_]+)_/g, '<span>$1</span>');
+			}
+		} 
+
 		const {description} = loaded_order;
 		const json_description = JSON.parse(description);
 		const {ORDER_TEXT} = json_description;
-		const parsed_order_text = ORDER_TEXT.replace(/\\n/g,'<br>');		
+		let parsed_order_text = ORDER_TEXT.replace(/\\n/g,'<br>');		
+		parsed_order_text = fn.replaceUnderscores(parsed_order_text);
+		
 		this.$msgOrderText.html(parsed_order_text);		
 		const currency = GLB.CAFE.get('cafe_currency').symbol;
 		const TOTAL_PRICE = "Итого: "+loaded_order.total_price+" "+ currency;
