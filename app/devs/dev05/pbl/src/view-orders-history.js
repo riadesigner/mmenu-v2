@@ -33,7 +33,7 @@ export var VIEW_ORDERS_HISTORY = {
 		const $list = $('<div class="orders-history-list"></div>');
 		orders.map((order)=>{
 			const order_date = '15 дек 25, 12:02';// order.date
-			const to_table = order.order_target ==='table_order' ? `на стол ${order.table}`:''; 
+			const to_table = order.order_target ==='table_order' ? `на стол ${order.table_number}`:''; 
 			const str_order = `Заказ ${to_table} <span>${order.short_number}</span> ${order_date}`;
 			const $row = $(`<div data-id-uniq='${order.id_uniq}' class="row-history-order">${str_order}</div>`);
 			$row.on('touched click',function(){				

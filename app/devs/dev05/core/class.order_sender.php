@@ -128,7 +128,7 @@ class Order_sender{
 
 			$pre = date("y").date("m").date("d");
 			$num = sprintf("%03d", $count);
-			$short_number = $pre."-".$num;			
+			$short_number = $pre."-".$num;			 
 
 			// SAVE ORDER TO DB
 			$ORDER = new Smart_object("orders");
@@ -140,6 +140,7 @@ class Order_sender{
 			$ORDER->date = "now()";
 			$ORDER->updated = "now()";			
 			$ORDER->description = json_encode($order_data, JSON_UNESCAPED_UNICODE);
+			$ORDER->total_price = $order_data["TOTAL_PRICE"];
 			$just_created_id = $ORDER->save();			
 
 			if(!$just_created_id) {

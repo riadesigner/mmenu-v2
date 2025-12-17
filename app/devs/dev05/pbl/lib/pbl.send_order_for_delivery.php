@@ -90,7 +90,8 @@ $order_id_uniq = Order_sender::save_order_to_db(
 	ORDER_TARGET,
 	$cafe, 
 	[
-		"ORDER_TEXT"=>$ORDER_TXT
+		"ORDER_TEXT"=>$ORDER_TXT,
+		"TOTAL_PRICE"=>$order_data["order_total_price"],
 	], 
 	null,  
 	PENDING_MODE,

@@ -53,6 +53,11 @@ __answerjson( [
     "order_status"=>$order->state, 
     "order_manager"=>$order->manager,
     "order_manager_name"=>$order_manager_name,
+    "id_uniq"=>$order->id_uniq,
+    "short_number"=>$order->short_number,
+    "date"=>$order->date,
+    "order_target"=>$order->order_target,
+    "table_number"=>$order->table_number,
     ] );	
 
 

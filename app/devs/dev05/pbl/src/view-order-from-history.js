@@ -11,7 +11,7 @@ export var VIEW_ORDER_FROM_HISTORY = {
 
 		this.$msgReport = this.$view.find(this._CN+"order-ok-report-main");						
 		this.$msgOrderSentInfo = this.$view.find(this._CN+"order-ok-report-info");		
-		this.$msgCartList = this.$view.find(this._CN+"order-ok-cart-list");
+		this.$msgOrderText = this.$view.find(this._CN+"order-from-history__text");
 		this.$totalCost =  this.$view.find(this._CN+"order-ok-total-cost");		
 		this.$tplOrderedItem = $("#mm2-templates "+this._CN+"ordered-item");				
 
@@ -35,33 +35,43 @@ export var VIEW_ORDER_FROM_HISTORY = {
 
 	},	
 
-	update:function(order){		
+	update:function(orderFromHistoryDto){		
 		this._content_hide();
 		this.chefsmenu.now_loading();	
-		console.log('hello order', order)
-
-		setTimeout(()=>{			
-			this._content_show();
-			setTimeout(()=>{			
-				this.chefsmenu.end_loading();			
-			},500);			
-		},1000);				
-
 		
-		
-		// this.TABLE_MODE = opt&&opt.table_number?true:false;
-		// this.IIKO_MODE = GLB.CAFE.is_iiko_mode();		
-		// this.PICKUPSELF_MODE = opt&&opt.pickupself_mode?true:false;	
-		// this.order = order;
-		// this.update_template_part_common();
-		// !this.TABLE_MODE && this.update_template_part_delivery();		
-		// this.build_ordered_list(this.order.order_items);		
-		// this.chefsmenu.end_loading();
-		// setTimeout(()=>{
-		// 	// this.end_loading();
-		// 	this.chefsmenu.end_loading();
-		// },3000);
+		const {id_uniq} = orderFromHistoryDto;
 
+		this.load_order_async(id_uniq)
+		.then((loaded_order)=>{
+			console.log('loaded_order', loaded_order);
+			this._show_order(loaded_order);
+			this._show_all();
+		});
+
+	},
+
+	load_order_async:function(uniq_id){
+		return new Promise((res,rej)=>{
+			var url = GLB_APP_URL+"pbl/lib/pbl.get_order_from_history.php";	
+			var data = {orderUniqId:uniq_id};			
+
+			this.AJX_ITEMS = $.ajax({
+				url: url,				
+				dataType: "json",
+				method:"POST",
+				data:data,
+                xhrFields: {
+                    withCredentials: true  // Для отправки cookies при CORS
+                },
+				success: (order)=> {        
+					res(order);
+				},
+				error:(response)=> {					
+					console.log("err response",response);
+					rej("ошибка загрузки");
+				}
+			});					
+		})
 	},
 
 	update_template_part_common(){
@@ -73,49 +83,7 @@ export var VIEW_ORDER_FROM_HISTORY = {
 				location.href="tel:"+ph;
 				return false;
 			});
-		};
-		var msg = [
-			"<h2>"+GLB.LNG.get("lng_number_of_your_order")+"</h2>",
-			"<h3>"+this.order.short_number+"</h3>"
-		].join("\n");				
-		this.$msgReport.html(msg);				
-	},
-
-	update_template_part_delivery:function(){
-
-		var need_time = this.order.order_time_need===this.order.order_time_sent;
-		var need_time_str = need_time ? GLB.LNG.get('lng_near_time') : this.formatLngTime(this.order.order_time_need);		
-
-		let order_str = "";
-		const addr = this.order.order_user_full_address;
-		if(this.IIKO_MODE){			
-			// IIKO MODE ADDRESS	
-			const addr_entrance = addr.u_entrance?`, подъезд ${addr.u_entrance}`:"";
-			const addr_floor = addr.u_floor?`, эт. ${addr.u_floor}`:"";
-			const addr_flat = addr.u_flat?`, кв. ${addr.u_flat}`:"";
-			order_str = `ул. ${addr.u_street}, д. ${addr.u_house}${addr_flat}${addr_floor}${addr_entrance}.`;
-		}else{
-			// CHEFSMENU MODE ADDRESS
-			order_str = addr.description;
-		};
-
-		let delivery_str = this.PICKUPSELF_MODE? `<span>Доставка: </span> Заберу сам.<br>`: `<span>${GLB.LNG.get("lng_address")}</span> ${order_str}<br>`;
-
-		var currency = GLB.CAFE.get('cafe_currency').symbol;
-
-		var msg2 = [
-			"<p>",
-				"<span>"+GLB.LNG.get("lng_time_from")+"</span> "+ this.formatLngTime(this.order.order_time_sent)+"<br>",
-				"<span>"+GLB.LNG.get("lng_time_to")+"</span> "+ need_time_str+"<br>",
-				"<span>"+GLB.LNG.get("lng_amount")+"</span> "+this.order.order_total_price+" "+currency+"<br>",
-				"<span>"+GLB.LNG.get("lng_tel")+"</span> "+this.order.order_user_phone+"<br>",
-				delivery_str,
-				"<br>"+this.order.order_user_comment,
-			"</p>"
-		].join("\n");
-
-		this.$msgOrderSentInfo.html(msg2);
-	
+		};			
 	},
 
 	formatLngTime:function(tm,full){
@@ -127,67 +95,28 @@ export var VIEW_ORDER_FROM_HISTORY = {
 		return d[0]+" "+arr[parseInt(d[1],10)-1]+year+", "+t[1];
 	},
 
-	build_ordered_list:function(order_items) {
+	_show_order:function(loaded_order){
+		const {description} = loaded_order;
+		const json_description = JSON.parse(description);
+		const {ORDER_TEXT} = json_description;
+		const parsed_order_text = ORDER_TEXT.replace(/\\n/g,'<br>');		
+		this.$msgOrderText.html(parsed_order_text);		
 		const currency = GLB.CAFE.get('cafe_currency').symbol;
-		const IIKO_MODE = GLB.CAFE.is_iiko_mode();
-
-		const orders = [...order_items];
-
-		const fn = {
-			buildArrRows:(orders)=>{
-				const $list = $('<ul></ul>');
-				for(let i in orders){
-					if(orders.hasOwnProperty(i)){
-						let item = orders[i]; 												
-						if(item){		
-							let $li = $('<li></li>');
-							let $row = fn.buildRow(item);
-							$li.append($row);
-							$list.append($li);
-						}						
-					}
-				};
-				return $list;
-			},
-			buildRow:(row)=>{
-				
-				const title_str = row.item_data.title;
-				const count = row.count;
-				const price_with_modifiers = parseInt(row.price_with_modifiers, 10);				
-				const price = parseInt(row.price, 10); 
-
-				const weight = `${row.volume} ${row.units}`;
-				let volume_str = IIKO_MODE ? `${row.sizeName} / ${weight}` : weight;
-				volume_str+= `, ${price} ₽`;
-
-				const modifiers = row.chosen_modifiers;
-				let modifiers_str = "";
-				if(IIKO_MODE && modifiers && modifiers.length){
-					for (let i in modifiers){																		
-						const pr = parseInt(modifiers[i].price, 10);
-						if(pr>0){
-							modifiers_str += `+ ${modifiers[i].name}, ${modifiers[i].price}&nbsp;₽<br>`;
-						}else{
-							modifiers_str += `${modifiers[i].name}<br>`;
-						}						
-					}
-				};				
-				const price_str = `${count} x ${price_with_modifiers}  ₽`;
-				const $row = this.$tplOrderedItem.clone();
-				$row.find(this._CN+"ordered-title__item").html(title_str);
-				$row.find(this._CN+"ordered-title__volume").html(volume_str);				
-				IIKO_MODE && $row.find(this._CN+"ordered-title__modifiers").html(modifiers_str);								
-				$row.find(this._CN+"ordered-quantity").html(price_str);
-				return $row; 
-			}
-		};			
-
-		const $list = fn.buildArrRows(order_items);			
-		this.$msgCartList.html($list);
-
-		const TOTAL_PRICE = "Итого: "+GLB.CART.get_total_price()+" "+ currency;
-		this.$totalCost.html(TOTAL_PRICE);
-
+		const TOTAL_PRICE = "Итого: "+loaded_order.total_price+" "+ currency;
+		this.$totalCost.html(TOTAL_PRICE);	
+		var msg = [
+			"<h2>"+GLB.LNG.get("lng_number_of_your_order")+"</h2>",
+			"<h3>"+loaded_order.short_number+"</h3>"
+		].join("\n");				
+		this.$msgReport.html(msg);				
+	},
+	_show_all:function(){
+		setTimeout(()=>{			
+			this._content_show();
+			setTimeout(()=>{			
+				this.chefsmenu.end_loading();			
+			},500);			
+		},1000);
 	}
 };
 

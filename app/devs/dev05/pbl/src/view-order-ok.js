@@ -273,11 +273,32 @@ export var VIEW_ORDER_OK = {
 			console.log('--vars--',vars);				
 			if(vars.order_status==='taken'){
 				this.show_successful_message(vars.order_manager_name);
+				this._save_to_local_history(vars);
 			}
 		})
 		.catch((vars)=>{
 			console.log('err',vars);
 		});		
+	},
+	_save_to_local_history:function(saveOrderLocalDto){
+		const {
+			id_uniq,
+			short_number,
+			date,
+			order_target,
+			table_number,
+		} = saveOrderLocalDto;
+
+		const orderHistory = {
+			id_uniq,
+			short_number,
+			date,
+			order_target,
+			table_number,			
+		}
+
+		console.log('orderHistory', orderHistory);
+
 	},
 	timeout_for_taking_the_order:function(){
 		this.statusbarIsStopped = true;

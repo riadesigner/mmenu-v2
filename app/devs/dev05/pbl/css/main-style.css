@@ -1187,6 +1187,8 @@ a.mm2-home-link:hover{ color: %[color-home-link-hover]%; }
 .mm2-order-ok-cart-list li .mm2-ordered-title__modifiers{opacity: .5;font-size: .8rem;}
 .mm2-order-ok-total-cost {text-align: right;padding: 10px 0;color:%[color-front]%;font-size: 1.3rem;}
 
+.mm2-order-from-history__text {color: %[color-bright]%;}
+
 /* --- ORDER PAGE --- */
 
 .mm2-order-cancel-content {display: table;width: 100%;height: 80%;}

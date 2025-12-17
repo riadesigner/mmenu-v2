@@ -93,12 +93,15 @@ if(IIKO_MODE){
 //	- GETTING ORDER_ID_UNIQ
 // ----------------------------------------
  
+// glog('========= ORDER_DATA ========= '.print_r($order_data,1));
+
 $order_id_uniq = Order_sender::save_order_to_db(
 	ORDER_TARGET,
 	$cafe, 
 	[		
 		"ORDER_TEXT"=>addcslashes($ORDER_TXT,"\n"),
 		"ORDER_IIKO"=>$ARR_ORDER_FOR_IIKO,
+		"TOTAL_PRICE"=>$order_data["order_total_price"],		
 	], 
 	$table_number,
 	PENDING_MODE,
