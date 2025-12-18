@@ -33,11 +33,11 @@ export var VIEW_ORDERS_HISTORY = {
 		}		 
 	},
 	
-	_build_list:function(orders){
-		const _this=this;
+	_build_list:function(orders){	
+
 		const $list = $('<div class="orders-history-list"></div>');
-		orders.map((order)=>{
-			const order_date = '15 дек 25, 12:02';// order.date
+		orders.map((order)=>{			
+			const order_date = this._beautify_date(order.date); 
 			const to_table = order.order_target ==='table_order' ? `на стол ${order.table_number}`:''; 
 			const str_order = `Заказ ${to_table} <span>${order.short_number}</span> ${order_date}`;
 			const $row = $(`<div data-id-uniq='${order.id_uniq}' class="row-history-order">${str_order}</div>`);
@@ -48,6 +48,20 @@ export var VIEW_ORDERS_HISTORY = {
 			$list.append($row);
 		});
 		this.$listOrdersContainer.html($list);
+	},
+	_beautify_date:function(dateString){
+		const date = new Date(dateString);		
+		const months = [
+			'Янв', 'Фев', 'Мар', 'Апр', 'Мая', 'Июн',
+			'Июл', 'Авг', 'Сен', 'Окт', 'Ноя', 'Дек'
+		];		
+		const day = date.getDate();
+		const month = months[date.getMonth()];
+		const year = date.getFullYear();
+		const hours = date.getHours();
+		const minutes = date.getMinutes().toString().padStart(2, '0');
+		
+		return `${day} ${month} ${year}, ${hours}:${minutes}`;
 	},
 	_show_empty:function(){
 		const emptyMessage = `<div class="${this.CN}orders-history-is-empty"><p>У вас нет отправленных заказов</p></div>`;
