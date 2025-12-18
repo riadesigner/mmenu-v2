@@ -11,7 +11,7 @@ export var ORDERS_HISTORY = {
 	},
 	add_order:function(order){
 		const orders = JSON.parse(localStorage.getItem(this.STORAGE_KEY) || '[]');
-			orders.push({ ...order, timestamp: new Date().toISOString() });
+			orders.unshift({ ...order, timestamp: new Date().toISOString() });
 			
 			// Проверка на переполнение (≈5MB)
 			const dataSize = JSON.stringify(orders).length * 2; // Байты
