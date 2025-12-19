@@ -36,18 +36,23 @@ export var VIEW_CAFE_TABLES_QRCODE = {
 		this.TABLE_MENU_LINK = GLB.THE_CAFE.get_link().url+'/table/';		
 		const tables_uniq_names = CAFE.tables_uniq_names?JSON.parse(CAFE.tables_uniq_names):[];					
 		this.rebuild_menulinks_list(tables_uniq_names, TOTAL_TABLE);				
+		
 		setTimeout(()=>{ 
+
+			if(GLB.THE_CAFE.is_iiko_mode()){				
+				const iiko_params = GLB.THE_CAFE.get('iiko_params');
+				if(iiko_params && iiko_params.tables){
+					const tables_data = JSON.parse(iiko_params.tables);
+					IikoTables.init(tables_data);			
+					const $total_iiko_tables = this.$form.find('.iiko-tables-total-message');
+					const msg = `В iiko настроено всего <span>${IikoTables.get_total_tables()}</span> стола (ов)`;
+					$total_iiko_tables.html(msg);
+				}
+			}
+
 			this._page_show();			
 		},300);
 
-		if(GLB.THE_CAFE.is_iiko_mode()){
-			const iiko_params = GLB.THE_CAFE.get('iiko_params');			
-			const tables_data = JSON.parse(iiko_params.tables);
-			IikoTables.init(tables_data);			
-			const $total_iiko_tables = this.$form.find('.iiko-tables-total-message');
-			const msg = `В iiko настроено всего <span>${IikoTables.get_total_tables()}</span> стола (ов)`;
-			$total_iiko_tables.html(msg);			
-		}
 	},
 
 	/**
