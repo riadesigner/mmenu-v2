@@ -109,7 +109,15 @@ export var VIEW_ORDER_FROM_HISTORY = {
 		let parsed_order_text = ORDER_TEXT.replace(/\\n/g,'<br>');		
 		parsed_order_text = fn.replaceUnderscores(parsed_order_text);
 		
-		this.$msgOrderText.html(parsed_order_text);		
+		let str_comment = "";
+		const waiter_comment = loaded_order.comment;
+		if(waiter_comment.length>0){
+			str_comment = `<h3>Комментарий официанта:</h3>
+			<p class="order-waiter-comment">${waiter_comment}</p>`
+		}
+
+		this.$msgOrderText.html(parsed_order_text+str_comment);		
+		
 		const currency = GLB.CAFE.get('cafe_currency').symbol;
 		const TOTAL_PRICE = "Итого: "+loaded_order.total_price+" "+ currency;
 		this.$totalCost.html(TOTAL_PRICE);	
