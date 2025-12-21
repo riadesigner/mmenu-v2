@@ -268,7 +268,8 @@ export default $.extend({
 					},300);
 
 				},
-				load_image:function(item,doAfterLoad) {					
+				load_image:function(item,doAfterLoad) {		
+					console.log('load image for ', item.title)			
 					var src = item.image_url.replace('.jpg','-s.jpg');					
 					NOW_IMG_LOADING = new Image();
 					NOW_IMG_LOADING.onload = function(){					
@@ -279,17 +280,28 @@ export default $.extend({
 				},
 				replace_image:function(item_id,image){
 					setTimeout(function(){					
-					$.each($PAGES,function(){
+					$.each($PAGES,function(){						
 						var $item = this;
 						if($item.hasClass('item-'+item_id)){
-						$item.find(".small-item-image__holder")
-						.css({backgroundImage:"url('"+image.src +"')"})
-						.removeClass('hidden')
-						.end().find(".small-item-image__loader")
-						.addClass("hidden");
+							$item.find(".small-item-image__holder")
+							.css({backgroundImage:"url('"+image.src +"')"})
+							.removeClass('hidden')
+							.end().find(".small-item-image__loader")
+							.addClass("hidden");
+							// mark external images
+							console.log('hello!', item_id)
+							if(image.src.includes('photobox')){							
+								$item.find('.small-item-image__holder').removeClass('external-image')
+							}else{
+								$item.find('.small-item-image__holder').addClass('external-image')
+							}							
 						}
+						
+						// console.log(`image.src ${image.src} includes)`, image.src.includes('photobox'));
+
+
 					});
-					},500);
+					},100);
 				}				
 
 			};

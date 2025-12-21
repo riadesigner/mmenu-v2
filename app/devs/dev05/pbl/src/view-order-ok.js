@@ -309,7 +309,7 @@ export var VIEW_ORDER_OK = {
 	},
 	show_successful_message(order_manager_name){
 		this.progress_bar_to_end();
-		this.set_operator_message_to(`Заказ в работе! <br> Ваш официант – ${order_manager_name}`);		
+		this.set_operator_message_to(`Заказ принят! <br> Ваш официант – ${order_manager_name}`);		
 	}
 };
 
