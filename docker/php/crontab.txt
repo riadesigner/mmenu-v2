@@ -5,6 +5,6 @@
 * * * * * /usr/local/bin/php /var/www/app/order-test.php >> /var/www/app/logs/cron-logs.log 2>&1
 
 # daily rotate log files (every 1:00 am)
-0 1 * * * /usr/sbin/logrotate /etc/logrotate.d/cron
-0 1 * * * /usr/sbin/logrotate /etc/logrotate.d/menu
-0 1 * * * /usr/sbin/logrotate /etc/logrotate.d/iiko-hook
+0 1 * * * /usr/sbin/logrotate /etc/logrotate.d/logrotate-cron.txt
+0 1 * * * /usr/sbin/logrotate /etc/logrotate.d/logrotate-menu.txt
+0 1 * * * /usr/sbin/logrotate /etc/logrotate.d/logrotate-iiko-hook.txt
