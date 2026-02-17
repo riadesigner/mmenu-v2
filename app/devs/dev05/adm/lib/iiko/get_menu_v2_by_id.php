@@ -86,6 +86,10 @@ function load_and_parse_menu($id_org, $api_key, $current_menu_id, $currentExtmen
          __errorjsonp($extmenu_data['errorDescription']);
     }
 
+    // ------------------------------
+    // 2. CONVERT TO CHEFSMENU FORMAT
+    // ------------------------------       
+    // 
     $chefs_data = Iiko_extmenu_to_chefs::parse($extmenu_data);
     $chefs_data_export = [
             "SourceMenu" => "EXT_MENU",
@@ -93,13 +97,16 @@ function load_and_parse_menu($id_org, $api_key, $current_menu_id, $currentExtmen
             "Menu" => $chefs_data,            
         ];
 
-    // ------------------
-    // 2. CONVERT TO JSON
-    // ------------------    
+    // --------------------
+    // 3. COLLECT META DATA
+    // --------------------    
     $json_meta_info = json_encode([
                 "iiko_loaded"=>$EXTMENU_LOADER->get_info(),
             ], JSON_UNESCAPED_UNICODE);
    
+    // ------------------
+    // 4. CONVERT TO JSON
+    // ------------------              
     $json_menu_data = json_encode($chefs_data_export, JSON_UNESCAPED_UNICODE | JSON_INVALID_UTF8_SUBSTITUTE);
 
     // Проверка кодирования json
