@@ -261,7 +261,8 @@ export const IIKO_ITEM_MODIFIERS = {
 					let modifier = g.items[m];					
 					let chosen = '';
 					let chosenByDefault = '';
-					if( parseInt(modifier['restrictions']['byDefault'],10) > 0){
+					let mByDefault = modifier['byDefault']?modifier['byDefault']:0; 
+					if( parseInt(mByDefault,10) > 0){
 						chosen = 'chosen'; 
 						chosenByDefault = 'chosen-by-default';
 					}

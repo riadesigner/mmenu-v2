@@ -32,8 +32,7 @@ export var ExtMenuParser = {
 					sizes:[],
 					imageUrl:"",
 					modifiers:[],
-					orderItemType: items[n].orderItemType,
-					sku: items[n].sku
+					orderItemType: items[n].orderItemType,					
 				}
 				var sizes = [];
 				var itemSizes = items[n].itemSizes;

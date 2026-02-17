@@ -152,8 +152,7 @@
 
 					$item_pos = 0;
 					$new_item = new Smart_object('items');
-					$new_item->id_cafe = $id_cafe;					
-					$new_item->sku = $iiko_item["sku"];
+					$new_item->id_cafe = $id_cafe;
 					$new_item->iiko_order_item_type = $iiko_item["orderItemType"];
 					$new_item->id_external = $id_item_external;
 					$new_item->description = $iiko_item['description'];

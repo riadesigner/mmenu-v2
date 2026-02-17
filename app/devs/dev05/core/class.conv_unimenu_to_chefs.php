@@ -94,7 +94,6 @@ class Conv_unimenu_to_chefs {
             "sizes"=> $sizes,
             "modifiers"=> $gNormalModifiers,
             "orderItemType"=>"",
-            "sku"=>"",        
         ];}, $items);
         return $items_parsed;
     }

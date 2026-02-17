@@ -45,7 +45,7 @@ import {VIEW_MODAL_CONFIRM} from './view-modal-confirm.js';
 import {VIEW_ACTION_SHEET} from './view-action-sheet.js';
 
 import {IikoLoader} from './iiko/iiko-loader.js';
-import {ExtMenuParser} from './iiko/iiko-extmenu-parser.js';
+// import {ExtMenuParser} from './iiko/iiko-extmenu-parser.js';
 import {IikoUpdater} from './iiko/iiko-updater.js';
 
 GLB.LNG = LNG;
@@ -60,7 +60,7 @@ GLB.ITEMS = ITEMS;
 GLB.INPUTS_LENGTH = INPUTS_LENGTH;
 
 GLB.IIKO_LOADER = IikoLoader;
-GLB.IIKO_EXT_MENU_PARSER = ExtMenuParser;
+// GLB.IIKO_EXT_MENU_PARSER = ExtMenuParser;
 GLB.IIKO_UPDATER = IikoUpdater;
 
 

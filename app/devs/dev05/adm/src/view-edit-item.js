@@ -160,14 +160,12 @@ export var VIEW_EDIT_ITEM = {
 			const restrictions = iiko_modifiers[m].restrictions;		
 			const r_min =  restrictions.minQuantity;
 			const r_max =  restrictions.maxQuantity;
-			// const r_default = restrictions.byDefault;
 
 			var modifiers = iiko_modifiers[m].items;
 			if(modifiers.length>0){
 				var arr_tags = [];
 				for(var nm in modifiers){
-					// console.log('modifiers[nm] =', modifiers[nm]);
-					arr_tags.push(`${modifiers[nm].name} / ${modifiers[nm].price} руб.`);
+					arr_tags.push(`${modifiers[nm].name} / ${modifiers[nm].price} руб. / ${modifiers[nm].portionWeightGrams} г.`);
 				};
 				var arr_tags_str = '<ul class="std-form__ui_tags"><li>'+arr_tags.join('</li><li>')+'</li></ul>';
 				

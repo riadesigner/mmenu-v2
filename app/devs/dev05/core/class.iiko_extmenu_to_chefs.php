@@ -1,22 +1,10 @@
 <?php
 /**
- * ПРЕОБРАЗУЕМ ВНЕШНЕЕ МЕНЮ В CHEFSMENU (v-1.0.0)
+ * ПРЕОБРАЗУЕМ ВНЕШНЕЕ МЕНЮ В CHEFSMENU (v-1.2.0)
  *  
- * до этого делали это в js
- * принято решение передать эту функцию в php, 
- * т.к. изменился подход в передаче данных,
- * теперь при загрузке внешнего меню, преобразуется и сохраняется в базе данных
- * а на фронт передается только id загруженного меню.
- *  
- * далее фронт дает команду обновить (апгрейдить) меню в соответствии с новыми данными
- * и также передает на бэк только id загруженного меню. 
+ * updated: 17-02-2026 
  * 
- * ОБЪЯСНЕНИЕ
- * т.к. загрузка внешнего меню происходит на стороне сервера и обновление (апгрейд) также на стороне, 
- * то гораздо эффективнее оставаться в нем (в php), а не проеобразовывать меню в js только для того, 
- * чтобы перестроить структуру и снова отдать на сервер, преобразуя в php.
- * 
- * РЕАДИЗАЦИЯ
+ * РЕАЛИЗАЦИЯ
  * особенность формата chefsmenu в том (в том числе), что 
  * CATEGORIES и ITEMS (ТОВАРЫ) - хранятся как ассоциативный массив (с id ключами ),
  * а MODIFIERS и ITEMS (ГРУППЫ МОДИФИКАТОРОВ и МОДИФИКАТОРЫ) - как обычные массивы (с индексами 0, 1, 2, ...);
@@ -59,11 +47,11 @@ class Iiko_extmenu_to_chefs {
                     'imageUrl' => "",
                     'modifiers' => [],
                     'orderItemType' => $itemData['orderItemType'] ?? null,
-                    'sku' => $itemData['sku'] ?? null
+                    'nutritionPerHundredGrams'=>"",
                 ];
 
                 $sizes = [];
-                $itemSizes = $itemData['itemSizes'] ?? [];
+                $itemSizes = $itemData['itemSizes'] ?? [];                
 
                 // собираем размеры, цены и вес
                 foreach ($itemSizes as $size) {
@@ -73,10 +61,14 @@ class Iiko_extmenu_to_chefs {
                         'sizeName' => $size['sizeName'] ?? null,
                         'isDefault' => $size['isDefault'] ?? null,
                         'measureUnitType' => $size['measureUnitType'] ?? null,
-                        'portionWeightGrams' => $size['portionWeightGrams'] ?? null,
-                        'nutritionPerHundredGrams' => $size['nutritionPerHundredGrams'] ?? null,
+                        'portionWeightGrams' => $size['portionWeightGrams'] ?? null,                        
                         'price' => $size['prices'][0]['price'] ?? null
                     ];
+
+                    // берем только первое описание калорий
+                    if(empty($item['nutritionPerHundredGrams'])){
+                        $item['nutritionPerHundredGrams'] = $size['nutritionPerHundredGrams'];
+                    }
 
                     // берем только первую картинку
                     if (!empty($size['buttonImageUrl']) && empty($item['imageUrl'])) {
@@ -88,22 +80,25 @@ class Iiko_extmenu_to_chefs {
                         $arr_m = [];
                         foreach ($size['itemModifierGroups'] as $modGroup) {
                             $m = [
-                                'modifierGroupId' => $modGroup['itemGroupId'] ?? null,
-                                'name' => $modGroup['name'] ?? null,
-                                'restrictions' => $modGroup['restrictions'] ?? null,
+                                'modifierGroupId' => $modGroup['itemGroupId'] ?? '',
+                                'name' => $modGroup['name'] ?? '',
+                                'restrictions' => [
+                                    'max' => $modGroup['restrictions']['max'] ?? 0,
+                                    'min' => $modGroup['restrictions']['min'] ?? 0,
+                                ],
                                 'items' => []
                             ];
 
                             foreach ($modGroup['items'] as $modifier) {
                                 $m['items'][] = [
-                                    'modifierId' => $modifier['itemId'] ?? null,
-                                    'name' => $modifier['name'] ?? null,
-                                    'description' => $modifier['description'] ?? null,
-                                    'portionWeightGrams' => $modifier['portionWeightGrams'] ?? null,
-                                    'restrictions' => $modifier['restrictions'] ?? null,
-                                    'nutritionPerHundredGrams' => $modifier['nutritionPerHundredGrams'] ?? null,
-                                    'price' => $modifier['prices'][0]['price'] ?? null
-                                ];
+                                    'modifierId' => $modifier['itemId'] ?? '',
+                                    'name' => $modifier['name'] ?? '',
+                                    'price' => $modifier['prices'][0]['price'] ?? 0,
+                                    'position' => $modifier['position'] ?? 0,
+                                    'portionWeightGrams' => $modifier['portionWeightGrams'] ?? 0,
+                                    'measureUnitType' => $modifier['measureUnitType'] ?? 'GRAM',
+                                    'byDefault' => $modifier['restrictions']['byDefault'] ?? 0,
+                                ];                                
                             }
 
                             $arr_m[] = $m;

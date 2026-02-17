@@ -233,6 +233,8 @@ export var VIEW_ORDER_OK = {
 				const price_with_modifiers = parseInt(row.price_with_modifiers, 10);				
 				const price = parseInt(row.price, 10); 
 
+				console.log('ROW = ', row);
+
 				const weight = `${row.volume} ${row.units}`;
 				let volume_str = IIKO_MODE ? `${row.sizeName} / ${weight}` : weight;
 				volume_str+= `, ${price} ₽`;
