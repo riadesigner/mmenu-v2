@@ -17,7 +17,8 @@ export var VIEW_CUSTOMIZE_ALL = {
 
 		this.$btnChangePassword = this.$form.find('.btn-change-password');
 		this.$btnCartSettings = this.$form.find('.btn-cart-settings');
-		this.$btnStaffSettings = this.$form.find('.btn-staff-settings');
+		this.$btnStaffSettings = this.$form.find('.btn-staff-settings');		
+		this.$btnStaffPushSettings = this.$form.find('.btn-staff-push-settings');
 		this.$btnChangeSubdomain = this.$form.find('.btn-change-subdomain');
 		this.$btnAddIiko = this.$form.find('.btn-add-iiko');				
 		this.$btnIikoCustomization = this.$form.find('.btn-iiko-customization');				
@@ -32,7 +33,7 @@ export var VIEW_CUSTOMIZE_ALL = {
 		this.$app_version = this.$view.find('.view-customize-all__app-version');
 		
 		this.siteUrl = CFG.http+CFG.www_url;
-		this.update_app_version(CFG.app_version);					
+		this.update_app_version(CFG.app_version);
 		
 		this.behavior();
 		this.reset();
@@ -170,6 +171,15 @@ export var VIEW_CUSTOMIZE_ALL = {
 			};
 			e.originalEvent.cancelable && e.preventDefault();
 		});
+
+		this.$btnStaffPushSettings.on('touchend',function(e){	
+			console.log("!!")		
+			if(!_this.VIEW_SCROLLED){				
+			GLB.VIEW_CUSTOMIZING_STAFF_PUSH.update(_this.ID_USER);
+			GLB.VIEWS.setCurrent(GLB.VIEW_CUSTOMIZING_STAFF_PUSH.name);
+			};
+			e.originalEvent.cancelable && e.preventDefault();
+		});		
 
 		this.$btnMenuLink.on('touchend',function(e){			
 			if(!_this.VIEW_SCROLLED){				

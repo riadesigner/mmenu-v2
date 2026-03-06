@@ -857,7 +857,8 @@ App&&App();
 					<div class="std-form__wide-button btn-cart-settings bright-btn" >Настроить Корзину</div>
 
 					<div class="std-form__section-description" >Здесь вы можете добавить сотрудников</div>
-					<div class="std-form__wide-button btn-staff-settings bright-btn" >Сотрудники кафе</div>					
+					<div class="std-form__wide-button btn-staff-settings bright-btn" >Сотрудники кафе для TG</div>					
+					<div class="std-form__wide-button btn-staff-push-settings bright-btn" >Сотрудники кафе для Push</div>										
 					
 					<div class="std-form__section-description" lang="lng_view_customize_all__menu_link"><!-- Здесь вы можете скачать QR-код и поделиться ссылкой на ваше меню --></div>					
 					<div class="std-form__wide-button btn-menu-link" lang="lng_view_customize_all__menu_link_btn"><!-- Ссылка на QR-код --></div>	
@@ -1109,11 +1110,11 @@ App&&App();
 
 					<p>Выберите роль для себя и получите ссылку-приглашение в телеграм канал вашего кафе, чтобы работать с заказами.</p>
 
-					<div class="customizing-cart__tg-links-section-attention std-form__highlight-field">
+					<div class="customizing-cart__push-links-section-attention std-form__highlight-field">
 						<strong>Не найдено ни одного телеграм ключа!</strong><br>Нажмите ниже «Сбросить телеграм ключи».
 					</div>
 
-					<div class="customizing-cart__tg-links-section">						
+					<div class="customizing-cart__push-links-section">						
 						
 						<div class="customizing-cart__all-keylinks">
 							<a href="<?=$CFG->http.$CFG->wwwroot;?>" target="_blank" class="link-waiter"><button class="std-special-single-button">ОФИЦИАНТ</button></a>
@@ -1175,6 +1176,100 @@ App&&App();
 			<div class="button-section"><div class="button save"><span lang="lng_save"><!-- Save --></span></div></div>
 		</div>
 	</div>		
+
+<!-- - - - - - - - VIEW CUSTOMIZING STAFF PUSH - - - - - - - - - - - - - - - -->
+
+	<div class="app-view view-customizing-staff-push">
+		<div class="app-view-header">
+			
+			<div class="view-header-title">
+				<div class="view-header-title_icon ico-adm-customizing"></div>
+				<div class="view-header-title_text">Настройка персонала</div>
+			</div>			
+
+			<div class="view-header-buttons">
+				<div class="view-header-buttons__button view-header-buttons__button_help"></div>
+			</div>
+		</div>
+		<div class="app-view-page">
+			<div class="app-view-page-container overflow-y">
+				<div class="std-form">
+					 
+					<p>Здесь вы можете пригласить сотрудников в кафе и назначить им роли.</p>
+
+					<p>Все заказы приходят в web-приложение через PUSH уведомления. 
+						После подтверждения заказа, официант или менеджер могут переправить его на кассу.</p>											
+
+					<h2>Выберите роль для себя:</h2>
+
+					<p>Выберите роль для себя и получите ссылку-приглашение в приложение вашего кафе, чтобы работать с заказами.</p>
+
+					<div class="customizing-cart__push-links-section-attention std-form__highlight-field">
+						<strong>Не найдено ни одного PUSH ключа!</strong><br>Нажмите ниже «Сбросить Push ключи».
+					</div>
+
+					<div class="customizing-cart__push-links-section">						
+						
+						<div class="customizing-cart__all-keylinks">
+							<a href="<?=$CFG->http.$CFG->wwwroot;?>" target="_blank" class="link-waiter"><button class="std-special-single-button">ОФИЦИАНТ</button></a>
+							<a href="<?=$CFG->http.$CFG->wwwroot;?>" target="_blank" class="link-manager"><button class="std-special-single-button">МЕНЕДЖЕР</button></a>
+							<a href="<?=$CFG->http.$CFG->wwwroot;?>" target="_blank" class="link-supervisor"><button class="std-special-single-button">АДМИНИСТРАТОР</button></a>
+						</div>
+
+					<h2 id="anchor_invitation">Пригласите сотрудника:</h2>
+
+						<p>Чтобы пригласить нового сотрудника, перешлите ему ссылку соответствующеее приглашение с нужной ролью. Или покажите ему соответствующий QR-код.</p>
+
+						<h3>Ссылка-приглашение:</h3>
+						<div class="customizing-cart__all-invite-links">
+							<button class="std-special-single-button invite-link-waiter">ОФИЦИАНТ</button>
+							<button class="std-special-single-button invite-link-manager">МЕНЕДЖЕР</button>
+							<button class="std-special-single-button invite-link-supervisor">АДМИНИСТРАТОР</button>
+						</div>	
+
+						<h3>QR-код приглашение:</h3>
+						<div class="customizing-cart__all-invite-qrcodes">
+							<button class="std-single-button-with-icon invite-qrcode-waiter">ОФИЦИАНТ</button>
+							<button class="std-single-button-with-icon invite-qrcode-manager">МЕНЕДЖЕР</button>
+							<button class="std-single-button-with-icon invite-qrcode-supervisor">АДМИНИСТРАТОР</button>
+						</div>		
+
+					</div>					
+					
+					<h2>Сотрудники кафе:</h2>
+
+					<div class="customizing-cart__all-tgusers">
+						<p>Сейчас в кафе зарегистрированы следующие сотрудники:</p>
+						<ul>
+							<li class="tgusers-role-waiter">Официанты: <span>нет</span></li>
+							<li class="tgusers-role-manager">Менеджеры: <span>нет</span></li>
+							<li class="tgusers-role-supervisor">Администраторы: <span>нет</span></li>
+						</ul>
+					</div>
+
+					<h2>Справка:</h2>
+
+					<p><strong><i>Официант</i></strong> – будет получать заказы на стол (в кафе).</p>
+					<p><strong><i>Менеджер</i></strong> – будет получать внешние заказы на доставку или самовывоз.</p>
+					<p><strong><i>Администратор</i></strong> – будет получать статистику по всем заказам за день.</p>
+
+					<h2>Удаление сотрудников:</h2>						
+					
+					<div class="super-admin-only">						
+						<p>Если нужно отозвать все разрешения и заново пересоздать ключи для доступа в web-приложение, выберите:</p>
+						<button name="update_all_push_keys">Сбросить Push ключи</button>
+					</div>								
+					
+				</div>										
+			</div>
+		</div>
+		<div class="app-view-loader"><span></span></div>
+		<div class="app-view-footer">
+			<div class="button-section"><div class="button cancel"><span lang="lng_cancel"><!-- Cancel --></span></div></div>
+			<div class="button-section"></div>
+			<div class="button-section"><div class="button save"><span lang="lng_save"><!-- Save --></span></div></div>
+		</div>
+	</div>	
 
 <!-- - - - - - - - VIEW CAFE DESCRIPTION - - - - - - - - - - - - - - - - - - -->
 
