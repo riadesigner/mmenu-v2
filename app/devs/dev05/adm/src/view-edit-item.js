@@ -157,9 +157,9 @@ export var VIEW_EDIT_ITEM = {
 		for(var m in iiko_modifiers){							
 			
 			var mod_group_title = iiko_modifiers[m].name;	
-			const restrictions = iiko_modifiers[m].restrictions;		
-			const r_min =  restrictions.minQuantity;
-			const r_max =  restrictions.maxQuantity;
+			const restrictions = iiko_modifiers[m].restrictions;
+			const r_min =  restrictions.min;
+			const r_max =  restrictions.max;
 
 			var modifiers = iiko_modifiers[m].items;
 			if(modifiers.length>0){
