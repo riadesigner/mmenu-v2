@@ -21,6 +21,7 @@ class Site{
 	static private $ARR_PAGES = [];
 	static private $ARR_BODY_CLASSES = [];	
 	static private $ARR_BODY_DATA = [];	
+	static private $ROUTER = null;	
 
 
 	static public function init(): void{
@@ -37,6 +38,8 @@ class Site{
 		// updating token expire date 
 		if(self::$User){ User::auth_update(self::$User->email); }
 
+		self::$ROUTER = new Router();
+
 		//if subdomail
 		if(self::has_subdomain()){						
 
@@ -49,7 +52,8 @@ class Site{
 					self::$SITE_PAGE = "RDSAdminEnter";
 					self::add_body_classes("page-rds-admin__enter");
 				}else{					
-					$R = new Router();					
+					$R = self::$ROUTER;
+
 					switch ($R->get(0)) {
 						case 'deluser':						
 							if(!$R->get(1) || !$R->get(2)){
@@ -98,7 +102,7 @@ class Site{
 			}			
 		}else{
 
-			//if no subdomail			
+			//if no subdomain			
 			$R = new Router();			
 			switch ($R->get(0)) {
 				case 'admin':					
@@ -184,6 +188,10 @@ class Site{
 						self::add_body_classes('page-control-panel');
 					}
 
+				break;
+				case 'webuser-register';
+					self::$SITE_PAGE = 'WebUserRegisterPage';	
+					self::add_body_classes('page-webuser-register');					
 				break;
 				case 'help':					
 					self::$SITE_PAGE = 'HelpPage';	
@@ -313,6 +321,10 @@ class Site{
   		};
 		return self::$ARR_PAGES[self::$SITE_PAGE]['template'];
 	}
+
+	static public function get_router(){		
+		return self::$ROUTER;
+	}	
 
 	/* PRIVATE */
 
