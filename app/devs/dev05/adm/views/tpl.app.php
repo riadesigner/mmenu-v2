@@ -1110,7 +1110,7 @@ App&&App();
 
 					<p>Выберите роль для себя и получите ссылку-приглашение в телеграм канал вашего кафе, чтобы работать с заказами.</p>
 
-					<div class="customizing-cart__push-links-section-attention std-form__highlight-field">
+					<div class="customizing-cart__tg-links-section-attention std-form__highlight-field">
 						<strong>Не найдено ни одного телеграм ключа!</strong><br>Нажмите ниже «Сбросить телеграм ключи».
 					</div>
 
