@@ -25,6 +25,7 @@ export var VIEW_IIKO_CUSTOMIZATION = {
 		this.$oldway_choosing_section = this.$form.find('.choosing-nomenclature-section');
 		this.$terminals_list = this.$form.find('.iiko-terminals-sections');
 		this.$tables_list = this.$form.find('.iiko-table-sections');
+		this.$order_types_list = this.$form.find('.iiko-order-service-types');
 		this.$current_organization_title = this.$form.find('.iiko-current-org-title span');		
 		this.$terminal_status_info_name = this.$form.find('.iiko-terminal-status-info-name');
 		this.$terminal_status_info = this.$form.find('.iiko-terminal-status-info');		
@@ -86,7 +87,10 @@ export var VIEW_IIKO_CUSTOMIZATION = {
 		terminal_groups_status === 1||"true"||true ? terminal_groups_status = "Активен" : terminal_groups_status = "Не активен";
 		this.update_terminal_status_info(current_terminal_group_name, terminal_groups_status);
 		
-		//xxx
+		// SHOW ORDER TYPES INFO
+		this.CURRENT_TERMINAL_GROUP_ID = iiko_params['current_order_type_id']||'';
+		this.DATA.order_types = iiko_params['order_types']?JSON.parse(iiko_params['order_types']):[];
+		this.update_order_types_list(this.DATA.order_types, this.CURRENT_ORDER_TYPE_ID);		
 
 		// SHOW TABLES INFO
 		this.DATA.table_sections = iiko_params['tables']?JSON.parse(iiko_params['tables']):[];
@@ -528,6 +532,24 @@ export var VIEW_IIKO_CUSTOMIZATION = {
 			this.$general_information.append($btn);
 		}
 
+	},
+	update_order_types_list:function(order_types, current_order_type_id){
+		console.log('order_types, current_order_type_id = ', order_types, current_order_type_id );
+		let has_active_types = 0;  		
+		if(order_types && order_types.length>0){
+			this.$order_types_list.html("");
+			for(let t in order_types){
+				if(!order_types[t].isDeleted){
+					has_active_types++
+					console.log(order_types[t]);	
+					let $btn = $(`<div class="std-form__radio-button" data-order-type-id="${order_types[t].id}">${order_types[t].name} <small>(${order_types[t].orderServiceType})</small></div>`);							
+					this.$order_types_list.append($btn);
+				}								
+			}
+			if(!has_active_types){
+				console.log("нет активных типов заказов.");
+			}
+		}
 	},
 	update_terminals_list:function(terminal_groups, current_terminal_group_id){
 		

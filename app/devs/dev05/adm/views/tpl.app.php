@@ -382,7 +382,13 @@ App&&App();
 
 					<!-- TODO -->
 					<!-- <button class="std-special-single-button btn-iiko-terminal-to-alive">Разбудить терминал</button> -->
-					
+
+					<h2>Тип заказа</h2>					
+					<p>Выберите тип заказа из списка</p>					
+					<div class="iiko-order-service-types">
+						<p>Не найдено.</p>
+					</div>					
+
 					<h2>Столы</h2>					
 					<p>У вас есть зарегистрированные столы: </p>					
 					<ul class="iiko-table-sections">
@@ -1318,7 +1324,7 @@ App&&App();
 			<div class="app-view-page-container overflow-y">				
 				<div class="std-form">
 
-				<h2>Столы</h2>					
+				<h2>Столы</h2>
 				<p>Укажите количество столов в вашем ресторане (до 50): </p>					
 				<div class="view-cafe-tables__table-counts-wrapper">
 					<input type="number" class="std-form__input w30">					
