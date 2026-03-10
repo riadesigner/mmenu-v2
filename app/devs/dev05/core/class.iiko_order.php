@@ -277,7 +277,10 @@ class Iiko_order{
 		$order_type_id = "";
 		foreach($order_types as $o_type){
 			// regular order
-			if(mb_strtolower($o_type['orderServiceType']) === 'common'){
+			if(
+				mb_strtolower($o_type['orderServiceType']) === 'common'
+				&& $o_type['isDeleted'] !== true
+				){
 				$order_type_id = $o_type['id'];
 				break;
 			}
