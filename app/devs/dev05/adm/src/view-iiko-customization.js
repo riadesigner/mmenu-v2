@@ -88,9 +88,10 @@ export var VIEW_IIKO_CUSTOMIZATION = {
 		this.update_terminal_status_info(current_terminal_group_name, terminal_groups_status);
 		
 		// SHOW ORDER TYPES INFO
-		this.CURRENT_TERMINAL_GROUP_ID = iiko_params['current_order_type_id']||'';
 		this.DATA.order_types = iiko_params['order_types']?JSON.parse(iiko_params['order_types']):[];
-		this.update_order_types_list(this.DATA.order_types, this.CURRENT_ORDER_TYPE_ID);		
+		this.CURRENT_ORDER_TYPE_ID = iiko_params['current_order_type_id']||'';		
+		this.NEW_ORDER_TYPE_ID = this.CURRENT_ORDER_TYPE_ID;
+		this.update_order_types_list(this.DATA.order_types, this.CURRENT_ORDER_TYPE_ID);
 
 		// SHOW TABLES INFO
 		this.DATA.table_sections = iiko_params['tables']?JSON.parse(iiko_params['tables']):[];
@@ -117,7 +118,11 @@ export var VIEW_IIKO_CUSTOMIZATION = {
 			this._page_show();
 		},300);
 		
-	},
+	},	
+	new_current_order_type_id:function(new_order_type_id) {		
+		this.NEW_ORDER_TYPE_ID = new_order_type_id.toString();
+		this.check_if_need2save();		
+	},	
 	new_current_extmenu_id:function(new_menu_id) {		
 		this.NEW_EXTMENU_ID = new_menu_id.toString();
 		this.check_if_need2save();		
@@ -142,13 +147,13 @@ export var VIEW_IIKO_CUSTOMIZATION = {
 		
 		let need2save = false;
 		
-		// CHECK THE MENUS_ID, ORGANIZATION_ID, TERMINAL_GROUP_ID				
 		if(
 			(this.NEW_EXTMENU_ID && this.NEW_EXTMENU_ID!==this.CURRENT_EXTMENU_ID)			
 			|| (this.NEW_OLDWAY_MENU_ID && this.NEW_OLDWAY_MENU_ID !==this.CURRENT_OLDWAY_MENU_ID)
 			|| (this.NEW_NOMENCLATURE_TYPE && this.NEW_NOMENCLATURE_TYPE !==this.CURRENT_NOMENCLATURE_TYPE)
 			|| (this.NEW_ORGANIZATION_ID && this.NEW_ORGANIZATION_ID!==this.CURRENT_ORGANIZATION_ID)
 			|| (this.NEW_TERMINAL_GROUP_ID && this.NEW_TERMINAL_GROUP_ID !==this.CURRENT_TERMINAL_GROUP_ID)
+			|| (this.NEW_ORDER_TYPE_ID && this.NEW_ORDER_TYPE_ID !==this.CURRENT_ORDER_TYPE_ID)
 		){			
 			need2save = true;
 		}
@@ -534,17 +539,37 @@ export var VIEW_IIKO_CUSTOMIZATION = {
 
 	},
 	update_order_types_list:function(order_types, current_order_type_id){
-		console.log('order_types, current_order_type_id = ', order_types, current_order_type_id );
+		
 		let has_active_types = 0;  		
-		if(order_types && order_types.length>0){
+		const order_active_types = order_types.filter((t)=>{ return !t.isDeleted});
+
+		if(order_active_types && order_active_types.length>0){
+			
 			this.$order_types_list.html("");
-			for(let t in order_types){
-				if(!order_types[t].isDeleted){
+			for(let t in order_active_types){
+				let ot = order_active_types[t];
+				
 					has_active_types++
 					console.log(order_types[t]);	
-					let $btn = $(`<div class="std-form__radio-button" data-order-type-id="${order_types[t].id}">${order_types[t].name} <small>(${order_types[t].orderServiceType})</small></div>`);							
+					let $btn = $(`<div class="std-form__radio-button" data-order-type-id="${ot.id}">${ot.name} <small>(${ot.orderServiceType})</small></div>`);
+
+					$btn.on("touchend",(e)=>{
+						this._blur({onBlur:()=>{
+							if(!this.LOADING && !this.VIEW_SCROLLED){
+								const $el = ($(e.target).prop('tagName')).toLowerCase()==='div'?$(e.target) : $(e.target).parent();								
+								const order_type_id = $el.data("order-type-id");								
+								if(!$el.hasClass("checked")){
+									$el.siblings().removeClass("checked");
+									$el.addClass("checked");									
+									this.new_current_order_type_id(order_type_id);
+								}						
+							}
+						}});
+						e.originalEvent.cancelable && e.preventDefault();						
+					});
+
 					this.$order_types_list.append($btn);
-				}								
+												
 			}
 			if(!has_active_types){
 				console.log("нет активных типов заказов.");
@@ -734,6 +759,7 @@ export var VIEW_IIKO_CUSTOMIZATION = {
 				current_extmenu_id:this.NEW_EXTMENU_ID,
 				current_oldway_menu_id:this.NEW_OLDWAY_MENU_ID,
 				current_nomenclature_type:this.NEW_NOMENCLATURE_TYPE,
+				current_order_type_id:this.NEW_ORDER_TYPE_ID,
 			};
 
 			console.log('data',data);

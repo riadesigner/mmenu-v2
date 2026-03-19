@@ -41,6 +41,7 @@
 	$current_extmenu_id = post_clean($_POST['current_extmenu_id'],100);	
 	$current_oldway_menu_id = post_clean($_POST['current_oldway_menu_id'],100);	
 	$current_nomenclature_type = post_clean($_POST['current_nomenclature_type'],100);		
+	// TODO ... update current order type id
 
 	$iiko_params_collect = new Smart_collect("iiko_params", "where id_cafe='".$id_cafe."'");
 	if(!$iiko_params_collect || !$iiko_params_collect->full()) __errorjsonp("Not found iiko params for cafe {$id_cafe}");	
