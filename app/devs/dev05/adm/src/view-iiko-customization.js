@@ -549,9 +549,9 @@ export var VIEW_IIKO_CUSTOMIZATION = {
 			for(let t in order_active_types){
 				let ot = order_active_types[t];
 				
-					has_active_types++
-					console.log(order_types[t]);	
-					let $btn = $(`<div class="std-form__radio-button" data-order-type-id="${ot.id}">${ot.name} <small>(${ot.orderServiceType})</small></div>`);
+					has_active_types++										
+					let checked_class = current_order_type_id===ot.id?'checked':'';					
+					let $btn = $(`<div class="std-form__radio-button ${checked_class}" data-order-type-id="${ot.id}">${ot.name} <small>(${ot.orderServiceType})</small></div>`);
 
 					$btn.on("touchend",(e)=>{
 						this._blur({onBlur:()=>{
@@ -762,7 +762,7 @@ export var VIEW_IIKO_CUSTOMIZATION = {
 				current_order_type_id:this.NEW_ORDER_TYPE_ID,
 			};
 
-			console.log('data',data);
+			console.log('data to save',data);
 
 			this._now_loading();
 	

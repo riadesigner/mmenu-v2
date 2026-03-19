@@ -40,8 +40,9 @@
 	$current_terminal_group_id = post_clean($_POST['current_terminal_group_id'],100);	
 	$current_extmenu_id = post_clean($_POST['current_extmenu_id'],100);	
 	$current_oldway_menu_id = post_clean($_POST['current_oldway_menu_id'],100);	
-	$current_nomenclature_type = post_clean($_POST['current_nomenclature_type'],100);		
-	// TODO ... update current order type id
+	$current_nomenclature_type = post_clean($_POST['current_nomenclature_type'],100);
+	$current_order_type_id = post_clean($_POST['current_order_type_id'],100);		
+	
 
 	$iiko_params_collect = new Smart_collect("iiko_params", "where id_cafe='".$id_cafe."'");
 	if(!$iiko_params_collect || !$iiko_params_collect->full()) __errorjsonp("Not found iiko params for cafe {$id_cafe}");	
@@ -82,12 +83,14 @@
 			if(!empty($current_extmenu_id)) $IIKO_PARAMS->set_current_extmenu_id($current_extmenu_id);
 			if(!empty($current_oldway_menu_id)) $IIKO_PARAMS->set_current_oldway_menu_id($current_oldway_menu_id);
 			if(!empty($current_nomenclature_type)) $IIKO_PARAMS->set_current_nomenclature_type($current_nomenclature_type);
+			if(!empty($current_order_type_id)) $IIKO_PARAMS->set_current_order_type_id($current_order_type_id);
 			
 			if(
 				!empty($current_terminal_group_id) || 
 				!empty($current_extmenu_id) ||
 				!empty($current_oldway_menu_id) ||	
-				!empty($current_nomenclature_type)
+				!empty($current_nomenclature_type) ||
+				!empty($current_order_type_id)
 			) {
 				$IIKO_PARAMS->save();
 			}			

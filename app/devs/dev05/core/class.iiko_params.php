@@ -24,6 +24,7 @@ class Iiko_params{
 	private string $switch_to_current_organization_id;
 	private string $current_organization_id;
 	private string $current_extmenu_id;
+	private string $current_order_type_id;
 	private string $current_terminal_group_id;
 	private string $current_oldway_menu_id;	
 	private string $current_nomenclature_type;	
@@ -92,10 +93,7 @@ class Iiko_params{
 		$this->iiko_params->current_oldway_menu_id = $id;	
 	}
 	public function set_current_nomenclature_type(string $id): void{
-		$id = mb_strtolower($id); 
-		// if(!array_key_exists($id,["groups_as_categories","real_categories"])){
-		// 	$id = "real_categories";
-		// }		
+		$id = mb_strtolower($id); 		
 		$this->current_nomenclature_type = $id;
 		$this->iiko_params->current_nomenclature_type = $id;	
 
@@ -109,6 +107,10 @@ class Iiko_params{
 		$this->current_extmenu_id = $id;
 		$this->iiko_params->current_extmenu_id = $id;	
 	}	
+	public function set_current_order_type_id(string $id): void{
+		$this->current_order_type_id = $id;
+		$this->iiko_params->current_order_type_id = $id;	
+	}
 	public function read_status_current_terminal_group():void {					
 
 		$url     = 'api/1/terminal_groups/is_alive';
@@ -143,14 +145,17 @@ class Iiko_params{
 		$this->iiko_params->organizations = json_encode($this->arr_organizations, JSON_UNESCAPED_UNICODE);	
 		$this->iiko_params->terminal_groups = json_encode($this->arr_terminals, JSON_UNESCAPED_UNICODE);	
 		$this->iiko_params->tables = json_encode($this->arr_tables, JSON_UNESCAPED_UNICODE);	
-		$this->iiko_params->order_types = json_encode($this->arr_order_types, JSON_UNESCAPED_UNICODE);	
+		$this->iiko_params->order_types = json_encode($this->arr_order_types, JSON_UNESCAPED_UNICODE);
+		
+		
 		if($this->arr_extmenus && count($this->arr_extmenus)){
 			$this->iiko_params->extmenus = json_encode($this->arr_extmenus, JSON_UNESCAPED_UNICODE);	
 			$this->iiko_params->current_extmenu_id = $this->current_extmenu_id;
 		}		
-		$this->iiko_params->current_organization_id = $this->current_organization_id;
+		$this->iiko_params->current_organization_id = $this->current_organization_id;		
 		$this->iiko_params->current_terminal_group_id = $this->current_terminal_group_id;	
 		$this->iiko_params->current_terminal_group_status = $this->current_terminal_group_status;	
+		$this->iiko_params->current_order_type_id = $this->current_order_type_id;
 			
 		$this->iiko_params->rough_data = json_encode($this->ROUGH_DATA, JSON_UNESCAPED_UNICODE);	
 		
