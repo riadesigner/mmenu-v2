@@ -48,7 +48,17 @@ export default [
     globals: {'jquery': 'jQuery'},
     plugins: [terser()],    
   }    
-}
+},{
+  // WEBCART
+  external: ['jquery'],
+  input: 'webcart/src/app.js',
+  output: {
+    file: 'webcart/dist/app.js',
+    format: 'iife',
+    name:'App',
+    plugins: [terser()],
+  } 
+},
 ];
 
 

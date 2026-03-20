@@ -288,8 +288,7 @@ export default $.extend({
 							.removeClass('hidden')
 							.end().find(".small-item-image__loader")
 							.addClass("hidden");
-							// mark external images
-							console.log('hello!', item_id)
+							// mark external images							
 							if(image.src.includes('photobox')){							
 								$item.find('.small-item-image__holder').removeClass('external-image')
 							}else{

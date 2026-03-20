@@ -11,9 +11,10 @@
 <base href="<?=Site::get_app_url();?>">
 
 <link rel="stylesheet" href="./site/css/style_cafe.css<?=$ver;?>" type="text/css">
-<link href="https://fonts.googleapis.com/css?family=Open+Sans:400,700" rel="stylesheet">
-
 <script type="text/javascript" src="<?=$CFG->base_url;?>jquery/jquery.min.js"></script>
+
+<script type="text/javascript" src="./webcart/dist/app.js<?=$ver;?>"></script>
+
 <script type="text/javascript">
 
 const GLB_APP_URL = '<?=Site::get_app_url();?>'; 
@@ -37,7 +38,10 @@ $(function() {
 		alert('Неправильная ссылка');
 		location.href=SITE_CFG.home_page+'404';
 	}
+	
 });
+
+
 
 </script>
 
@@ -57,5 +61,8 @@ $(function() {
 
 <div>загрузка...</div>
 
+<script>
+	App && App();
+</script>
 </body>
 </html>
