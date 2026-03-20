@@ -73,7 +73,7 @@ class Iiko_order{
 		}		
 
 		$order_items = $this->prepare_items($order_rows);		
-		// $order_type_id = $this->get_id_for_tables_type_order();
+		$order_type_id = $this->get_id_for_tables_type_order();
 
 		// $order = [
 		// 	"id"=>"",
@@ -254,38 +254,46 @@ class Iiko_order{
 		$current_table = array_filter($all_tables, function($table) use ($table_number) {
 			return $table['number'] == $table_number;
 		});
-		
-		// glog("CURRENT_TABLE", print_r($current_table,1));
 
 		if(!count($current_table)) throw new Exception("--cant find iiko tableIds for the cafe, 4");
 
 		$firstKey = array_key_first($current_table);
 		$table_id = $current_table[$firstKey]['id'];
 
-		// glog("TABLE_ID = ".$table_id);
-
 		return $table_id;
 	}	
 
 	private function get_id_for_tables_type_order(): string{
 		
-		$order_types = $this->iiko_params->order_types;
-		$order_types = !empty($order_types)?json_decode($order_types,true):[];
-		
-		if(!count($order_types)) throw new Exception("--cant find iiko order types");
-		
-		$order_type_id = "";
-		foreach($order_types as $o_type){
-			// regular order
-			if(
-				mb_strtolower($o_type['orderServiceType']) === 'common'
-				&& $o_type['isDeleted'] !== true
-				){
-				$order_type_id = $o_type['id'];
-				break;
-			}
+		$chosen_order_type =  $this->iiko_params->current_order_type_id;
+
+		// if admin not selected the type, then
+		// we use auto-calculation: 
+		// choosing type, where type==common & !Deleted		
+
+		if(empty($chosen_order_type)){
+
+			$order_types = $this->iiko_params->order_types;
+			$order_types = !empty($order_types)?json_decode($order_types,true):[];
+			
+			if(!count($order_types)) throw new Exception("--cant find iiko order types");
+			
+			$order_type_id = "";
+			foreach($order_types as $o_type){
+				// regular order
+				if(
+					mb_strtolower($o_type['orderServiceType']) === 'common'
+					&& $o_type['isDeleted'] !== true
+					){
+					$order_type_id = $o_type['id'];
+					break;
+				}
+			}		
+
+			$chosen_order_type = $order_type_id;
 		}
-		return $order_type_id;
+
+		return $chosen_order_type;
 	}
 }
 
