@@ -1,9 +1,31 @@
 import {GLB} from './glb.js';
 
 export var WebReg  = {
-	init:function(){
-		console.log('START REG');
+	init:function(siteConfig){
+		this.siteConfig = siteConfig;
+		console.log('this.siteConfig',this.siteConfig);
+		this.$webuserRole = $('.webuser-role');		
+		this.check_url();
 		this.behavior();
+	},
+	check_url:function(){
+
+		if(this.siteConfig.register!=='waiter' 
+		&& this.siteConfig.register!=='manager' 
+		&& this.siteConfig.register!=='supervisor' ){
+			alert('Неправильная ссылка');
+			location.href=this.siteConfig.home_page+'404';
+		}
+
+		this.init_web_reg();
+
+	},
+	init_web_reg:function(){
+		let role = this.siteConfig.register=='waiter'?'Официант':this.siteConfig.register=='manager'?'Менеджер':'Супервайзер';
+		this.$webuserRole.html(`Роль: ${role}`);
+		console.log('init_web_reg', this.siteConfig.register);
+		// this.$btn = $(".web-reg-btn");
+
 	},
 	behavior:function(){
 		// var _this=this;

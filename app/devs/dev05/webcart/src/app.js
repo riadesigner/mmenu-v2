@@ -5,11 +5,11 @@ import {WebReg} from './web_reg.js';
 
 GLB.WebReg = WebReg;
 
-export default function(){
+export default function(siteConfig){
 
 	$(function(){
 			
-		GLB.WebReg.init();
+		GLB.WebReg.init(siteConfig);
 
 	});
 	
