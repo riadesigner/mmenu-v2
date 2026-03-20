@@ -8,6 +8,7 @@
 <meta http-equiv="Cache-Control" content="no-cache"/>
 <link rel="shortcut icon" href="<?=$CFG->base_url;?>favicon.png" type="image/png">
 <base href="<?=Site::get_app_url();?>">
+<link rel="manifest" href="./webcart/manifest.json">
 <link rel="stylesheet" href="./webcart/css/style.css<?=$ver;?>">
 <script type="text/javascript" src="<?=$CFG->base_url;?>jquery/jquery.min.js"></script>
 <script type="text/javascript" src="./webcart/dist/app.js<?=$ver;?>"></script>
@@ -37,6 +38,10 @@ App && App(SITE_CFG);
 <h2>Регистрация пользователя</h2>
 
 <div class="webuser-role">Роль: ...</div>
+<br>
+<div class="app-status">...</div>
+<br>
+<div class="err-message"></div>
 
 <script>
 	

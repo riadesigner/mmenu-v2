@@ -13,6 +13,6 @@ body{
     padding:20px;    
 }
 
-
-
 * {	box-sizing: border-box; }
+
+.err_message{color:rgb(184, 26, 26);}
