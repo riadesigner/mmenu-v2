@@ -53,7 +53,7 @@ export const RegisterPush = {
         // 5. Создаем новую подписку
         const subscription = await registration.pushManager.subscribe({
             userVisibleOnly: true,
-            applicationServerKey: urlBase64ToUint8Array(this.vapidPublicKey)
+            applicationServerKey: this.urlBase64ToUint8Array(this.vapidPublicKey)
         });
         
         console.log('New subscription created:', subscription);
@@ -70,6 +70,44 @@ export const RegisterPush = {
         // alert('Уведомления успешно включены!');
         
     },
+
+    urlBase64ToUint8Array: function(base64String) {
+        // Очищаем строку от пробелов, переносов строк и других лишних символов
+        base64String = base64String.trim();
+        
+        // Удаляем возможные префиксы типа '-----BEGIN PUBLIC KEY-----'
+        if (base64String.includes('BEGIN PUBLIC KEY')) {
+            base64String = base64String
+                .replace(/-----BEGIN PUBLIC KEY-----/, '')
+                .replace(/-----END PUBLIC KEY-----/, '')
+                .replace(/\s/g, '');
+        }
+        
+        // Проверяем, что строка не пустая
+        if (!base64String) {
+            console.error('VAPID key is empty');
+            throw new Error('VAPID public key is empty');
+        }
+        
+        console.log('Original VAPID key:', base64String);
+        
+        try {
+            // Добавляем padding если нужно
+            const padding = '='.repeat((4 - base64String.length % 4) % 4);
+            const base64 = (base64String + padding)
+                .replace(/-/g, '+')
+                .replace(/_/g, '/');
+            
+            console.log('Formatted base64:', base64);
+            
+            const rawData = atob(base64);
+            return Uint8Array.from([...rawData].map(char => char.charCodeAt(0)));
+        } catch (error) {
+            console.error('Failed to decode VAPID key:', error);
+            console.error('Problematic string:', base64String);
+            throw new Error('Invalid VAPID public key format');
+        }
+    },    
     
     // Вспомогательная функция для ожидания готовности Service Worker
     waitForServiceWorkerReady: async function(registration) {
