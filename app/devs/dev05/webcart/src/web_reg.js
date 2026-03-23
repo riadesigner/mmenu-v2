@@ -7,12 +7,28 @@ export var WebReg  = {
 		this.$webuserRole = $('.webuser-role');		
 		this.$appStatus = $('.app-status');		
 		this.$errMessage = $('.err-message');
+		this.vapidPublicKey = this.siteConfig.vapidPublicKey;
 		this.reset();
-		this.check_url();		
+		this.check_url();
+		this.check_notif_enabled();		
 		this.behavior();
 	},
 	reset:function(){		
 		this.err_message('');		
+	},
+	check_notif_enabled:function(){
+		// Проверяем доступность уведомлений
+		if (!('Notification' in window)) {
+			alert('Ваш браузер не поддерживает уведомления');
+		}		
+		
+		if(Notification.permission === 'denied'){
+			const msg =`Уведомления не разрешены.<br>
+			Чтобы их включить нажпите на замок в адресной строке,
+			выберите Настройка сайта->Уведомления->разрешить`;
+			this.err_message(msg);
+		}
+	
 	},
 	check_url:function(){
 
@@ -46,56 +62,59 @@ export var WebReg  = {
 		let role = this.siteConfig.register=='waiter'?'Официант':this.siteConfig.register=='manager'?'Менеджер':'Супервайзер';
 		this.$webuserRole.html(`Роль: ${role}`);		
 
-		this.async_register(this.siteConfig.token)
+		this.async_check_token(this.siteConfig.token)
 		.then(data => {
-			console.log('data', data);
+			this.err_message('');
+			this.async_webuser_register(data);			
 		})
 		.catch(error => {
 			this.err_message(error);
-			console.log('error', error);
+			console.log('error', error);			
 		});
 
 	},
-	async_register:function(token){
+	async_check_token:function(token){
 		return new Promise((res, rej) => {
-			this.now_loading();	
-			
-			console.log('PAUSE')
-			rej();
+			this.now_loading();									
 
-			var url = 'webcart/lib/web.register.php';
+			var url = 'webcart/lib/web.check_token.php';
 			var data = {
 				token:token
 			};
 			this.AJAX = $.ajax({
-				url: url+"?callback=?",
+				url: url,
 				dataType: "json",
 				data:data,
 				method:"POST",
                 xhrFields: {
                     withCredentials: true  // Для отправки cookies при CORS
                 }, 				
-				success: (answer)=> {				
-					this.end_loading();
-					if(answer && !answer.error){
-						console.log(answer)
-						// location.reload();
-						res();
-					}else{
-						this.err_message(answer.error);
-						rej();
+				success: (answer)=> {					
+					this.end_loading();					
+					if(answer && !answer.error){						
+						res(answer);
+					}else{						
+						rej(answer.error);
 					}
 				},
 				error:(response)=> {					
-					console.log(response)
-					this.err_message(JSON.stringify(response));
-					this.end_loading();		
-					rej();	
+					console.log('err!', response)
+					this.end_loading();	
+					rej(JSON.stringify(response));	
 				}
 			});			
 		});
 	},
+	async_webuser_register:function(data){
+				
+		console.log('async_webuser_register', data);
+		const Push = GLB.RegisterPush;
+		Push.init(this.vapidPublicKey); 
+				
+	},
 	behavior:function(){
+
+
 		// var _this=this;
 		// this.$btn.on("touchend click",function(e) {			
 		// 	var contract_name = $(this).data("contract-name");

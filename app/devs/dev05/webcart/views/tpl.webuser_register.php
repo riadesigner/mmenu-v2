@@ -19,13 +19,17 @@ const GLB_APP_URL = '<?=Site::get_app_url();?>';
 
 <?php
 $R = Site::get_router();
+$pushConfig = require_once WORK_DIR.APP_DIR.'webcart/config/push.php';
+$publicKey = $pushConfig['publicKey'];     
 ?>
 
 var SITE_CFG = {
 	home_page: '<?=SITE::get_link("home");?>/',
 	register:'<?=$R->get(1);?>',	
-	token:'<?=$R->get(2);?>',	
+	token:'<?=$R->get(2);?>',
+	vapidPublicKey: '<?=$publicKey;?>',
 };
+
 
 App && App(SITE_CFG);
 
@@ -41,7 +45,10 @@ App && App(SITE_CFG);
 <br>
 <div class="app-status">...</div>
 <br>
+<div id="notification-status"></div>
+<br>
 <div class="err-message"></div>
+
 
 <script>
 	

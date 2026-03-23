@@ -55,7 +55,7 @@ export default [
   output: {
     file: 'webcart/dist/app.js',
     format: 'iife',
-    name:'App',
+    name:'App',    
     plugins: [terser()],
   } 
 },
