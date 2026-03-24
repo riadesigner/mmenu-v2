@@ -32,7 +32,11 @@
 
 	$all_menu = new Smart_collect("menu","WHERE id_cafe={$id_cafe}","ORDER BY pos");
 
-	__answerjson(["cafe"=>$cafe->export(), "menu"=>$all_menu->export()]);
+	$answr = ["cafe"=>$cafe->export(), "menu"=>$all_menu->export()];
+	
+	// saveArrayToUniqueJson($answr); //for test only!
+
+	__answerjson($answr);
 
 
 

@@ -27,8 +27,9 @@
 
 	$all_items_export = $all_items->export();
 	
-	// glog("==== all_items =====: ".print_r($all_items_export,1));
-	__answerjson($all_items->export());
+	// saveArrayToUniqueJson($all_items_export); //for test only!
+
+	__answerjson($all_items_export);
 
 
 ?>

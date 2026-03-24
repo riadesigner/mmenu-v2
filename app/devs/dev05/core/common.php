@@ -356,12 +356,12 @@ function capture_var_dump($data) {
 
 function saveArrayToUniqueJson(array $data, string $directory = ""): ?string {
 
-	$directory = empty($directory)?'exports':$directory;
+	$directory = empty($directory)?'exports_json':$directory;
     	
 	// Создаем директорию, если её нет
-    // if (!is_dir($directory) && !mkdir($directory, 0777, true)) {
-    //     throw new RuntimeException("Failed to create directory: $directory");
-    // }
+    if (!is_dir($directory) && !mkdir($directory, 0777, true)) {
+        throw new RuntimeException("Failed to create directory: $directory");
+    }
 
     // Генерируем уникальное имя для финального файла
     do {
@@ -399,6 +399,30 @@ function saveArrayToUniqueJson(array $data, string $directory = ""): ?string {
 
     return $finalFilename;
 }
+
+		
+function loadJsonFile(string $json_file_path=""): array{	
+	
+	// Step 1: Read the file
+	$jsonString = file_get_contents($json_file_path);
+	
+	if ($jsonString === false) {			
+		throw new RuntimeException("Error: Unable to read the JSON file.");
+	}
+	
+	// Step 2: Decode the JSON
+	$data = json_decode($jsonString, true);
+
+	// Check for JSON decoding errors
+	if (json_last_error() !== JSON_ERROR_NONE) {
+		throw new RuntimeException("Error decoding JSON: " . json_last_error_msg());
+	}
+			
+	return $data;
+
+}
+
+
 
 /* for remember and TODO */
 

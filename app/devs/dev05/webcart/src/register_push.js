@@ -59,16 +59,48 @@ export const RegisterPush = {
         console.log('New subscription created:', subscription);
         
         // 6. Отправляем на сервер
-        // const response = await fetch('/api-save-subscription', {
-        //     method: 'POST',
-        //     headers: { 'Content-Type': 'application/json' },
-        //     body: JSON.stringify(subscription)
-        // });
+        await this.save_to_db_async(subscription)
+        .then(response => {
+            console.log('Server response:', response);
+            alert('Уведомления успешно включены');
+        })
+        .catch(error => {
+            console.error('Error saving subscription:', error);
+        });
         
-        // const text = await response.text();
-        // console.log("Server response:", text);
-        // alert('Уведомления успешно включены!');
-        
+    },
+    save_to_db_async: function(subscription){
+		return new Promise((res, rej) => {
+			this.now_loading();									
+
+			var url = 'webcart/lib/web.reg_to_db.php';
+            // здесь нужно доделать передачу данных на сервер
+			var data = {
+				subscription:{}
+			};
+			this.AJAX = $.ajax({
+				url: url,
+				dataType: "json",
+				data:data,
+				method:"POST",
+                xhrFields: {
+                    withCredentials: true  // Для отправки cookies при CORS
+                }, 				
+				success: (answer)=> {					
+					this.end_loading();					
+					if(answer && !answer.error){						
+						res(answer);
+					}else{						
+						rej(answer.error);
+					}
+				},
+				error:(response)=> {					
+					console.log('err!', response)
+					this.end_loading();	
+					rej(JSON.stringify(response));	
+				}
+			});			
+		});
     },
 
     urlBase64ToUint8Array: function(base64String) {
@@ -140,6 +172,12 @@ export const RegisterPush = {
                 reject(new Error('Service Worker activation timeout'));
             }, 10000);
         });
+    },
+    now_loading: function() {
+        this.loading = true;
+    },
+    end_loading: function() {
+        this.loading = false;
     }
     
 }
