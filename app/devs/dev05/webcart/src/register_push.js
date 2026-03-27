@@ -1,10 +1,51 @@
+/**
+ * @return: {subscription:any, isNew:boolean, error:string, message:string }
+ */
+
 export const RegisterPush = {
-    init:function(vapidPublicKey){
+    init:async function(vapidPublicKey){
+        
         this.vapidPublicKey = vapidPublicKey;
         this.SW_PATH = `${GLB_APP_URL}/webcart/sw.js`;
         console.log('RegisterPush init!');
-        this.regPush();        
+        
+        const {subscription, isNew, message, error} = await this.regPush();        
+        return {subscription, isNew, message, error};
+    },
+    regPush: async function() {
+        
+        // 1. Регистрируем Service Worker
+        const registration = await this.initServiceWorker();
+        if(!registration) return { error:'Service Worker registration failed', isNew:false, subscription:null };
+        
+        // 2. Ждем, пока Service Worker активируется
+        // (можно использовать ready или ждать события activate)
+        await this.waitForServiceWorkerReady(registration);
+        
+        // 3. Теперь запрашиваем разрешение
+        const permission = await Notification.requestPermission();
+        if (permission !== 'granted') {            
+            return {error:'Разрешите уведомления', subscription:null, isNew:false};
+        }                
 
+        // Получаем существующую подписку
+        let subscriptionAlready = await registration.pushManager.getSubscription();   
+        
+        console.log('------- subscriptionAlready: ------------ ', subscriptionAlready);
+        
+        if (subscriptionAlready) {
+            // Если подписка уже есть, можно не создавать новую                        
+            return {subscription:subscriptionAlready,isNew:false,message:'Подписка на уведомления уже есть'};
+        }
+
+        // 5. Создаем новую подписку
+        const subscription = await registration.pushManager.subscribe({
+            userVisibleOnly: true,
+            applicationServerKey: this.urlBase64ToUint8Array(this.vapidPublicKey)
+        });         
+        
+        return {subscription:subscription,isNew:true,message:'Подписка на уведомления успешно создана'};
+        
     },
     initServiceWorker: async function() {
         // проверяем доступность Service Worker
@@ -21,88 +62,7 @@ export const RegisterPush = {
             console.error('Service Worker registration failed:', error);
             return false;
         }
-    },
-    regPush: async function() {
-        
-        // 1. Регистрируем Service Worker
-        const registration = await this.initServiceWorker();
-        if(!registration) return;
-        
-        // 2. Ждем, пока Service Worker активируется
-        // (можно использовать ready или ждать события activate)
-        await this.waitForServiceWorkerReady(registration);
-        
-        // 3. Теперь запрашиваем разрешение
-        const permission = await Notification.requestPermission();
-        if (permission !== 'granted') {
-            alert('Разрешите уведомления');
-            return;
-        }                
-
-        // Получаем существующую подписку
-        let subscriptionAlready = await registration.pushManager.getSubscription();                
-        
-        if (subscriptionAlready) {
-            console.log('Подписка на уведомления уже есть');
-            // Если подписка уже есть, можно не создавать новую
-            console.log('subscriptionAlready',subscriptionAlready);
-            alert('Уведомления уже включены');            
-            return;
-        }
-
-        // 5. Создаем новую подписку
-        const subscription = await registration.pushManager.subscribe({
-            userVisibleOnly: true,
-            applicationServerKey: this.urlBase64ToUint8Array(this.vapidPublicKey)
-        });
-        
-        console.log('New subscription created:', subscription);
-        
-        // 6. Отправляем на сервер
-        await this.save_to_db_async(subscription)
-        .then(response => {
-            console.log('Server response:', response);
-            alert('Уведомления успешно включены');
-        })
-        .catch(error => {
-            console.error('Error saving subscription:', error);
-        });
-        
-    },
-    save_to_db_async: function(subscription){
-		return new Promise((res, rej) => {
-			this.now_loading();									
-
-			var url = 'webcart/lib/web.reg_to_db.php';
-            // здесь нужно доделать передачу данных на сервер
-			var data = {
-				subscription:{}
-			};
-			this.AJAX = $.ajax({
-				url: url,
-				dataType: "json",
-				data:data,
-				method:"POST",
-                xhrFields: {
-                    withCredentials: true  // Для отправки cookies при CORS
-                }, 				
-				success: (answer)=> {					
-					this.end_loading();					
-					if(answer && !answer.error){						
-						res(answer);
-					}else{						
-						rej(answer.error);
-					}
-				},
-				error:(response)=> {					
-					console.log('err!', response)
-					this.end_loading();	
-					rej(JSON.stringify(response));	
-				}
-			});			
-		});
-    },
-
+    },    
     urlBase64ToUint8Array: function(base64String) {
         // Очищаем строку от пробелов, переносов строк и других лишних символов
         base64String = base64String.trim();

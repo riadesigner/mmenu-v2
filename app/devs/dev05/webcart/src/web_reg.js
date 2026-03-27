@@ -7,6 +7,7 @@ export var WebReg  = {
 		this.$webuserRole = $('.webuser-role');		
 		this.$appStatus = $('.app-status');		
 		this.$errMessage = $('.err-message');
+		this.$okMessage = $('.ok-message');
 		this.vapidPublicKey = this.siteConfig.vapidPublicKey;
 		this.reset();
 		this.check_url();
@@ -14,7 +15,8 @@ export var WebReg  = {
 		this.behavior();
 	},
 	reset:function(){		
-		this.err_message('');		
+		this.$errMessage.html('');	
+		this.$okMessage.html('');	
 	},
 	check_notif_enabled:function(){
 		// Проверяем доступность уведомлений
@@ -50,7 +52,10 @@ export var WebReg  = {
 		this.$appStatus.html('Готово');
 	},
 	err_message:function(errMsg=''){
-		this.$errMessage.html(errMsg);
+		this.$errMessage.append(`<p>${errMsg}</p>`);
+	},
+	ok_message:function(okMsg=''){
+		this.$okMessage.append(`<p>${okMsg}</p>`);
 	},
 	message_not_valid_link:function(){
 		this.err_message('Неправильная ссылка');
@@ -105,13 +110,67 @@ export var WebReg  = {
 			});			
 		});
 	},
-	async_webuser_register:function(data){
+	async_webuser_register:async function(data){
 				
+		console.log('======= VAPIDPUBLICKEY ======= ', this.vapidPublicKey);
 		console.log('async_webuser_register', data);
 		const Push = GLB.RegisterPush;
-		Push.init(this.vapidPublicKey); 
-				
+		const {error, subscription, isNew, message} = await Push.init(this.vapidPublicKey); 		
+		if(error){
+			this.err_message(error);
+		}else{
+			message && this.ok_message(message);
+			console.log( 'subscription = ',subscription, 'isNew = ', isNew);
+			await this.save_to_db_async(subscription,isNew)
+			.then((vars)=>{
+				console.log('vars', vars);
+			},
+			(error)=>{
+				console.log('error', error);
+			})
+		}		
+		
 	},
+    save_to_db_async: function(subscription, isNew){
+		return new Promise((res, rej) => {
+			this.now_loading();
+
+			var url = 'webcart/lib/web.reg_to_db.php';
+
+			const subscriptionData = JSON.parse(JSON.stringify(subscription));
+
+			const data = {
+				isNew,
+				...subscriptionData
+			};			
+
+			console.log('data', data);
+
+			$.ajax({
+				url: url,
+				method: "POST",
+                xhrFields: {
+                    withCredentials: true  // Для отправки cookies при CORS
+                },
+				contentType: "application/json",
+				data: JSON.stringify(subscription), // ← сохраняем полную структуру
+				success: (answer)=> {					
+					this.end_loading();					
+					if(answer && !answer.error){						
+						res(answer);
+					}else{						
+						rej(answer.error);
+					}
+				},
+				error:(response)=> {					
+					console.log('err!', response)
+					this.end_loading();	
+					rej(JSON.stringify(response));	
+				}				
+			});
+
+		});
+    },	
 	behavior:function(){
 
 

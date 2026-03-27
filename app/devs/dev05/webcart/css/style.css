@@ -16,3 +16,4 @@ body{
 * {	box-sizing: border-box; }
 
 .err-message{color:rgb(254, 88, 32);}
+.ok-message{color:rgb(0, 167, 112);}

@@ -59,7 +59,7 @@ class Site{
 							if(!$R->get(1) || !$R->get(2)){
 								self::$SITE_PAGE = "RDSAdmin404";
 								self::add_body_classes("page-rds-admin__404");
-								glogError("Unknown path: ".$_SERVER['REQUEST_URI'],__FILE__);
+								glogError("Unknown path 8: ".$_SERVER['REQUEST_URI'],__FILE__);
 							}else{
 								self::$SITE_PAGE = "RDSAdminDelUser"; // test
 								self::add_body_classes("page-rds-admin__del-user");
@@ -92,12 +92,12 @@ class Site{
 					}else{
 						self::$SITE_PAGE = "404";
 						self::add_body_classes("page-404");
-						glogError("Unknown path: ".$_SERVER['REQUEST_URI'],__FILE__);
+						glogError("Unknown path 7: ".$_SERVER['REQUEST_URI'],__FILE__);
 					}
 				}else{
 					self::$SITE_PAGE = "404";
 					self::add_body_classes("page-404");
-					glogError("Unknown path: ".$_SERVER['REQUEST_URI'],__FILE__);
+					glogError("Unknown path 6: ".$_SERVER['REQUEST_URI'],__FILE__);
 				}				
 			}			
 		}else{
@@ -131,7 +131,7 @@ class Site{
 						glogError("Requested cafe, uniq name unknown",__FILE__);
 						self::$SITE_PAGE = '404';
 						self::add_body_classes("page-404");
-						glogError("Unknown path: ".$_SERVER['REQUEST_URI'],__FILE__);						
+						glogError("Unknown path 5: ".$_SERVER['REQUEST_URI'],__FILE__);						
 					}
 				break;
 				case 'confirmpass':
@@ -140,7 +140,7 @@ class Site{
 					if(!$email || !$key){
 						self::$SITE_PAGE = '404';
 						self::add_body_classes("page-404");
-						glogError("Unknown path: ".$_SERVER['REQUEST_URI'],__FILE__);
+						glogError("Unknown path 4: ".$_SERVER['REQUEST_URI'],__FILE__);
 					}else{									
 						self::$SITE_PAGE = 'Confirmpass';
 						self::add_body_classes("page-confirmpass");
@@ -156,7 +156,7 @@ class Site{
 					if(!$cafe_uniq_name || !$new_subdomain || !$key){
 						self::$SITE_PAGE = '404';
 						self::add_body_classes("page-404");
-						glogError("Unknown path: ".$_SERVER['REQUEST_URI'],__FILE__);
+						glogError("Unknown path 3: ".$_SERVER['REQUEST_URI'],__FILE__);
 					}else{									
 						self::$SITE_PAGE = 'ConfirmSubdomain';
 						self::add_body_classes("page-confirm-subdomain");
@@ -180,7 +180,7 @@ class Site{
 						}else{							
 							self::$SITE_PAGE = '404';
 							self::add_body_classes('page-404');
-							glogError("Unknown path: ".$_SERVER['REQUEST_URI'],__FILE__);
+							glogError("Unknown path 2: ".$_SERVER['REQUEST_URI'],__FILE__);
 						}
 					}else{
 						// user already in cookies
@@ -239,7 +239,7 @@ class Site{
 					}else{						
 						self::$SITE_PAGE = '404';
 						self::add_body_classes('page-404');
-						glogError("Unknown path: ".$_SERVER['REQUEST_URI'],__FILE__);
+						glogError("Unknown path 1: ".$_SERVER['REQUEST_URI'],__FILE__);
 					}
 				break;
 			}	

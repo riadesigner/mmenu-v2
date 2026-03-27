@@ -48,6 +48,7 @@ App && App(SITE_CFG);
 <div id="notification-status"></div>
 <br>
 <div class="err-message"></div>
+<div class="ok-message"></div>
 
 
 <script>
