@@ -142,7 +142,9 @@ export var WebReg  = {
 			const data = {
 				isNew,
 				...subscriptionData
-			};			
+			};		
+			
+			// const data = Object.assign({ isNew }, subscription);
 
 			console.log('data', data);
 
@@ -153,19 +155,20 @@ export var WebReg  = {
                     withCredentials: true  // Для отправки cookies при CORS
                 },
 				contentType: "application/json",
-				data: JSON.stringify(subscription), // ← сохраняем полную структуру
-				success: (answer)=> {					
-					this.end_loading();					
-					if(answer && !answer.error){						
-						res(answer);
-					}else{						
-						rej(answer.error);
-					}
+				data: JSON.stringify(data), // ← сохраняем полную структуру
+				success: (answer)=> {		
+					console.log('answer', answer);			
+					// this.end_loading();					
+					// if(answer && !answer.error){						
+					// 	res(answer);
+					// }else{						
+					// 	rej(answer.error);
+					// }
 				},
-				error:(response)=> {					
+				error:(response)=> {						
 					console.log('err!', response)
-					this.end_loading();	
-					rej(JSON.stringify(response));	
+					// this.end_loading();	
+					// rej(response);	
 				}				
 			});
 
