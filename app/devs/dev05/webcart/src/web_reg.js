@@ -65,6 +65,10 @@ export var WebReg  = {
 	ok_message:function(okMsg=''){
 		this.$okMessage.append(`<p>${okMsg}</p>`);
 	},
+	clear_messages:function(){
+		this.$errMessage.html('');
+		this.$okMessage.html('');
+	},
 	message_not_valid_link:function(){
 		this.err_message('Неправильная ссылка');
 		setTimeout(()=>{
@@ -135,7 +139,8 @@ export var WebReg  = {
 				if(webuser.nickname===''){
 					this.$regSelectNickname.addClass('shown');
 				}else{
-					this.show_nickname(webuser.nickname);
+					this.update_nickname(webuser.nickname);
+					this.$regSelectNickname.removeClass('shown');
 				}
 				console.log('answer', answer);
 			},
@@ -186,6 +191,9 @@ export var WebReg  = {
     webuser_save_nickname_async: function(nickname){
 		return new Promise((res, rej) => {
 			this.now_loading();
+			
+			this.clear_messages();
+			this.$regSelectNickname.removeClass('shown');
 
 			var url = 'webcart/lib/web.edit_nickname.php';
 
@@ -225,10 +233,11 @@ export var WebReg  = {
 			!this.NOW_LOADING && this.webuser_save_nickname_async(nickname)
 			.then((answer)=>{
 				console.log('answer', answer);
-				this.show_nickname(answer.nickname);
+				this.update_nickname(answer.nickname);
 			},
 			(error)=>{
 				console.log('error', error);
+				this.$regSelectNickname.addClass('shown');
 			})
 			e.preventDefault();
 		});
@@ -244,7 +253,7 @@ export var WebReg  = {
 		// 	return false;
 		// });
 	},
-	show_nickname:function(nickname){
+	update_nickname:function(nickname){
 		this.$webuserNickname.text(`Никнейм: ${nickname}`);
 	},
 };
