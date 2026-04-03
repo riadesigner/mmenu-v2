@@ -40,15 +40,23 @@ App && App(SITE_CFG);
 <body class='<?=Site::get_body_classes();?>' <?=Site::get_body_data();?> >
 
 <h2>Регистрация пользователя</h2>
+<div class="webuser-nickname">Никнейм: ...</div>
 
-<div class="webuser-role">Роль: ...</div>
-<br>
-<div class="app-status">...</div>
-<br>
-<div id="notification-status"></div>
-<br>
-<div class="err-message"></div>
-<div class="ok-message"></div>
+<div id="regMainInfo" class="section">
+	<div class="webuser-role">Роль: ...</div>
+	<div class="app-status">...</div>
+	<div id="notification-status"></div>
+	<div class="err-message"></div>
+	<div class="ok-message"></div>
+</div>
+<div id="regSelectNickname" class="section">
+	<div class="levels">
+		<div>Ваше имя:</div>
+		<input class="input" type="text" placeholder='Ваня' value=''>
+		<button class="button">ok</button> 
+	</div>
+</div>
+
 
 
 <script>

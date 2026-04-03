@@ -34,7 +34,7 @@ $endpoints = new Smart_collect("push_users","where push_endpoint = '".$endpoint.
 if($endpoints && $endpoints->full()){
 	$webuser = $endpoints->get(0);
 	glog("endpoint already exists")."\n";	
-	__answerjson(["webuser"=>($webuser->export()), "isNew"=>"false"]);		
+	__answerjson(["webuser"=>($webuser->export()), "isNew"=>false]);		
 }else{
 	$webuser = new Smart_object("push_users");
 	$webuser->push_endpoint = $endpoint;

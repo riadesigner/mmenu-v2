@@ -11,9 +11,19 @@ body{
     background-color: #180e09;
     color:white;
     padding:20px;    
+    font-size:1rem;
 }
 
 * {	box-sizing: border-box; }
 
 .err-message{color:rgb(254, 88, 32);}
 .ok-message{color:rgb(0, 167, 112);}
+
+#regMainInfo{ font-size: .9rem;}
+#regSelectNickname{ display: none;}
+#regSelectNickname.shown{ display: block;}
+
+.section{  margin:0 0 2rem 0; }
+.input{border-radius: 20px;padding:5px 10px;border:none;}
+.button{border-radius: 20px;padding:5px 10px;border:none;cursor: pointer;}
+.levels{display: flex;flex-direction: row;gap:10px;}

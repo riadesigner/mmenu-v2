@@ -5,10 +5,16 @@ export var WebReg  = {
 		this.siteConfig = siteConfig;
 		console.log('this.siteConfig',this.siteConfig);
 		this.$webuserRole = $('.webuser-role');		
+		this.$webuserNickname = $('.webuser-nickname');		
 		this.$appStatus = $('.app-status');		
 		this.$errMessage = $('.err-message');
 		this.$okMessage = $('.ok-message');
+		this.$regSelectNickname = $('#regSelectNickname');
+		this.$regSelectNicknameInput = this.$regSelectNickname.find('input');
+		this.$regSelectNicknameOk = this.$regSelectNickname.find('button');
 		this.vapidPublicKey = this.siteConfig.vapidPublicKey;
+		this.NOW_LOADING = false;
+		this.WEBUSER = null;
 		this.reset();
 		this.check_url();
 		this.check_notif_enabled();		
@@ -46,9 +52,11 @@ export var WebReg  = {
 	},
 	now_loading:function(){
 		console.log('now_loading');
+		this.NOW_LOADING = true;
 		this.$appStatus.html('Загрузка...');
 	},
 	end_loading:function(){
+		this.NOW_LOADING = false;
 		this.$appStatus.html('Готово');
 	},
 	err_message:function(errMsg=''){
@@ -111,9 +119,7 @@ export var WebReg  = {
 		});
 	},
 	async_webuser_register:async function(data){
-				
-		console.log('======= VAPIDPUBLICKEY ======= ', this.vapidPublicKey);
-		console.log('async_webuser_register', data);
+						
 		const Push = GLB.RegisterPush;
 		const {error, subscription, isNew, message} = await Push.init(this.vapidPublicKey); 		
 		if(error){
@@ -121,9 +127,17 @@ export var WebReg  = {
 		}else{
 			message && this.ok_message(message);
 			console.log( 'subscription = ',subscription, 'isNew = ', isNew);
-			await this.save_to_db_async(subscription,isNew)
-			.then((vars)=>{
-				console.log('vars', vars);
+			await this.save_to_db_async(subscription, isNew)
+			.then((answer)=>{
+				answer.isNew && this.ok_message('Ваша запись в базе данных успешно обновлена');		
+				const webuser = answer.webuser;		
+				this.WEBUSER = webuser;		
+				if(webuser.nickname===''){
+					this.$regSelectNickname.addClass('shown');
+				}else{
+					this.show_nickname(webuser.nickname);
+				}
+				console.log('answer', answer);
 			},
 			(error)=>{
 				console.log('error', error);
@@ -142,11 +156,7 @@ export var WebReg  = {
 			const data = {
 				isNew,
 				...subscriptionData
-			};		
-			
-			// const data = Object.assign({ isNew }, subscription);
-
-			console.log('data', data);
+			};			
 
 			$.ajax({
 				url: url,
@@ -156,26 +166,72 @@ export var WebReg  = {
                 },
 				contentType: "application/json",
 				data: JSON.stringify(data), // ← сохраняем полную структуру
-				success: (answer)=> {		
-					console.log('answer', answer);			
-					// this.end_loading();					
-					// if(answer && !answer.error){						
-					// 	res(answer);
-					// }else{						
-					// 	rej(answer.error);
-					// }
+				success: (answer)=> {							
+					this.end_loading();					
+					if(answer && !answer.error){						
+						res(answer);
+					}else{						
+						rej(answer.error);
+					}
 				},
-				error:(response)=> {						
-					console.log('err-1', response)
-					// this.end_loading();	
-					// rej(response);	
+				error:(response)=> {
+					console.log('response',response)
+					this.end_loading();	
+					rej(response);	
 				}				
 			});
 
 		});
     },	
-	behavior:function(){
+    webuser_save_nickname_async: function(nickname){
+		return new Promise((res, rej) => {
+			this.now_loading();
 
+			var url = 'webcart/lib/web.edit_nickname.php';
+
+			const data = {
+				nickname,
+				push_endpoint: this.WEBUSER.push_endpoint,
+			};	
+
+			$.ajax({
+				url: url,
+				method: "POST",
+                xhrFields: {
+                    withCredentials: true  // Для отправки cookies при CORS
+                },
+				dataType: "json",
+				data: data,
+				success: (answer)=> {							
+					this.end_loading();					
+					if(answer && !answer.error){						
+						res(answer);
+					}else{						
+						rej(answer.error);
+					}
+				},
+				error:(response)=> {
+					console.log('response',response)
+					this.end_loading();	
+					rej(response);	
+				}				
+			});
+
+		});
+    },		
+	behavior:function(){
+		this.$regSelectNicknameOk.on("click",(e)=> {
+			let nickname = this.$regSelectNicknameInput.val();			
+			!this.NOW_LOADING && this.webuser_save_nickname_async(nickname)
+			.then((answer)=>{
+				console.log('answer', answer);
+				this.show_nickname(answer.nickname);
+			},
+			(error)=>{
+				console.log('error', error);
+			})
+			e.preventDefault();
+		});
 
 		// var _this=this;
 		// this.$btn.on("touchend click",function(e) {			
@@ -187,6 +243,9 @@ export var WebReg  = {
 		// 	};
 		// 	return false;
 		// });
-	}
+	},
+	show_nickname:function(nickname){
+		this.$webuserNickname.text(`Никнейм: ${nickname}`);
+	},
 };
 
