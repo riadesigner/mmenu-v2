@@ -49,28 +49,31 @@ function __answerjsonp($data): never {
 // \____//____/\____/_/ |_/
 
 function __answerjson($data): never{	
-   // Проверка кодирования
+    // Проверка кодирования
     $json = json_encode($data, JSON_UNESCAPED_UNICODE | JSON_INVALID_UTF8_SUBSTITUTE);
+	
     
     if($json === false) {
         $error = "JSON Error: " . json_last_error_msg();
         error_log($error);
-		glogError($error);
+        glogError($error);
         echo json_encode(['error' => $error]);
         exit();
     }
     
     // Проверка размера
     if(strlen($json) > 10000000) { // >10MB
-		$error = "Oversized JSON: ".strlen($json)." bytes";
-		glogError($error);
+        $error = "Oversized JSON: ".strlen($json)." bytes";
+        glogError($error);
         error_log($error);
     }
     
-    header('Content-Type: application/javascript; charset=utf-8');
+    header('Content-Type: application/json; charset=utf-8'); // ← изменили на application/json
     echo $json;
     exit();
-}	
+}
+
+
 function __errorjson($msg): never{	
 	echo json_encode(["error"=>$msg], JSON_UNESCAPED_UNICODE);
 	exit();

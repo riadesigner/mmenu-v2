@@ -103,7 +103,7 @@ export var WebReg  = {
 					}
 				},
 				error:(response)=> {					
-					console.log('err!', response)
+					console.log('err-2', response)
 					this.end_loading();	
 					rej(JSON.stringify(response));	
 				}
@@ -166,7 +166,7 @@ export var WebReg  = {
 					// }
 				},
 				error:(response)=> {						
-					console.log('err!', response)
+					console.log('err-1', response)
 					// this.end_loading();	
 					// rej(response);	
 				}				
