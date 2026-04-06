@@ -25,8 +25,8 @@ $publicKey = $pushConfig['publicKey'];
 
 var SITE_CFG = {
 	home_page: '<?=SITE::get_link("home");?>/',
-	register:'<?=$R->get(1);?>',	
-	token:'<?=$R->get(2);?>',
+	cafe_uniq:'<?=$R->get(1);?>',	
+	webuser_public_id:'<?=$R->get(2);?>',
 	vapidPublicKey: '<?=$publicKey;?>',
 };
 
@@ -39,25 +39,26 @@ App && App(SITE_CFG);
 </head>
 <body class='<?=Site::get_body_classes();?>' <?=Site::get_body_data();?> >
 
+<h2>Панель управления</h2>
+
 <div id="loader">Загрузка...</div>
 
-<h2>Регистрация пользователя</h2>
-<div class="webuser-nickname">Никнейм: ...</div>
-
-<div id="regMainInfo" class="section">
+<div id="panelMainInfo" class="section">
+	<div class="webuser-nickname">Привет, ...</div>
 	<div class="webuser-role">Роль: ...</div>
 	<div class="app-status">...</div>
-	<div id="notification-status"></div>
 	<div class="err-message"></div>
 	<div class="ok-message"></div>
 </div>
+<!--
 <div id="regSelectNickname" class="section">
 	<div class="levels">
 		<div>Ваше имя:</div>
 		<input class="input" type="text" placeholder='Ваня' value=''>
 		<button class="button">ok</button> 
 	</div>
-</div>
+</div> -->
+
 
 
 <script>

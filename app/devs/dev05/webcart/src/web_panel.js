@@ -1,28 +1,73 @@
 import {GLB} from './glb.js';
 
-export var WebReg  = {
+export var WebPanel  = {
 	init:function(siteConfig){
 		this.siteConfig = siteConfig;
 		console.log('this.siteConfig',this.siteConfig);
 		this.$webuserRole = $('.webuser-role');		
 		this.$webuserNickname = $('.webuser-nickname');		
-		this.$appStatus = $('.app-status');		
+		// this.$appStatus = $('.app-status');		
 		this.$errMessage = $('.err-message');
 		this.$okMessage = $('.ok-message');
-		this.$regSelectNickname = $('#regSelectNickname');
-		this.$regSelectNicknameInput = this.$regSelectNickname.find('input');
-		this.$regSelectNicknameOk = this.$regSelectNickname.find('button');
-		this.vapidPublicKey = this.siteConfig.vapidPublicKey;
-		this.NOW_LOADING = false;
+
 		this.WEBUSER = null;
-		this.reset();
-		this.check_url();
-		this.check_notif_enabled();		
-		this.behavior();
+		console.log('siteconfig',this.siteConfig);
+
+		// this.$regSelectNickname = $('#regSelectNickname');
+		// this.$regSelectNicknameInput = this.$regSelectNickname.find('input');
+		// this.$regSelectNicknameOk = this.$regSelectNickname.find('button');
+		// this.vapidPublicKey = this.siteConfig.vapidPublicKey;
+		// this.NOW_LOADING = false;
+		// this.WEBUSER = null;
+		// this.reset();
+		// this.check_url();
+		// this.check_notif_enabled();		
+		// this.behavior();
+		console.log('web panel inited');		
+		// this.load_webuser_info_async()
+		// .then(data => {
+		// 	console.log('data',data);
+		// })
+		// .catch(error => {
+		// 	console.log('error',error);
+		// });
+		return this;
 	},
 	reset:function(){		
 		this.$errMessage.html('');	
 		this.$okMessage.html('');	
+	},
+	load_webuser_info_async: function() {
+		return new Promise((res, rej) => {
+			this.now_loading();
+			
+			var url = this.siteConfig.home_page + '/webcart/lib/web.reg_to_db.php';
+			
+			fetch(url, {
+				method: "GET",
+				credentials: "include", // Аналог withCredentials: true
+				headers: {
+					"Content-Type": "application/json"
+				}
+			})
+			.then(response => {
+				if (!response.ok) {
+					throw new Error(`HTTP error! status: ${response.status}`);
+				}
+				return response.json();
+			})
+			.then(data => {
+				this.WEBUSER = data;
+				console.log('WEBUSER', this.WEBUSER);
+				this.end_loading();
+				res(data);
+			})
+			.catch(error => {
+				console.error('Fetch error:', error);
+				this.end_loading();
+				rej(error);
+			});
+		});
 	},
 	check_notif_enabled:function(){
 		// Проверяем доступность уведомлений
@@ -52,13 +97,11 @@ export var WebReg  = {
 	},
 	now_loading:function(){
 		console.log('now_loading');
-		this.NOW_LOADING = true;
-		this.$appStatus.html('Загрузка...');
+		this.NOW_LOADING = true;		
 		$('body').addClass('now-loading');
 	},
 	end_loading:function(){
 		this.NOW_LOADING = false;
-		this.$appStatus.html('Готово');
 		$('body').removeClass('now-loading');
 	},
 	err_message:function(errMsg=''){
@@ -125,8 +168,7 @@ export var WebReg  = {
 		});
 	},
 	async_webuser_register:async function(data){
-		console.log('data', data);
-		const {cafe_uniq_name} = data;						
+						
 		const Push = GLB.RegisterPush;
 		const {error, subscription, isNew, message} = await Push.init(this.vapidPublicKey); 		
 		if(error){
@@ -134,19 +176,17 @@ export var WebReg  = {
 		}else{
 			message && this.ok_message(message);
 			console.log( 'subscription = ',subscription, 'isNew = ', isNew);
-			await this.save_to_db_async(subscription, isNew, cafe_uniq_name)
+			await this.save_to_db_async(subscription, isNew)
 			.then((answer)=>{
 				answer.isNew && this.ok_message('Ваша запись в базе данных успешно обновлена');		
 				const webuser = answer.webuser;		
-				// this.WEBUSER = webuser;		
-				this.go_to_webuser_panel(webuser);
-				// http://chefsmenu.localhost/webuser-panel/321yyn/03534d96-bd63-490b-b07b-74dc263e4426
-				// if(webuser.nickname===''){
-				// 	this.$regSelectNickname.addClass('shown');
-				// }else{
-				// 	this.update_nickname(webuser.nickname);
-				// 	this.$regSelectNickname.removeClass('shown');
-				// }
+				this.WEBUSER = webuser;		
+				if(webuser.nickname===''){
+					this.$regSelectNickname.addClass('shown');
+				}else{
+					this.update_nickname(webuser.nickname);
+					this.$regSelectNickname.removeClass('shown');
+				}
 				console.log('answer', answer);
 			},
 			(error)=>{
@@ -155,13 +195,7 @@ export var WebReg  = {
 		}		
 		
 	},
-	go_to_webuser_panel:function(webuser){
-		setTimeout(()=>{
-			const url = `/webuser-panel/${webuser.cafe_uniq_name}/${webuser.public_id}`;		
-			window.location.href = url;			
-		}, 500)
-	},
-    save_to_db_async: function(subscription, isNew, cafe_uniq_name){
+    save_to_db_async: function(subscription, isNew){
 		return new Promise((res, rej) => {
 			this.now_loading();
 
@@ -170,7 +204,6 @@ export var WebReg  = {
 			const subscriptionData = JSON.parse(JSON.stringify(subscription));
 
 			const data = {
-				cafe_uniq_name,
 				isNew,
 				...subscriptionData
 			};			

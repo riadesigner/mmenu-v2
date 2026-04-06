@@ -193,6 +193,10 @@ class Site{
 					self::$SITE_PAGE = 'WebUserRegisterPage';	
 					self::add_body_classes('page-webuser-register');					
 				break;
+				case 'webuser-panel';
+					self::$SITE_PAGE = 'WebUserPanelPage';	
+					self::add_body_classes('page-webuser-panel');					
+				break;				
 				case 'help':					
 					self::$SITE_PAGE = 'HelpPage';	
 					self::add_body_classes('page-help');

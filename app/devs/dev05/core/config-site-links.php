@@ -65,6 +65,12 @@ if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 		'title'=> 'Chefs Menu! Регистрация пользователя в приложении WebCart', 
 	 	'descr'=>'',
 		'template'=>'webcart/views/tpl.webuser_register.php',],
+	
+	'WebUserPanelPage'	=>[
+		'title'=> 'Chefs Menu! Панель управления WebCart', 
+	 	'descr'=>'',
+		'template'=>'webcart/views/tpl.webuser_panel.php',],
+
 	'IikoConnectionPage'=>[
 		'title'=>'Chefs Menu! Подключение Iiko. QR-Меню для кафе и ресторанов за 10 минут!', 
 		'descr'=>'Сервис быстрого создания электронного меню для ресторанов и кафе, с удобным управлением, корзиной для приема заказов!', 
