@@ -2,7 +2,7 @@ services:
   php:
     build: ./docker/php
     restart: unless-stopped
-    container_name: docker.php    
+    container_name: mmenu.php    
     tty: true
     expose:
       - ${LOCAL_PHP_EXPOSE}
@@ -16,7 +16,7 @@ services:
   apache:
     build: ./docker/apache
     restart: unless-stopped
-    container_name: docker.apache
+    container_name: mmenu.apache
     tty: true
     depends_on:
       - php
@@ -30,7 +30,7 @@ services:
 
   db:
     image: mariadb:lts-ubi9
-    container_name: docker.mariadb    
+    container_name: mmenu.mariadb    
     restart: always    
     ports:
       - ${LOCAL_DB_EXPOSE}:3306    
@@ -44,7 +44,7 @@ services:
 
   adminer:
     image: adminer:5.3.0
-    container_name: docker.adminer    
+    container_name: mmenu.adminer    
     restart: always
     ports:
       - ${LOCAL_ADMINER_EXPOSE}:8080
