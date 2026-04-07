@@ -8,12 +8,21 @@ services:
       - ${PROD_PHP_EXPOSE}
     environment:
       - TZ=UTC
+      - PHP_FPM_LISTEN=9000
     depends_on:
       - db
     volumes:
       - ./:/var/www
+      - ./docker/php/php.ini:/usr/local/etc/php/conf.d/custom.ini:ro
     networks:
           - mmenu-network
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 512M
+        reservations:
+          memory: 256M          
   apache:
     build: ./docker/apache
     restart: unless-stopped
@@ -25,11 +34,18 @@ services:
       - ${PROD_APACHE_HTTP}:80
     environment:
       - TZ=UTC
-      - VIRTUAL_HOST=${PROD_WWWROOT}      
+      - VIRTUAL_HOST=${PROD_WWWROOT}  
+      - APACHE_DOCUMENT_ROOT=/var/www/app/public     
     volumes:
       - ./app:/var/www/app
+      - ./docker/apache/vhosts.conf:/etc/apache2/sites-enabled/000-default.conf:ro
+      - ./app/logs/apache:/var/log/apache2
     networks:
-          - mmenu-network      
+          - mmenu-network
+    deploy:
+      resources:
+        limits:
+          memory: 256M                
 
   db:
     image: mariadb:lts-ubi9
@@ -41,13 +57,24 @@ services:
       - TZ=UTC
       - MARIADB_ROOT_PASSWORD=${PROD_DBPASS}
       - HOSTNAME=localhost
-    command: --innodb-buffer-pool-size=128M
+    command: 
+      - --innodb-buffer-pool-size=128M
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
+      - --max_connections=150
     volumes:
-      - ./db:/var/lib/mysql 
+      - mmenu-db-data:/var/lib/mysql  
       - ./docker/mysql/mariadb.cnf:/etc/mysql/conf.d/custom.cnf:ro
     networks:
           - mmenu-network      
-
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      timeout: 20s
+      retries: 10
+    deploy:
+      resources:
+        limits:
+          memory: 1G      
   adminer:
     image: adminer:5.3.0
     container_name: mmenu.adminer    
@@ -56,10 +83,17 @@ services:
       - ${PROD_ADMINER_EXPOSE}:8080
     environment:
       - TZ=UTC 
+      - ADMINER_DEFAULT_SERVER=db # автоматическое подключение к БД      
     networks:
-          - mmenu-network           
+      - mmenu-networks
+    depends_on:
+      - db      
 
 networks:
   mmenu-network:
     driver: bridge
     name: mmenu-network
+
+volumes:
+  mmenu-db-data:
+    driver: local    
