@@ -1,0 +1,131 @@
+[Sat Nov 29 12:08:49.276432 2025] [proxy_fcgi:error] [pid 9:tid 68] (70008)Partial results are valid but processing is incomplete: [client 192.168.65.1:26793] AH01075: Error dispatching request to : (reading input brigade)
+[Fri Dec 05 10:25:02.297999 2025] [mpm_event:notice] [pid 1:tid 1] AH00492: caught SIGWINCH, shutting down gracefully
+[Fri Dec 05 12:30:42.276792 2025] [ssl:warn] [pid 1:tid 1] AH01873: Init: Session Cache is not configured [hint: SSLSessionCache]
+[Fri Dec 05 12:30:42.430626 2025] [mpm_event:notice] [pid 1:tid 1] AH00489: Apache/2.4.65 (Unix) OpenSSL/3.5.4 configured -- resuming normal operations
+[Fri Dec 05 12:30:42.432886 2025] [core:notice] [pid 1:tid 1] AH00094: Command line: 'httpd -D FOREGROUND'
+[Sat Dec 06 03:41:30.909504 2025] [ssl:warn] [pid 1:tid 1] AH01873: Init: Session Cache is not configured [hint: SSLSessionCache]
+[Sat Dec 06 03:41:30.914659 2025] [mpm_event:notice] [pid 1:tid 1] AH00489: Apache/2.4.65 (Unix) OpenSSL/3.5.4 configured -- resuming normal operations
+[Sat Dec 06 03:41:30.917239 2025] [core:notice] [pid 1:tid 1] AH00094: Command line: 'httpd -D FOREGROUND'
+[Tue Dec 09 10:31:30.959250 2025] [mpm_event:notice] [pid 1:tid 1] AH00492: caught SIGWINCH, shutting down gracefully
+[Thu Dec 11 05:03:15.203650 2025] [ssl:warn] [pid 1:tid 1] AH01873: Init: Session Cache is not configured [hint: SSLSessionCache]
+[Thu Dec 11 05:03:15.239744 2025] [mpm_event:notice] [pid 1:tid 1] AH00489: Apache/2.4.66 (Unix) OpenSSL/3.5.4 configured -- resuming normal operations
+[Thu Dec 11 05:03:15.258082 2025] [core:notice] [pid 1:tid 1] AH00094: Command line: 'httpd -D FOREGROUND'
+[Thu Dec 11 10:27:51.306742 2025] [mpm_event:notice] [pid 1:tid 1] AH00492: caught SIGWINCH, shutting down gracefully
+[Fri Dec 12 10:14:29.145024 2025] [ssl:warn] [pid 1:tid 1] AH01873: Init: Session Cache is not configured [hint: SSLSessionCache]
+[Fri Dec 12 10:14:29.245103 2025] [mpm_event:notice] [pid 1:tid 1] AH00489: Apache/2.4.66 (Unix) OpenSSL/3.5.4 configured -- resuming normal operations
+[Fri Dec 12 10:14:29.247291 2025] [core:notice] [pid 1:tid 1] AH00094: Command line: 'httpd -D FOREGROUND'
+[Fri Dec 12 10:23:00.878527 2025] [core:error] [pid 92:tid 106] [client 192.168.65.1:26432] AH10244: invalid URI path (/cgi-bin/.%2e/.%2e/.%2e/.%2e/.%2e/.%2e/.%2e/.%2e/.%2e/.%2e/bin/sh)
+[Fri Dec 12 10:23:01.259637 2025] [core:error] [pid 33:tid 44] [client 192.168.65.1:19602] AH10244: invalid URI path (/cgi-bin/%%32%65%%32%65/%%32%65%%32%65/%%32%65%%32%65/%%32%65%%32%65/%%32%65%%32%65/%%32%65%%32%65/%%32%65%%32%65/bin/sh)
+[Mon Dec 15 06:53:06.149927 2025] [mpm_event:notice] [pid 1:tid 1] AH00492: caught SIGWINCH, shutting down gracefully
+[Tue Dec 16 10:26:48.852733 2025] [ssl:warn] [pid 1:tid 1] AH01873: Init: Session Cache is not configured [hint: SSLSessionCache]
+[Tue Dec 16 10:26:48.867849 2025] [mpm_event:notice] [pid 1:tid 1] AH00489: Apache/2.4.66 (Unix) OpenSSL/3.5.4 configured -- resuming normal operations
+[Tue Dec 16 10:26:48.868605 2025] [core:notice] [pid 1:tid 1] AH00094: Command line: 'httpd -D FOREGROUND'
+[Tue Dec 16 12:08:50.726513 2025] [mpm_event:notice] [pid 1:tid 1] AH00492: caught SIGWINCH, shutting down gracefully
+[Tue Dec 16 12:19:03.344983 2025] [ssl:warn] [pid 1:tid 1] AH01873: Init: Session Cache is not configured [hint: SSLSessionCache]
+[Tue Dec 16 12:19:03.351303 2025] [mpm_event:notice] [pid 1:tid 1] AH00489: Apache/2.4.66 (Unix) OpenSSL/3.5.4 configured -- resuming normal operations
+[Tue Dec 16 12:19:03.353524 2025] [core:notice] [pid 1:tid 1] AH00094: Command line: 'httpd -D FOREGROUND'
+[Thu Dec 18 11:13:02.319678 2025] [core:error] [pid 10:tid 65] [client 192.168.65.1:34101] AH10244: invalid URI path (/cgi-bin/.%2e/.%2e/.%2e/.%2e/.%2e/.%2e/.%2e/.%2e/.%2e/.%2e/bin/sh)
+[Thu Dec 18 11:13:03.158527 2025] [core:error] [pid 10:tid 80] [client 192.168.65.1:50570] AH10244: invalid URI path (/cgi-bin/%%32%65%%32%65/%%32%65%%32%65/%%32%65%%32%65/%%32%65%%32%65/%%32%65%%32%65/%%32%65%%32%65/%%32%65%%32%65/bin/sh)
+[Fri Dec 26 03:28:35.565635 2025] [mpm_event:notice] [pid 1:tid 1] AH00492: caught SIGWINCH, shutting down gracefully
+[Wed Feb 04 10:37:54.264887 2026] [ssl:warn] [pid 1:tid 1] AH01873: Init: Session Cache is not configured [hint: SSLSessionCache]
+[Wed Feb 04 10:37:54.292311 2026] [mpm_event:notice] [pid 1:tid 1] AH00489: Apache/2.4.66 (Unix) OpenSSL/3.5.5 configured -- resuming normal operations
+[Wed Feb 04 10:37:54.295563 2026] [core:notice] [pid 1:tid 1] AH00094: Command line: 'httpd -D FOREGROUND'
+[Wed Feb 04 11:17:52.986697 2026] [core:error] [pid 91:tid 94] [client 146.75.122.132:50239] AH10244: invalid URI path (/cgi-bin/.%2e/.%2e/.%2e/.%2e/.%2e/.%2e/.%2e/.%2e/.%2e/.%2e/bin/sh)
+[Wed Feb 04 11:18:01.355422 2026] [core:error] [pid 91:tid 95] [client 146.75.122.132:29106] AH10244: invalid URI path (/cgi-bin/%%32%65%%32%65/%%32%65%%32%65/%%32%65%%32%65/%%32%65%%32%65/%%32%65%%32%65/%%32%65%%32%65/%%32%65%%32%65/bin/sh)
+[Wed Feb 04 12:34:39.709322 2026] [mpm_event:notice] [pid 1:tid 1] AH00492: caught SIGWINCH, shutting down gracefully
+[Wed Feb 04 13:17:21.911329 2026] [ssl:warn] [pid 1:tid 1] AH01873: Init: Session Cache is not configured [hint: SSLSessionCache]
+[Wed Feb 04 13:17:21.924885 2026] [mpm_event:notice] [pid 1:tid 1] AH00489: Apache/2.4.66 (Unix) OpenSSL/3.5.5 configured -- resuming normal operations
+[Wed Feb 04 13:17:21.927982 2026] [core:notice] [pid 1:tid 1] AH00094: Command line: 'httpd -D FOREGROUND'
+[Wed Feb 04 13:24:41.102020 2026] [proxy_fcgi:error] [pid 8:tid 13] (70007)The timeout specified has expired: [client 192.168.65.1:55174] AH01075: Error dispatching request to : (polling)
+[Wed Feb 04 13:25:01.384779 2026] [proxy_fcgi:error] [pid 92:tid 102] (70007)The timeout specified has expired: [client 192.168.65.1:25217] AH01075: Error dispatching request to : (polling), referer: http://chefsmenu.localhost/admin
+[Mon Feb 09 00:55:24.343783 2026] [ssl:warn] [pid 1:tid 1] AH01873: Init: Session Cache is not configured [hint: SSLSessionCache]
+[Mon Feb 09 00:55:24.376807 2026] [mpm_event:notice] [pid 1:tid 1] AH00489: Apache/2.4.66 (Unix) OpenSSL/3.5.5 configured -- resuming normal operations
+[Mon Feb 09 00:55:24.551321 2026] [core:notice] [pid 1:tid 1] AH00094: Command line: 'httpd -D FOREGROUND'
+[Mon Feb 09 00:56:43.882121 2026] [mpm_event:notice] [pid 1:tid 1] AH00492: caught SIGWINCH, shutting down gracefully
+[Sat Feb 14 05:58:30.005153 2026] [ssl:warn] [pid 1:tid 1] AH01873: Init: Session Cache is not configured [hint: SSLSessionCache]
+[Sat Feb 14 05:58:30.022742 2026] [mpm_event:notice] [pid 1:tid 1] AH00489: Apache/2.4.66 (Unix) OpenSSL/3.5.5 configured -- resuming normal operations
+[Sat Feb 14 05:58:30.024639 2026] [core:notice] [pid 1:tid 1] AH00094: Command line: 'httpd -D FOREGROUND'
+[Sat Feb 14 06:07:20.037662 2026] [core:error] [pid 92:tid 94] [client 192.168.65.1:18019] AH10244: invalid URI path (/cgi-bin/.%2e/.%2e/.%2e/.%2e/.%2e/.%2e/.%2e/.%2e/.%2e/.%2e/bin/sh)
+[Sun Feb 15 04:45:24.800492 2026] [core:error] [pid 92:tid 110] [client 192.168.65.1:19265] AH10244: invalid URI path (/cgi-bin/.%2e/.%2e/.%2e/.%2e/.%2e/.%2e/.%2e/.%2e/.%2e/.%2e/bin/sh)
+[Sun Feb 15 04:45:25.729908 2026] [core:error] [pid 10:tid 34] [client 192.168.65.1:37736] AH10244: invalid URI path (/cgi-bin/%%32%65%%32%65/%%32%65%%32%65/%%32%65%%32%65/%%32%65%%32%65/%%32%65%%32%65/%%32%65%%32%65/%%32%65%%32%65/bin/sh)
+[Tue Feb 17 06:27:21.961407 2026] [mpm_event:notice] [pid 1:tid 1] AH00492: caught SIGWINCH, shutting down gracefully
+[Tue Feb 17 06:27:26.819485 2026] [ssl:warn] [pid 1:tid 1] AH01873: Init: Session Cache is not configured [hint: SSLSessionCache]
+[Tue Feb 17 06:27:26.828222 2026] [mpm_event:notice] [pid 1:tid 1] AH00489: Apache/2.4.66 (Unix) OpenSSL/3.5.5 configured -- resuming normal operations
+[Tue Feb 17 06:27:26.831098 2026] [core:notice] [pid 1:tid 1] AH00094: Command line: 'httpd -D FOREGROUND'
+[Thu Feb 19 23:18:03.594894 2026] [mpm_event:notice] [pid 1:tid 1] AH00492: caught SIGWINCH, shutting down gracefully
+[Thu Feb 19 23:18:26.210566 2026] [ssl:warn] [pid 1:tid 1] AH01873: Init: Session Cache is not configured [hint: SSLSessionCache]
+[Thu Feb 19 23:18:26.220424 2026] [mpm_event:notice] [pid 1:tid 1] AH00489: Apache/2.4.66 (Unix) OpenSSL/3.5.5 configured -- resuming normal operations
+[Thu Feb 19 23:18:26.225912 2026] [core:notice] [pid 1:tid 1] AH00094: Command line: 'httpd -D FOREGROUND'
+[Thu Feb 19 23:18:28.711366 2026] [mpm_event:notice] [pid 1:tid 1] AH00492: caught SIGWINCH, shutting down gracefully
+[Thu Feb 19 23:19:22.201946 2026] [ssl:warn] [pid 1:tid 1] AH01873: Init: Session Cache is not configured [hint: SSLSessionCache]
+[Thu Feb 19 23:19:22.235409 2026] [mpm_event:notice] [pid 1:tid 1] AH00489: Apache/2.4.66 (Unix) OpenSSL/3.5.5 configured -- resuming normal operations
+[Thu Feb 19 23:19:22.238020 2026] [core:notice] [pid 1:tid 1] AH00094: Command line: 'httpd -D FOREGROUND'
+[Thu Feb 19 23:30:02.128026 2026] [mpm_event:notice] [pid 1:tid 1] AH00492: caught SIGWINCH, shutting down gracefully
+[Thu Feb 19 23:30:06.457024 2026] [ssl:warn] [pid 1:tid 1] AH01873: Init: Session Cache is not configured [hint: SSLSessionCache]
+[Thu Feb 19 23:30:06.562737 2026] [mpm_event:notice] [pid 1:tid 1] AH00489: Apache/2.4.66 (Unix) OpenSSL/3.5.5 configured -- resuming normal operations
+[Thu Feb 19 23:30:06.588902 2026] [core:notice] [pid 1:tid 1] AH00094: Command line: 'httpd -D FOREGROUND'
+[Fri Feb 20 00:11:36.280986 2026] [mpm_event:notice] [pid 1:tid 1] AH00492: caught SIGWINCH, shutting down gracefully
+[Fri Feb 20 00:12:03.859462 2026] [ssl:warn] [pid 1:tid 1] AH01873: Init: Session Cache is not configured [hint: SSLSessionCache]
+[Fri Feb 20 00:12:03.897109 2026] [mpm_event:notice] [pid 1:tid 1] AH00489: Apache/2.4.66 (Unix) OpenSSL/3.5.5 configured -- resuming normal operations
+[Fri Feb 20 00:12:03.907171 2026] [core:notice] [pid 1:tid 1] AH00094: Command line: 'httpd -D FOREGROUND'
+[Fri Feb 20 05:03:15.570847 2026] [core:error] [pid 22:tid 86] [client 192.168.65.1:23766] AH10244: invalid URI path (/cgi-bin/.%2e/.%2e/.%2e/.%2e/.%2e/.%2e/.%2e/.%2e/.%2e/.%2e/bin/sh)
+[Fri Feb 20 05:03:16.586842 2026] [core:error] [pid 22:tid 71] [client 192.168.65.1:47629] AH10244: invalid URI path (/cgi-bin/%%32%65%%32%65/%%32%65%%32%65/%%32%65%%32%65/%%32%65%%32%65/%%32%65%%32%65/%%32%65%%32%65/%%32%65%%32%65/bin/sh)
+[Fri Feb 20 10:42:54.342260 2026] [core:error] [pid 12:tid 64] [client 192.168.65.1:46947] AH10244: invalid URI path (/cgi-bin/.%2e/.%2e/.%2e/.%2e/.%2e/.%2e/.%2e/.%2e/.%2e/.%2e/bin/sh)
+[Fri Feb 20 10:42:55.916563 2026] [core:error] [pid 22:tid 89] [client 192.168.65.1:53305] AH10244: invalid URI path (/cgi-bin/%%32%65%%32%65/%%32%65%%32%65/%%32%65%%32%65/%%32%65%%32%65/%%32%65%%32%65/%%32%65%%32%65/%%32%65%%32%65/bin/sh)
+[Sat Feb 21 13:01:02.477509 2026] [core:error] [pid 93:tid 119] [client 192.168.65.1:60828] AH10244: invalid URI path (/cgi-bin/.%2e/.%2e/.%2e/.%2e/.%2e/.%2e/.%2e/.%2e/.%2e/.%2e/bin/sh)
+[Sat Feb 21 13:01:02.836489 2026] [core:error] [pid 22:tid 80] [client 192.168.65.1:58624] AH10244: invalid URI path (/cgi-bin/%%32%65%%32%65/%%32%65%%32%65/%%32%65%%32%65/%%32%65%%32%65/%%32%65%%32%65/%%32%65%%32%65/%%32%65%%32%65/bin/sh)
+[Tue Feb 24 10:54:49.753686 2026] [core:error] [pid 22:tid 81] [client 192.168.65.1:27731] AH10244: invalid URI path (/cgi-bin/.%2e/.%2e/.%2e/.%2e/.%2e/.%2e/.%2e/.%2e/.%2e/.%2e/bin/sh)
+[Tue Feb 24 10:54:50.876605 2026] [core:error] [pid 22:tid 83] [client 192.168.65.1:57739] AH10244: invalid URI path (/cgi-bin/%%32%65%%32%65/%%32%65%%32%65/%%32%65%%32%65/%%32%65%%32%65/%%32%65%%32%65/%%32%65%%32%65/%%32%65%%32%65/bin/sh)
+[Tue Feb 24 12:21:13.536698 2026] [core:error] [pid 22:tid 74] [client 192.168.65.1:23155] AH10244: invalid URI path (/cgi-bin/.%2e/.%2e/.%2e/.%2e/.%2e/.%2e/.%2e/.%2e/.%2e/.%2e/bin/sh)
+[Tue Feb 24 12:21:14.423847 2026] [core:error] [pid 22:tid 76] [client 192.168.65.1:33063] AH10244: invalid URI path (/cgi-bin/%%32%65%%32%65/%%32%65%%32%65/%%32%65%%32%65/%%32%65%%32%65/%%32%65%%32%65/%%32%65%%32%65/%%32%65%%32%65/bin/sh)
+[Fri Feb 27 04:48:50.489224 2026] [ssl:warn] [pid 1:tid 1] AH01873: Init: Session Cache is not configured [hint: SSLSessionCache]
+[Fri Feb 27 04:48:50.512677 2026] [mpm_event:notice] [pid 1:tid 1] AH00489: Apache/2.4.66 (Unix) OpenSSL/3.5.5 configured -- resuming normal operations
+[Fri Feb 27 04:48:50.514200 2026] [core:notice] [pid 1:tid 1] AH00094: Command line: 'httpd -D FOREGROUND'
+[Fri Feb 27 04:57:16.433341 2026] [mpm_event:notice] [pid 1:tid 1] AH00492: caught SIGWINCH, shutting down gracefully
+[Thu Mar 05 23:19:26.806448 2026] [ssl:warn] [pid 1:tid 1] AH01873: Init: Session Cache is not configured [hint: SSLSessionCache]
+[Thu Mar 05 23:19:26.842856 2026] [mpm_event:notice] [pid 1:tid 1] AH00489: Apache/2.4.66 (Unix) OpenSSL/3.5.5 configured -- resuming normal operations
+[Thu Mar 05 23:19:26.843536 2026] [core:notice] [pid 1:tid 1] AH00094: Command line: 'httpd -D FOREGROUND'
+[Thu Mar 19 23:11:16.781683 2026] [ssl:warn] [pid 1:tid 1] AH01873: Init: Session Cache is not configured [hint: SSLSessionCache]
+[Thu Mar 19 23:11:16.785651 2026] [mpm_event:notice] [pid 1:tid 1] AH00489: Apache/2.4.66 (Unix) OpenSSL/3.5.5 configured -- resuming normal operations
+[Thu Mar 19 23:11:16.786339 2026] [core:notice] [pid 1:tid 1] AH00094: Command line: 'httpd -D FOREGROUND'
+[Fri Mar 20 00:25:33.504394 2026] [mpm_event:notice] [pid 1:tid 1] AH00492: caught SIGWINCH, shutting down gracefully
+[Fri Mar 20 01:04:19.647451 2026] [ssl:warn] [pid 1:tid 1] AH01873: Init: Session Cache is not configured [hint: SSLSessionCache]
+[Fri Mar 20 01:04:19.650819 2026] [mpm_event:notice] [pid 1:tid 1] AH00489: Apache/2.4.66 (Unix) OpenSSL/3.5.5 configured -- resuming normal operations
+[Fri Mar 20 01:04:19.659876 2026] [core:notice] [pid 1:tid 1] AH00094: Command line: 'httpd -D FOREGROUND'
+[Fri Mar 20 01:40:53.058305 2026] [access_compat:error] [pid 92:tid 116] [client 192.168.65.1:36993] AH01797: client denied by server configuration: /var/www/app/devs/dev05/webcart/src/app.js, referer: http://chefsmenu.localhost/webuser-register/waiter/321yyn-c0a3bf6e1e4d6284
+[Fri Mar 20 01:43:09.007078 2026] [access_compat:error] [pid 10:tid 52] [client 192.168.65.1:21179] AH01797: client denied by server configuration: /var/www/app/devs/dev05/webcart/src/app.js, referer: http://chefsmenu.localhost/webuser-register/waiter/321yyn-c0a3bf6e1e4d6284
+[Fri Mar 20 01:57:03.015878 2026] [access_compat:error] [pid 10:tid 27] [client 192.168.65.1:47655] AH01797: client denied by server configuration: /var/www/app/devs/dev05/webcart/src/app.js, referer: http://chefsmenu.localhost/webuser-register/waiter/321yyn-c0a3bf6e1e4d6284
+[Fri Mar 20 01:57:10.327698 2026] [access_compat:error] [pid 10:tid 29] [client 192.168.65.1:47655] AH01797: client denied by server configuration: /var/www/app/devs/dev05/webcart/src/app.js, referer: http://chefsmenu.localhost/webuser-register/waiter/321yyn-c0a3bf6e1e4d6284
+[Fri Mar 20 02:01:00.834432 2026] [access_compat:error] [pid 8:tid 13] [client 192.168.65.1:47741] AH01797: client denied by server configuration: /var/www/app/devs/dev05/webcart/src/app.js, referer: http://chefsmenu.localhost/webuser-register/waiter/321yyn-c0a3bf6e1e4d6284
+[Fri Mar 20 02:03:47.498523 2026] [access_compat:error] [pid 92:tid 95] [client 192.168.65.1:36106] AH01797: client denied by server configuration: /var/www/app/devs/dev05/webcart/src/app.js, referer: http://chefsmenu.localhost/webuser-register/waiter/321yyn-c0a3bf6e1e4d6284
+[Fri Mar 20 02:07:15.058024 2026] [access_compat:error] [pid 10:tid 56] [client 192.168.65.1:59550] AH01797: client denied by server configuration: /var/www/app/devs/dev05/webcart/src/app.js
+[Fri Mar 20 02:07:29.378606 2026] [access_compat:error] [pid 92:tid 104] [client 192.168.65.1:55421] AH01797: client denied by server configuration: /var/www/app/devs/dev05/webcart/src/app.js
+[Fri Mar 20 02:07:44.296219 2026] [access_compat:error] [pid 10:tid 67] [client 192.168.65.1:20316] AH01797: client denied by server configuration: /var/www/app/devs/dev05/rds/src/app.js
+[Fri Mar 20 02:08:27.945034 2026] [access_compat:error] [pid 92:tid 118] [client 192.168.65.1:51972] AH01797: client denied by server configuration: /var/www/app/devs/dev05/rds/src/app.js
+[Fri Mar 20 02:18:23.686186 2026] [access_compat:error] [pid 92:tid 98] [client 192.168.65.1:52703] AH01797: client denied by server configuration: /var/www/app/devs/dev05/rds/src/app.js
+[Mon Mar 23 00:27:35.729929 2026] [mpm_event:notice] [pid 1:tid 1] AH00492: caught SIGWINCH, shutting down gracefully
+[Mon Mar 23 00:45:32.582271 2026] [ssl:warn] [pid 1:tid 1] AH01873: Init: Session Cache is not configured [hint: SSLSessionCache]
+[Mon Mar 23 00:45:32.603704 2026] [mpm_event:notice] [pid 1:tid 1] AH00489: Apache/2.4.66 (Unix) OpenSSL/3.5.5 configured -- resuming normal operations
+[Mon Mar 23 00:45:32.608826 2026] [core:notice] [pid 1:tid 1] AH00094: Command line: 'httpd -D FOREGROUND'
+[Mon Mar 23 00:50:41.540168 2026] [access_compat:error] [pid 91:tid 107] [client 192.168.65.1:30000] AH01797: client denied by server configuration: /var/www/app/devs/dev05/webcart/src/push.js
+[Fri Mar 27 03:43:36.255674 2026] [mpm_event:notice] [pid 1:tid 1] AH00492: caught SIGWINCH, shutting down gracefully
+[Fri Mar 27 03:47:40.287431 2026] [ssl:warn] [pid 1:tid 1] AH01873: Init: Session Cache is not configured [hint: SSLSessionCache]
+[Fri Mar 27 03:47:40.369236 2026] [mpm_event:notice] [pid 1:tid 1] AH00489: Apache/2.4.66 (Unix) OpenSSL/3.5.5 configured -- resuming normal operations
+[Fri Mar 27 03:47:40.371366 2026] [core:notice] [pid 1:tid 1] AH00094: Command line: 'httpd -D FOREGROUND'
+[Fri Mar 27 03:53:45.566119 2026] [mpm_event:notice] [pid 1:tid 1] AH00492: caught SIGWINCH, shutting down gracefully
+[Fri Mar 27 04:06:41.042412 2026] [ssl:warn] [pid 1:tid 1] AH01873: Init: Session Cache is not configured [hint: SSLSessionCache]
+[Fri Mar 27 04:06:41.050068 2026] [mpm_event:notice] [pid 1:tid 1] AH00489: Apache/2.4.66 (Unix) OpenSSL/3.5.5 configured -- resuming normal operations
+[Fri Mar 27 04:06:41.053701 2026] [core:notice] [pid 1:tid 1] AH00094: Command line: 'httpd -D FOREGROUND'
+[Fri Mar 27 04:44:31.669677 2026] [mpm_event:notice] [pid 1:tid 1] AH00492: caught SIGWINCH, shutting down gracefully
+[Fri Mar 27 04:50:01.361897 2026] [ssl:warn] [pid 1:tid 1] AH01873: Init: Session Cache is not configured [hint: SSLSessionCache]
+[Fri Mar 27 04:50:01.374910 2026] [mpm_event:notice] [pid 1:tid 1] AH00489: Apache/2.4.66 (Unix) OpenSSL/3.5.5 configured -- resuming normal operations
+[Fri Mar 27 04:50:01.376739 2026] [core:notice] [pid 1:tid 1] AH00094: Command line: 'httpd -D FOREGROUND'
+[Sun Mar 29 11:40:41.247998 2026] [core:error] [pid 39:tid 56] [client 192.168.65.1:55133] AH10244: invalid URI path (/cgi-bin/.%2e/%2e%2e/%2e%2e/%2e%2e/%2e%2e/%2e%2e/%2e%2e/%2e%2e/%2e%2e/etc/hosts)
+[Mon Mar 30 06:14:39.402287 2026] [mpm_event:notice] [pid 1:tid 1] AH00492: caught SIGWINCH, shutting down gracefully
+[Fri Apr 03 04:33:01.751788 2026] [ssl:warn] [pid 1:tid 1] AH01873: Init: Session Cache is not configured [hint: SSLSessionCache]
+[Fri Apr 03 04:33:01.811096 2026] [mpm_event:notice] [pid 1:tid 1] AH00489: Apache/2.4.66 (Unix) OpenSSL/3.5.5 configured -- resuming normal operations
+[Fri Apr 03 04:33:01.860613 2026] [core:notice] [pid 1:tid 1] AH00094: Command line: 'httpd -D FOREGROUND'
+[Mon Apr 06 13:14:28.838647 2026] [mpm_event:notice] [pid 1:tid 1] AH00492: caught SIGWINCH, shutting down gracefully
+[Mon Apr 06 13:17:24.212036 2026] [ssl:warn] [pid 1:tid 1] AH01873: Init: Session Cache is not configured [hint: SSLSessionCache]
+[Mon Apr 06 13:17:24.238093 2026] [mpm_event:notice] [pid 1:tid 1] AH00489: Apache/2.4.66 (Unix) OpenSSL/3.5.5 configured -- resuming normal operations
+[Mon Apr 06 13:17:24.241763 2026] [core:notice] [pid 1:tid 1] AH00094: Command line: 'httpd -D FOREGROUND'

@@ -1,0 +1,594 @@
+2026-04-03 14:02:26 gError:  Unknown path 1: /.well-known/appspecific/com.chrome.devtools.json
+2026-04-03 14:02:26 log:  endpoint= https://fcm.googleapis.com/fcm/send/fFhD72Db7ZI:APA91bFDJnW4jJ9yjJI7qzg98Ii7ovmLl-fAjAY9kb85yf3YUlj7cBFxgdY7CsLP8qDlSvcxV1THolgZThIXY-VEAnQ3nq9NFlBPCdoZju2t_tMqSrIzxIN2bdw_Ex6BJCCQjrQzNG5d
+2026-04-03 14:02:26 log:  p256dh= BMWcLby0lzz38dt1AjptryGNEYmjQMaDaQvqtewv1sFGdYRCz1-3ojPUu6tAwx1OzV6_RmjV4m_deL8DE_ecolE
+2026-04-03 14:02:26 log:  auth= Z2iLiZgghwWXe_gpjTCSkg
+2026-04-03 14:02:26 log:  yes
+2026-04-03 14:02:26 log:  endpoint already exists
+2026-04-03 14:02:31 log:  edit users nickname
+2026-04-03 14:02:31 log:  array (
+  'CHMENU_USER' => 'ec280acde45f148ff18574dc3efc9392',
+  'CHMENU_AGENT' => '1576c8ef29db925b7128d5d0dd67ca1e',
+  'adminer_settings' => 'vendor-server-db=MariaDB',
+  'adminer_key' => '1eb16ebffbcab4722ccddc8c68a5e776',
+  'adminer_version' => '0',
+  'adminer_sid' => '9b1d2455a8b5c0024fad0a20e3e1f973',
+)
+2026-04-03 14:02:31 log:  array (
+)
+2026-04-03 14:02:31 log:  array (
+)
+2026-04-03 14:03:27 gError:  Unknown path 1: /.well-known/appspecific/com.chrome.devtools.json
+2026-04-03 14:03:27 log:  endpoint= https://fcm.googleapis.com/fcm/send/fFhD72Db7ZI:APA91bFDJnW4jJ9yjJI7qzg98Ii7ovmLl-fAjAY9kb85yf3YUlj7cBFxgdY7CsLP8qDlSvcxV1THolgZThIXY-VEAnQ3nq9NFlBPCdoZju2t_tMqSrIzxIN2bdw_Ex6BJCCQjrQzNG5d
+2026-04-03 14:03:27 log:  p256dh= BMWcLby0lzz38dt1AjptryGNEYmjQMaDaQvqtewv1sFGdYRCz1-3ojPUu6tAwx1OzV6_RmjV4m_deL8DE_ecolE
+2026-04-03 14:03:27 log:  auth= Z2iLiZgghwWXe_gpjTCSkg
+2026-04-03 14:03:27 log:  yes
+2026-04-03 14:03:27 log:  endpoint already exists
+2026-04-03 14:03:29 log:  edit users nickname
+2026-04-03 14:03:29 log:  array (
+  'nickname' => 'sdf',
+  'push_endpoint' => 'https://fcm.googleapis.com/fcm/send/fFhD72Db7ZI:APA91bFDJnW4jJ9yjJI7qzg98Ii7ovmLl-fAjAY9kb85yf3YUlj7cBFxgdY7CsLP8qDlSvcxV1THolgZThIXY-VEAnQ3nq9NFlBPCdoZju2t_tMqSrIzxIN2bdw_Ex6BJCCQjrQzNG5d',
+  'CHMENU_USER' => 'ec280acde45f148ff18574dc3efc9392',
+  'CHMENU_AGENT' => '1576c8ef29db925b7128d5d0dd67ca1e',
+  'adminer_settings' => 'vendor-server-db=MariaDB',
+  'adminer_key' => '1eb16ebffbcab4722ccddc8c68a5e776',
+  'adminer_version' => '0',
+  'adminer_sid' => '9b1d2455a8b5c0024fad0a20e3e1f973',
+)
+2026-04-03 14:03:29 log:  array (
+  'nickname' => 'sdf',
+  'push_endpoint' => 'https://fcm.googleapis.com/fcm/send/fFhD72Db7ZI:APA91bFDJnW4jJ9yjJI7qzg98Ii7ovmLl-fAjAY9kb85yf3YUlj7cBFxgdY7CsLP8qDlSvcxV1THolgZThIXY-VEAnQ3nq9NFlBPCdoZju2t_tMqSrIzxIN2bdw_Ex6BJCCQjrQzNG5d',
+)
+2026-04-03 14:03:29 log:  array (
+)
+2026-04-03 14:03:41 log:  edit users nickname
+2026-04-03 14:03:41 log:  array (
+  'nickname' => '1234',
+  'push_endpoint' => 'https://fcm.googleapis.com/fcm/send/fFhD72Db7ZI:APA91bFDJnW4jJ9yjJI7qzg98Ii7ovmLl-fAjAY9kb85yf3YUlj7cBFxgdY7CsLP8qDlSvcxV1THolgZThIXY-VEAnQ3nq9NFlBPCdoZju2t_tMqSrIzxIN2bdw_Ex6BJCCQjrQzNG5d',
+  'CHMENU_USER' => 'ec280acde45f148ff18574dc3efc9392',
+  'CHMENU_AGENT' => '1576c8ef29db925b7128d5d0dd67ca1e',
+  'adminer_settings' => 'vendor-server-db=MariaDB',
+  'adminer_key' => '1eb16ebffbcab4722ccddc8c68a5e776',
+  'adminer_version' => '0',
+  'adminer_sid' => '9b1d2455a8b5c0024fad0a20e3e1f973',
+)
+2026-04-03 14:03:41 log:  array (
+  'nickname' => '1234',
+  'push_endpoint' => 'https://fcm.googleapis.com/fcm/send/fFhD72Db7ZI:APA91bFDJnW4jJ9yjJI7qzg98Ii7ovmLl-fAjAY9kb85yf3YUlj7cBFxgdY7CsLP8qDlSvcxV1THolgZThIXY-VEAnQ3nq9NFlBPCdoZju2t_tMqSrIzxIN2bdw_Ex6BJCCQjrQzNG5d',
+)
+2026-04-03 14:03:41 log:  array (
+)
+2026-04-03 14:07:01 gError:  Unknown path 1: /.well-known/appspecific/com.chrome.devtools.json
+2026-04-03 14:07:01 log:  endpoint= https://fcm.googleapis.com/fcm/send/fFhD72Db7ZI:APA91bFDJnW4jJ9yjJI7qzg98Ii7ovmLl-fAjAY9kb85yf3YUlj7cBFxgdY7CsLP8qDlSvcxV1THolgZThIXY-VEAnQ3nq9NFlBPCdoZju2t_tMqSrIzxIN2bdw_Ex6BJCCQjrQzNG5d
+2026-04-03 14:07:01 log:  p256dh= BMWcLby0lzz38dt1AjptryGNEYmjQMaDaQvqtewv1sFGdYRCz1-3ojPUu6tAwx1OzV6_RmjV4m_deL8DE_ecolE
+2026-04-03 14:07:01 log:  auth= Z2iLiZgghwWXe_gpjTCSkg
+2026-04-03 14:07:01 log:  yes
+2026-04-03 14:07:01 log:  endpoint already exists
+2026-04-03 14:07:14 gError:  Unknown path 1: /.well-known/appspecific/com.chrome.devtools.json
+2026-04-03 14:07:14 log:  endpoint= https://fcm.googleapis.com/fcm/send/fFhD72Db7ZI:APA91bFDJnW4jJ9yjJI7qzg98Ii7ovmLl-fAjAY9kb85yf3YUlj7cBFxgdY7CsLP8qDlSvcxV1THolgZThIXY-VEAnQ3nq9NFlBPCdoZju2t_tMqSrIzxIN2bdw_Ex6BJCCQjrQzNG5d
+2026-04-03 14:07:14 log:  p256dh= BMWcLby0lzz38dt1AjptryGNEYmjQMaDaQvqtewv1sFGdYRCz1-3ojPUu6tAwx1OzV6_RmjV4m_deL8DE_ecolE
+2026-04-03 14:07:14 log:  auth= Z2iLiZgghwWXe_gpjTCSkg
+2026-04-03 14:07:14 log:  yes
+2026-04-03 14:07:14 log:  endpoint already exists
+2026-04-03 14:07:48 gError:  Unknown path 1: /.well-known/appspecific/com.chrome.devtools.json
+2026-04-03 14:07:49 log:  endpoint= https://fcm.googleapis.com/fcm/send/fFhD72Db7ZI:APA91bFDJnW4jJ9yjJI7qzg98Ii7ovmLl-fAjAY9kb85yf3YUlj7cBFxgdY7CsLP8qDlSvcxV1THolgZThIXY-VEAnQ3nq9NFlBPCdoZju2t_tMqSrIzxIN2bdw_Ex6BJCCQjrQzNG5d
+2026-04-03 14:07:49 log:  p256dh= BMWcLby0lzz38dt1AjptryGNEYmjQMaDaQvqtewv1sFGdYRCz1-3ojPUu6tAwx1OzV6_RmjV4m_deL8DE_ecolE
+2026-04-03 14:07:49 log:  auth= Z2iLiZgghwWXe_gpjTCSkg
+2026-04-03 14:07:49 log:  yes
+2026-04-03 14:07:49 log:  endpoint already exists
+2026-04-03 14:08:23 gError:  Unknown path 1: /.well-known/appspecific/com.chrome.devtools.json
+2026-04-03 14:08:23 log:  endpoint= https://fcm.googleapis.com/fcm/send/fFhD72Db7ZI:APA91bFDJnW4jJ9yjJI7qzg98Ii7ovmLl-fAjAY9kb85yf3YUlj7cBFxgdY7CsLP8qDlSvcxV1THolgZThIXY-VEAnQ3nq9NFlBPCdoZju2t_tMqSrIzxIN2bdw_Ex6BJCCQjrQzNG5d
+2026-04-03 14:08:23 log:  p256dh= BMWcLby0lzz38dt1AjptryGNEYmjQMaDaQvqtewv1sFGdYRCz1-3ojPUu6tAwx1OzV6_RmjV4m_deL8DE_ecolE
+2026-04-03 14:08:23 log:  auth= Z2iLiZgghwWXe_gpjTCSkg
+2026-04-03 14:08:23 log:  yes
+2026-04-03 14:08:23 log:  endpoint already exists
+2026-04-03 14:08:43 gError:  Unknown path 1: /.well-known/appspecific/com.chrome.devtools.json
+2026-04-03 14:08:43 log:  endpoint= https://fcm.googleapis.com/fcm/send/fFhD72Db7ZI:APA91bFDJnW4jJ9yjJI7qzg98Ii7ovmLl-fAjAY9kb85yf3YUlj7cBFxgdY7CsLP8qDlSvcxV1THolgZThIXY-VEAnQ3nq9NFlBPCdoZju2t_tMqSrIzxIN2bdw_Ex6BJCCQjrQzNG5d
+2026-04-03 14:08:43 log:  p256dh= BMWcLby0lzz38dt1AjptryGNEYmjQMaDaQvqtewv1sFGdYRCz1-3ojPUu6tAwx1OzV6_RmjV4m_deL8DE_ecolE
+2026-04-03 14:08:43 log:  auth= Z2iLiZgghwWXe_gpjTCSkg
+2026-04-03 14:08:43 log:  yes
+2026-04-03 14:08:43 log:  endpoint already exists
+2026-04-03 14:10:24 gError:  Unknown path 1: /.well-known/appspecific/com.chrome.devtools.json
+2026-04-03 14:10:24 log:  endpoint= https://fcm.googleapis.com/fcm/send/fFhD72Db7ZI:APA91bFDJnW4jJ9yjJI7qzg98Ii7ovmLl-fAjAY9kb85yf3YUlj7cBFxgdY7CsLP8qDlSvcxV1THolgZThIXY-VEAnQ3nq9NFlBPCdoZju2t_tMqSrIzxIN2bdw_Ex6BJCCQjrQzNG5d
+2026-04-03 14:10:24 log:  p256dh= BMWcLby0lzz38dt1AjptryGNEYmjQMaDaQvqtewv1sFGdYRCz1-3ojPUu6tAwx1OzV6_RmjV4m_deL8DE_ecolE
+2026-04-03 14:10:24 log:  auth= Z2iLiZgghwWXe_gpjTCSkg
+2026-04-03 14:10:24 log:  yes
+2026-04-03 14:10:24 log:  created new webuser
+2026-04-03 14:10:40 log:  edit users nickname
+2026-04-03 14:10:40 log:  array (
+  'nickname' => 'Петя',
+  'push_endpoint' => 'https://fcm.googleapis.com/fcm/send/fFhD72Db7ZI:APA91bFDJnW4jJ9yjJI7qzg98Ii7ovmLl-fAjAY9kb85yf3YUlj7cBFxgdY7CsLP8qDlSvcxV1THolgZThIXY-VEAnQ3nq9NFlBPCdoZju2t_tMqSrIzxIN2bdw_Ex6BJCCQjrQzNG5d',
+  'CHMENU_USER' => 'ec280acde45f148ff18574dc3efc9392',
+  'CHMENU_AGENT' => '1576c8ef29db925b7128d5d0dd67ca1e',
+  'adminer_settings' => 'vendor-server-db=MariaDB',
+  'adminer_key' => '1eb16ebffbcab4722ccddc8c68a5e776',
+  'adminer_version' => '0',
+  'adminer_sid' => '9b1d2455a8b5c0024fad0a20e3e1f973',
+)
+2026-04-03 14:10:40 log:  array (
+  'nickname' => 'Петя',
+  'push_endpoint' => 'https://fcm.googleapis.com/fcm/send/fFhD72Db7ZI:APA91bFDJnW4jJ9yjJI7qzg98Ii7ovmLl-fAjAY9kb85yf3YUlj7cBFxgdY7CsLP8qDlSvcxV1THolgZThIXY-VEAnQ3nq9NFlBPCdoZju2t_tMqSrIzxIN2bdw_Ex6BJCCQjrQzNG5d',
+)
+2026-04-03 14:10:40 log:  array (
+)
+2026-04-03 14:12:04 gError:  Unknown path 1: /.well-known/appspecific/com.chrome.devtools.json
+2026-04-03 14:12:05 log:  endpoint= https://fcm.googleapis.com/fcm/send/fFhD72Db7ZI:APA91bFDJnW4jJ9yjJI7qzg98Ii7ovmLl-fAjAY9kb85yf3YUlj7cBFxgdY7CsLP8qDlSvcxV1THolgZThIXY-VEAnQ3nq9NFlBPCdoZju2t_tMqSrIzxIN2bdw_Ex6BJCCQjrQzNG5d
+2026-04-03 14:12:05 log:  p256dh= BMWcLby0lzz38dt1AjptryGNEYmjQMaDaQvqtewv1sFGdYRCz1-3ojPUu6tAwx1OzV6_RmjV4m_deL8DE_ecolE
+2026-04-03 14:12:05 log:  auth= Z2iLiZgghwWXe_gpjTCSkg
+2026-04-03 14:12:05 log:  yes
+2026-04-03 14:12:05 log:  endpoint already exists
+2026-04-03 14:13:44 gError:  Unknown path 1: /.well-known/appspecific/com.chrome.devtools.json
+2026-04-03 14:13:44 log:  endpoint= https://fcm.googleapis.com/fcm/send/fFhD72Db7ZI:APA91bFDJnW4jJ9yjJI7qzg98Ii7ovmLl-fAjAY9kb85yf3YUlj7cBFxgdY7CsLP8qDlSvcxV1THolgZThIXY-VEAnQ3nq9NFlBPCdoZju2t_tMqSrIzxIN2bdw_Ex6BJCCQjrQzNG5d
+2026-04-03 14:13:44 log:  p256dh= BMWcLby0lzz38dt1AjptryGNEYmjQMaDaQvqtewv1sFGdYRCz1-3ojPUu6tAwx1OzV6_RmjV4m_deL8DE_ecolE
+2026-04-03 14:13:44 log:  auth= Z2iLiZgghwWXe_gpjTCSkg
+2026-04-03 14:13:44 log:  yes
+2026-04-03 14:13:44 log:  endpoint already exists
+2026-04-03 14:13:58 gError:  Unknown path 1: /.well-known/appspecific/com.chrome.devtools.json
+2026-04-03 14:13:58 log:  endpoint= https://fcm.googleapis.com/fcm/send/fFhD72Db7ZI:APA91bFDJnW4jJ9yjJI7qzg98Ii7ovmLl-fAjAY9kb85yf3YUlj7cBFxgdY7CsLP8qDlSvcxV1THolgZThIXY-VEAnQ3nq9NFlBPCdoZju2t_tMqSrIzxIN2bdw_Ex6BJCCQjrQzNG5d
+2026-04-03 14:13:58 log:  p256dh= BMWcLby0lzz38dt1AjptryGNEYmjQMaDaQvqtewv1sFGdYRCz1-3ojPUu6tAwx1OzV6_RmjV4m_deL8DE_ecolE
+2026-04-03 14:13:58 log:  auth= Z2iLiZgghwWXe_gpjTCSkg
+2026-04-03 14:13:58 log:  yes
+2026-04-03 14:13:58 log:  created new webuser
+2026-04-03 14:14:03 log:  edit users nickname
+2026-04-03 14:14:03 log:  array (
+  'nickname' => 'дима',
+  'push_endpoint' => 'https://fcm.googleapis.com/fcm/send/fFhD72Db7ZI:APA91bFDJnW4jJ9yjJI7qzg98Ii7ovmLl-fAjAY9kb85yf3YUlj7cBFxgdY7CsLP8qDlSvcxV1THolgZThIXY-VEAnQ3nq9NFlBPCdoZju2t_tMqSrIzxIN2bdw_Ex6BJCCQjrQzNG5d',
+  'CHMENU_USER' => 'ec280acde45f148ff18574dc3efc9392',
+  'CHMENU_AGENT' => '1576c8ef29db925b7128d5d0dd67ca1e',
+  'adminer_settings' => 'vendor-server-db=MariaDB',
+  'adminer_key' => '1eb16ebffbcab4722ccddc8c68a5e776',
+  'adminer_version' => '0',
+  'adminer_sid' => '9b1d2455a8b5c0024fad0a20e3e1f973',
+)
+2026-04-03 14:14:03 log:  array (
+  'nickname' => 'дима',
+  'push_endpoint' => 'https://fcm.googleapis.com/fcm/send/fFhD72Db7ZI:APA91bFDJnW4jJ9yjJI7qzg98Ii7ovmLl-fAjAY9kb85yf3YUlj7cBFxgdY7CsLP8qDlSvcxV1THolgZThIXY-VEAnQ3nq9NFlBPCdoZju2t_tMqSrIzxIN2bdw_Ex6BJCCQjrQzNG5d',
+)
+2026-04-03 14:14:03 log:  array (
+)
+2026-04-03 14:14:09 log:  edit users nickname
+2026-04-03 14:14:09 log:  array (
+  'nickname' => 'дима',
+  'push_endpoint' => 'https://fcm.googleapis.com/fcm/send/fFhD72Db7ZI:APA91bFDJnW4jJ9yjJI7qzg98Ii7ovmLl-fAjAY9kb85yf3YUlj7cBFxgdY7CsLP8qDlSvcxV1THolgZThIXY-VEAnQ3nq9NFlBPCdoZju2t_tMqSrIzxIN2bdw_Ex6BJCCQjrQzNG5d',
+  'CHMENU_USER' => 'ec280acde45f148ff18574dc3efc9392',
+  'CHMENU_AGENT' => '1576c8ef29db925b7128d5d0dd67ca1e',
+  'adminer_settings' => 'vendor-server-db=MariaDB',
+  'adminer_key' => '1eb16ebffbcab4722ccddc8c68a5e776',
+  'adminer_version' => '0',
+  'adminer_sid' => '9b1d2455a8b5c0024fad0a20e3e1f973',
+)
+2026-04-03 14:14:09 log:  array (
+  'nickname' => 'дима',
+  'push_endpoint' => 'https://fcm.googleapis.com/fcm/send/fFhD72Db7ZI:APA91bFDJnW4jJ9yjJI7qzg98Ii7ovmLl-fAjAY9kb85yf3YUlj7cBFxgdY7CsLP8qDlSvcxV1THolgZThIXY-VEAnQ3nq9NFlBPCdoZju2t_tMqSrIzxIN2bdw_Ex6BJCCQjrQzNG5d',
+)
+2026-04-03 14:14:09 log:  array (
+)
+2026-04-03 14:14:09 gError:  cant save: Smart Object: #8 (id, iiko_user_id, name, nickname, role, state, cafe_uniq_name, push_endpoint, push_p256dh, push_auth, typing_comment_to_order, last_seen, updated, regdate)
+2026-04-03 14:16:34 gError:  Unknown path 1: /.well-known/appspecific/com.chrome.devtools.json
+2026-04-03 14:16:35 log:  endpoint= https://fcm.googleapis.com/fcm/send/fFhD72Db7ZI:APA91bFDJnW4jJ9yjJI7qzg98Ii7ovmLl-fAjAY9kb85yf3YUlj7cBFxgdY7CsLP8qDlSvcxV1THolgZThIXY-VEAnQ3nq9NFlBPCdoZju2t_tMqSrIzxIN2bdw_Ex6BJCCQjrQzNG5d
+2026-04-03 14:16:35 log:  p256dh= BMWcLby0lzz38dt1AjptryGNEYmjQMaDaQvqtewv1sFGdYRCz1-3ojPUu6tAwx1OzV6_RmjV4m_deL8DE_ecolE
+2026-04-03 14:16:35 log:  auth= Z2iLiZgghwWXe_gpjTCSkg
+2026-04-03 14:16:35 log:  yes
+2026-04-03 14:16:35 log:  endpoint already exists
+2026-04-03 14:16:47 gError:  Unknown path 1: /.well-known/appspecific/com.chrome.devtools.json
+2026-04-03 14:16:48 log:  endpoint= https://fcm.googleapis.com/fcm/send/fFhD72Db7ZI:APA91bFDJnW4jJ9yjJI7qzg98Ii7ovmLl-fAjAY9kb85yf3YUlj7cBFxgdY7CsLP8qDlSvcxV1THolgZThIXY-VEAnQ3nq9NFlBPCdoZju2t_tMqSrIzxIN2bdw_Ex6BJCCQjrQzNG5d
+2026-04-03 14:16:48 log:  p256dh= BMWcLby0lzz38dt1AjptryGNEYmjQMaDaQvqtewv1sFGdYRCz1-3ojPUu6tAwx1OzV6_RmjV4m_deL8DE_ecolE
+2026-04-03 14:16:48 log:  auth= Z2iLiZgghwWXe_gpjTCSkg
+2026-04-03 14:16:48 log:  yes
+2026-04-03 14:16:48 log:  created new webuser
+2026-04-03 14:16:56 log:  edit users nickname
+2026-04-03 14:16:56 log:  array (
+  'nickname' => 'димка',
+  'push_endpoint' => 'https://fcm.googleapis.com/fcm/send/fFhD72Db7ZI:APA91bFDJnW4jJ9yjJI7qzg98Ii7ovmLl-fAjAY9kb85yf3YUlj7cBFxgdY7CsLP8qDlSvcxV1THolgZThIXY-VEAnQ3nq9NFlBPCdoZju2t_tMqSrIzxIN2bdw_Ex6BJCCQjrQzNG5d',
+  'CHMENU_USER' => 'ec280acde45f148ff18574dc3efc9392',
+  'CHMENU_AGENT' => '1576c8ef29db925b7128d5d0dd67ca1e',
+  'adminer_settings' => 'vendor-server-db=MariaDB',
+  'adminer_key' => '1eb16ebffbcab4722ccddc8c68a5e776',
+  'adminer_version' => '0',
+  'adminer_sid' => '9b1d2455a8b5c0024fad0a20e3e1f973',
+)
+2026-04-03 14:16:56 log:  array (
+  'nickname' => 'димка',
+  'push_endpoint' => 'https://fcm.googleapis.com/fcm/send/fFhD72Db7ZI:APA91bFDJnW4jJ9yjJI7qzg98Ii7ovmLl-fAjAY9kb85yf3YUlj7cBFxgdY7CsLP8qDlSvcxV1THolgZThIXY-VEAnQ3nq9NFlBPCdoZju2t_tMqSrIzxIN2bdw_Ex6BJCCQjrQzNG5d',
+)
+2026-04-03 14:16:56 log:  array (
+)
+2026-04-03 14:18:23 gError:  Unknown path 1: /.well-known/appspecific/com.chrome.devtools.json
+2026-04-03 14:18:24 log:  endpoint= https://fcm.googleapis.com/fcm/send/fFhD72Db7ZI:APA91bFDJnW4jJ9yjJI7qzg98Ii7ovmLl-fAjAY9kb85yf3YUlj7cBFxgdY7CsLP8qDlSvcxV1THolgZThIXY-VEAnQ3nq9NFlBPCdoZju2t_tMqSrIzxIN2bdw_Ex6BJCCQjrQzNG5d
+2026-04-03 14:18:24 log:  p256dh= BMWcLby0lzz38dt1AjptryGNEYmjQMaDaQvqtewv1sFGdYRCz1-3ojPUu6tAwx1OzV6_RmjV4m_deL8DE_ecolE
+2026-04-03 14:18:24 log:  auth= Z2iLiZgghwWXe_gpjTCSkg
+2026-04-03 14:18:24 log:  yes
+2026-04-03 14:18:24 log:  endpoint already exists
+2026-04-03 14:18:37 gError:  Unknown path 1: /.well-known/appspecific/com.chrome.devtools.json
+2026-04-03 14:18:37 log:  endpoint= https://fcm.googleapis.com/fcm/send/fFhD72Db7ZI:APA91bFDJnW4jJ9yjJI7qzg98Ii7ovmLl-fAjAY9kb85yf3YUlj7cBFxgdY7CsLP8qDlSvcxV1THolgZThIXY-VEAnQ3nq9NFlBPCdoZju2t_tMqSrIzxIN2bdw_Ex6BJCCQjrQzNG5d
+2026-04-03 14:18:37 log:  p256dh= BMWcLby0lzz38dt1AjptryGNEYmjQMaDaQvqtewv1sFGdYRCz1-3ojPUu6tAwx1OzV6_RmjV4m_deL8DE_ecolE
+2026-04-03 14:18:37 log:  auth= Z2iLiZgghwWXe_gpjTCSkg
+2026-04-03 14:18:37 log:  yes
+2026-04-03 14:18:37 log:  created new webuser
+2026-04-03 14:18:42 log:  edit users nickname
+2026-04-03 14:18:42 log:  array (
+  'nickname' => 'борис',
+  'push_endpoint' => 'https://fcm.googleapis.com/fcm/send/fFhD72Db7ZI:APA91bFDJnW4jJ9yjJI7qzg98Ii7ovmLl-fAjAY9kb85yf3YUlj7cBFxgdY7CsLP8qDlSvcxV1THolgZThIXY-VEAnQ3nq9NFlBPCdoZju2t_tMqSrIzxIN2bdw_Ex6BJCCQjrQzNG5d',
+  'CHMENU_USER' => 'ec280acde45f148ff18574dc3efc9392',
+  'CHMENU_AGENT' => '1576c8ef29db925b7128d5d0dd67ca1e',
+  'adminer_settings' => 'vendor-server-db=MariaDB',
+  'adminer_key' => '1eb16ebffbcab4722ccddc8c68a5e776',
+  'adminer_version' => '0',
+  'adminer_sid' => '9b1d2455a8b5c0024fad0a20e3e1f973',
+)
+2026-04-03 14:18:42 log:  array (
+  'nickname' => 'борис',
+  'push_endpoint' => 'https://fcm.googleapis.com/fcm/send/fFhD72Db7ZI:APA91bFDJnW4jJ9yjJI7qzg98Ii7ovmLl-fAjAY9kb85yf3YUlj7cBFxgdY7CsLP8qDlSvcxV1THolgZThIXY-VEAnQ3nq9NFlBPCdoZju2t_tMqSrIzxIN2bdw_Ex6BJCCQjrQzNG5d',
+)
+2026-04-03 14:18:42 log:  array (
+)
+2026-04-03 14:18:48 gError:  Unknown path 1: /.well-known/appspecific/com.chrome.devtools.json
+2026-04-03 14:18:48 log:  endpoint= https://fcm.googleapis.com/fcm/send/fFhD72Db7ZI:APA91bFDJnW4jJ9yjJI7qzg98Ii7ovmLl-fAjAY9kb85yf3YUlj7cBFxgdY7CsLP8qDlSvcxV1THolgZThIXY-VEAnQ3nq9NFlBPCdoZju2t_tMqSrIzxIN2bdw_Ex6BJCCQjrQzNG5d
+2026-04-03 14:18:48 log:  p256dh= BMWcLby0lzz38dt1AjptryGNEYmjQMaDaQvqtewv1sFGdYRCz1-3ojPUu6tAwx1OzV6_RmjV4m_deL8DE_ecolE
+2026-04-03 14:18:48 log:  auth= Z2iLiZgghwWXe_gpjTCSkg
+2026-04-03 14:18:48 log:  yes
+2026-04-03 14:18:49 log:  endpoint already exists
+2026-04-05 23:37:25 gError:  Unknown path 1: /.well-known/appspecific/com.chrome.devtools.json
+2026-04-05 23:37:25 log:  endpoint= https://fcm.googleapis.com/fcm/send/fFhD72Db7ZI:APA91bFDJnW4jJ9yjJI7qzg98Ii7ovmLl-fAjAY9kb85yf3YUlj7cBFxgdY7CsLP8qDlSvcxV1THolgZThIXY-VEAnQ3nq9NFlBPCdoZju2t_tMqSrIzxIN2bdw_Ex6BJCCQjrQzNG5d
+2026-04-05 23:37:25 log:  p256dh= BMWcLby0lzz38dt1AjptryGNEYmjQMaDaQvqtewv1sFGdYRCz1-3ojPUu6tAwx1OzV6_RmjV4m_deL8DE_ecolE
+2026-04-05 23:37:25 log:  auth= Z2iLiZgghwWXe_gpjTCSkg
+2026-04-05 23:37:25 log:  yes
+2026-04-05 23:37:25 log:  endpoint already exists
+2026-04-06 00:53:33 gError:  Unknown path 1: /.well-known/appspecific/com.chrome.devtools.json
+2026-04-06 00:54:26 gError:  Unknown path 1: /.well-known/appspecific/com.chrome.devtools.json
+2026-04-06 00:54:40 gError:  Unknown path 1: /.well-known/appspecific/com.chrome.devtools.json
+2026-04-06 00:54:41 gError:  Unknown path 1: /404
+2026-04-06 00:54:41 gError:  Unknown path 1: /.well-known/appspecific/com.chrome.devtools.json
+2026-04-06 00:54:57 gError:  Unknown path 1: /.well-known/appspecific/com.chrome.devtools.json
+2026-04-06 00:54:59 gError:  Unknown path 1: /.well-known/appspecific/com.chrome.devtools.json
+2026-04-06 00:55:00 gError:  Unknown path 1: /404
+2026-04-06 00:55:00 gError:  Unknown path 1: /.well-known/appspecific/com.chrome.devtools.json
+2026-04-06 00:55:05 gError:  Unknown path 1: /.well-known/appspecific/com.chrome.devtools.json
+2026-04-06 00:55:05 log:  endpoint= https://fcm.googleapis.com/fcm/send/fFhD72Db7ZI:APA91bFDJnW4jJ9yjJI7qzg98Ii7ovmLl-fAjAY9kb85yf3YUlj7cBFxgdY7CsLP8qDlSvcxV1THolgZThIXY-VEAnQ3nq9NFlBPCdoZju2t_tMqSrIzxIN2bdw_Ex6BJCCQjrQzNG5d
+2026-04-06 00:55:05 log:  p256dh= BMWcLby0lzz38dt1AjptryGNEYmjQMaDaQvqtewv1sFGdYRCz1-3ojPUu6tAwx1OzV6_RmjV4m_deL8DE_ecolE
+2026-04-06 00:55:05 log:  auth= Z2iLiZgghwWXe_gpjTCSkg
+2026-04-06 00:55:05 log:  yes
+2026-04-06 00:55:05 log:  endpoint already exists
+2026-04-06 00:55:16 gError:  Unknown path 1: /.well-known/appspecific/com.chrome.devtools.json
+2026-04-06 00:55:17 gError:  Unknown path 1: /404
+2026-04-06 00:55:17 gError:  Unknown path 1: /.well-known/appspecific/com.chrome.devtools.json
+2026-04-06 00:57:31 gError:  Unknown path 1: /404
+2026-04-06 00:57:32 gError:  Unknown path 1: /.well-known/appspecific/com.chrome.devtools.json
+2026-04-06 00:57:33 gError:  Unknown path 1: /.well-known/appspecific/com.chrome.devtools.json
+2026-04-06 00:57:34 log:  endpoint= https://fcm.googleapis.com/fcm/send/fFhD72Db7ZI:APA91bFDJnW4jJ9yjJI7qzg98Ii7ovmLl-fAjAY9kb85yf3YUlj7cBFxgdY7CsLP8qDlSvcxV1THolgZThIXY-VEAnQ3nq9NFlBPCdoZju2t_tMqSrIzxIN2bdw_Ex6BJCCQjrQzNG5d
+2026-04-06 00:57:34 log:  p256dh= BMWcLby0lzz38dt1AjptryGNEYmjQMaDaQvqtewv1sFGdYRCz1-3ojPUu6tAwx1OzV6_RmjV4m_deL8DE_ecolE
+2026-04-06 00:57:34 log:  auth= Z2iLiZgghwWXe_gpjTCSkg
+2026-04-06 00:57:34 log:  yes
+2026-04-06 00:57:34 log:  endpoint already exists
+2026-04-06 00:57:39 gError:  Unknown path 1: /.well-known/appspecific/com.chrome.devtools.json
+2026-04-06 00:57:40 gError:  Unknown path 1: /404
+2026-04-06 00:57:40 gError:  Unknown path 1: /.well-known/appspecific/com.chrome.devtools.json
+2026-04-06 00:57:42 gError:  Unknown path 1: /404
+2026-04-06 00:57:42 gError:  Unknown path 1: /.well-known/appspecific/com.chrome.devtools.json
+2026-04-06 00:58:19 gError:  Unknown path 1: /.well-known/appspecific/com.chrome.devtools.json
+2026-04-06 00:58:19 gError:  Unknown path 1: /.well-known/appspecific/com.chrome.devtools.json
+2026-04-06 00:58:33 gError:  Unknown path 1: /.well-known/appspecific/com.chrome.devtools.json
+2026-04-06 00:58:33 gError:  Unknown path 1: /404
+2026-04-06 00:58:34 gError:  Unknown path 1: /.well-known/appspecific/com.chrome.devtools.json
+2026-04-06 00:59:01 gError:  Unknown path 1: /.well-known/appspecific/com.chrome.devtools.json
+2026-04-06 00:59:01 gError:  Unknown path 1: /.well-known/appspecific/com.chrome.devtools.json
+2026-04-06 00:59:04 gError:  Unknown path 1: /.well-known/appspecific/com.chrome.devtools.json
+2026-04-06 00:59:04 log:  endpoint= https://fcm.googleapis.com/fcm/send/fFhD72Db7ZI:APA91bFDJnW4jJ9yjJI7qzg98Ii7ovmLl-fAjAY9kb85yf3YUlj7cBFxgdY7CsLP8qDlSvcxV1THolgZThIXY-VEAnQ3nq9NFlBPCdoZju2t_tMqSrIzxIN2bdw_Ex6BJCCQjrQzNG5d
+2026-04-06 00:59:04 log:  p256dh= BMWcLby0lzz38dt1AjptryGNEYmjQMaDaQvqtewv1sFGdYRCz1-3ojPUu6tAwx1OzV6_RmjV4m_deL8DE_ecolE
+2026-04-06 00:59:04 log:  auth= Z2iLiZgghwWXe_gpjTCSkg
+2026-04-06 00:59:04 log:  yes
+2026-04-06 00:59:04 log:  endpoint already exists
+2026-04-06 00:59:07 gError:  Unknown path 1: /.well-known/appspecific/com.chrome.devtools.json
+2026-04-06 00:59:07 log:  endpoint= https://fcm.googleapis.com/fcm/send/fFhD72Db7ZI:APA91bFDJnW4jJ9yjJI7qzg98Ii7ovmLl-fAjAY9kb85yf3YUlj7cBFxgdY7CsLP8qDlSvcxV1THolgZThIXY-VEAnQ3nq9NFlBPCdoZju2t_tMqSrIzxIN2bdw_Ex6BJCCQjrQzNG5d
+2026-04-06 00:59:07 log:  p256dh= BMWcLby0lzz38dt1AjptryGNEYmjQMaDaQvqtewv1sFGdYRCz1-3ojPUu6tAwx1OzV6_RmjV4m_deL8DE_ecolE
+2026-04-06 00:59:07 log:  auth= Z2iLiZgghwWXe_gpjTCSkg
+2026-04-06 00:59:07 log:  yes
+2026-04-06 00:59:07 log:  endpoint already exists
+2026-04-06 00:59:11 gError:  Unknown path 1: /.well-known/appspecific/com.chrome.devtools.json
+2026-04-06 00:59:14 gError:  Unknown path 1: /404
+2026-04-06 00:59:14 gError:  Unknown path 1: /.well-known/appspecific/com.chrome.devtools.json
+2026-04-06 00:59:17 gError:  Unknown path 1: /.well-known/appspecific/com.chrome.devtools.json
+2026-04-06 00:59:17 gError:  Unknown path 1: /.well-known/appspecific/com.chrome.devtools.json
+2026-04-06 00:59:27 gError:  Unknown path 1: /.well-known/appspecific/com.chrome.devtools.json
+2026-04-06 00:59:27 log:  endpoint= https://fcm.googleapis.com/fcm/send/fFhD72Db7ZI:APA91bFDJnW4jJ9yjJI7qzg98Ii7ovmLl-fAjAY9kb85yf3YUlj7cBFxgdY7CsLP8qDlSvcxV1THolgZThIXY-VEAnQ3nq9NFlBPCdoZju2t_tMqSrIzxIN2bdw_Ex6BJCCQjrQzNG5d
+2026-04-06 00:59:27 log:  p256dh= BMWcLby0lzz38dt1AjptryGNEYmjQMaDaQvqtewv1sFGdYRCz1-3ojPUu6tAwx1OzV6_RmjV4m_deL8DE_ecolE
+2026-04-06 00:59:27 log:  auth= Z2iLiZgghwWXe_gpjTCSkg
+2026-04-06 00:59:27 log:  yes
+2026-04-06 00:59:27 log:  endpoint already exists
+2026-04-06 00:59:31 gError:  Unknown path 1: /.well-known/appspecific/com.chrome.devtools.json
+2026-04-06 01:08:22 gError:  Unknown path 1: /.well-known/appspecific/com.chrome.devtools.json
+2026-04-06 01:26:48 gError:  Unknown path 1: /.well-known/appspecific/com.chrome.devtools.json
+2026-04-06 01:30:43 gError:  Unknown path 1: /.well-known/appspecific/com.chrome.devtools.json
+2026-04-06 01:37:59 gError:  Unknown path 1: /.well-known/appspecific/com.chrome.devtools.json
+2026-04-06 01:39:06 gError:  Unknown path 1: /.well-known/appspecific/com.chrome.devtools.json
+2026-04-06 01:41:19 gError:  Unknown path 1: /.well-known/appspecific/com.chrome.devtools.json
+2026-04-06 01:41:34 gError:  Unknown path 1: /.well-known/appspecific/com.chrome.devtools.json
+2026-04-06 01:41:43 gError:  Unknown path 1: /.well-known/appspecific/com.chrome.devtools.json
+2026-04-06 01:42:09 gError:  Unknown path 1: /.well-known/appspecific/com.chrome.devtools.json
+2026-04-06 01:42:52 gError:  Unknown path 1: /.well-known/appspecific/com.chrome.devtools.json
+2026-04-06 01:43:34 gError:  Unknown path 1: /.well-known/appspecific/com.chrome.devtools.json
+2026-04-06 01:44:51 gError:  Unknown path 1: /.well-known/appspecific/com.chrome.devtools.json
+2026-04-06 01:45:01 log:  endpoint= https://fcm.googleapis.com/fcm/send/fFhD72Db7ZI:APA91bFDJnW4jJ9yjJI7qzg98Ii7ovmLl-fAjAY9kb85yf3YUlj7cBFxgdY7CsLP8qDlSvcxV1THolgZThIXY-VEAnQ3nq9NFlBPCdoZju2t_tMqSrIzxIN2bdw_Ex6BJCCQjrQzNG5d
+2026-04-06 01:45:01 log:  p256dh= BMWcLby0lzz38dt1AjptryGNEYmjQMaDaQvqtewv1sFGdYRCz1-3ojPUu6tAwx1OzV6_RmjV4m_deL8DE_ecolE
+2026-04-06 01:45:01 log:  auth= Z2iLiZgghwWXe_gpjTCSkg
+2026-04-06 01:45:01 log:  yes
+2026-04-06 01:45:01 log:  endpoint already exists
+2026-04-06 01:45:03 log:  endpoint= https://fcm.googleapis.com/fcm/send/fFhD72Db7ZI:APA91bFDJnW4jJ9yjJI7qzg98Ii7ovmLl-fAjAY9kb85yf3YUlj7cBFxgdY7CsLP8qDlSvcxV1THolgZThIXY-VEAnQ3nq9NFlBPCdoZju2t_tMqSrIzxIN2bdw_Ex6BJCCQjrQzNG5d
+2026-04-06 01:45:03 log:  p256dh= BMWcLby0lzz38dt1AjptryGNEYmjQMaDaQvqtewv1sFGdYRCz1-3ojPUu6tAwx1OzV6_RmjV4m_deL8DE_ecolE
+2026-04-06 01:45:03 log:  auth= Z2iLiZgghwWXe_gpjTCSkg
+2026-04-06 01:45:03 log:  yes
+2026-04-06 01:45:03 log:  endpoint already exists
+2026-04-06 01:45:05 log:  endpoint= https://fcm.googleapis.com/fcm/send/fFhD72Db7ZI:APA91bFDJnW4jJ9yjJI7qzg98Ii7ovmLl-fAjAY9kb85yf3YUlj7cBFxgdY7CsLP8qDlSvcxV1THolgZThIXY-VEAnQ3nq9NFlBPCdoZju2t_tMqSrIzxIN2bdw_Ex6BJCCQjrQzNG5d
+2026-04-06 01:45:05 log:  p256dh= BMWcLby0lzz38dt1AjptryGNEYmjQMaDaQvqtewv1sFGdYRCz1-3ojPUu6tAwx1OzV6_RmjV4m_deL8DE_ecolE
+2026-04-06 01:45:05 log:  auth= Z2iLiZgghwWXe_gpjTCSkg
+2026-04-06 01:45:05 log:  yes
+2026-04-06 01:45:05 log:  endpoint already exists
+2026-04-06 01:46:35 log:  endpoint= https://fcm.googleapis.com/fcm/send/fFhD72Db7ZI:APA91bFDJnW4jJ9yjJI7qzg98Ii7ovmLl-fAjAY9kb85yf3YUlj7cBFxgdY7CsLP8qDlSvcxV1THolgZThIXY-VEAnQ3nq9NFlBPCdoZju2t_tMqSrIzxIN2bdw_Ex6BJCCQjrQzNG5d
+2026-04-06 01:46:35 log:  p256dh= BMWcLby0lzz38dt1AjptryGNEYmjQMaDaQvqtewv1sFGdYRCz1-3ojPUu6tAwx1OzV6_RmjV4m_deL8DE_ecolE
+2026-04-06 01:46:35 log:  auth= Z2iLiZgghwWXe_gpjTCSkg
+2026-04-06 01:46:35 log:  yes
+2026-04-06 01:46:35 log:  created new webuser
+2026-04-06 01:46:38 log:  endpoint= https://fcm.googleapis.com/fcm/send/fFhD72Db7ZI:APA91bFDJnW4jJ9yjJI7qzg98Ii7ovmLl-fAjAY9kb85yf3YUlj7cBFxgdY7CsLP8qDlSvcxV1THolgZThIXY-VEAnQ3nq9NFlBPCdoZju2t_tMqSrIzxIN2bdw_Ex6BJCCQjrQzNG5d
+2026-04-06 01:46:38 log:  p256dh= BMWcLby0lzz38dt1AjptryGNEYmjQMaDaQvqtewv1sFGdYRCz1-3ojPUu6tAwx1OzV6_RmjV4m_deL8DE_ecolE
+2026-04-06 01:46:38 log:  auth= Z2iLiZgghwWXe_gpjTCSkg
+2026-04-06 01:46:38 log:  yes
+2026-04-06 01:46:38 log:  endpoint already exists
+2026-04-06 01:46:48 log:  edit users nickname
+2026-04-06 01:46:48 log:  array (
+  'nickname' => 'qwe',
+  'push_endpoint' => 'https://fcm.googleapis.com/fcm/send/fFhD72Db7ZI:APA91bFDJnW4jJ9yjJI7qzg98Ii7ovmLl-fAjAY9kb85yf3YUlj7cBFxgdY7CsLP8qDlSvcxV1THolgZThIXY-VEAnQ3nq9NFlBPCdoZju2t_tMqSrIzxIN2bdw_Ex6BJCCQjrQzNG5d',
+  'CHMENU_USER' => 'ec280acde45f148ff18574dc3efc9392',
+  'CHMENU_AGENT' => '1576c8ef29db925b7128d5d0dd67ca1e',
+  'adminer_settings' => 'vendor-server-db=MariaDB',
+  'adminer_key' => '1eb16ebffbcab4722ccddc8c68a5e776',
+  'adminer_version' => '0',
+  'adminer_sid' => '63b79b727a119d79747e686c2858f1cd',
+)
+2026-04-06 01:46:48 log:  array (
+  'nickname' => 'qwe',
+  'push_endpoint' => 'https://fcm.googleapis.com/fcm/send/fFhD72Db7ZI:APA91bFDJnW4jJ9yjJI7qzg98Ii7ovmLl-fAjAY9kb85yf3YUlj7cBFxgdY7CsLP8qDlSvcxV1THolgZThIXY-VEAnQ3nq9NFlBPCdoZju2t_tMqSrIzxIN2bdw_Ex6BJCCQjrQzNG5d',
+)
+2026-04-06 01:46:48 log:  array (
+)
+2026-04-06 01:46:58 gError:  Unknown path 1: /.well-known/appspecific/com.chrome.devtools.json
+2026-04-06 01:48:28 gError:  Unknown path 1: /.well-known/appspecific/com.chrome.devtools.json
+2026-04-06 01:48:31 gError:  Unknown path 1: /.well-known/appspecific/com.chrome.devtools.json
+2026-04-06 01:48:33 log:  endpoint= https://fcm.googleapis.com/fcm/send/fFhD72Db7ZI:APA91bFDJnW4jJ9yjJI7qzg98Ii7ovmLl-fAjAY9kb85yf3YUlj7cBFxgdY7CsLP8qDlSvcxV1THolgZThIXY-VEAnQ3nq9NFlBPCdoZju2t_tMqSrIzxIN2bdw_Ex6BJCCQjrQzNG5d
+2026-04-06 01:48:33 log:  p256dh= BMWcLby0lzz38dt1AjptryGNEYmjQMaDaQvqtewv1sFGdYRCz1-3ojPUu6tAwx1OzV6_RmjV4m_deL8DE_ecolE
+2026-04-06 01:48:33 log:  auth= Z2iLiZgghwWXe_gpjTCSkg
+2026-04-06 01:48:33 log:  yes
+2026-04-06 01:48:33 log:  endpoint already exists
+2026-04-06 01:48:36 log:  endpoint= https://fcm.googleapis.com/fcm/send/fFhD72Db7ZI:APA91bFDJnW4jJ9yjJI7qzg98Ii7ovmLl-fAjAY9kb85yf3YUlj7cBFxgdY7CsLP8qDlSvcxV1THolgZThIXY-VEAnQ3nq9NFlBPCdoZju2t_tMqSrIzxIN2bdw_Ex6BJCCQjrQzNG5d
+2026-04-06 01:48:36 log:  p256dh= BMWcLby0lzz38dt1AjptryGNEYmjQMaDaQvqtewv1sFGdYRCz1-3ojPUu6tAwx1OzV6_RmjV4m_deL8DE_ecolE
+2026-04-06 01:48:36 log:  auth= Z2iLiZgghwWXe_gpjTCSkg
+2026-04-06 01:48:36 log:  yes
+2026-04-06 01:48:36 log:  endpoint already exists
+2026-04-06 01:48:54 log:  endpoint= https://fcm.googleapis.com/fcm/send/fFhD72Db7ZI:APA91bFDJnW4jJ9yjJI7qzg98Ii7ovmLl-fAjAY9kb85yf3YUlj7cBFxgdY7CsLP8qDlSvcxV1THolgZThIXY-VEAnQ3nq9NFlBPCdoZju2t_tMqSrIzxIN2bdw_Ex6BJCCQjrQzNG5d
+2026-04-06 01:48:54 log:  p256dh= BMWcLby0lzz38dt1AjptryGNEYmjQMaDaQvqtewv1sFGdYRCz1-3ojPUu6tAwx1OzV6_RmjV4m_deL8DE_ecolE
+2026-04-06 01:48:54 log:  auth= Z2iLiZgghwWXe_gpjTCSkg
+2026-04-06 01:48:54 log:  yes
+2026-04-06 01:48:54 log:  created new webuser
+2026-04-06 01:48:59 log:  edit users nickname
+2026-04-06 01:48:59 log:  array (
+  'nickname' => 'sadfgg',
+  'push_endpoint' => 'https://fcm.googleapis.com/fcm/send/fFhD72Db7ZI:APA91bFDJnW4jJ9yjJI7qzg98Ii7ovmLl-fAjAY9kb85yf3YUlj7cBFxgdY7CsLP8qDlSvcxV1THolgZThIXY-VEAnQ3nq9NFlBPCdoZju2t_tMqSrIzxIN2bdw_Ex6BJCCQjrQzNG5d',
+  'CHMENU_USER' => 'ec280acde45f148ff18574dc3efc9392',
+  'CHMENU_AGENT' => '1576c8ef29db925b7128d5d0dd67ca1e',
+  'adminer_settings' => 'vendor-server-db=MariaDB',
+  'adminer_key' => '1eb16ebffbcab4722ccddc8c68a5e776',
+  'adminer_version' => '0',
+  'adminer_sid' => '63b79b727a119d79747e686c2858f1cd',
+)
+2026-04-06 01:48:59 log:  array (
+  'nickname' => 'sadfgg',
+  'push_endpoint' => 'https://fcm.googleapis.com/fcm/send/fFhD72Db7ZI:APA91bFDJnW4jJ9yjJI7qzg98Ii7ovmLl-fAjAY9kb85yf3YUlj7cBFxgdY7CsLP8qDlSvcxV1THolgZThIXY-VEAnQ3nq9NFlBPCdoZju2t_tMqSrIzxIN2bdw_Ex6BJCCQjrQzNG5d',
+)
+2026-04-06 01:48:59 log:  array (
+)
+2026-04-06 01:50:27 log:  endpoint= https://fcm.googleapis.com/fcm/send/fFhD72Db7ZI:APA91bFDJnW4jJ9yjJI7qzg98Ii7ovmLl-fAjAY9kb85yf3YUlj7cBFxgdY7CsLP8qDlSvcxV1THolgZThIXY-VEAnQ3nq9NFlBPCdoZju2t_tMqSrIzxIN2bdw_Ex6BJCCQjrQzNG5d
+2026-04-06 01:50:27 log:  p256dh= BMWcLby0lzz38dt1AjptryGNEYmjQMaDaQvqtewv1sFGdYRCz1-3ojPUu6tAwx1OzV6_RmjV4m_deL8DE_ecolE
+2026-04-06 01:50:27 log:  auth= Z2iLiZgghwWXe_gpjTCSkg
+2026-04-06 01:50:27 log:  yes
+2026-04-06 01:50:27 log:  created new webuser
+2026-04-06 01:50:30 log:  edit users nickname
+2026-04-06 01:50:30 log:  array (
+  'nickname' => 'wdert',
+  'push_endpoint' => 'https://fcm.googleapis.com/fcm/send/fFhD72Db7ZI:APA91bFDJnW4jJ9yjJI7qzg98Ii7ovmLl-fAjAY9kb85yf3YUlj7cBFxgdY7CsLP8qDlSvcxV1THolgZThIXY-VEAnQ3nq9NFlBPCdoZju2t_tMqSrIzxIN2bdw_Ex6BJCCQjrQzNG5d',
+  'CHMENU_USER' => 'ec280acde45f148ff18574dc3efc9392',
+  'CHMENU_AGENT' => '1576c8ef29db925b7128d5d0dd67ca1e',
+  'adminer_settings' => 'vendor-server-db=MariaDB',
+  'adminer_key' => '1eb16ebffbcab4722ccddc8c68a5e776',
+  'adminer_version' => '0',
+  'adminer_sid' => '63b79b727a119d79747e686c2858f1cd',
+)
+2026-04-06 01:50:30 log:  array (
+  'nickname' => 'wdert',
+  'push_endpoint' => 'https://fcm.googleapis.com/fcm/send/fFhD72Db7ZI:APA91bFDJnW4jJ9yjJI7qzg98Ii7ovmLl-fAjAY9kb85yf3YUlj7cBFxgdY7CsLP8qDlSvcxV1THolgZThIXY-VEAnQ3nq9NFlBPCdoZju2t_tMqSrIzxIN2bdw_Ex6BJCCQjrQzNG5d',
+)
+2026-04-06 01:50:30 log:  array (
+)
+2026-04-06 01:53:31 log:  endpoint= https://fcm.googleapis.com/fcm/send/fFhD72Db7ZI:APA91bFDJnW4jJ9yjJI7qzg98Ii7ovmLl-fAjAY9kb85yf3YUlj7cBFxgdY7CsLP8qDlSvcxV1THolgZThIXY-VEAnQ3nq9NFlBPCdoZju2t_tMqSrIzxIN2bdw_Ex6BJCCQjrQzNG5d
+2026-04-06 01:53:31 log:  p256dh= BMWcLby0lzz38dt1AjptryGNEYmjQMaDaQvqtewv1sFGdYRCz1-3ojPUu6tAwx1OzV6_RmjV4m_deL8DE_ecolE
+2026-04-06 01:53:31 log:  auth= Z2iLiZgghwWXe_gpjTCSkg
+2026-04-06 01:53:31 log:  yes
+2026-04-06 01:53:31 log:  created new webuser
+2026-04-06 01:53:33 log:  edit users nickname
+2026-04-06 01:53:33 log:  array (
+  'nickname' => 'ert',
+  'push_endpoint' => 'https://fcm.googleapis.com/fcm/send/fFhD72Db7ZI:APA91bFDJnW4jJ9yjJI7qzg98Ii7ovmLl-fAjAY9kb85yf3YUlj7cBFxgdY7CsLP8qDlSvcxV1THolgZThIXY-VEAnQ3nq9NFlBPCdoZju2t_tMqSrIzxIN2bdw_Ex6BJCCQjrQzNG5d',
+  'CHMENU_USER' => 'ec280acde45f148ff18574dc3efc9392',
+  'CHMENU_AGENT' => '1576c8ef29db925b7128d5d0dd67ca1e',
+  'adminer_key' => '1eb16ebffbcab4722ccddc8c68a5e776',
+  'adminer_version' => '0',
+  'adminer_sid' => '63b79b727a119d79747e686c2858f1cd',
+  'adminer_settings' => 'vendor-server-db=MariaDB&defaults=1',
+)
+2026-04-06 01:53:33 log:  array (
+  'nickname' => 'ert',
+  'push_endpoint' => 'https://fcm.googleapis.com/fcm/send/fFhD72Db7ZI:APA91bFDJnW4jJ9yjJI7qzg98Ii7ovmLl-fAjAY9kb85yf3YUlj7cBFxgdY7CsLP8qDlSvcxV1THolgZThIXY-VEAnQ3nq9NFlBPCdoZju2t_tMqSrIzxIN2bdw_Ex6BJCCQjrQzNG5d',
+)
+2026-04-06 01:53:33 log:  array (
+)
+2026-04-06 01:55:29 log:  endpoint= https://fcm.googleapis.com/fcm/send/fFhD72Db7ZI:APA91bFDJnW4jJ9yjJI7qzg98Ii7ovmLl-fAjAY9kb85yf3YUlj7cBFxgdY7CsLP8qDlSvcxV1THolgZThIXY-VEAnQ3nq9NFlBPCdoZju2t_tMqSrIzxIN2bdw_Ex6BJCCQjrQzNG5d
+2026-04-06 01:55:29 log:  p256dh= BMWcLby0lzz38dt1AjptryGNEYmjQMaDaQvqtewv1sFGdYRCz1-3ojPUu6tAwx1OzV6_RmjV4m_deL8DE_ecolE
+2026-04-06 01:55:29 log:  auth= Z2iLiZgghwWXe_gpjTCSkg
+2026-04-06 01:55:29 log:  yes
+2026-04-06 01:55:35 gError:  Unknown path 1: /.well-known/appspecific/com.chrome.devtools.json
+2026-04-06 01:56:31 gError:  Unknown path 1: /.well-known/appspecific/com.chrome.devtools.json
+2026-04-06 01:56:31 log:  endpoint= https://fcm.googleapis.com/fcm/send/fFhD72Db7ZI:APA91bFDJnW4jJ9yjJI7qzg98Ii7ovmLl-fAjAY9kb85yf3YUlj7cBFxgdY7CsLP8qDlSvcxV1THolgZThIXY-VEAnQ3nq9NFlBPCdoZju2t_tMqSrIzxIN2bdw_Ex6BJCCQjrQzNG5d
+2026-04-06 01:56:31 log:  p256dh= BMWcLby0lzz38dt1AjptryGNEYmjQMaDaQvqtewv1sFGdYRCz1-3ojPUu6tAwx1OzV6_RmjV4m_deL8DE_ecolE
+2026-04-06 01:56:31 log:  auth= Z2iLiZgghwWXe_gpjTCSkg
+2026-04-06 01:56:31 log:  yes
+2026-04-06 01:57:56 gError:  Unknown path 1: /.well-known/appspecific/com.chrome.devtools.json
+2026-04-06 01:57:56 log:  endpoint= https://fcm.googleapis.com/fcm/send/fFhD72Db7ZI:APA91bFDJnW4jJ9yjJI7qzg98Ii7ovmLl-fAjAY9kb85yf3YUlj7cBFxgdY7CsLP8qDlSvcxV1THolgZThIXY-VEAnQ3nq9NFlBPCdoZju2t_tMqSrIzxIN2bdw_Ex6BJCCQjrQzNG5d
+2026-04-06 01:57:56 log:  p256dh= BMWcLby0lzz38dt1AjptryGNEYmjQMaDaQvqtewv1sFGdYRCz1-3ojPUu6tAwx1OzV6_RmjV4m_deL8DE_ecolE
+2026-04-06 01:57:56 log:  auth= Z2iLiZgghwWXe_gpjTCSkg
+2026-04-06 01:57:56 log:  yes
+2026-04-06 01:57:56 log:  created new webuser
+2026-04-06 01:57:59 log:  edit users nickname
+2026-04-06 01:57:59 log:  array (
+  'nickname' => '2345',
+  'push_endpoint' => 'https://fcm.googleapis.com/fcm/send/fFhD72Db7ZI:APA91bFDJnW4jJ9yjJI7qzg98Ii7ovmLl-fAjAY9kb85yf3YUlj7cBFxgdY7CsLP8qDlSvcxV1THolgZThIXY-VEAnQ3nq9NFlBPCdoZju2t_tMqSrIzxIN2bdw_Ex6BJCCQjrQzNG5d',
+  'CHMENU_USER' => 'ec280acde45f148ff18574dc3efc9392',
+  'CHMENU_AGENT' => '1576c8ef29db925b7128d5d0dd67ca1e',
+  'adminer_key' => '1eb16ebffbcab4722ccddc8c68a5e776',
+  'adminer_version' => '0',
+  'adminer_sid' => '63b79b727a119d79747e686c2858f1cd',
+  'adminer_settings' => 'vendor-server-db=MariaDB&defaults=1',
+)
+2026-04-06 01:57:59 log:  array (
+  'nickname' => '2345',
+  'push_endpoint' => 'https://fcm.googleapis.com/fcm/send/fFhD72Db7ZI:APA91bFDJnW4jJ9yjJI7qzg98Ii7ovmLl-fAjAY9kb85yf3YUlj7cBFxgdY7CsLP8qDlSvcxV1THolgZThIXY-VEAnQ3nq9NFlBPCdoZju2t_tMqSrIzxIN2bdw_Ex6BJCCQjrQzNG5d',
+)
+2026-04-06 01:57:59 log:  array (
+)
+2026-04-06 02:01:00 gError:  Unknown path 1: /.well-known/appspecific/com.chrome.devtools.json
+2026-04-06 02:01:00 log:  endpoint= https://fcm.googleapis.com/fcm/send/fFhD72Db7ZI:APA91bFDJnW4jJ9yjJI7qzg98Ii7ovmLl-fAjAY9kb85yf3YUlj7cBFxgdY7CsLP8qDlSvcxV1THolgZThIXY-VEAnQ3nq9NFlBPCdoZju2t_tMqSrIzxIN2bdw_Ex6BJCCQjrQzNG5d
+2026-04-06 02:01:00 log:  p256dh= BMWcLby0lzz38dt1AjptryGNEYmjQMaDaQvqtewv1sFGdYRCz1-3ojPUu6tAwx1OzV6_RmjV4m_deL8DE_ecolE
+2026-04-06 02:01:00 log:  auth= Z2iLiZgghwWXe_gpjTCSkg
+2026-04-06 02:01:00 log:  yes
+2026-04-06 02:01:00 log:  created new webuser
+2026-04-06 02:01:02 log:  edit users nickname
+2026-04-06 02:01:02 log:  array (
+  'nickname' => 'sdfg',
+  'push_endpoint' => 'https://fcm.googleapis.com/fcm/send/fFhD72Db7ZI:APA91bFDJnW4jJ9yjJI7qzg98Ii7ovmLl-fAjAY9kb85yf3YUlj7cBFxgdY7CsLP8qDlSvcxV1THolgZThIXY-VEAnQ3nq9NFlBPCdoZju2t_tMqSrIzxIN2bdw_Ex6BJCCQjrQzNG5d',
+  'CHMENU_USER' => 'ec280acde45f148ff18574dc3efc9392',
+  'CHMENU_AGENT' => '1576c8ef29db925b7128d5d0dd67ca1e',
+  'adminer_key' => '1eb16ebffbcab4722ccddc8c68a5e776',
+  'adminer_version' => '0',
+  'adminer_sid' => '63b79b727a119d79747e686c2858f1cd',
+  'adminer_settings' => 'vendor-server-db=MariaDB&defaults=1',
+)
+2026-04-06 02:01:02 log:  array (
+  'nickname' => 'sdfg',
+  'push_endpoint' => 'https://fcm.googleapis.com/fcm/send/fFhD72Db7ZI:APA91bFDJnW4jJ9yjJI7qzg98Ii7ovmLl-fAjAY9kb85yf3YUlj7cBFxgdY7CsLP8qDlSvcxV1THolgZThIXY-VEAnQ3nq9NFlBPCdoZju2t_tMqSrIzxIN2bdw_Ex6BJCCQjrQzNG5d',
+)
+2026-04-06 02:01:02 log:  array (
+)
+2026-04-06 02:06:20 gError:  Unknown path 1: /.well-known/appspecific/com.chrome.devtools.json
+2026-04-06 02:06:21 log:  endpoint= https://fcm.googleapis.com/fcm/send/fFhD72Db7ZI:APA91bFDJnW4jJ9yjJI7qzg98Ii7ovmLl-fAjAY9kb85yf3YUlj7cBFxgdY7CsLP8qDlSvcxV1THolgZThIXY-VEAnQ3nq9NFlBPCdoZju2t_tMqSrIzxIN2bdw_Ex6BJCCQjrQzNG5d
+2026-04-06 02:06:21 log:  p256dh= BMWcLby0lzz38dt1AjptryGNEYmjQMaDaQvqtewv1sFGdYRCz1-3ojPUu6tAwx1OzV6_RmjV4m_deL8DE_ecolE
+2026-04-06 02:06:21 log:  auth= Z2iLiZgghwWXe_gpjTCSkg
+2026-04-06 02:06:21 log:  yes
+2026-04-06 02:06:21 log:  created new webuser
+2026-04-06 02:06:22 log:  edit users nickname
+2026-04-06 02:06:22 log:  array (
+  'nickname' => 'sdf',
+  'push_endpoint' => 'https://fcm.googleapis.com/fcm/send/fFhD72Db7ZI:APA91bFDJnW4jJ9yjJI7qzg98Ii7ovmLl-fAjAY9kb85yf3YUlj7cBFxgdY7CsLP8qDlSvcxV1THolgZThIXY-VEAnQ3nq9NFlBPCdoZju2t_tMqSrIzxIN2bdw_Ex6BJCCQjrQzNG5d',
+  'CHMENU_USER' => 'ec280acde45f148ff18574dc3efc9392',
+  'CHMENU_AGENT' => '1576c8ef29db925b7128d5d0dd67ca1e',
+  'adminer_key' => '1eb16ebffbcab4722ccddc8c68a5e776',
+  'adminer_version' => '0',
+  'adminer_sid' => '63b79b727a119d79747e686c2858f1cd',
+  'adminer_settings' => 'vendor-server-db=MariaDB&defaults=1',
+)
+2026-04-06 02:06:22 log:  array (
+  'nickname' => 'sdf',
+  'push_endpoint' => 'https://fcm.googleapis.com/fcm/send/fFhD72Db7ZI:APA91bFDJnW4jJ9yjJI7qzg98Ii7ovmLl-fAjAY9kb85yf3YUlj7cBFxgdY7CsLP8qDlSvcxV1THolgZThIXY-VEAnQ3nq9NFlBPCdoZju2t_tMqSrIzxIN2bdw_Ex6BJCCQjrQzNG5d',
+)
+2026-04-06 02:06:22 log:  array (
+)
+2026-04-06 02:55:53 gError:  Unknown path 1: /.well-known/appspecific/com.chrome.devtools.json
+2026-04-06 02:55:58 gError:  Unknown path 1: /.well-known/appspecific/com.chrome.devtools.json
+2026-04-06 02:56:00 gError:  Unknown path 1: /.well-known/appspecific/com.chrome.devtools.json
+2026-04-06 02:56:00 log:  endpoint= https://fcm.googleapis.com/fcm/send/fFhD72Db7ZI:APA91bFDJnW4jJ9yjJI7qzg98Ii7ovmLl-fAjAY9kb85yf3YUlj7cBFxgdY7CsLP8qDlSvcxV1THolgZThIXY-VEAnQ3nq9NFlBPCdoZju2t_tMqSrIzxIN2bdw_Ex6BJCCQjrQzNG5d
+2026-04-06 02:56:00 log:  p256dh= BMWcLby0lzz38dt1AjptryGNEYmjQMaDaQvqtewv1sFGdYRCz1-3ojPUu6tAwx1OzV6_RmjV4m_deL8DE_ecolE
+2026-04-06 02:56:00 log:  auth= Z2iLiZgghwWXe_gpjTCSkg
+2026-04-06 02:56:00 log:  yes
+2026-04-06 03:02:21 gError:  Unknown path 1: /.well-known/appspecific/com.chrome.devtools.json
+2026-04-06 03:03:04 gError:  Unknown path 1: /.well-known/appspecific/com.chrome.devtools.json
+2026-04-06 03:03:59 gError:  Unknown path 1: /.well-known/appspecific/com.chrome.devtools.json
+2026-04-06 03:03:59 log:  Регистрация веб-пользователя (устройства)
+Кафе= 321yyn
+endpoint= https://fcm.googleapis.com/fcm/send/fFhD72Db7ZI:APA91bFDJnW4jJ9yjJI7qzg98Ii7ovmLl-fAjAY9kb85yf3YUlj7cBFxgdY7CsLP8qDlSvcxV1THolgZThIXY-VEAnQ3nq9NFlBPCdoZju2t_tMqSrIzxIN2bdw_Ex6BJCCQjrQzNG5d
+p256dh= BMWcLby0lzz38dt1AjptryGNEYmjQMaDaQvqtewv1sFGdYRCz1-3ojPUu6tAwx1OzV6_RmjV4m_deL8DE_ecolE
+auth= Z2iLiZgghwWXe_gpjTCSkg
+yes
+2026-04-06 03:03:59 log:  created new webuser
+2026-04-06 03:04:02 log:  edit users nickname
+2026-04-06 03:04:02 log:  array (
+  'nickname' => 'QWER',
+  'push_endpoint' => 'https://fcm.googleapis.com/fcm/send/fFhD72Db7ZI:APA91bFDJnW4jJ9yjJI7qzg98Ii7ovmLl-fAjAY9kb85yf3YUlj7cBFxgdY7CsLP8qDlSvcxV1THolgZThIXY-VEAnQ3nq9NFlBPCdoZju2t_tMqSrIzxIN2bdw_Ex6BJCCQjrQzNG5d',
+  'CHMENU_USER' => 'ec280acde45f148ff18574dc3efc9392',
+  'CHMENU_AGENT' => '1576c8ef29db925b7128d5d0dd67ca1e',
+  'adminer_key' => '1eb16ebffbcab4722ccddc8c68a5e776',
+  'adminer_version' => '0',
+  'adminer_sid' => '63b79b727a119d79747e686c2858f1cd',
+  'adminer_settings' => 'vendor-server-db=MariaDB&defaults=1',
+)
+2026-04-06 03:04:02 log:  array (
+  'nickname' => 'QWER',
+  'push_endpoint' => 'https://fcm.googleapis.com/fcm/send/fFhD72Db7ZI:APA91bFDJnW4jJ9yjJI7qzg98Ii7ovmLl-fAjAY9kb85yf3YUlj7cBFxgdY7CsLP8qDlSvcxV1THolgZThIXY-VEAnQ3nq9NFlBPCdoZju2t_tMqSrIzxIN2bdw_Ex6BJCCQjrQzNG5d',
+)
+2026-04-06 03:04:02 log:  array (
+)
+2026-04-06 03:04:56 gError:  Unknown path 1: /.well-known/appspecific/com.chrome.devtools.json
+2026-04-06 03:10:06 gError:  Unknown path 1: /.well-known/appspecific/com.chrome.devtools.json
+2026-04-06 03:10:10 gError:  Unknown path 1: /.well-known/appspecific/com.chrome.devtools.json
+2026-04-06 03:10:10 log:  Регистрация веб-пользователя (устройства)
+Кафе= 321yyn
+endpoint= https://fcm.googleapis.com/fcm/send/fFhD72Db7ZI:APA91bFDJnW4jJ9yjJI7qzg98Ii7ovmLl-fAjAY9kb85yf3YUlj7cBFxgdY7CsLP8qDlSvcxV1THolgZThIXY-VEAnQ3nq9NFlBPCdoZju2t_tMqSrIzxIN2bdw_Ex6BJCCQjrQzNG5d
+p256dh= BMWcLby0lzz38dt1AjptryGNEYmjQMaDaQvqtewv1sFGdYRCz1-3ojPUu6tAwx1OzV6_RmjV4m_deL8DE_ecolE
+auth= Z2iLiZgghwWXe_gpjTCSkg
+yes
+2026-04-06 03:10:10 log:  endpoint already exists
+2026-04-06 03:10:11 gError:  Unknown path 1: /.well-known/appspecific/com.chrome.devtools.json
+2026-04-06 03:10:34 gError:  неправильная ссылка (токен)
+2026-04-06 03:10:35 gError:  Unknown path 1: /.well-known/appspecific/com.chrome.devtools.json
+2026-04-06 03:10:39 gError:  Unknown path 1: /.well-known/appspecific/com.chrome.devtools.json
+2026-04-06 03:10:39 gError:  неправильная ссылка (токен)
+2026-04-06 03:10:59 gError:  Unknown path 1: /.well-known/appspecific/com.chrome.devtools.json
+2026-04-06 03:11:00 log:  Регистрация веб-пользователя (устройства)
+Кафе= 321yyn
+endpoint= https://fcm.googleapis.com/fcm/send/fFhD72Db7ZI:APA91bFDJnW4jJ9yjJI7qzg98Ii7ovmLl-fAjAY9kb85yf3YUlj7cBFxgdY7CsLP8qDlSvcxV1THolgZThIXY-VEAnQ3nq9NFlBPCdoZju2t_tMqSrIzxIN2bdw_Ex6BJCCQjrQzNG5d
+p256dh= BMWcLby0lzz38dt1AjptryGNEYmjQMaDaQvqtewv1sFGdYRCz1-3ojPUu6tAwx1OzV6_RmjV4m_deL8DE_ecolE
+auth= Z2iLiZgghwWXe_gpjTCSkg
+yes
+2026-04-06 03:11:00 log:  endpoint already exists
+2026-04-06 03:11:01 gError:  Unknown path 1: /.well-known/appspecific/com.chrome.devtools.json
+2026-04-06 03:11:16 gError:  Unknown path 1: /.well-known/appspecific/com.chrome.devtools.json
+2026-04-06 03:11:19 gError:  Unknown path 1: /.well-known/appspecific/com.chrome.devtools.json
+2026-04-06 03:11:24 gError:  Unknown path 1: /.well-known/appspecific/com.chrome.devtools.json
+2026-04-06 03:11:57 gError:  Unknown path 1: /.well-known/appspecific/com.chrome.devtools.json
+2026-04-06 03:13:45 gError:  Unknown path 1: /.well-known/appspecific/com.chrome.devtools.json
+2026-04-06 13:01:36 gError:  Unknown path 1: /manage/account/login
+2026-04-06 13:01:40 gError:  Unknown path 1: /+CSCOE+/logon.html
+2026-04-06 13:01:42 gError:  Unknown path 1: /login.htm
+2026-04-06 13:01:43 gError:  Unknown path 1: /login.html
+2026-04-06 13:11:10 gError:  Unknown path 1: /.well-known/appspecific/com.chrome.devtools.json
+2026-04-06 13:11:24 gError:  Unknown path 1: /.well-known/appspecific/com.chrome.devtools.json
+2026-04-06 13:11:33 gError:  Unknown path 1: /.well-known/appspecific/com.chrome.devtools.json
+2026-04-06 13:11:33 gError:  неправильная ссылка (токен)
+2026-04-06 13:11:35 gError:  Unknown path 1: /.well-known/appspecific/com.chrome.devtools.json
+2026-04-06 13:11:36 log:  Регистрация веб-пользователя (устройства)
+Кафе= 321yyn
+endpoint= https://fcm.googleapis.com/fcm/send/fFhD72Db7ZI:APA91bFDJnW4jJ9yjJI7qzg98Ii7ovmLl-fAjAY9kb85yf3YUlj7cBFxgdY7CsLP8qDlSvcxV1THolgZThIXY-VEAnQ3nq9NFlBPCdoZju2t_tMqSrIzxIN2bdw_Ex6BJCCQjrQzNG5d
+p256dh= BMWcLby0lzz38dt1AjptryGNEYmjQMaDaQvqtewv1sFGdYRCz1-3ojPUu6tAwx1OzV6_RmjV4m_deL8DE_ecolE
+auth= Z2iLiZgghwWXe_gpjTCSkg
+yes
+2026-04-06 13:11:36 log:  endpoint already exists
+2026-04-06 13:11:37 gError:  Unknown path 1: /.well-known/appspecific/com.chrome.devtools.json
+2026-04-06 13:13:20 gError:  Unknown path 1: /.well-known/appspecific/com.chrome.devtools.json
+2026-04-06 13:13:21 gError:  Unknown path 1: /.well-known/appspecific/com.chrome.devtools.json
+2026-04-06 13:27:41 gError:  Unknown path 1: /+cscoe+/message.html?mc=2
+2026-04-06 13:37:03 gError:  Unknown path 1: /.well-known/appspecific/com.chrome.devtools.json
+2026-04-06 23:26:55 gError:  Unknown path 1: /sw.js

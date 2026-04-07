@@ -1,0 +1,21 @@
+[
+  {
+    "sizeCode": "",
+    "sizeId": null,
+    "sizeName": "",
+    "isDefault": true,
+    "measureUnitType": "GRAM",
+    "portionWeightGrams": 220,
+    "nutritionPerHundredGrams": {
+      "fats": 0,
+      "proteins": 0,
+      "carbs": 0,
+      "energy": 0,
+      "organizations": [],
+      "saturatedFattyAcid": null,
+      "salt": null,
+      "sugar": null
+    },
+    "price": 429
+  }
+]

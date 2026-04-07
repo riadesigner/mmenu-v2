@@ -1,0 +1,41 @@
+{
+  "ORDER_TEXT": "   ------------\\n   на стол №: 1\\n   ------------\\n   Создан: 03 декабря, 14:44\\n   Сумма: 500 ₽.\\n   ------------\\n_1. Пицца маргарита_\\n40см / 450 г, 500 ₽\\n+ С собой, 1x ₽\\n= 1x500 ₽\\n--------- //\\n",
+  "ORDER_IIKO": {
+    "id": "",
+    "externalNumber": "",
+    "tableIds": [
+      "644788cd-5500-4dfb-9e84-8b3565bdb34e"
+    ],
+    "customer": "",
+    "phone": "",
+    "guests": "",
+    "tabName": "",
+    "menuId": "11215",
+    "items": [
+      {
+        "type": "Product",
+        "amount": 1,
+        "price": 200,
+        "productId": "5d696b6a-4ccd-4087-bd10-794352f00753",
+        "modifiers": [
+          {
+            "productId": "332bdeed-c8c5-4ff3-929a-5a5828344beb",
+            "amount": 1,
+            "price": 0
+          },
+          {
+            "productId": "0c3f375d-b749-4b21-b2a8-f06881475fd1",
+            "amount": 1,
+            "price": 300,
+            "productGroupId": "4df1dd85-3dbf-47a6-89fd-e92c271f436e"
+          }
+        ]
+      }
+    ],
+    "combos": "",
+    "payments": "",
+    "tips": "",
+    "orderTypeId": "bbbef4dc-5a02-7ea3-81d3-826f4e8bb3e0",
+    "chequeAdditionalInfo": ""
+  }
+}

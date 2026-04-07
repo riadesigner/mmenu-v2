@@ -1,0 +1,2719 @@
+[
+  {
+    "modifierGroupId": "5f9f08c4-2326-457c-95e8-3a13e71d8e7a",
+    "name": "Размер кола- барбекю",
+    "restrictions": {
+      "minQuantity": 1,
+      "maxQuantity": 1,
+      "freeQuantity": 0,
+      "byDefault": 0,
+      "hideIfDefaultQuantity": false
+    },
+    "items": [
+      {
+        "modifierId": "cbf608e6-170d-478a-9db8-cccd6e02aec3",
+        "name": "20см",
+        "description": "",
+        "portionWeightGrams": 0,
+        "restrictions": {
+          "minQuantity": 0,
+          "maxQuantity": 0,
+          "freeQuantity": 0,
+          "byDefault": 0,
+          "hideIfDefaultQuantity": false
+        },
+        "nutritionPerHundredGrams": {
+          "fats": 0,
+          "proteins": 0,
+          "carbs": 0,
+          "energy": 0,
+          "organizations": [],
+          "saturatedFattyAcid": null,
+          "salt": null,
+          "sugar": null
+        },
+        "price": 0
+      },
+      {
+        "modifierId": "7e90238c-31f3-4107-8f3d-0eabd9c366fc",
+        "name": "30см",
+        "description": "",
+        "portionWeightGrams": 330,
+        "restrictions": {
+          "minQuantity": 0,
+          "maxQuantity": 0,
+          "freeQuantity": 0,
+          "byDefault": 0,
+          "hideIfDefaultQuantity": false
+        },
+        "nutritionPerHundredGrams": {
+          "fats": 0,
+          "proteins": 0,
+          "carbs": 0,
+          "energy": 0,
+          "organizations": [],
+          "saturatedFattyAcid": null,
+          "salt": null,
+          "sugar": null
+        },
+        "price": 440
+      },
+      {
+        "modifierId": "b01d3116-7487-4c30-a270-67bdcaeaf5a4",
+        "name": "40см",
+        "description": "",
+        "portionWeightGrams": 520,
+        "restrictions": {
+          "minQuantity": 0,
+          "maxQuantity": 0,
+          "freeQuantity": 0,
+          "byDefault": 0,
+          "hideIfDefaultQuantity": false
+        },
+        "nutritionPerHundredGrams": {
+          "fats": 0,
+          "proteins": 0,
+          "carbs": 0,
+          "energy": 0,
+          "organizations": [],
+          "saturatedFattyAcid": null,
+          "salt": null,
+          "sugar": null
+        },
+        "price": 800
+      },
+      {
+        "modifierId": "7382ba40-128d-485b-8abd-fc52d83076b6",
+        "name": "25см",
+        "description": "",
+        "portionWeightGrams": 50,
+        "restrictions": {
+          "minQuantity": 0,
+          "maxQuantity": 0,
+          "freeQuantity": 0,
+          "byDefault": 0,
+          "hideIfDefaultQuantity": false
+        },
+        "nutritionPerHundredGrams": {
+          "fats": 0,
+          "proteins": 0,
+          "carbs": 0,
+          "energy": 0,
+          "organizations": [],
+          "saturatedFattyAcid": null,
+          "salt": null,
+          "sugar": null
+        },
+        "price": 120
+      }
+    ]
+  },
+  {
+    "modifierGroupId": "b7247754-8ded-4327-b028-db74ded7a50f",
+    "name": "Мясо 20см",
+    "restrictions": {
+      "minQuantity": 0,
+      "maxQuantity": 5,
+      "freeQuantity": 0,
+      "byDefault": 0,
+      "hideIfDefaultQuantity": false
+    },
+    "items": [
+      {
+        "modifierId": "fc895a38-88fb-4f08-b08d-109f68de317e",
+        "name": "20см Филе куриное (30г.)",
+        "description": "",
+        "portionWeightGrams": 30,
+        "restrictions": {
+          "minQuantity": 0,
+          "maxQuantity": 0,
+          "freeQuantity": 0,
+          "byDefault": 0,
+          "hideIfDefaultQuantity": false
+        },
+        "nutritionPerHundredGrams": {
+          "fats": 0,
+          "proteins": 0,
+          "carbs": 0,
+          "energy": 0,
+          "organizations": [],
+          "saturatedFattyAcid": null,
+          "salt": null,
+          "sugar": null
+        },
+        "price": 59
+      },
+      {
+        "modifierId": "28097e48-bf87-4118-9f2c-2a8eb13cc66a",
+        "name": "20см Говядина ароматная (20г.)",
+        "description": "",
+        "portionWeightGrams": 20,
+        "restrictions": {
+          "minQuantity": 0,
+          "maxQuantity": 0,
+          "freeQuantity": 0,
+          "byDefault": 0,
+          "hideIfDefaultQuantity": false
+        },
+        "nutritionPerHundredGrams": {
+          "fats": 0,
+          "proteins": 0,
+          "carbs": 0,
+          "energy": 0,
+          "organizations": [],
+          "saturatedFattyAcid": null,
+          "salt": null,
+          "sugar": null
+        },
+        "price": 69
+      },
+      {
+        "modifierId": "0e731c86-0d1d-4615-93c5-2ff69f14a8e8",
+        "name": "20см Копченые окорока (25г.)",
+        "description": "",
+        "portionWeightGrams": 25,
+        "restrictions": {
+          "minQuantity": 0,
+          "maxQuantity": 0,
+          "freeQuantity": 0,
+          "byDefault": 0,
+          "hideIfDefaultQuantity": false
+        },
+        "nutritionPerHundredGrams": {
+          "fats": 0,
+          "proteins": 0,
+          "carbs": 0,
+          "energy": 0,
+          "organizations": [],
+          "saturatedFattyAcid": null,
+          "salt": null,
+          "sugar": null
+        },
+        "price": 59
+      },
+      {
+        "modifierId": "05123fc8-0ae9-444a-bed7-5e4107321121",
+        "name": "20см Ветчина  (20г.)",
+        "description": "",
+        "portionWeightGrams": 20,
+        "restrictions": {
+          "minQuantity": 0,
+          "maxQuantity": 0,
+          "freeQuantity": 0,
+          "byDefault": 0,
+          "hideIfDefaultQuantity": false
+        },
+        "nutritionPerHundredGrams": {
+          "fats": 0,
+          "proteins": 0,
+          "carbs": 0,
+          "energy": 0,
+          "organizations": [],
+          "saturatedFattyAcid": null,
+          "salt": null,
+          "sugar": null
+        },
+        "price": 49
+      },
+      {
+        "modifierId": "62e4f340-195c-4031-b155-a88ea2484bdd",
+        "name": "20см Фарш (30г.)",
+        "description": "",
+        "portionWeightGrams": 30,
+        "restrictions": {
+          "minQuantity": 0,
+          "maxQuantity": 0,
+          "freeQuantity": 0,
+          "byDefault": 0,
+          "hideIfDefaultQuantity": false
+        },
+        "nutritionPerHundredGrams": {
+          "fats": 0,
+          "proteins": 0,
+          "carbs": 0,
+          "energy": 0,
+          "organizations": [],
+          "saturatedFattyAcid": null,
+          "salt": null,
+          "sugar": null
+        },
+        "price": 69
+      },
+      {
+        "modifierId": "bd49a4d6-e33d-437a-a7e7-d251b059ede0",
+        "name": "20см Бекон (20г.)",
+        "description": "",
+        "portionWeightGrams": 20,
+        "restrictions": {
+          "minQuantity": 0,
+          "maxQuantity": 0,
+          "freeQuantity": 0,
+          "byDefault": 0,
+          "hideIfDefaultQuantity": false
+        },
+        "nutritionPerHundredGrams": {
+          "fats": 0,
+          "proteins": 0,
+          "carbs": 0,
+          "energy": 0,
+          "organizations": [],
+          "saturatedFattyAcid": null,
+          "salt": null,
+          "sugar": null
+        },
+        "price": 59
+      },
+      {
+        "modifierId": "bf4bb038-24fc-44c6-a9c0-d2eba27219b1",
+        "name": "20см Гребешок (30г.)",
+        "description": "",
+        "portionWeightGrams": 30,
+        "restrictions": {
+          "minQuantity": 0,
+          "maxQuantity": 0,
+          "freeQuantity": 0,
+          "byDefault": 0,
+          "hideIfDefaultQuantity": false
+        },
+        "nutritionPerHundredGrams": {
+          "fats": 0,
+          "proteins": 0,
+          "carbs": 0,
+          "energy": 0,
+          "organizations": [],
+          "saturatedFattyAcid": null,
+          "salt": null,
+          "sugar": null
+        },
+        "price": 169
+      },
+      {
+        "modifierId": "78ebfc88-bb17-40d7-8658-9b7c0bee712b",
+        "name": "20см Креветка (30г.)",
+        "description": "",
+        "portionWeightGrams": 30,
+        "restrictions": {
+          "minQuantity": 0,
+          "maxQuantity": 0,
+          "freeQuantity": 0,
+          "byDefault": 0,
+          "hideIfDefaultQuantity": false
+        },
+        "nutritionPerHundredGrams": {
+          "fats": 0,
+          "proteins": 0,
+          "carbs": 0,
+          "energy": 0,
+          "organizations": [],
+          "saturatedFattyAcid": null,
+          "salt": null,
+          "sugar": null
+        },
+        "price": 119
+      },
+      {
+        "modifierId": "e2316f9a-d082-4f91-b60e-fc1091e9cbf8",
+        "name": "20см Кальмар (30г.)",
+        "description": "",
+        "portionWeightGrams": 30,
+        "restrictions": {
+          "minQuantity": 0,
+          "maxQuantity": 0,
+          "freeQuantity": 0,
+          "byDefault": 0,
+          "hideIfDefaultQuantity": false
+        },
+        "nutritionPerHundredGrams": {
+          "fats": 0,
+          "proteins": 0,
+          "carbs": 0,
+          "energy": 0,
+          "organizations": [],
+          "saturatedFattyAcid": null,
+          "salt": null,
+          "sugar": null
+        },
+        "price": 79
+      }
+    ]
+  },
+  {
+    "modifierGroupId": "c5bbefbd-a3d2-497d-8dda-fd592bd22dc5",
+    "name": "Мясо 30см",
+    "restrictions": {
+      "minQuantity": 0,
+      "maxQuantity": 5,
+      "freeQuantity": 0,
+      "byDefault": 0,
+      "hideIfDefaultQuantity": false
+    },
+    "items": [
+      {
+        "modifierId": "72ac5ba9-b68a-4b2c-a9b1-1cdfa2797638",
+        "name": "30см Окорока копченые (50г.)",
+        "description": "",
+        "portionWeightGrams": 50,
+        "restrictions": {
+          "minQuantity": 0,
+          "maxQuantity": 0,
+          "freeQuantity": 0,
+          "byDefault": 0,
+          "hideIfDefaultQuantity": false
+        },
+        "nutritionPerHundredGrams": {
+          "fats": 0,
+          "proteins": 0,
+          "carbs": 0,
+          "energy": 0,
+          "organizations": [],
+          "saturatedFattyAcid": null,
+          "salt": null,
+          "sugar": null
+        },
+        "price": 99
+      },
+      {
+        "modifierId": "bc54e5c0-59d4-46a7-b57a-2cd85fba2085",
+        "name": "30см Ветчина (40г.)",
+        "description": "",
+        "portionWeightGrams": 40,
+        "restrictions": {
+          "minQuantity": 0,
+          "maxQuantity": 0,
+          "freeQuantity": 0,
+          "byDefault": 0,
+          "hideIfDefaultQuantity": false
+        },
+        "nutritionPerHundredGrams": {
+          "fats": 0,
+          "proteins": 0,
+          "carbs": 0,
+          "energy": 0,
+          "organizations": [],
+          "saturatedFattyAcid": null,
+          "salt": null,
+          "sugar": null
+        },
+        "price": 79
+      },
+      {
+        "modifierId": "0b6f931f-4417-4339-ad72-563d6447e512",
+        "name": "30см Кальмар (60г.)",
+        "description": "",
+        "portionWeightGrams": 60,
+        "restrictions": {
+          "minQuantity": 0,
+          "maxQuantity": 0,
+          "freeQuantity": 0,
+          "byDefault": 0,
+          "hideIfDefaultQuantity": false
+        },
+        "nutritionPerHundredGrams": {
+          "fats": 0,
+          "proteins": 0,
+          "carbs": 0,
+          "energy": 0,
+          "organizations": [],
+          "saturatedFattyAcid": null,
+          "salt": null,
+          "sugar": null
+        },
+        "price": 139
+      },
+      {
+        "modifierId": "b229f9d3-69ef-4f19-95da-66b8790c94c7",
+        "name": "30см Бекон (40г.)",
+        "description": "",
+        "portionWeightGrams": 40,
+        "restrictions": {
+          "minQuantity": 0,
+          "maxQuantity": 0,
+          "freeQuantity": 0,
+          "byDefault": 0,
+          "hideIfDefaultQuantity": false
+        },
+        "nutritionPerHundredGrams": {
+          "fats": 0,
+          "proteins": 0,
+          "carbs": 0,
+          "energy": 0,
+          "organizations": [],
+          "saturatedFattyAcid": null,
+          "salt": null,
+          "sugar": null
+        },
+        "price": 99
+      },
+      {
+        "modifierId": "843bc873-110b-4c9f-bc23-d28dbac93e85",
+        "name": "30см Гребешок (60г.)",
+        "description": "",
+        "portionWeightGrams": 60,
+        "restrictions": {
+          "minQuantity": 0,
+          "maxQuantity": 0,
+          "freeQuantity": 0,
+          "byDefault": 0,
+          "hideIfDefaultQuantity": false
+        },
+        "nutritionPerHundredGrams": {
+          "fats": 0,
+          "proteins": 0,
+          "carbs": 0,
+          "energy": 0,
+          "organizations": [],
+          "saturatedFattyAcid": null,
+          "salt": null,
+          "sugar": null
+        },
+        "price": 299
+      },
+      {
+        "modifierId": "932244cd-4f3f-44b7-81ba-dbec90cd03c3",
+        "name": "30см Фарш (60г.)",
+        "description": "",
+        "portionWeightGrams": 60,
+        "restrictions": {
+          "minQuantity": 0,
+          "maxQuantity": 0,
+          "freeQuantity": 0,
+          "byDefault": 0,
+          "hideIfDefaultQuantity": false
+        },
+        "nutritionPerHundredGrams": {
+          "fats": 0,
+          "proteins": 0,
+          "carbs": 0,
+          "energy": 0,
+          "organizations": [],
+          "saturatedFattyAcid": null,
+          "salt": null,
+          "sugar": null
+        },
+        "price": 119
+      },
+      {
+        "modifierId": "de9c2858-aece-4581-b298-e50e561934a0",
+        "name": "30см Говядина ароматная (40г.)",
+        "description": "",
+        "portionWeightGrams": 40,
+        "restrictions": {
+          "minQuantity": 0,
+          "maxQuantity": 0,
+          "freeQuantity": 0,
+          "byDefault": 0,
+          "hideIfDefaultQuantity": false
+        },
+        "nutritionPerHundredGrams": {
+          "fats": 0,
+          "proteins": 0,
+          "carbs": 0,
+          "energy": 0,
+          "organizations": [],
+          "saturatedFattyAcid": null,
+          "salt": null,
+          "sugar": null
+        },
+        "price": 129
+      },
+      {
+        "modifierId": "bae66520-d90a-4092-a7f0-f312d6b656d6",
+        "name": "30см Филе куриное (60г.)",
+        "description": "",
+        "portionWeightGrams": 60,
+        "restrictions": {
+          "minQuantity": 0,
+          "maxQuantity": 0,
+          "freeQuantity": 0,
+          "byDefault": 0,
+          "hideIfDefaultQuantity": false
+        },
+        "nutritionPerHundredGrams": {
+          "fats": 0,
+          "proteins": 0,
+          "carbs": 0,
+          "energy": 0,
+          "organizations": [],
+          "saturatedFattyAcid": null,
+          "salt": null,
+          "sugar": null
+        },
+        "price": 99
+      },
+      {
+        "modifierId": "7f5078d0-9b96-47f1-a304-39ffd28b23e8",
+        "name": "30см Креветка (60г.)",
+        "description": "",
+        "portionWeightGrams": 60,
+        "restrictions": {
+          "minQuantity": 0,
+          "maxQuantity": 0,
+          "freeQuantity": 0,
+          "byDefault": 0,
+          "hideIfDefaultQuantity": false
+        },
+        "nutritionPerHundredGrams": {
+          "fats": 0,
+          "proteins": 0,
+          "carbs": 0,
+          "energy": 0,
+          "organizations": [],
+          "saturatedFattyAcid": null,
+          "salt": null,
+          "sugar": null
+        },
+        "price": 299
+      }
+    ]
+  },
+  {
+    "modifierGroupId": "4bca5e1c-bc44-4851-9936-c7930ddf957f",
+    "name": "Мясо 40см",
+    "restrictions": {
+      "minQuantity": 0,
+      "maxQuantity": 5,
+      "freeQuantity": 0,
+      "byDefault": 0,
+      "hideIfDefaultQuantity": false
+    },
+    "items": [
+      {
+        "modifierId": "a414bc42-bfac-4f68-9679-5e12bbdfdc27",
+        "name": "40см Кальмар (90г.)",
+        "description": "",
+        "portionWeightGrams": 90,
+        "restrictions": {
+          "minQuantity": 0,
+          "maxQuantity": 0,
+          "freeQuantity": 0,
+          "byDefault": 0,
+          "hideIfDefaultQuantity": false
+        },
+        "nutritionPerHundredGrams": {
+          "fats": 0,
+          "proteins": 0,
+          "carbs": 0,
+          "energy": 0,
+          "organizations": [],
+          "saturatedFattyAcid": null,
+          "salt": null,
+          "sugar": null
+        },
+        "price": 189
+      },
+      {
+        "modifierId": "bf7b0680-fb46-448f-9ef1-6bab6694994c",
+        "name": "40см Говядина ароматная (60г.)",
+        "description": "",
+        "portionWeightGrams": 60,
+        "restrictions": {
+          "minQuantity": 0,
+          "maxQuantity": 0,
+          "freeQuantity": 0,
+          "byDefault": 0,
+          "hideIfDefaultQuantity": false
+        },
+        "nutritionPerHundredGrams": {
+          "fats": 0,
+          "proteins": 0,
+          "carbs": 0,
+          "energy": 0,
+          "organizations": [],
+          "saturatedFattyAcid": null,
+          "salt": null,
+          "sugar": null
+        },
+        "price": 169
+      },
+      {
+        "modifierId": "0d3a5644-e677-49df-9933-6fa772d270b3",
+        "name": "40см Ветчина (60г.)",
+        "description": "",
+        "portionWeightGrams": 60,
+        "restrictions": {
+          "minQuantity": 0,
+          "maxQuantity": 0,
+          "freeQuantity": 0,
+          "byDefault": 0,
+          "hideIfDefaultQuantity": false
+        },
+        "nutritionPerHundredGrams": {
+          "fats": 0,
+          "proteins": 0,
+          "carbs": 0,
+          "energy": 0,
+          "organizations": [],
+          "saturatedFattyAcid": null,
+          "salt": null,
+          "sugar": null
+        },
+        "price": 109
+      },
+      {
+        "modifierId": "36a04433-957c-46be-9bb0-a3222c4cc1d6",
+        "name": "40см Гребешок (90г.)",
+        "description": "",
+        "portionWeightGrams": 90,
+        "restrictions": {
+          "minQuantity": 0,
+          "maxQuantity": 0,
+          "freeQuantity": 0,
+          "byDefault": 0,
+          "hideIfDefaultQuantity": false
+        },
+        "nutritionPerHundredGrams": {
+          "fats": 0,
+          "proteins": 0,
+          "carbs": 0,
+          "energy": 0,
+          "organizations": [],
+          "saturatedFattyAcid": null,
+          "salt": null,
+          "sugar": null
+        },
+        "price": 449
+      },
+      {
+        "modifierId": "3f135c70-733a-49c4-abec-cd3e2780c79d",
+        "name": "40см Бекон (60г.)",
+        "description": "",
+        "portionWeightGrams": 60,
+        "restrictions": {
+          "minQuantity": 0,
+          "maxQuantity": 0,
+          "freeQuantity": 0,
+          "byDefault": 0,
+          "hideIfDefaultQuantity": false
+        },
+        "nutritionPerHundredGrams": {
+          "fats": 0,
+          "proteins": 0,
+          "carbs": 0,
+          "energy": 0,
+          "organizations": [],
+          "saturatedFattyAcid": null,
+          "salt": null,
+          "sugar": null
+        },
+        "price": 139
+      },
+      {
+        "modifierId": "be57c7ef-b864-46bf-a479-cd4c291bcf94",
+        "name": "40см Филе куриное (90г.)",
+        "description": "",
+        "portionWeightGrams": 81.081081,
+        "restrictions": {
+          "minQuantity": 0,
+          "maxQuantity": 0,
+          "freeQuantity": 0,
+          "byDefault": 0,
+          "hideIfDefaultQuantity": false
+        },
+        "nutritionPerHundredGrams": {
+          "fats": 0,
+          "proteins": 0,
+          "carbs": 0,
+          "energy": 0,
+          "organizations": [],
+          "saturatedFattyAcid": null,
+          "salt": null,
+          "sugar": null
+        },
+        "price": 139
+      },
+      {
+        "modifierId": "4ab28a33-1ec0-4595-8ca9-d97cf24fde7c",
+        "name": "40см Фарш (90г.)",
+        "description": "",
+        "portionWeightGrams": 90,
+        "restrictions": {
+          "minQuantity": 0,
+          "maxQuantity": 0,
+          "freeQuantity": 0,
+          "byDefault": 0,
+          "hideIfDefaultQuantity": false
+        },
+        "nutritionPerHundredGrams": {
+          "fats": 0,
+          "proteins": 0,
+          "carbs": 0,
+          "energy": 0,
+          "organizations": [],
+          "saturatedFattyAcid": null,
+          "salt": null,
+          "sugar": null
+        },
+        "price": 179
+      },
+      {
+        "modifierId": "90833ea7-3402-42f5-85f8-ec81520a92bc",
+        "name": "40см Куриные окорока копченые (75г.)",
+        "description": "",
+        "portionWeightGrams": 75,
+        "restrictions": {
+          "minQuantity": 0,
+          "maxQuantity": 0,
+          "freeQuantity": 0,
+          "byDefault": 0,
+          "hideIfDefaultQuantity": false
+        },
+        "nutritionPerHundredGrams": {
+          "fats": 0,
+          "proteins": 0,
+          "carbs": 0,
+          "energy": 0,
+          "organizations": [],
+          "saturatedFattyAcid": null,
+          "salt": null,
+          "sugar": null
+        },
+        "price": 139
+      },
+      {
+        "modifierId": "666aa663-52a8-4321-9dbc-5975a97cac4f",
+        "name": "40см Креветка (80г.)",
+        "description": "",
+        "portionWeightGrams": 80,
+        "restrictions": {
+          "minQuantity": 0,
+          "maxQuantity": 0,
+          "freeQuantity": 0,
+          "byDefault": 0,
+          "hideIfDefaultQuantity": false
+        },
+        "nutritionPerHundredGrams": {
+          "fats": 0,
+          "proteins": 0,
+          "carbs": 0,
+          "energy": 0,
+          "organizations": [],
+          "saturatedFattyAcid": null,
+          "salt": null,
+          "sugar": null
+        },
+        "price": 329
+      }
+    ]
+  },
+  {
+    "modifierGroupId": "83db5445-b809-450c-bcbe-83637c6639ad",
+    "name": "Овощи 20см",
+    "restrictions": {
+      "minQuantity": 0,
+      "maxQuantity": 5,
+      "freeQuantity": 0,
+      "byDefault": 0,
+      "hideIfDefaultQuantity": false
+    },
+    "items": [
+      {
+        "modifierId": "bf896250-ec5e-4f8f-9868-355cea827ded",
+        "name": "20см Перец болгарский (15г.)",
+        "description": "",
+        "portionWeightGrams": 15,
+        "restrictions": {
+          "minQuantity": 0,
+          "maxQuantity": 0,
+          "freeQuantity": 0,
+          "byDefault": 0,
+          "hideIfDefaultQuantity": false
+        },
+        "nutritionPerHundredGrams": {
+          "fats": 0,
+          "proteins": 0,
+          "carbs": 0,
+          "energy": 0,
+          "organizations": [],
+          "saturatedFattyAcid": null,
+          "salt": null,
+          "sugar": null
+        },
+        "price": 29
+      },
+      {
+        "modifierId": "b0d452dd-2d00-44b9-8542-3a1acc2dc899",
+        "name": "20см Лук репчатый (15г.)",
+        "description": "",
+        "portionWeightGrams": 15,
+        "restrictions": {
+          "minQuantity": 0,
+          "maxQuantity": 0,
+          "freeQuantity": 0,
+          "byDefault": 0,
+          "hideIfDefaultQuantity": false
+        },
+        "nutritionPerHundredGrams": {
+          "fats": 0,
+          "proteins": 0,
+          "carbs": 0,
+          "energy": 0,
+          "organizations": [],
+          "saturatedFattyAcid": null,
+          "salt": null,
+          "sugar": null
+        },
+        "price": 29
+      },
+      {
+        "modifierId": "293efac1-0fd6-4387-8398-68eac14b84e5",
+        "name": "20см Цуккини (15г.)",
+        "description": "",
+        "portionWeightGrams": 15,
+        "restrictions": {
+          "minQuantity": 0,
+          "maxQuantity": 0,
+          "freeQuantity": 0,
+          "byDefault": 0,
+          "hideIfDefaultQuantity": false
+        },
+        "nutritionPerHundredGrams": {
+          "fats": 0,
+          "proteins": 0,
+          "carbs": 0,
+          "energy": 0,
+          "organizations": [],
+          "saturatedFattyAcid": null,
+          "salt": null,
+          "sugar": null
+        },
+        "price": 29
+      },
+      {
+        "modifierId": "7d660db0-b838-41ea-b82f-6abc4a3f38c7",
+        "name": "20см Черри (20г.)",
+        "description": "",
+        "portionWeightGrams": 20,
+        "restrictions": {
+          "minQuantity": 0,
+          "maxQuantity": 0,
+          "freeQuantity": 0,
+          "byDefault": 0,
+          "hideIfDefaultQuantity": false
+        },
+        "nutritionPerHundredGrams": {
+          "fats": 0,
+          "proteins": 0,
+          "carbs": 0,
+          "energy": 0,
+          "organizations": [],
+          "saturatedFattyAcid": null,
+          "salt": null,
+          "sugar": null
+        },
+        "price": 49
+      },
+      {
+        "modifierId": "775557ce-79c1-4364-a1bd-798bbc53b26b",
+        "name": "20см Корнишоны (15г.)",
+        "description": "",
+        "portionWeightGrams": 15,
+        "restrictions": {
+          "minQuantity": 0,
+          "maxQuantity": 0,
+          "freeQuantity": 0,
+          "byDefault": 0,
+          "hideIfDefaultQuantity": false
+        },
+        "nutritionPerHundredGrams": {
+          "fats": 0,
+          "proteins": 0,
+          "carbs": 0,
+          "energy": 0,
+          "organizations": [],
+          "saturatedFattyAcid": null,
+          "salt": null,
+          "sugar": null
+        },
+        "price": 29
+      },
+      {
+        "modifierId": "e48a0cad-16ab-4b02-bf43-bcc1bea1dfae",
+        "name": "20см Помидоры (40г.)",
+        "description": "",
+        "portionWeightGrams": 40,
+        "restrictions": {
+          "minQuantity": 0,
+          "maxQuantity": 0,
+          "freeQuantity": 0,
+          "byDefault": 0,
+          "hideIfDefaultQuantity": false
+        },
+        "nutritionPerHundredGrams": {
+          "fats": 0,
+          "proteins": 0,
+          "carbs": 0,
+          "energy": 0,
+          "organizations": [],
+          "saturatedFattyAcid": null,
+          "salt": null,
+          "sugar": null
+        },
+        "price": 59
+      },
+      {
+        "modifierId": "9393b104-f67f-4024-9c2e-e02003abbad7",
+        "name": "20см Ананас (20г.)",
+        "description": "",
+        "portionWeightGrams": 20,
+        "restrictions": {
+          "minQuantity": 0,
+          "maxQuantity": 0,
+          "freeQuantity": 0,
+          "byDefault": 0,
+          "hideIfDefaultQuantity": false
+        },
+        "nutritionPerHundredGrams": {
+          "fats": 0,
+          "proteins": 0,
+          "carbs": 0,
+          "energy": 0,
+          "organizations": [],
+          "saturatedFattyAcid": null,
+          "salt": null,
+          "sugar": null
+        },
+        "price": 59
+      },
+      {
+        "modifierId": "d1e6aab8-46f0-4ffe-88e9-ecd079a456a7",
+        "name": "20см Халапеньо (10г.)",
+        "description": "",
+        "portionWeightGrams": 10,
+        "restrictions": {
+          "minQuantity": 0,
+          "maxQuantity": 0,
+          "freeQuantity": 0,
+          "byDefault": 0,
+          "hideIfDefaultQuantity": false
+        },
+        "nutritionPerHundredGrams": {
+          "fats": 0,
+          "proteins": 0,
+          "carbs": 0,
+          "energy": 0,
+          "organizations": [],
+          "saturatedFattyAcid": null,
+          "salt": null,
+          "sugar": null
+        },
+        "price": 29
+      },
+      {
+        "modifierId": "d7d35bf2-43fe-4292-891e-fe0845eef4ba",
+        "name": "20см Шампиньоны (20г.)",
+        "description": "",
+        "portionWeightGrams": 20,
+        "restrictions": {
+          "minQuantity": 0,
+          "maxQuantity": 0,
+          "freeQuantity": 0,
+          "byDefault": 0,
+          "hideIfDefaultQuantity": false
+        },
+        "nutritionPerHundredGrams": {
+          "fats": 0,
+          "proteins": 0,
+          "carbs": 0,
+          "energy": 0,
+          "organizations": [],
+          "saturatedFattyAcid": null,
+          "salt": null,
+          "sugar": null
+        },
+        "price": 49
+      },
+      {
+        "modifierId": "d42d9736-d6fa-4e93-88cd-edc6107afc97",
+        "name": "20см Маслины (10г.)",
+        "description": "",
+        "portionWeightGrams": 10,
+        "restrictions": {
+          "minQuantity": 0,
+          "maxQuantity": 0,
+          "freeQuantity": 0,
+          "byDefault": 0,
+          "hideIfDefaultQuantity": false
+        },
+        "nutritionPerHundredGrams": {
+          "fats": 0,
+          "proteins": 0,
+          "carbs": 0,
+          "energy": 0,
+          "organizations": [],
+          "saturatedFattyAcid": null,
+          "salt": null,
+          "sugar": null
+        },
+        "price": 29
+      }
+    ]
+  },
+  {
+    "modifierGroupId": "3ac2d829-fb5e-4f7e-ada2-d48550e24b52",
+    "name": "Овощи 30см",
+    "restrictions": {
+      "minQuantity": 0,
+      "maxQuantity": 5,
+      "freeQuantity": 0,
+      "byDefault": 0,
+      "hideIfDefaultQuantity": false
+    },
+    "items": [
+      {
+        "modifierId": "c69b9580-cd53-4800-8d27-2b581dfd4953",
+        "name": "30см Халапеньо (20г.)",
+        "description": "",
+        "portionWeightGrams": 20,
+        "restrictions": {
+          "minQuantity": 0,
+          "maxQuantity": 0,
+          "freeQuantity": 0,
+          "byDefault": 0,
+          "hideIfDefaultQuantity": false
+        },
+        "nutritionPerHundredGrams": {
+          "fats": 0,
+          "proteins": 0,
+          "carbs": 0,
+          "energy": 0,
+          "organizations": [],
+          "saturatedFattyAcid": null,
+          "salt": null,
+          "sugar": null
+        },
+        "price": 39
+      },
+      {
+        "modifierId": "5c6521b8-7166-4693-82af-52c8edfef095",
+        "name": "30см Шампиньоны (40г.)",
+        "description": "",
+        "portionWeightGrams": 40,
+        "restrictions": {
+          "minQuantity": 0,
+          "maxQuantity": 0,
+          "freeQuantity": 0,
+          "byDefault": 0,
+          "hideIfDefaultQuantity": false
+        },
+        "nutritionPerHundredGrams": {
+          "fats": 0,
+          "proteins": 0,
+          "carbs": 0,
+          "energy": 0,
+          "organizations": [],
+          "saturatedFattyAcid": null,
+          "salt": null,
+          "sugar": null
+        },
+        "price": 79
+      },
+      {
+        "modifierId": "6d7cd048-8111-4b95-bb54-768e178ffa48",
+        "name": "30см Цукини (30г.)",
+        "description": "",
+        "portionWeightGrams": 30,
+        "restrictions": {
+          "minQuantity": 0,
+          "maxQuantity": 0,
+          "freeQuantity": 0,
+          "byDefault": 0,
+          "hideIfDefaultQuantity": false
+        },
+        "nutritionPerHundredGrams": {
+          "fats": 0,
+          "proteins": 0,
+          "carbs": 0,
+          "energy": 0,
+          "organizations": [],
+          "saturatedFattyAcid": null,
+          "salt": null,
+          "sugar": null
+        },
+        "price": 49
+      },
+      {
+        "modifierId": "a0a56269-4f9a-4a19-b3ab-893d82b9153b",
+        "name": "30см Помидоры (70г.)",
+        "description": "",
+        "portionWeightGrams": 70,
+        "restrictions": {
+          "minQuantity": 0,
+          "maxQuantity": 0,
+          "freeQuantity": 0,
+          "byDefault": 0,
+          "hideIfDefaultQuantity": false
+        },
+        "nutritionPerHundredGrams": {
+          "fats": 0,
+          "proteins": 0,
+          "carbs": 0,
+          "energy": 0,
+          "organizations": [],
+          "saturatedFattyAcid": null,
+          "salt": null,
+          "sugar": null
+        },
+        "price": 99
+      },
+      {
+        "modifierId": "c1b76833-74bb-4146-ae98-a43590b5e3b2",
+        "name": "30см Корнишоны (25г.)",
+        "description": "",
+        "portionWeightGrams": 25,
+        "restrictions": {
+          "minQuantity": 0,
+          "maxQuantity": 0,
+          "freeQuantity": 0,
+          "byDefault": 0,
+          "hideIfDefaultQuantity": false
+        },
+        "nutritionPerHundredGrams": {
+          "fats": 0,
+          "proteins": 0,
+          "carbs": 0,
+          "energy": 0,
+          "organizations": [],
+          "saturatedFattyAcid": null,
+          "salt": null,
+          "sugar": null
+        },
+        "price": 49
+      },
+      {
+        "modifierId": "3e28f41d-5f28-474c-8d98-a9b83af1abea",
+        "name": "30см Лук репчатый (25г.)",
+        "description": "",
+        "portionWeightGrams": 25,
+        "restrictions": {
+          "minQuantity": 0,
+          "maxQuantity": 0,
+          "freeQuantity": 0,
+          "byDefault": 0,
+          "hideIfDefaultQuantity": false
+        },
+        "nutritionPerHundredGrams": {
+          "fats": 0,
+          "proteins": 0,
+          "carbs": 0,
+          "energy": 0,
+          "organizations": [],
+          "saturatedFattyAcid": null,
+          "salt": null,
+          "sugar": null
+        },
+        "price": 39
+      },
+      {
+        "modifierId": "0a7bf0d5-8dd0-4395-96b0-ada9b6e18800",
+        "name": "30см Ананас (40г.)",
+        "description": "",
+        "portionWeightGrams": 40,
+        "restrictions": {
+          "minQuantity": 0,
+          "maxQuantity": 0,
+          "freeQuantity": 0,
+          "byDefault": 0,
+          "hideIfDefaultQuantity": false
+        },
+        "nutritionPerHundredGrams": {
+          "fats": 0,
+          "proteins": 0,
+          "carbs": 0,
+          "energy": 0,
+          "organizations": [],
+          "saturatedFattyAcid": null,
+          "salt": null,
+          "sugar": null
+        },
+        "price": 99
+      },
+      {
+        "modifierId": "3f7df1c8-b092-46af-9ff7-c042a1237f02",
+        "name": "30см Перец болгалский (25г.)",
+        "description": "",
+        "portionWeightGrams": 25,
+        "restrictions": {
+          "minQuantity": 0,
+          "maxQuantity": 0,
+          "freeQuantity": 0,
+          "byDefault": 0,
+          "hideIfDefaultQuantity": false
+        },
+        "nutritionPerHundredGrams": {
+          "fats": 0,
+          "proteins": 0,
+          "carbs": 0,
+          "energy": 0,
+          "organizations": [],
+          "saturatedFattyAcid": null,
+          "salt": null,
+          "sugar": null
+        },
+        "price": 49
+      },
+      {
+        "modifierId": "2a67a72f-7268-495c-b62a-e1dfd53c85eb",
+        "name": "30см Черри (30г.)",
+        "description": "",
+        "portionWeightGrams": 30,
+        "restrictions": {
+          "minQuantity": 0,
+          "maxQuantity": 0,
+          "freeQuantity": 0,
+          "byDefault": 0,
+          "hideIfDefaultQuantity": false
+        },
+        "nutritionPerHundredGrams": {
+          "fats": 0,
+          "proteins": 0,
+          "carbs": 0,
+          "energy": 0,
+          "organizations": [],
+          "saturatedFattyAcid": null,
+          "salt": null,
+          "sugar": null
+        },
+        "price": 79
+      },
+      {
+        "modifierId": "0004e3a7-66a3-4723-af79-f206f3b6e900",
+        "name": "30см Маслины (20г.)",
+        "description": "",
+        "portionWeightGrams": 20,
+        "restrictions": {
+          "minQuantity": 0,
+          "maxQuantity": 0,
+          "freeQuantity": 0,
+          "byDefault": 0,
+          "hideIfDefaultQuantity": false
+        },
+        "nutritionPerHundredGrams": {
+          "fats": 0,
+          "proteins": 0,
+          "carbs": 0,
+          "energy": 0,
+          "organizations": [],
+          "saturatedFattyAcid": null,
+          "salt": null,
+          "sugar": null
+        },
+        "price": 39
+      }
+    ]
+  },
+  {
+    "modifierGroupId": "2b65e6cf-acde-4258-919d-9b42354fcd17",
+    "name": "Овощи 40см",
+    "restrictions": {
+      "minQuantity": 0,
+      "maxQuantity": 5,
+      "freeQuantity": 0,
+      "byDefault": 0,
+      "hideIfDefaultQuantity": false
+    },
+    "items": [
+      {
+        "modifierId": "0f327d59-47ec-4990-8c93-323b2115f2c2",
+        "name": "40см Ананас (60г.)",
+        "description": "",
+        "portionWeightGrams": 60,
+        "restrictions": {
+          "minQuantity": 0,
+          "maxQuantity": 0,
+          "freeQuantity": 0,
+          "byDefault": 0,
+          "hideIfDefaultQuantity": false
+        },
+        "nutritionPerHundredGrams": {
+          "fats": 0,
+          "proteins": 0,
+          "carbs": 0,
+          "energy": 0,
+          "organizations": [],
+          "saturatedFattyAcid": null,
+          "salt": null,
+          "sugar": null
+        },
+        "price": 139
+      },
+      {
+        "modifierId": "bff4b09f-6716-4592-a0bd-360c77db94cf",
+        "name": "40см Черри (40г.)",
+        "description": "",
+        "portionWeightGrams": 40,
+        "restrictions": {
+          "minQuantity": 0,
+          "maxQuantity": 0,
+          "freeQuantity": 0,
+          "byDefault": 0,
+          "hideIfDefaultQuantity": false
+        },
+        "nutritionPerHundredGrams": {
+          "fats": 0,
+          "proteins": 0,
+          "carbs": 0,
+          "energy": 0,
+          "organizations": [],
+          "saturatedFattyAcid": null,
+          "salt": null,
+          "sugar": null
+        },
+        "price": 99
+      },
+      {
+        "modifierId": "4bb4259d-9902-4010-a712-4c5d0679a46a",
+        "name": "40см Халапеньо (30г.)",
+        "description": "",
+        "portionWeightGrams": 30,
+        "restrictions": {
+          "minQuantity": 0,
+          "maxQuantity": 0,
+          "freeQuantity": 0,
+          "byDefault": 0,
+          "hideIfDefaultQuantity": false
+        },
+        "nutritionPerHundredGrams": {
+          "fats": 0,
+          "proteins": 0,
+          "carbs": 0,
+          "energy": 0,
+          "organizations": [],
+          "saturatedFattyAcid": null,
+          "salt": null,
+          "sugar": null
+        },
+        "price": 49
+      },
+      {
+        "modifierId": "a6980086-aaf2-4ed2-8559-5fbafc0e6272",
+        "name": "40см Перец болгарский (40г.)",
+        "description": "",
+        "portionWeightGrams": 40,
+        "restrictions": {
+          "minQuantity": 0,
+          "maxQuantity": 0,
+          "freeQuantity": 0,
+          "byDefault": 0,
+          "hideIfDefaultQuantity": false
+        },
+        "nutritionPerHundredGrams": {
+          "fats": 0,
+          "proteins": 0,
+          "carbs": 0,
+          "energy": 0,
+          "organizations": [],
+          "saturatedFattyAcid": null,
+          "salt": null,
+          "sugar": null
+        },
+        "price": 69
+      },
+      {
+        "modifierId": "e26be909-922e-41d4-b7b6-7ed84f026cec",
+        "name": "40см Корнишоны (35г.)",
+        "description": "",
+        "portionWeightGrams": 35,
+        "restrictions": {
+          "minQuantity": 0,
+          "maxQuantity": 0,
+          "freeQuantity": 0,
+          "byDefault": 0,
+          "hideIfDefaultQuantity": false
+        },
+        "nutritionPerHundredGrams": {
+          "fats": 0,
+          "proteins": 0,
+          "carbs": 0,
+          "energy": 0,
+          "organizations": [],
+          "saturatedFattyAcid": null,
+          "salt": null,
+          "sugar": null
+        },
+        "price": 69
+      },
+      {
+        "modifierId": "f8062fe2-f5fb-4267-972c-8314f4e1ae92",
+        "name": "40см Шампиньоны (80г.)",
+        "description": "",
+        "portionWeightGrams": 80,
+        "restrictions": {
+          "minQuantity": 0,
+          "maxQuantity": 0,
+          "freeQuantity": 0,
+          "byDefault": 0,
+          "hideIfDefaultQuantity": false
+        },
+        "nutritionPerHundredGrams": {
+          "fats": 0,
+          "proteins": 0,
+          "carbs": 0,
+          "energy": 0,
+          "organizations": [],
+          "saturatedFattyAcid": null,
+          "salt": null,
+          "sugar": null
+        },
+        "price": 99
+      },
+      {
+        "modifierId": "6d87c56b-f1d2-4184-91ba-956849f1dc2b",
+        "name": "40см Лук репчатый (35г.)",
+        "description": "",
+        "portionWeightGrams": 35,
+        "restrictions": {
+          "minQuantity": 0,
+          "maxQuantity": 0,
+          "freeQuantity": 0,
+          "byDefault": 0,
+          "hideIfDefaultQuantity": false
+        },
+        "nutritionPerHundredGrams": {
+          "fats": 0,
+          "proteins": 0,
+          "carbs": 0,
+          "energy": 0,
+          "organizations": [],
+          "saturatedFattyAcid": null,
+          "salt": null,
+          "sugar": null
+        },
+        "price": 49
+      },
+      {
+        "modifierId": "22d4e76b-a336-4a5d-baf4-d5ecf87da8ac",
+        "name": "40см Цукини (45г.)",
+        "description": "",
+        "portionWeightGrams": 45,
+        "restrictions": {
+          "minQuantity": 0,
+          "maxQuantity": 0,
+          "freeQuantity": 0,
+          "byDefault": 0,
+          "hideIfDefaultQuantity": false
+        },
+        "nutritionPerHundredGrams": {
+          "fats": 0,
+          "proteins": 0,
+          "carbs": 0,
+          "energy": 0,
+          "organizations": [],
+          "saturatedFattyAcid": null,
+          "salt": null,
+          "sugar": null
+        },
+        "price": 69
+      },
+      {
+        "modifierId": "b1a3f12f-60d2-42fb-b44c-f6b072134121",
+        "name": "40см Помидор (100г.)",
+        "description": "",
+        "portionWeightGrams": 100,
+        "restrictions": {
+          "minQuantity": 0,
+          "maxQuantity": 0,
+          "freeQuantity": 0,
+          "byDefault": 0,
+          "hideIfDefaultQuantity": false
+        },
+        "nutritionPerHundredGrams": {
+          "fats": 0,
+          "proteins": 0,
+          "carbs": 0,
+          "energy": 0,
+          "organizations": [],
+          "saturatedFattyAcid": null,
+          "salt": null,
+          "sugar": null
+        },
+        "price": 139
+      },
+      {
+        "modifierId": "c128d4d3-9b2d-400b-9097-622c93d28bf0",
+        "name": "40см Маслины (40г.)",
+        "description": "",
+        "portionWeightGrams": 40,
+        "restrictions": {
+          "minQuantity": 0,
+          "maxQuantity": 0,
+          "freeQuantity": 0,
+          "byDefault": 0,
+          "hideIfDefaultQuantity": false
+        },
+        "nutritionPerHundredGrams": {
+          "fats": 0,
+          "proteins": 0,
+          "carbs": 0,
+          "energy": 0,
+          "organizations": [],
+          "saturatedFattyAcid": null,
+          "salt": null,
+          "sugar": null
+        },
+        "price": 69
+      }
+    ]
+  },
+  {
+    "modifierGroupId": "d994f6e4-1331-4171-a1c9-aaed3f66cea1",
+    "name": "Сыр 20см",
+    "restrictions": {
+      "minQuantity": 0,
+      "maxQuantity": 1,
+      "freeQuantity": 0,
+      "byDefault": 0,
+      "hideIfDefaultQuantity": false
+    },
+    "items": [
+      {
+        "modifierId": "24ca08e6-755b-4747-b1da-082e45e24b56",
+        "name": "20см Горгонзола (5г.)",
+        "description": "",
+        "portionWeightGrams": 5,
+        "restrictions": {
+          "minQuantity": 0,
+          "maxQuantity": 0,
+          "freeQuantity": 0,
+          "byDefault": 0,
+          "hideIfDefaultQuantity": false
+        },
+        "nutritionPerHundredGrams": {
+          "fats": 0,
+          "proteins": 0,
+          "carbs": 0,
+          "energy": 0,
+          "organizations": [],
+          "saturatedFattyAcid": null,
+          "salt": null,
+          "sugar": null
+        },
+        "price": 49
+      },
+      {
+        "modifierId": "7cec2a91-13a7-4559-adb8-556423901c51",
+        "name": "20см Творожный сыр (20г.)",
+        "description": "",
+        "portionWeightGrams": 0,
+        "restrictions": {
+          "minQuantity": 0,
+          "maxQuantity": 0,
+          "freeQuantity": 0,
+          "byDefault": 0,
+          "hideIfDefaultQuantity": false
+        },
+        "nutritionPerHundredGrams": {
+          "fats": 0,
+          "proteins": 0,
+          "carbs": 0,
+          "energy": 0,
+          "organizations": [],
+          "saturatedFattyAcid": null,
+          "salt": null,
+          "sugar": null
+        },
+        "price": 49
+      },
+      {
+        "modifierId": "e5f07601-dbbe-45a6-8426-79162b16425d",
+        "name": "20см Моцарелла микс (50г.)",
+        "description": "",
+        "portionWeightGrams": 50,
+        "restrictions": {
+          "minQuantity": 0,
+          "maxQuantity": 0,
+          "freeQuantity": 0,
+          "byDefault": 0,
+          "hideIfDefaultQuantity": false
+        },
+        "nutritionPerHundredGrams": {
+          "fats": 0,
+          "proteins": 0,
+          "carbs": 0,
+          "energy": 0,
+          "organizations": [],
+          "saturatedFattyAcid": null,
+          "salt": null,
+          "sugar": null
+        },
+        "price": 89
+      },
+      {
+        "modifierId": "6a112de2-7a31-4cd2-ab1d-f978cc7ab73e",
+        "name": "20см Пармезан (20г.)",
+        "description": "",
+        "portionWeightGrams": 20,
+        "restrictions": {
+          "minQuantity": 0,
+          "maxQuantity": 0,
+          "freeQuantity": 0,
+          "byDefault": 0,
+          "hideIfDefaultQuantity": false
+        },
+        "nutritionPerHundredGrams": {
+          "fats": 0,
+          "proteins": 0,
+          "carbs": 0,
+          "energy": 0,
+          "organizations": [],
+          "saturatedFattyAcid": null,
+          "salt": null,
+          "sugar": null
+        },
+        "price": 79
+      },
+      {
+        "modifierId": "d9830667-d2d6-4efd-a713-fcd6493f2b9e",
+        "name": "20см Чеддер (20г.)",
+        "description": "",
+        "portionWeightGrams": 20,
+        "restrictions": {
+          "minQuantity": 0,
+          "maxQuantity": 0,
+          "freeQuantity": 0,
+          "byDefault": 0,
+          "hideIfDefaultQuantity": false
+        },
+        "nutritionPerHundredGrams": {
+          "fats": 0,
+          "proteins": 0,
+          "carbs": 0,
+          "energy": 0,
+          "organizations": [],
+          "saturatedFattyAcid": null,
+          "salt": null,
+          "sugar": null
+        },
+        "price": 79
+      }
+    ]
+  },
+  {
+    "modifierGroupId": "f2ae2afa-85f6-40b3-9145-22a257eba6f4",
+    "name": "Сыр 30см",
+    "restrictions": {
+      "minQuantity": 0,
+      "maxQuantity": 1,
+      "freeQuantity": 0,
+      "byDefault": 0,
+      "hideIfDefaultQuantity": false
+    },
+    "items": [
+      {
+        "modifierId": "7625adea-d887-4055-b7a8-6a37dbc7db7e",
+        "name": "30см Пармезан (40г.)",
+        "description": "",
+        "portionWeightGrams": 40,
+        "restrictions": {
+          "minQuantity": 0,
+          "maxQuantity": 0,
+          "freeQuantity": 0,
+          "byDefault": 0,
+          "hideIfDefaultQuantity": false
+        },
+        "nutritionPerHundredGrams": {
+          "fats": 0,
+          "proteins": 0,
+          "carbs": 0,
+          "energy": 0,
+          "organizations": [],
+          "saturatedFattyAcid": null,
+          "salt": null,
+          "sugar": null
+        },
+        "price": 129
+      },
+      {
+        "modifierId": "68277f47-0751-4ebe-9a5c-84ae7198f818",
+        "name": "30см Творожный сыр (40г.)",
+        "description": "",
+        "portionWeightGrams": 40,
+        "restrictions": {
+          "minQuantity": 0,
+          "maxQuantity": 0,
+          "freeQuantity": 0,
+          "byDefault": 0,
+          "hideIfDefaultQuantity": false
+        },
+        "nutritionPerHundredGrams": {
+          "fats": 0,
+          "proteins": 0,
+          "carbs": 0,
+          "energy": 0,
+          "organizations": [],
+          "saturatedFattyAcid": null,
+          "salt": null,
+          "sugar": null
+        },
+        "price": 79
+      },
+      {
+        "modifierId": "b158ea54-6aa3-4889-a946-93fb8a5240e7",
+        "name": "30см Горгонзола (10г.)",
+        "description": "",
+        "portionWeightGrams": 10,
+        "restrictions": {
+          "minQuantity": 0,
+          "maxQuantity": 0,
+          "freeQuantity": 0,
+          "byDefault": 0,
+          "hideIfDefaultQuantity": false
+        },
+        "nutritionPerHundredGrams": {
+          "fats": 0,
+          "proteins": 0,
+          "carbs": 0,
+          "energy": 0,
+          "organizations": [],
+          "saturatedFattyAcid": null,
+          "salt": null,
+          "sugar": null
+        },
+        "price": 79
+      },
+      {
+        "modifierId": "7120279e-154d-432d-9dfa-bfe20b3d1cf1",
+        "name": "30см Чеддер (40г.)",
+        "description": "",
+        "portionWeightGrams": 40,
+        "restrictions": {
+          "minQuantity": 0,
+          "maxQuantity": 0,
+          "freeQuantity": 0,
+          "byDefault": 0,
+          "hideIfDefaultQuantity": false
+        },
+        "nutritionPerHundredGrams": {
+          "fats": 0,
+          "proteins": 0,
+          "carbs": 0,
+          "energy": 0,
+          "organizations": [],
+          "saturatedFattyAcid": null,
+          "salt": null,
+          "sugar": null
+        },
+        "price": 129
+      },
+      {
+        "modifierId": "51d41f1b-e73d-49d9-9a0d-f7141c8e4f2f",
+        "name": "30см Моцарелла микс (100г)",
+        "description": "",
+        "portionWeightGrams": 100,
+        "restrictions": {
+          "minQuantity": 0,
+          "maxQuantity": 0,
+          "freeQuantity": 0,
+          "byDefault": 0,
+          "hideIfDefaultQuantity": false
+        },
+        "nutritionPerHundredGrams": {
+          "fats": 0,
+          "proteins": 0,
+          "carbs": 0,
+          "energy": 0,
+          "organizations": [],
+          "saturatedFattyAcid": null,
+          "salt": null,
+          "sugar": null
+        },
+        "price": 149
+      }
+    ]
+  },
+  {
+    "modifierGroupId": "f3a8ab19-b5ef-4c34-9f94-4bd82bf5da96",
+    "name": "Сыр 40см",
+    "restrictions": {
+      "minQuantity": 0,
+      "maxQuantity": 1,
+      "freeQuantity": 0,
+      "byDefault": 0,
+      "hideIfDefaultQuantity": false
+    },
+    "items": [
+      {
+        "modifierId": "fdcc440b-dcd0-4d34-abbf-0c649e800d78",
+        "name": "40см Чеддер (60г.)",
+        "description": "",
+        "portionWeightGrams": 60,
+        "restrictions": {
+          "minQuantity": 0,
+          "maxQuantity": 0,
+          "freeQuantity": 0,
+          "byDefault": 0,
+          "hideIfDefaultQuantity": false
+        },
+        "nutritionPerHundredGrams": {
+          "fats": 0,
+          "proteins": 0,
+          "carbs": 0,
+          "energy": 0,
+          "organizations": [],
+          "saturatedFattyAcid": null,
+          "salt": null,
+          "sugar": null
+        },
+        "price": 179
+      },
+      {
+        "modifierId": "fb711ad2-0520-4b93-bba5-1862ed2d2401",
+        "name": "40см Горгонзола (15г.)",
+        "description": "",
+        "portionWeightGrams": 20,
+        "restrictions": {
+          "minQuantity": 0,
+          "maxQuantity": 0,
+          "freeQuantity": 0,
+          "byDefault": 0,
+          "hideIfDefaultQuantity": false
+        },
+        "nutritionPerHundredGrams": {
+          "fats": 0,
+          "proteins": 0,
+          "carbs": 0,
+          "energy": 0,
+          "organizations": [],
+          "saturatedFattyAcid": null,
+          "salt": null,
+          "sugar": null
+        },
+        "price": 99
+      },
+      {
+        "modifierId": "c1894926-7e73-4cb1-b86e-776ad7e8c87f",
+        "name": "40см Творожный сыр (60г.)",
+        "description": "",
+        "portionWeightGrams": 60,
+        "restrictions": {
+          "minQuantity": 0,
+          "maxQuantity": 0,
+          "freeQuantity": 0,
+          "byDefault": 0,
+          "hideIfDefaultQuantity": false
+        },
+        "nutritionPerHundredGrams": {
+          "fats": 0,
+          "proteins": 0,
+          "carbs": 0,
+          "energy": 0,
+          "organizations": [],
+          "saturatedFattyAcid": null,
+          "salt": null,
+          "sugar": null
+        },
+        "price": 119
+      },
+      {
+        "modifierId": "e408c953-bc2f-4977-807d-b78338ed1266",
+        "name": "40см Пармезан (60г.)",
+        "description": "",
+        "portionWeightGrams": 60,
+        "restrictions": {
+          "minQuantity": 0,
+          "maxQuantity": 0,
+          "freeQuantity": 0,
+          "byDefault": 0,
+          "hideIfDefaultQuantity": false
+        },
+        "nutritionPerHundredGrams": {
+          "fats": 0,
+          "proteins": 0,
+          "carbs": 0,
+          "energy": 0,
+          "organizations": [],
+          "saturatedFattyAcid": null,
+          "salt": null,
+          "sugar": null
+        },
+        "price": 179
+      },
+      {
+        "modifierId": "dc82287c-d73a-4354-bc17-ced15b0b3a9e",
+        "name": "40см Моцарелла микс (150г.)",
+        "description": "",
+        "portionWeightGrams": 150,
+        "restrictions": {
+          "minQuantity": 0,
+          "maxQuantity": 0,
+          "freeQuantity": 0,
+          "byDefault": 0,
+          "hideIfDefaultQuantity": false
+        },
+        "nutritionPerHundredGrams": {
+          "fats": 0,
+          "proteins": 0,
+          "carbs": 0,
+          "energy": 0,
+          "organizations": [],
+          "saturatedFattyAcid": null,
+          "salt": null,
+          "sugar": null
+        },
+        "price": 199
+      }
+    ]
+  },
+  {
+    "modifierGroupId": "1bcd1fd6-f231-4926-a723-303894115021",
+    "name": "Двойная порция сыра 20см",
+    "restrictions": {
+      "minQuantity": 0,
+      "maxQuantity": 1,
+      "freeQuantity": 0,
+      "byDefault": 0,
+      "hideIfDefaultQuantity": false
+    },
+    "items": [
+      {
+        "modifierId": "8c18cecf-b2c4-4de6-a5ee-e2c2861c31b5",
+        "name": "двойная порция сыра 20см",
+        "description": "",
+        "portionWeightGrams": 80,
+        "restrictions": {
+          "minQuantity": 0,
+          "maxQuantity": 0,
+          "freeQuantity": 0,
+          "byDefault": 0,
+          "hideIfDefaultQuantity": false
+        },
+        "nutritionPerHundredGrams": {
+          "fats": 0,
+          "proteins": 0,
+          "carbs": 0,
+          "energy": 0,
+          "organizations": [],
+          "saturatedFattyAcid": null,
+          "salt": null,
+          "sugar": null
+        },
+        "price": 119
+      }
+    ]
+  },
+  {
+    "modifierGroupId": "2ec3d15d-6118-46ff-9384-2e9fb7730522",
+    "name": "Двойная порция сыра 30см",
+    "restrictions": {
+      "minQuantity": 0,
+      "maxQuantity": 1,
+      "freeQuantity": 0,
+      "byDefault": 0,
+      "hideIfDefaultQuantity": false
+    },
+    "items": [
+      {
+        "modifierId": "b52a43b2-fca6-4529-8a86-0435b085c47b",
+        "name": "двойная порция сыра 30см",
+        "description": "",
+        "portionWeightGrams": 130,
+        "restrictions": {
+          "minQuantity": 0,
+          "maxQuantity": 0,
+          "freeQuantity": 0,
+          "byDefault": 0,
+          "hideIfDefaultQuantity": false
+        },
+        "nutritionPerHundredGrams": {
+          "fats": 0,
+          "proteins": 0,
+          "carbs": 0,
+          "energy": 0,
+          "organizations": [],
+          "saturatedFattyAcid": null,
+          "salt": null,
+          "sugar": null
+        },
+        "price": 179
+      }
+    ]
+  },
+  {
+    "modifierGroupId": "310a6df8-615c-4d1d-af48-085080d0860c",
+    "name": "Двойная порция сыра 40см",
+    "restrictions": {
+      "minQuantity": 0,
+      "maxQuantity": 1,
+      "freeQuantity": 0,
+      "byDefault": 0,
+      "hideIfDefaultQuantity": false
+    },
+    "items": [
+      {
+        "modifierId": "b0ce11bb-2f74-4588-9126-209fde46abc9",
+        "name": "двойная порция сыра 40см",
+        "description": "",
+        "portionWeightGrams": 200,
+        "restrictions": {
+          "minQuantity": 0,
+          "maxQuantity": 0,
+          "freeQuantity": 0,
+          "byDefault": 0,
+          "hideIfDefaultQuantity": false
+        },
+        "nutritionPerHundredGrams": {
+          "fats": 0,
+          "proteins": 0,
+          "carbs": 0,
+          "energy": 0,
+          "organizations": [],
+          "saturatedFattyAcid": null,
+          "salt": null,
+          "sugar": null
+        },
+        "price": 249
+      }
+    ]
+  },
+  {
+    "modifierGroupId": "4b1abcce-9235-4c5a-b5bc-5f8555a4ac2e",
+    "name": "Сыр 25см",
+    "restrictions": {
+      "minQuantity": 0,
+      "maxQuantity": 5,
+      "freeQuantity": 0,
+      "byDefault": 0,
+      "hideIfDefaultQuantity": false
+    },
+    "items": [
+      {
+        "modifierId": "9c8a4b2e-9173-4029-9919-08bccf6cb1c1",
+        "name": "25см Горгонзола (7г.)",
+        "description": "",
+        "portionWeightGrams": 7,
+        "restrictions": {
+          "minQuantity": 0,
+          "maxQuantity": 0,
+          "freeQuantity": 0,
+          "byDefault": 0,
+          "hideIfDefaultQuantity": false
+        },
+        "nutritionPerHundredGrams": {
+          "fats": 0,
+          "proteins": 0,
+          "carbs": 0,
+          "energy": 0,
+          "organizations": [],
+          "saturatedFattyAcid": null,
+          "salt": null,
+          "sugar": null
+        },
+        "price": 69
+      },
+      {
+        "modifierId": "58717613-37a6-498e-b072-e578a8355ae5",
+        "name": "25см Моцарелла микс (75г.)",
+        "description": "",
+        "portionWeightGrams": 75,
+        "restrictions": {
+          "minQuantity": 0,
+          "maxQuantity": 0,
+          "freeQuantity": 0,
+          "byDefault": 0,
+          "hideIfDefaultQuantity": false
+        },
+        "nutritionPerHundredGrams": {
+          "fats": 0,
+          "proteins": 0,
+          "carbs": 0,
+          "energy": 0,
+          "organizations": [],
+          "saturatedFattyAcid": null,
+          "salt": null,
+          "sugar": null
+        },
+        "price": 119
+      },
+      {
+        "modifierId": "ee2747e0-f59f-441e-aeb5-1ebe9c6e0719",
+        "name": "25см Пармезан (30г.)",
+        "description": "",
+        "portionWeightGrams": 30,
+        "restrictions": {
+          "minQuantity": 0,
+          "maxQuantity": 0,
+          "freeQuantity": 0,
+          "byDefault": 0,
+          "hideIfDefaultQuantity": false
+        },
+        "nutritionPerHundredGrams": {
+          "fats": 0,
+          "proteins": 0,
+          "carbs": 0,
+          "energy": 0,
+          "organizations": [],
+          "saturatedFattyAcid": null,
+          "salt": null,
+          "sugar": null
+        },
+        "price": 109
+      },
+      {
+        "modifierId": "6c86e825-ee25-4ca5-93c1-b4f84c68ed77",
+        "name": "25см Творожный сыр (30г.)",
+        "description": "",
+        "portionWeightGrams": 0,
+        "restrictions": {
+          "minQuantity": 0,
+          "maxQuantity": 0,
+          "freeQuantity": 0,
+          "byDefault": 0,
+          "hideIfDefaultQuantity": false
+        },
+        "nutritionPerHundredGrams": {
+          "fats": 0,
+          "proteins": 0,
+          "carbs": 0,
+          "energy": 0,
+          "organizations": [],
+          "saturatedFattyAcid": null,
+          "salt": null,
+          "sugar": null
+        },
+        "price": 69
+      },
+      {
+        "modifierId": "930aa090-8690-439f-b3da-94aaaa04427d",
+        "name": "25см Чеддер (30г.)",
+        "description": "",
+        "portionWeightGrams": 30,
+        "restrictions": {
+          "minQuantity": 0,
+          "maxQuantity": 0,
+          "freeQuantity": 0,
+          "byDefault": 0,
+          "hideIfDefaultQuantity": false
+        },
+        "nutritionPerHundredGrams": {
+          "fats": 0,
+          "proteins": 0,
+          "carbs": 0,
+          "energy": 0,
+          "organizations": [],
+          "saturatedFattyAcid": null,
+          "salt": null,
+          "sugar": null
+        },
+        "price": 109
+      }
+    ]
+  },
+  {
+    "modifierGroupId": "dc5a2364-0be3-48a9-95bd-b01388b94b6f",
+    "name": "Овощи 25см",
+    "restrictions": {
+      "minQuantity": 0,
+      "maxQuantity": 5,
+      "freeQuantity": 0,
+      "byDefault": 0,
+      "hideIfDefaultQuantity": false
+    },
+    "items": [
+      {
+        "modifierId": "c81d7703-b7bb-4a11-af1d-0b971675a554",
+        "name": "25см Ананас (30г.)",
+        "description": "",
+        "portionWeightGrams": 30,
+        "restrictions": {
+          "minQuantity": 0,
+          "maxQuantity": 0,
+          "freeQuantity": 0,
+          "byDefault": 0,
+          "hideIfDefaultQuantity": false
+        },
+        "nutritionPerHundredGrams": {
+          "fats": 0,
+          "proteins": 0,
+          "carbs": 0,
+          "energy": 0,
+          "organizations": [],
+          "saturatedFattyAcid": null,
+          "salt": null,
+          "sugar": null
+        },
+        "price": 79
+      },
+      {
+        "modifierId": "8e46c482-59a1-404c-98c5-1c2e889b6101",
+        "name": "25см Корнишоны (20г.)",
+        "description": "",
+        "portionWeightGrams": 20,
+        "restrictions": {
+          "minQuantity": 0,
+          "maxQuantity": 0,
+          "freeQuantity": 0,
+          "byDefault": 0,
+          "hideIfDefaultQuantity": false
+        },
+        "nutritionPerHundredGrams": {
+          "fats": 0,
+          "proteins": 0,
+          "carbs": 0,
+          "energy": 0,
+          "organizations": [],
+          "saturatedFattyAcid": null,
+          "salt": null,
+          "sugar": null
+        },
+        "price": 39
+      },
+      {
+        "modifierId": "0c6f53ec-5743-45c6-bc97-81c3a10ddec2",
+        "name": "25см Лук репчатый (20г.)",
+        "description": "",
+        "portionWeightGrams": 20,
+        "restrictions": {
+          "minQuantity": 0,
+          "maxQuantity": 0,
+          "freeQuantity": 0,
+          "byDefault": 0,
+          "hideIfDefaultQuantity": false
+        },
+        "nutritionPerHundredGrams": {
+          "fats": 0,
+          "proteins": 0,
+          "carbs": 0,
+          "energy": 0,
+          "organizations": [],
+          "saturatedFattyAcid": null,
+          "salt": null,
+          "sugar": null
+        },
+        "price": 39
+      },
+      {
+        "modifierId": "ea663728-8286-4c37-a75d-2844c0c68da2",
+        "name": "25см Маслины (15г.)",
+        "description": "",
+        "portionWeightGrams": 15,
+        "restrictions": {
+          "minQuantity": 0,
+          "maxQuantity": 0,
+          "freeQuantity": 0,
+          "byDefault": 0,
+          "hideIfDefaultQuantity": false
+        },
+        "nutritionPerHundredGrams": {
+          "fats": 0,
+          "proteins": 0,
+          "carbs": 0,
+          "energy": 0,
+          "organizations": [],
+          "saturatedFattyAcid": null,
+          "salt": null,
+          "sugar": null
+        },
+        "price": 39
+      },
+      {
+        "modifierId": "a8d0340d-bc66-4fc6-8d34-b0aa1d0b6af7",
+        "name": "25см Перец болгарский (20г.)",
+        "description": "",
+        "portionWeightGrams": 20,
+        "restrictions": {
+          "minQuantity": 0,
+          "maxQuantity": 0,
+          "freeQuantity": 0,
+          "byDefault": 0,
+          "hideIfDefaultQuantity": false
+        },
+        "nutritionPerHundredGrams": {
+          "fats": 0,
+          "proteins": 0,
+          "carbs": 0,
+          "energy": 0,
+          "organizations": [],
+          "saturatedFattyAcid": null,
+          "salt": null,
+          "sugar": null
+        },
+        "price": 39
+      },
+      {
+        "modifierId": "c8dd2438-5fc5-4363-ad7c-f0d0f98bf891",
+        "name": "25см Помидоры (55г.)",
+        "description": "",
+        "portionWeightGrams": 55,
+        "restrictions": {
+          "minQuantity": 0,
+          "maxQuantity": 0,
+          "freeQuantity": 0,
+          "byDefault": 0,
+          "hideIfDefaultQuantity": false
+        },
+        "nutritionPerHundredGrams": {
+          "fats": 0,
+          "proteins": 0,
+          "carbs": 0,
+          "energy": 0,
+          "organizations": [],
+          "saturatedFattyAcid": null,
+          "salt": null,
+          "sugar": null
+        },
+        "price": 79
+      },
+      {
+        "modifierId": "d0524dc1-cec4-4d4e-8a89-af0efdc493c0",
+        "name": "25см Халапеньо (20г.)",
+        "description": "",
+        "portionWeightGrams": 15,
+        "restrictions": {
+          "minQuantity": 0,
+          "maxQuantity": 0,
+          "freeQuantity": 0,
+          "byDefault": 0,
+          "hideIfDefaultQuantity": false
+        },
+        "nutritionPerHundredGrams": {
+          "fats": 0,
+          "proteins": 0,
+          "carbs": 0,
+          "energy": 0,
+          "organizations": [],
+          "saturatedFattyAcid": null,
+          "salt": null,
+          "sugar": null
+        },
+        "price": 39
+      },
+      {
+        "modifierId": "1c3a185f-fe62-46b1-8820-d50dcdc7662b",
+        "name": "25см Цуккини (25г.)",
+        "description": "",
+        "portionWeightGrams": 25,
+        "restrictions": {
+          "minQuantity": 0,
+          "maxQuantity": 0,
+          "freeQuantity": 0,
+          "byDefault": 0,
+          "hideIfDefaultQuantity": false
+        },
+        "nutritionPerHundredGrams": {
+          "fats": 0,
+          "proteins": 0,
+          "carbs": 0,
+          "energy": 0,
+          "organizations": [],
+          "saturatedFattyAcid": null,
+          "salt": null,
+          "sugar": null
+        },
+        "price": 39
+      },
+      {
+        "modifierId": "5c2f4090-bfed-4a9e-8552-3e06572f7d49",
+        "name": "25см Черри (25г.)",
+        "description": "",
+        "portionWeightGrams": 25,
+        "restrictions": {
+          "minQuantity": 0,
+          "maxQuantity": 0,
+          "freeQuantity": 0,
+          "byDefault": 0,
+          "hideIfDefaultQuantity": false
+        },
+        "nutritionPerHundredGrams": {
+          "fats": 0,
+          "proteins": 0,
+          "carbs": 0,
+          "energy": 0,
+          "organizations": [],
+          "saturatedFattyAcid": null,
+          "salt": null,
+          "sugar": null
+        },
+        "price": 79
+      },
+      {
+        "modifierId": "ba430a0f-6e0b-428b-b2c8-4a235a9f5393",
+        "name": "25см Шампиньоны (30г.)",
+        "description": "",
+        "portionWeightGrams": 30,
+        "restrictions": {
+          "minQuantity": 0,
+          "maxQuantity": 0,
+          "freeQuantity": 0,
+          "byDefault": 0,
+          "hideIfDefaultQuantity": false
+        },
+        "nutritionPerHundredGrams": {
+          "fats": 0,
+          "proteins": 0,
+          "carbs": 0,
+          "energy": 0,
+          "organizations": [],
+          "saturatedFattyAcid": null,
+          "salt": null,
+          "sugar": null
+        },
+        "price": 79
+      }
+    ]
+  },
+  {
+    "modifierGroupId": "747881bb-37a5-4cf2-80c2-ba612dc440a6",
+    "name": "Мясо 25см",
+    "restrictions": {
+      "minQuantity": 0,
+      "maxQuantity": 5,
+      "freeQuantity": 0,
+      "byDefault": 0,
+      "hideIfDefaultQuantity": false
+    },
+    "items": [
+      {
+        "modifierId": "ea7e51e8-7106-41c7-9b04-c220d3a7d10d",
+        "name": "25см Говядина ароматная (30г.)",
+        "description": "",
+        "portionWeightGrams": 30,
+        "restrictions": {
+          "minQuantity": 0,
+          "maxQuantity": 0,
+          "freeQuantity": 0,
+          "byDefault": 0,
+          "hideIfDefaultQuantity": false
+        },
+        "nutritionPerHundredGrams": {
+          "fats": 0,
+          "proteins": 0,
+          "carbs": 0,
+          "energy": 0,
+          "organizations": [],
+          "saturatedFattyAcid": null,
+          "salt": null,
+          "sugar": null
+        },
+        "price": 99
+      },
+      {
+        "modifierId": "99aaa319-c384-4114-af1d-a91be80babcd",
+        "name": "25см Бекон (30г.)",
+        "description": "",
+        "portionWeightGrams": 30,
+        "restrictions": {
+          "minQuantity": 0,
+          "maxQuantity": 0,
+          "freeQuantity": 0,
+          "byDefault": 0,
+          "hideIfDefaultQuantity": false
+        },
+        "nutritionPerHundredGrams": {
+          "fats": 0,
+          "proteins": 0,
+          "carbs": 0,
+          "energy": 0,
+          "organizations": [],
+          "saturatedFattyAcid": null,
+          "salt": null,
+          "sugar": null
+        },
+        "price": 79
+      },
+      {
+        "modifierId": "c3055d07-9113-494d-8d63-6c36c4a4a16f",
+        "name": "25см Ветчина  (30г.)",
+        "description": "",
+        "portionWeightGrams": 30,
+        "restrictions": {
+          "minQuantity": 0,
+          "maxQuantity": 0,
+          "freeQuantity": 0,
+          "byDefault": 0,
+          "hideIfDefaultQuantity": false
+        },
+        "nutritionPerHundredGrams": {
+          "fats": 0,
+          "proteins": 0,
+          "carbs": 0,
+          "energy": 0,
+          "organizations": [],
+          "saturatedFattyAcid": null,
+          "salt": null,
+          "sugar": null
+        },
+        "price": 69
+      },
+      {
+        "modifierId": "19457e33-0c61-43e4-82e2-a6b1eda50302",
+        "name": "25см Гребешок (45г.)",
+        "description": "",
+        "portionWeightGrams": 45,
+        "restrictions": {
+          "minQuantity": 0,
+          "maxQuantity": 0,
+          "freeQuantity": 0,
+          "byDefault": 0,
+          "hideIfDefaultQuantity": false
+        },
+        "nutritionPerHundredGrams": {
+          "fats": 0,
+          "proteins": 0,
+          "carbs": 0,
+          "energy": 0,
+          "organizations": [],
+          "saturatedFattyAcid": null,
+          "salt": null,
+          "sugar": null
+        },
+        "price": 239
+      },
+      {
+        "modifierId": "e867bd55-1bcd-4295-9a31-d84b99cc3806",
+        "name": "25см Кальмар (45г.)",
+        "description": "",
+        "portionWeightGrams": 40.909091,
+        "restrictions": {
+          "minQuantity": 0,
+          "maxQuantity": 0,
+          "freeQuantity": 0,
+          "byDefault": 0,
+          "hideIfDefaultQuantity": false
+        },
+        "nutritionPerHundredGrams": {
+          "fats": 0,
+          "proteins": 0,
+          "carbs": 0,
+          "energy": 0,
+          "organizations": [],
+          "saturatedFattyAcid": null,
+          "salt": null,
+          "sugar": null
+        },
+        "price": 109
+      },
+      {
+        "modifierId": "6ad80db5-8cdb-416a-bcfb-cc88fae3a629",
+        "name": "25см Креветка (45г.)",
+        "description": "",
+        "portionWeightGrams": 45,
+        "restrictions": {
+          "minQuantity": 0,
+          "maxQuantity": 0,
+          "freeQuantity": 0,
+          "byDefault": 0,
+          "hideIfDefaultQuantity": false
+        },
+        "nutritionPerHundredGrams": {
+          "fats": 0,
+          "proteins": 0,
+          "carbs": 0,
+          "energy": 0,
+          "organizations": [],
+          "saturatedFattyAcid": null,
+          "salt": null,
+          "sugar": null
+        },
+        "price": 209
+      },
+      {
+        "modifierId": "1db7fd95-3bc7-4db1-808e-bdabd6f164a6",
+        "name": "25см Копченые окорока (40г.)",
+        "description": "",
+        "portionWeightGrams": 40,
+        "restrictions": {
+          "minQuantity": 0,
+          "maxQuantity": 0,
+          "freeQuantity": 0,
+          "byDefault": 0,
+          "hideIfDefaultQuantity": false
+        },
+        "nutritionPerHundredGrams": {
+          "fats": 0,
+          "proteins": 0,
+          "carbs": 0,
+          "energy": 0,
+          "organizations": [],
+          "saturatedFattyAcid": null,
+          "salt": null,
+          "sugar": null
+        },
+        "price": 79
+      },
+      {
+        "modifierId": "98ecfb1a-3a39-4291-82d7-98d990d0a6b7",
+        "name": "25см Фарш (45г.)",
+        "description": "",
+        "portionWeightGrams": 45,
+        "restrictions": {
+          "minQuantity": 0,
+          "maxQuantity": 0,
+          "freeQuantity": 0,
+          "byDefault": 0,
+          "hideIfDefaultQuantity": false
+        },
+        "nutritionPerHundredGrams": {
+          "fats": 0,
+          "proteins": 0,
+          "carbs": 0,
+          "energy": 0,
+          "organizations": [],
+          "saturatedFattyAcid": null,
+          "salt": null,
+          "sugar": null
+        },
+        "price": 99
+      },
+      {
+        "modifierId": "96cbfede-40e7-46d1-a76a-59d1459c98e5",
+        "name": "25см Филе куриное (45г.)",
+        "description": "",
+        "portionWeightGrams": 40.540541,
+        "restrictions": {
+          "minQuantity": 0,
+          "maxQuantity": 0,
+          "freeQuantity": 0,
+          "byDefault": 0,
+          "hideIfDefaultQuantity": false
+        },
+        "nutritionPerHundredGrams": {
+          "fats": 0,
+          "proteins": 0,
+          "carbs": 0,
+          "energy": 0,
+          "organizations": [],
+          "saturatedFattyAcid": null,
+          "salt": null,
+          "sugar": null
+        },
+        "price": 79
+      }
+    ]
+  },
+  {
+    "modifierGroupId": "3d17b103-4753-4106-bcd4-0ac43941ea27",
+    "name": "Двойная порция сыра 25см",
+    "restrictions": {
+      "minQuantity": 0,
+      "maxQuantity": 1,
+      "freeQuantity": 0,
+      "byDefault": 0,
+      "hideIfDefaultQuantity": false
+    },
+    "items": [
+      {
+        "modifierId": "26f998e7-a377-4918-ba08-0791dd07d4c8",
+        "name": "двойная порция сыра 25см",
+        "description": "",
+        "portionWeightGrams": 50,
+        "restrictions": {
+          "minQuantity": 0,
+          "maxQuantity": 0,
+          "freeQuantity": 0,
+          "byDefault": 0,
+          "hideIfDefaultQuantity": false
+        },
+        "nutritionPerHundredGrams": {
+          "fats": 0,
+          "proteins": 0,
+          "carbs": 0,
+          "energy": 0,
+          "organizations": [],
+          "saturatedFattyAcid": null,
+          "salt": null,
+          "sugar": null
+        },
+        "price": 129
+      }
+    ]
+  }
+]

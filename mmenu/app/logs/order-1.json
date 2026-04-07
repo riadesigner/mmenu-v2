@@ -1,0 +1,36 @@
+{
+   "ORDER_TEXT":"   ------------\\n   на стол №: 2\\n   ------------\\n   Создан: 30 ноября, 08:38\\n   Сумма: 478 ₽.\\n   ------------\\n_1. Пицца кола- барбекю_\\n20см \/ 220 г, 429 ₽\\n+ Горгонзола (5г.), 1x49 ₽\\n= 1x478 ₽\\n--------- \/\/\\n",
+   "ORDER_IIKO":{
+      "id":"",
+      "externalNumber":"",
+      "tableIds":[
+         "44dd4519-bd71-4e04-bf1c-1cef615683bb"
+      ],
+      "customer":"",
+      "phone":"",
+      "guests":"",
+      "tabName":"",
+      "menuId":"64136",
+      "items":[
+         {
+            "type":"Product",
+            "amount":1,
+            "price":429,
+            "productSizeId":"cbf608e6-170d-478a-9db8-cccd6e02aec3",
+            "productId":"cbb2b479-5618-4e02-bf63-1a56de3219fe",
+            "modifiers":[
+               {
+                  "productId":"24ca08e6-755b-4747-b1da-082e45e24b56",
+                  "amount":1,
+                  "price":49
+               }
+            ]
+         }
+      ],
+      "combos":"",
+      "payments":"",
+      "tips":"",
+      "orderTypeId":"bbbef4dc-5a02-7ea3-81d3-826f4e8bb3e0",
+      "chequeAdditionalInfo":""
+   }
+}
