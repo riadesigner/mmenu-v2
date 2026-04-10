@@ -24,7 +24,7 @@ class Iiko_params{
 	private string $switch_to_current_organization_id;
 	private string $current_organization_id;
 	private string $current_extmenu_id;
-	private string $current_order_type_id;
+	private string $current_order_type_id = '';
 	private string $current_terminal_group_id;
 	private string $current_oldway_menu_id;	
 	private string $current_nomenclature_type;	
@@ -293,7 +293,7 @@ class Iiko_params{
 			"Content-Type"=>"application/json",
 			"Authorization" => 'Bearer '.$token
 		]; 
-		$params  = ['organizationIds' => null, 'returnAdditionalInfo' => true, 'includeDisabled' => true];
+		$params  = ['organizationIds' => null, 'returnAdditionalInfo' => true, 'includeDisabled' => false];
 		$res = iiko_get_info($url,$headers,$params);
 		return $res["organizations"] ?? [];
 	}
@@ -307,8 +307,24 @@ class Iiko_params{
 		$params  = ['organizationIds' => [$orgId]];
 		$res = iiko_get_info($url,$headers,$params);
 		$order_types = $res['orderTypes'] ?? [];		
+		
+		$curr_order_type_id = "";
 
-		$this->set_current_order_type_id("");
+		if(count($order_types[0]['items'])){
+			
+			foreach($order_types[0]['items'] as $o_type){
+				// regular order
+				if(
+					mb_strtolower($o_type['orderServiceType']) === 'common'
+					&& $o_type['isDeleted'] !== true
+					){
+					$curr_order_type_id = $o_type['id'];
+					break;
+				}
+			}
+		}			
+
+		$this->set_current_order_type_id($curr_order_type_id);
 				
 		return $order_types;
 	}	
