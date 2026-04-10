@@ -278,19 +278,19 @@ class Iiko_order{
 			
 			if(!count($order_types)) throw new Exception("--cant find iiko order types");
 			
-			$order_type_id = "";
+			$curr_order_type_id = "";
 			foreach($order_types as $o_type){
 				// regular order
 				if(
 					mb_strtolower($o_type['orderServiceType']) === 'common'
 					&& $o_type['isDeleted'] !== true
 					){
-					$order_type_id = $o_type['id'];
+					$curr_order_type_id = $o_type['id'];
 					break;
 				}
 			}		
 
-			$chosen_order_type = $order_type_id;
+			$chosen_order_type = $curr_order_type_id;
 		}
 
 		return $chosen_order_type;
