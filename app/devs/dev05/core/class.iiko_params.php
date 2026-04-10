@@ -306,23 +306,9 @@ class Iiko_params{
 		]; 
 		$params  = ['organizationIds' => [$orgId]];
 		$res = iiko_get_info($url,$headers,$params);
-		$order_types = $res['orderTypes'] ?? [];
+		$order_types = $res['orderTypes'] ?? [];		
 
-		$curr_order_type_id = "";
-		if(count($order_types)){
-			foreach($order_types as $o_type){
-				// regular order
-				if(
-					mb_strtolower($o_type['orderServiceType']) === 'common'
-					&& $o_type['isDeleted'] !== true
-					){
-					$curr_order_type_id = $o_type['id'];
-					break;
-				}
-			}
-		}
-
-		$this->set_current_order_type_id = $order_type_id;
+		$this->set_current_order_type_id("");
 				
 		return $order_types;
 	}	
