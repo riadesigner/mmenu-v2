@@ -82,8 +82,8 @@ function load_and_parse_menu($id_org, $api_key, $current_menu_id, $currentExtmen
     $extmenu_data = $EXTMENU_LOADER->get_data();
 
     if(isset($extmenu_data['error'])){
-        glog('errorDescription '. $extmenu_data['errorDescription']);
-         __errorjsonp($extmenu_data['errorDescription']);
+        glog('error loading menu'. print_r($extmenu_data['error'],1));
+         __errorjsonp($extmenu_data['error']);
     }
 
     // ------------------------------
