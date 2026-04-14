@@ -153,7 +153,7 @@ export const IIKO_ITEM_MODIFIERS = {
 			if (a.items.length <= 1 && b.items.length > 1) return 1;
 			
 			// Приоритет 2: сортировка по maxQuantity по возрастанию
-			return a.restrictions.maxQuantity - b.restrictions.maxQuantity;
+			return a.restrictions.max - b.restrictions.max;
 		});
 
 		this.MODIFIERS = arr;		
@@ -239,8 +239,8 @@ export const IIKO_ITEM_MODIFIERS = {
 
 				let groupId = g['modifierGroupId']??"";
 				let groupName = g['name']??"–";	
-				let maxQuantity = parseInt(g['restrictions']['maxQuantity'],10);
-				let minQuantity = parseInt(g['restrictions']['minQuantity'],10);
+				let maxQuantity = parseInt(g['restrictions']['max'],10);
+				let minQuantity = parseInt(g['restrictions']['min'],10);
 				let radioMode = false;
 				if(g['restrictions']){					
 					radioMode = maxQuantity==1 && minQuantity==1 && g.items.length > 1;
