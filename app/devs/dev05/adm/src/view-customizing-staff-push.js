@@ -19,18 +19,18 @@ export var VIEW_CUSTOMIZING_STAFF_PUSH = {
 		this.$link_reg_push_manager = this.$view.find('.customizing-cart__all-keylinks a.link-manager'); 
 		this.$link_reg_push_supervisor = this.$view.find('.customizing-cart__all-keylinks a.link-supervisor'); 
 
-		// this.$btn_tg_invite_link_waiter =  this.$view.find('button.invite-link-waiter');
-		// this.$btn_tg_invite_link_manager =  this.$view.find('button.invite-link-manager');
-		// this.$btn_tg_invite_link_supervisor =  this.$view.find('button.invite-link-supervisor');
+		this.$btn_invite_link_waiter =  this.$view.find('button.invite-link-waiter');
+		this.$btn_invite_link_manager =  this.$view.find('button.invite-link-manager');
+		this.$btn_invite_link_supervisor =  this.$view.find('button.invite-link-supervisor');
 
-		// this.$btn_tg_invite_qrcode_waiter =  this.$view.find('button.invite-qrcode-waiter');
-		// this.$btn_tg_invite_qrcode_manager =  this.$view.find('button.invite-qrcode-manager');
-		// this.$btn_tg_invite_qrcode_supervisor =  this.$view.find('button.invite-qrcode-supervisor');		
+		this.$btn_invite_qrcode_waiter =  this.$view.find('button.invite-qrcode-waiter');
+		this.$btn_invite_qrcode_manager =  this.$view.find('button.invite-qrcode-manager');
+		this.$btn_invite_qrcode_supervisor =  this.$view.find('button.invite-qrcode-supervisor');		
 
 		this.PUSH_KEYS = null; // null | {waiter:string, manager:string, supervisor:string}					
 		this.PUSH_KEY_LINKS = null; // null | {waiter:string, manager:string, supervisor:string} 	
 
-		// this.tgbot_link = options.vars['tgbot_link'];
+		this.push_reg_link = options.vars['push_reg_link'];
 
 		this.behavior();
 
@@ -68,7 +68,7 @@ export var VIEW_CUSTOMIZING_STAFF_PUSH = {
 				this.end_updating();
 			})
 			.catch((vars)=>{
-				console.log(vars)
+				// console.log(vars)
 				this.end_updating_with_error("Не удалось проверить пользователей телеграм чата для кафе");
 			})
 		})
@@ -164,20 +164,24 @@ export var VIEW_CUSTOMIZING_STAFF_PUSH = {
 		},300);		
 	},
 
-	update_push_keys_buttons:function(tg_keys){
+	update_push_keys_buttons:function(push_keys){
 
-		const all_keys = tg_keys.reduce((acc,key)=>{
+		const all_keys = push_keys.reduce((acc,key)=>{
 			const role = key['role'] || "";
 			if(role) { acc[role] = key };
 			return acc;			
 		},{});		
 
+		// console.log('all_keys', all_keys);
+
 		this.PUSH_KEYS = all_keys;					
 		this.PUSH_KEY_LINKS = {
-			waiter : this.tgbot_link + all_keys['waiter']['tg_key'],
-			manager : this.tgbot_link + all_keys['manager']['tg_key'],
-			supervisor : this.tgbot_link + all_keys['supervisor']['tg_key']
+			waiter : this.push_reg_link + 'waiter/' +all_keys['waiter']['push_key'],
+			manager : this.push_reg_link + 'manager/' + all_keys['manager']['push_key'],
+			supervisor : this.push_reg_link + 'supervisor/' + all_keys['supervisor']['push_key']
 		};
+		// console.log('this.PUSH_KEY_LINKS', this.PUSH_KEY_LINKS);
+
 		this.$link_reg_push_waiter.attr({href : this.PUSH_KEY_LINKS['waiter']});
 		this.$link_reg_push_manager.attr({href : this.PUSH_KEY_LINKS['manager']});
 		this.$link_reg_push_supervisor.attr({href : this.PUSH_KEY_LINKS['supervisor']});
@@ -207,53 +211,53 @@ export var VIEW_CUSTOMIZING_STAFF_PUSH = {
 			return false;
 		});		
 		
-		// this.$btn_tg_invite_link_waiter.on('touchend',(e)=>{
-		// 	if(!this.VIEW_SCROLLED){
-		// 		const role = 'waiter';				
-		// 		this.tg_link_to_clipboard(this.PUSH_KEY_LINKS[role], role);
-		// 	} 
-		// 	e.originalEvent.cancelable && e.preventDefault();
-		// });
+		this.$btn_invite_link_waiter.on('touchend',(e)=>{
+			if(!this.VIEW_SCROLLED){
+				const role = 'waiter';				
+				this.set_link_to_clipboard(this.PUSH_KEY_LINKS[role], role);
+			} 
+			e.originalEvent.cancelable && e.preventDefault();
+		});
 
-		// this.$btn_tg_invite_link_manager.on('touchend',(e)=>{
-		// 	if(!this.VIEW_SCROLLED){
-		// 		const role = 'manager';				
-		// 		this.tg_link_to_clipboard(this.PUSH_KEY_LINKS[role], role);
-		// 	} 
-		// 	e.originalEvent.cancelable && e.preventDefault();
-		// });
+		this.$btn_invite_link_manager.on('touchend',(e)=>{
+			if(!this.VIEW_SCROLLED){
+				const role = 'manager';				
+				this.set_link_to_clipboard(this.PUSH_KEY_LINKS[role], role);
+			} 
+			e.originalEvent.cancelable && e.preventDefault();
+		});
 		
-		// this.$btn_tg_invite_link_supervisor.on('touchend',(e)=>{
-		// 	if(!this.VIEW_SCROLLED){
-		// 		const role = 'supervisor';				
-		// 		this.tg_link_to_clipboard(this.PUSH_KEY_LINKS[role], role);
-		// 	} 
-		// 	e.originalEvent.cancelable && e.preventDefault();
-		// });
+		this.$btn_invite_link_supervisor.on('touchend',(e)=>{
+			if(!this.VIEW_SCROLLED){
+				const role = 'supervisor';				
+				this.set_link_to_clipboard(this.PUSH_KEY_LINKS[role], role);
+			} 
+			e.originalEvent.cancelable && e.preventDefault();
+		});
 
-		// this.$btn_tg_invite_qrcode_waiter.on('touchend',(e)=>{
-		// 	if(!this.VIEW_SCROLLED){
-		// 		const role = 'waiter';				
-		// 		this.tg_link_to_qrcode(this.PUSH_KEY_LINKS[role], role);
-		// 	} 
-		// 	e.originalEvent.cancelable && e.preventDefault();
-		// });
+		this.$btn_invite_qrcode_waiter.on('touchend',(e)=>{
+			if(!this.VIEW_SCROLLED){
+				const role = 'waiter';				
+				this.calc_link_to_qrcode(this.PUSH_KEY_LINKS[role], role);
+			} 
+			e.originalEvent.cancelable && e.preventDefault();
+		});
 
-		// this.$btn_tg_invite_qrcode_manager.on('touchend',(e)=>{
-		// 	if(!this.VIEW_SCROLLED){
-		// 		const role = 'manager';				
-		// 		this.tg_link_to_qrcode(this.PUSH_KEY_LINKS[role], role);
-		// 	} 
-		// 	e.originalEvent.cancelable && e.preventDefault();
-		// });
+		this.$btn_invite_qrcode_manager.on('touchend',(e)=>{
+			if(!this.VIEW_SCROLLED){
+				const role = 'manager';				
+				this.calc_link_to_qrcode(this.PUSH_KEY_LINKS[role], role);
+			} 
+			e.originalEvent.cancelable && e.preventDefault();
+		});
 		
-		// this.$btn_tg_invite_qrcode_supervisor.on('touchend',(e)=>{
-		// 	if(!this.VIEW_SCROLLED){
-		// 		const role = 'supervisor';				
-		// 		this.tg_link_to_qrcode(this.PUSH_KEY_LINKS[role], role);
-		// 	} 
-		// 	e.originalEvent.cancelable && e.preventDefault();
-		// });		
+		this.$btn_invite_qrcode_supervisor.on('touchend',(e)=>{
+			if(!this.VIEW_SCROLLED){
+				const role = 'supervisor';				
+				this.calc_link_to_qrcode(this.PUSH_KEY_LINKS[role], role);
+			} 
+			e.originalEvent.cancelable && e.preventDefault();
+		});		
 
 		this.sa_bnt_upd_push_keys.on('touchend',(e)=>{
 			!_this.VIEW_SCROLLED && this.su_update_all_push_keys();
@@ -262,11 +266,11 @@ export var VIEW_CUSTOMIZING_STAFF_PUSH = {
 
 	},
 	
-	tg_link_to_qrcode:function(tg_link, role){
+	calc_link_to_qrcode:function(push_link, role){
 		
 		this._now_loading();
 
-		this.get_link_to_qrcode_asynq(tg_link)
+		this.get_link_to_qrcode_asynq(push_link)
 		.then((data)=>{					
 			
 			const imgUrl = `data:image/png;base64, ${data.image}`;
@@ -298,8 +302,8 @@ export var VIEW_CUSTOMIZING_STAFF_PUSH = {
 
 	},
 
-	tg_link_to_clipboard:function(tg_link, role) {				
-		navigator.clipboard.writeText(tg_link).then(() => {			
+	set_link_to_clipboard:function(push_link, role) {				
+		navigator.clipboard.writeText(push_link).then(() => {			
 			const arr_message = {
 				waiter:"Ссылка <strong>для официанта</strong> скопирована",
 				manager:"Ссылка <strong>для менеджера</strong> скопирована",

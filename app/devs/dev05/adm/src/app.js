@@ -171,7 +171,7 @@ export default function(){
 		name:"view-customizing-staff-push",
 		template:"#templates .view-customizing-staff-push",
 		anim:'animLeft',
-		vars:{}
+		vars:{push_reg_link:CFG.push_reg_link}
 	}));		
 
 	VIEWS.addView(

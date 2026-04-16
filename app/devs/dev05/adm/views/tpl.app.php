@@ -44,6 +44,7 @@ $APP_CFG = [
 	'limits'=>$CFG->limits,
 	'site_links'=>$CFG->site_links,
 	'tgbot_link'=>"https://t.me/".$CFG->tg_cart_bot."?start=",
+	'push_reg_link'=>'http://chefsmenu.localhost/webuser-register/',
 	];
 ?>
 
