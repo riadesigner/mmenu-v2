@@ -10,20 +10,13 @@ if (!preg_match('/^[a-z0-9_-]+$/i', (string) $callback)) {  $callback = 'alert';
 
 $path_to_images = $CFG->base_app_url."/pbl/i/";
 
-$filename = "head-style.css";
-$file=fopen($filename,"r");
-$headStyle = fread($file,filesize($filename));
-fclose($file);
-
-$filename = "main-style.css";
-$file=fopen($filename,"r");
-$mainStyle = fread($file,filesize($filename));
-fclose($file);
-
+$headStyle = file_get_contents('head-style.css');
+$mainStyle = file_get_contents('main-style.css');
+$mainStyleMobile = file_get_contents('main-style-mobile.css');
 
 $headStyle = str_replace("%[path-to-images]%",$path_to_images,$headStyle);
 
-$data = ['head-style' => $headStyle, 'main-style' => $mainStyle, 'skins' => $CFG->public_skins];
+$data = ['head-style' => $headStyle, 'main-style' => $mainStyle . "\n" . $mainStyleMobile, 'skins' => $CFG->public_skins];
 
 echo $callback.'('.json_encode($data, JSON_UNESCAPED_UNICODE).')';
 

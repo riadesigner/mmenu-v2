@@ -25,7 +25,7 @@ a{color:#ffffff;}
 }
 
 .menupage-loader{position: absolute;bottom:20%;left:0;width: 100%;text-align: center;opacity: 0;transition:.5s;transform:translateY(-30px);}
-.menupage-loader-wrapper{margin:0 auto;width: 20%;max-width: 88px;}
+.menupage-loader-wrapper{margin:0 auto;width: 18vw;}
 .menupage-loader-air-wrapper{transition:0s;opacity: 0;transform:translateY(-30px);}
 .menupage-loader-air{
 	width: 60%;margin:0 auto 3% auto;
