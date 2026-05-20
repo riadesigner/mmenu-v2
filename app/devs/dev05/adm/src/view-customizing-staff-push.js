@@ -69,7 +69,7 @@ export var VIEW_CUSTOMIZING_STAFF_PUSH = {
 			})
 			.catch((vars)=>{
 				// console.log(vars)
-				this.end_updating_with_error("Не удалось проверить пользователей телеграм чата для кафе");
+				this.end_updating_with_error("Не удалось получить пользователей push для кафе");
 			})
 		})
 		.catch((vars)=>{
@@ -402,7 +402,7 @@ export var VIEW_CUSTOMIZING_STAFF_PUSH = {
 		return new Promise((res,rej)=>{
 			
 			var PATH = 'adm/lib/';
-			var url = PATH + 'lib.get_tg_users.php';			
+			var url = PATH + 'lib.get_push_users.php';			
 			
 			this._now_loading();
 	
@@ -411,10 +411,13 @@ export var VIEW_CUSTOMIZING_STAFF_PUSH = {
 			};
 	
 			this.AJAX = $.ajax({
-				url: url+"?callback=?",
+				url: url,
 				data:data,
 				method:"POST",
-				dataType: "jsonp",
+				dataType: "json",
+				xhrFields: {
+					withCredentials: true  // Для отправки cookies при CORS
+				},				
 				success: function (response) {
 					
 					if(response && !response.error){

@@ -6,10 +6,6 @@
 */	
 define("BASEPATH",__file__);
 
-// Разрешаем CORS
-// header("Access-Control-Allow-Origin: https://your-frontend-domain.com"); // Укажите конкретный домен
-// header("Access-Control-Allow-Credentials: true"); // Разрешаем отправку cookies
-
 header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
 header("Access-Control-Allow-Headers: Content-Type");
@@ -26,15 +22,24 @@ require_once WORK_DIR.APP_DIR.'core/class.sql.php';
 require_once WORK_DIR.APP_DIR.'core/class.smart_object.php';
 require_once WORK_DIR.APP_DIR.'core/class.smart_collect.php';	
 
-if(!isset($_REQUEST['token']) || empty($_REQUEST['token']) ) __errorjson("неправильная ссылка");
-$token = post_clean($_REQUEST['token'],50);
+$cafe_uniq_name = $_POST['cafe_unic_name']??'';
+if(empty($cafe_uniq_name)) __errorjson('its need to cafe_uniq_name');	
 
-// проверем токен
-$tokens = new Smart_collect("push_keys","where push_key='$token'");
-if(!$tokens || !$tokens->full()) __errorjsonp("неправильная ссылка (токен)");			
-$valid_token = ($tokens->get(0));
+$public_id = $_POST['webuser_public_id']??'';
+if(empty($public_id)) __errorjson('its need to webuser_public_id');	
+	
+$all_push_users = new Smart_collect("push_users","where cafe_uniq_name = '{$cafe_uniq_name}' AND public_id = '{$public_id}'", "ORDER BY role");	
+if($all_push_users && $all_push_users->full()){
+    $user = $all_push_users->get(0);
+}else{
+    $user= null;
+}
+    
+__answerjson(["user"=>$user?$user->export():null]);
 
-__answerjson($valid_token->export());	
+
+
+
 
 
 

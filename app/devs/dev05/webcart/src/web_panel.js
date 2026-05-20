@@ -24,13 +24,16 @@ export var WebPanel  = {
 		// this.check_notif_enabled();		
 		// this.behavior();
 		console.log('web panel inited');		
-		// this.load_webuser_info_async()
-		// .then(data => {
-		// 	console.log('data',data);
-		// })
-		// .catch(error => {
-		// 	console.log('error',error);
-		// });
+		this.load_webuser_info_async()
+		.then(data => {
+			const {user} = data;
+			console.log('user',user);
+			this.update_nickname(user.nickname);
+			let role = user.role=='waiter'?'Официант':user.role=='manager'?'Менеджер':'Супервайзер';
+			this.$webuserRole.html(`Роль: ${role}`);					
+		}).catch(error => {
+			console.log('error',error);
+		});
 		return this;
 	},
 	reset:function(){		
@@ -41,32 +44,39 @@ export var WebPanel  = {
 		return new Promise((res, rej) => {
 			this.now_loading();
 			
-			var url = this.siteConfig.home_page + '/webcart/lib/web.reg_to_db.php';
+			var url = 'webcart/lib/web.get_user_info.php';			
 			
-			fetch(url, {
-				method: "GET",
-				credentials: "include", // Аналог withCredentials: true
-				headers: {
-					"Content-Type": "application/json"
+			var data = {
+				webuser_public_id:this.siteConfig.webuser_public_id,
+				cafe_unic_name:this.siteConfig.cafe_uniq
+			};
+
+			this.AJAX = $.ajax({
+				url: url,
+				dataType: "json",
+				data:data,
+				method:"POST",
+                xhrFields: {
+                    withCredentials: true  // Для отправки cookies при CORS
+                }, 				
+				success: (answer)=> {					
+					console.log('answer = ',answer);
+
+					this.end_loading();					
+					if(answer && !answer.error){						
+						res(answer);
+					}else{						
+						rej(answer.error);
+					}
+				},
+				error:(response)=> {					
+					console.log('err-2', response)
+					this.end_loading();	
+					rej(JSON.stringify(response));	
 				}
-			})
-			.then(response => {
-				if (!response.ok) {
-					throw new Error(`HTTP error! status: ${response.status}`);
-				}
-				return response.json();
-			})
-			.then(data => {
-				this.WEBUSER = data;
-				console.log('WEBUSER', this.WEBUSER);
-				this.end_loading();
-				res(data);
-			})
-			.catch(error => {
-				console.error('Fetch error:', error);
-				this.end_loading();
-				rej(error);
 			});
+			
+
 		});
 	},
 	check_notif_enabled:function(){
