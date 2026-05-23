@@ -9,6 +9,9 @@ export var VIEW_CUSTOMIZING_STAFF_PUSH = {
 		this.$btnSave = this.$view.find('.save');
 		this.$btnBack = this.$footer.find('.back, .close, .cancel');
 		
+		this.$section_cafe_registration = this.$view.find('.section-cafe-registration');		
+		this.$section_users_registration = this.$view.find('.section-users-registration');		
+
 		this.sa_bnt_upd_push_keys =  this.$view.find('button[name="update_all_push_keys"]');
 		this.$section_pushusers = this.$view.find('.customizing-cart__all-tgusers');		
 
@@ -48,13 +51,17 @@ export var VIEW_CUSTOMIZING_STAFF_PUSH = {
 		this._update();
 		this._page_hide();
 		
-		var cafe = GLB.THE_CAFE.get();
-		
+		var cafe = GLB.THE_CAFE.get();		
 		this.ID_CAFE = cafe.id;
 	
+		this.$section_users_registration.hide();
+
 		this.reset();		
-		this.rebuild();		
+		this.get_cafe_push_keys().then((result)=>{ 
+			console.log('result', result);
+		});		
 		
+		return;
 		this.load_push_keys_async()
 		.then((keys)=>{							
 
@@ -62,15 +69,18 @@ export var VIEW_CUSTOMIZING_STAFF_PUSH = {
 			this.show_push_links_section(true);
 			this.update_push_keys_buttons(keys);
 
-			this.load_push_users_async()
-			.then((push_users)=>{								
-				this.update_push_users_list(push_users);
+			//TODO 
+			// ДОБАВИТЬ ЗАГРУЗКУ ПОЛЬЗОВАТЕЛЕЙ PUSH
+			// ИЗ ВНЕШНЕГО СЕРВИСА CHATS_APP
+			// this.load_push_users_async()
+			// .then((push_users)=>{								
+			// 	this.update_push_users_list(push_users);
 				this.end_updating();
-			})
-			.catch((vars)=>{
-				// console.log(vars)
-				this.end_updating_with_error("Не удалось получить пользователей push для кафе");
-			})
+			// })
+			// .catch((vars)=>{
+			// 	// console.log(vars)
+			// 	this.end_updating_with_error("Не удалось получить пользователей push для кафе");
+			// })
 		})
 		.catch((vars)=>{
 			console.log('error!');
@@ -187,8 +197,32 @@ export var VIEW_CUSTOMIZING_STAFF_PUSH = {
 		this.$link_reg_push_supervisor.attr({href : this.PUSH_KEY_LINKS['supervisor']});
 
 	},
-	rebuild:function(){
-		// pass
+	get_cafe_push_keys:function(){
+		return new Promise((res, rej)=>{ 
+
+			var PATH = 'adm/lib/';
+			var url = PATH + 'lib.get_cafe_push_keys.php';			
+	
+			var data = {
+				cafe_id: this.cafe_id
+			};
+
+			$.ajax({
+				url: url,
+				type: 'POST',
+				dataType: "json",
+				xhrFields: {
+					withCredentials: true  // Для отправки cookies при CORS
+				},				
+				data: data,
+				success: function(response){
+					res(response);
+				},
+				error: function(err){
+					rej(err);
+				}
+			});
+		});		
 	},
 	behavior:function()	{
 		var _this = this;

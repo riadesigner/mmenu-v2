@@ -1207,65 +1207,71 @@ App&&App();
 					<p>Все заказы приходят в web-приложение через PUSH уведомления. 
 						После подтверждения заказа, официант или менеджер могут переправить его на кассу.</p>											
 
-					<h2>Выберите роль для себя:</h2>
-
-					<p>Выберите роль для себя и получите ссылку-приглашение в приложение вашего кафе, чтобы работать с заказами.</p>
-
-					<div class="customizing-cart__push-links-section-attention std-form__highlight-field">
-						<strong>Не найдено ни одного PUSH ключа!</strong><br>Нажмите ниже «Сбросить Push ключи».
+					<div class="section-cafe-registration">
+						<button id="btnCafeReg" class="std-special-single-button">Зарегистрировать кафе</button>
 					</div>
+					<div class="section-users-registration">
+							<h2>Выберите роль для себя:</h2>
 
-					<div class="customizing-cart__push-links-section">						
-						
-						<div class="customizing-cart__all-keylinks">
-							<a href="<?=$CFG->http.$CFG->wwwroot;?>" target="_blank" class="link-waiter"><button class="std-special-single-button">ОФИЦИАНТ</button></a>
-							<a href="<?=$CFG->http.$CFG->wwwroot;?>" target="_blank" class="link-manager"><button class="std-special-single-button">МЕНЕДЖЕР</button></a>
-							<a href="<?=$CFG->http.$CFG->wwwroot;?>" target="_blank" class="link-supervisor"><button class="std-special-single-button">АДМИНИСТРАТОР</button></a>
-						</div>
+							<p>Выберите роль для себя и получите ссылку-приглашение в приложение вашего кафе, чтобы работать с заказами.</p>
 
-					<h2 id="anchor_invitation">Пригласите сотрудника:</h2>
+							<div class="customizing-cart__push-links-section-attention std-form__highlight-field">
+								<strong>Не найдено ни одного PUSH ключа!</strong><br>Нажмите ниже «Сбросить Push ключи».
+							</div>
 
-						<p>Чтобы пригласить нового сотрудника, перешлите ему ссылку соответствующеее приглашение с нужной ролью. Или покажите ему соответствующий QR-код.</p>
+							<div class="customizing-cart__push-links-section">						
+								
+								<div class="customizing-cart__all-keylinks">
+									<a href="<?=$CFG->http.$CFG->wwwroot;?>" target="_blank" class="link-waiter"><button class="std-special-single-button">ОФИЦИАНТ</button></a>
+									<a href="<?=$CFG->http.$CFG->wwwroot;?>" target="_blank" class="link-manager"><button class="std-special-single-button">МЕНЕДЖЕР</button></a>
+									<a href="<?=$CFG->http.$CFG->wwwroot;?>" target="_blank" class="link-supervisor"><button class="std-special-single-button">АДМИНИСТРАТОР</button></a>
+								</div>
 
-						<h3>Ссылка-приглашение:</h3>
-						<div class="customizing-cart__all-invite-links">
-							<button class="std-special-single-button invite-link-waiter">ОФИЦИАНТ</button>
-							<button class="std-special-single-button invite-link-manager">МЕНЕДЖЕР</button>
-							<button class="std-special-single-button invite-link-supervisor">АДМИНИСТРАТОР</button>
-						</div>	
+							<h2 id="anchor_invitation">Пригласите сотрудника:</h2>
 
-						<h3>QR-код приглашение:</h3>
-						<div class="customizing-cart__all-invite-qrcodes">
-							<button class="std-single-button-with-icon invite-qrcode-waiter">ОФИЦИАНТ</button>
-							<button class="std-single-button-with-icon invite-qrcode-manager">МЕНЕДЖЕР</button>
-							<button class="std-single-button-with-icon invite-qrcode-supervisor">АДМИНИСТРАТОР</button>
-						</div>		
+								<p>Чтобы пригласить нового сотрудника, перешлите ему ссылку соответствующеее приглашение с нужной ролью. Или покажите ему соответствующий QR-код.</p>
 
-					</div>					
-					
-					<h2>Сотрудники кафе:</h2>
+								<h3>Ссылка-приглашение:</h3>
+								<div class="customizing-cart__all-invite-links">
+									<button class="std-special-single-button invite-link-waiter">ОФИЦИАНТ</button>
+									<button class="std-special-single-button invite-link-manager">МЕНЕДЖЕР</button>
+									<button class="std-special-single-button invite-link-supervisor">АДМИНИСТРАТОР</button>
+								</div>	
 
-					<div class="customizing-cart__all-tgusers">
-						<p>Сейчас в кафе зарегистрированы следующие сотрудники:</p>
-						<ul>
-							<li class="tgusers-role-waiter">Официанты: <span>нет</span></li>
-							<li class="tgusers-role-manager">Менеджеры: <span>нет</span></li>
-							<li class="tgusers-role-supervisor">Администраторы: <span>нет</span></li>
-						</ul>
+								<h3>QR-код приглашение:</h3>
+								<div class="customizing-cart__all-invite-qrcodes">
+									<button class="std-single-button-with-icon invite-qrcode-waiter">ОФИЦИАНТ</button>
+									<button class="std-single-button-with-icon invite-qrcode-manager">МЕНЕДЖЕР</button>
+									<button class="std-single-button-with-icon invite-qrcode-supervisor">АДМИНИСТРАТОР</button>
+								</div>		
+
+							</div>					
+							
+							<h2>Сотрудники кафе:</h2>
+
+							<div class="customizing-cart__all-tgusers">
+								<p>Сейчас в кафе зарегистрированы следующие сотрудники:</p>
+								<ul>
+									<li class="tgusers-role-waiter">Официанты: <span>нет</span></li>
+									<li class="tgusers-role-manager">Менеджеры: <span>нет</span></li>
+									<li class="tgusers-role-supervisor">Администраторы: <span>нет</span></li>
+								</ul>
+							</div>
+
+							<h2>Справка:</h2>
+
+							<p><strong><i>Официант</i></strong> – будет получать заказы на стол (в кафе).</p>
+							<p><strong><i>Менеджер</i></strong> – будет получать внешние заказы на доставку или самовывоз.</p>
+							<p><strong><i>Администратор</i></strong> – будет получать статистику по всем заказам за день.</p>
+
+							<h2>Удаление сотрудников:</h2>						
+							
+							<div class="super-admin-only">						
+								<p>Если нужно отозвать все разрешения и заново пересоздать ключи для доступа в web-приложение, выберите:</p>
+								<button name="update_all_push_keys">Сбросить Push ключи</button>
+							</div>							
 					</div>
-
-					<h2>Справка:</h2>
-
-					<p><strong><i>Официант</i></strong> – будет получать заказы на стол (в кафе).</p>
-					<p><strong><i>Менеджер</i></strong> – будет получать внешние заказы на доставку или самовывоз.</p>
-					<p><strong><i>Администратор</i></strong> – будет получать статистику по всем заказам за день.</p>
-
-					<h2>Удаление сотрудников:</h2>						
-					
-					<div class="super-admin-only">						
-						<p>Если нужно отозвать все разрешения и заново пересоздать ключи для доступа в web-приложение, выберите:</p>
-						<button name="update_all_push_keys">Сбросить Push ключи</button>
-					</div>								
+												
 					
 				</div>										
 			</div>
