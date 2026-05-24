@@ -199,6 +199,117 @@ function iiko_get_info($url,$headers,$params){
 
       	return $decoded;
 }
+/* --------------------------------------------------
+
+	          CHATS_APP FUNCTIONS 
+
+----------------------------------------------------- */
+function post_get_info($url,$headers,$params){
+     $header = [];
+      if (is_array($headers)) {
+          $i_header = $headers;          
+          foreach ($i_header as $param => $value) {
+              $header[] = "$param: $value";
+          }
+      }      
+      $curl = curl_init();
+      curl_setopt_array($curl, [
+		CURLOPT_URL => $url, 
+		CURLOPT_RETURNTRANSFER => true, 
+		CURLOPT_ENCODING => '', 
+		CURLOPT_MAXREDIRS => 15, 
+		CURLOPT_TIMEOUT => 30, 
+		CURLOPT_FOLLOWLOCATION => true, 
+		CURLOPT_HTTP_VERSION => 
+		CURL_HTTP_VERSION_1_1, 
+		CURLOPT_CUSTOMREQUEST => 'POST', 
+		CURLOPT_POSTFIELDS => json_encode($params, JSON_UNESCAPED_UNICODE), 
+		CURLOPT_HTTPHEADER => $header
+		]);
+
+      	$json = curl_exec($curl);      
+		$httpCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
+		$error = curl_error($curl);	    
+      	curl_close($curl);
+
+		if ($error) {
+			// Логируем ошибку cURL
+			glog("cURL Error: " . $error);
+			return ['error' => 'curl_error', 'message' => $error];
+		}
+		
+		if ($httpCode >= 400) {
+			glog("HTTP Error: " . $httpCode . " Response: " . $json);
+			return ['error' => 'http_error', 'code' => $httpCode, 'response' => $json];
+		}
+                
+		$decoded = json_decode($json, true);
+
+		if (json_last_error() !== JSON_ERROR_NONE) {
+			error_log("JSON Error: " . json_last_error_msg() . " Response: " . $json);
+			return ['error' => 'json_error', 'message' => json_last_error_msg()];
+		}		
+
+      	return $decoded;
+
+}
+
+function get_get_info($url, $headers, $params = []) {
+    // Формируем query string из параметров
+    if (!empty($params) && is_array($params)) {
+        $query = http_build_query($params);
+        $separator = strpos($url, '?') !== false ? '&' : '?';
+        $url = rtrim($url, '?&') . $separator . $query;
+    }
+
+    // Собираем заголовки
+    $header = [];
+    if (is_array($headers)) {
+        foreach ($headers as $param => $value) {
+            $header[] = "$param: $value";
+        }
+    }
+
+    $curl = curl_init();
+    curl_setopt_array($curl, [
+        CURLOPT_URL => $url,
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_ENCODING => '',
+        CURLOPT_MAXREDIRS => 15,
+        CURLOPT_TIMEOUT => 30,
+        CURLOPT_FOLLOWLOCATION => true,
+        CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+        // ❌ Убрали CURLOPT_CUSTOMREQUEST и CURLOPT_POSTFIELDS
+        CURLOPT_HTTPHEADER => $header,
+        // ✅ Опционально: явно указать метод (не обязательно, GET по умолчанию)
+        // CURLOPT_CUSTOMREQUEST => 'GET',
+    ]);
+
+    $json = curl_exec($curl);
+    $httpCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
+    $error = curl_error($curl);
+    curl_close($curl);
+
+    if ($error) {
+        glog("cURL Error: " . $error);
+        return ['error' => 'curl_error', 'message' => $error];
+    }
+
+    if ($httpCode >= 400) {
+        glog("HTTP Error: " . $httpCode . " Response: " . $json);
+        return ['error' => 'http_error', 'code' => $httpCode, 'response' => $json];
+    }
+
+    $decoded = json_decode($json, true);
+    if (json_last_error() !== JSON_ERROR_NONE) {
+        error_log("JSON Error: " . json_last_error_msg() . " Response: " . $json);
+        return ['error' => 'json_error', 'message' => json_last_error_msg()];
+    }
+
+    return $decoded;
+}
+
+
 
 function iiko_tables_res_parse(array $restaurantSections): array{
 	$arr = [];	
@@ -455,22 +566,6 @@ function loadJsonFile(string $json_file_path=""): array{
 
 }
 
-
-
-/* for remember and TODO */
-
-// try {
-//     throw new Exception("Exception message");
-//     echo "That code will never been executed";
-// } catch (Exception $e) {
-//     echo $e->getMessage();
-// }
-
-// if (!is_dir($path)) {  mkdir($path, 0777, true); }
-
-//$today  = date("Y-m-d");
-//select * from table_name where timestamp >= CURDATE();
-//select * from table_name where timestamp >= '2018-07-07';
 
 		
 ?>

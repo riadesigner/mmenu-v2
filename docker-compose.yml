@@ -12,6 +12,8 @@ services:
       - db
     volumes:
       - ./:/var/www
+    networks:
+      - shared-app-network
 
   apache:
     build: ./docker/apache
@@ -27,6 +29,8 @@ services:
       - VIRTUAL_HOST=${LOCAL_WWWROOT}
     volumes:
       - ./app:/var/www/app  
+    networks:
+      - shared-app-network
 
   db:
     image: mariadb:lts-ubi9
@@ -41,6 +45,8 @@ services:
     volumes:
       - ./db:/var/lib/mysql 
       - ./docker/mysql/mariadb.cnf:/etc/mysql/conf.d/custom.cnf:ro
+    networks:
+      - shared-app-network
 
   adminer:
     image: adminer:5.3.0
@@ -50,3 +56,9 @@ services:
       - ${LOCAL_ADMINER_EXPOSE}:8080
     environment:
       - TZ=UTC        
+    networks:
+      - shared-app-network
+
+networks:
+  shared-app-network:
+    external: true

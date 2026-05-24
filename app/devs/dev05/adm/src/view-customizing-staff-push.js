@@ -55,6 +55,16 @@ export var VIEW_CUSTOMIZING_STAFF_PUSH = {
 		this.reset();		
 		this.rebuild();		
 		
+		this.load_push_cafe_keys_async()
+		.then((keys)=>{ 
+			console.log('keys', keys);
+			this._end_loading();
+		})
+		.catch((vars)=>{
+			console.log('error', vars);
+		})
+
+		return;
 		this.load_push_keys_async()
 		.then((keys)=>{							
 
@@ -361,6 +371,41 @@ export var VIEW_CUSTOMIZING_STAFF_PUSH = {
 		this._need2save(false);
 	},
 
+	load_push_cafe_keys_async:function(){ 
+		return new Promise((res,rej)=>{ 
+			var PATH = 'adm/lib/';
+			var url = PATH + 'lib.get_push_cafe_keys.php';	
+			
+			this._now_loading();
+	
+			var data = {
+				cafe_uniq_name:GLB.THE_CAFE.get().uniq_name
+			};		
+	
+			this.AJAX = $.ajax({
+				url: url,
+				data:data,
+				method:"POST",
+				dataType: "json",
+				xhrFields: {
+					withCredentials: true  // Для отправки cookies при CORS
+				},			
+				success: function (response) {
+					
+					if(response && !response.error){
+						res(response)						
+					}else{
+						rej(response)						
+					}
+				},
+				error:function(response) {
+					console.log('==err response==',response)
+					rej(response)
+				}
+			});
+
+		});
+	},
 	load_push_keys_async:function(){
 		return new Promise((res,rej)=>{
 			
