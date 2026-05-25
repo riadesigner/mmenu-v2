@@ -22,9 +22,16 @@
 	$user = User::from_cookie();
 	if(!$user || !$user->valid())__errorjsonp("Unknown user");
 
+	if (empty($_POST['cafe_uniq_name'])) {
+    	__errorjsonp("Unknown cafe_uniq_name");
+	}
+	
+	$cafe_uniq_name = $_POST['cafe_uniq_name'];
 	
 	$internalApiKey = $_ENV['CHATS_APP_INTERNAL_API_KEY']; 
-	$url = 'http://chats-app-backend:3001/api-internal/cafe/uriw76';
+	$url = 'http://chats-app-backend:3001/api-internal/cafe/' . $cafe_uniq_name;
+
+	
 
 	$headers = ['x-internal-key' => $internalApiKey];
 	$params = []; // Для вашего случая параметры в URL не нужны
@@ -36,13 +43,39 @@
 
 	if (!$parsed['ok']) {
 		glog("API error: {$parsed['errorCode']} - {$parsed['message']}");
-		__errorjson($parsed['errorCode'] ?? 'external_error', $parsed['httpCode'] ?? 500);
-		return;
+
+		if(!empty($parsed['errorCode']) && $parsed['errorCode'] === 'CAFE_NOT_FOUND') {
+			// регистрируем новое кафе			
+			$url = 'http://chats-app-backend:3001/api-internal/add-cafe/' . $cafe_uniq_name;
+			$headers = ['x-internal-key' => $internalApiKey];
+			$cafeKeys = register_cafe_for_push($url, $headers, []);
+			glog("get keys for new cafe: " . print_r($cafeKeys, true));
+			__answerjson($cafeKeys);			
+			return;
+		}else{
+			__errorjson($parsed['errorCode'] ?? 'external_error', $parsed['httpCode'] ?? 500);
+			return;
+		}
 	}
 
 	// Успех — работаем с данными
 	$cafeKeys = $parsed['data'];
 	glog("get cafe keys: " . print_r($cafeKeys, true));
-	__answerjson($cafeKeys);
+	__answerjson($cafeKeys);	
+
+	function register_cafe_for_push($url, $headers, $data) {
+
+		$curlResult = post_get_info($url, $headers, $data);
+		$parsed = parse_curl_response($curlResult);
+
+		glog("register cafe response: ".print_r($curlResult, true)); // Логируем полный результат для отладки
+
+		if (!$parsed['ok']) {
+			glog("API error during registration: {$parsed['errorCode']} - {$parsed['message']}");
+			return false;
+		}
+
+		return $parsed['data'];
+	}
 
 ?>

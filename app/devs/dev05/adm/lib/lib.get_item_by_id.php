@@ -29,7 +29,7 @@
 	$user = User::from_cookie();
 	if(!$user || !$user->valid())__errorjsonp("Unknown user");
 
-	if(!isset($_POST['id_item']) && empty($_POST['id_item']) ) __errorjsonp("Unknown item id");
+	if(!isset($_POST['id_item']) || empty($_POST['id_item']) ) __errorjsonp("Unknown item id");
 	$id_item = (int) $_POST['id_item'];
 	$item = new Smart_object("items",$id_item);
 	if(!$item->valid())__errorjsonp("Unknown item");

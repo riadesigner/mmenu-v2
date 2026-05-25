@@ -44,9 +44,10 @@ $APP_CFG = [
 	'limits'=>$CFG->limits,
 	'site_links'=>$CFG->site_links,
 	'tgbot_link'=>"https://t.me/".$CFG->tg_cart_bot."?start=",
-	'push_reg_link'=>'http://chefsmenu.localhost/webuser-register/',
+	'push_reg_link'=>'http://localhost:3000',
 	];
 ?>
+
 
 var CFG = JSON.parse('<?=json_encode($APP_CFG, JSON_UNESCAPED_UNICODE);?>');
 
@@ -1201,6 +1202,14 @@ App&&App();
 		<div class="app-view-page">
 			<div class="app-view-page-container overflow-y">
 				<div class="std-form">
+
+					<br />
+
+					<div class="customizing-cart__push-links-section-attention">
+						<p><!-- text --></p>
+					</div>
+					
+					<hr />	
 					 
 					<p>Здесь вы можете пригласить сотрудников в кафе и назначить им роли.</p>
 
@@ -1211,9 +1220,7 @@ App&&App();
 
 					<p>Выберите роль для себя и получите ссылку-приглашение в приложение вашего кафе, чтобы работать с заказами.</p>
 
-					<div class="customizing-cart__push-links-section-attention std-form__highlight-field">
-						<strong>Не найдено ни одного PUSH ключа!</strong><br>Нажмите ниже «Сбросить Push ключи».
-					</div>
+
 
 					<div class="customizing-cart__push-links-section">						
 						

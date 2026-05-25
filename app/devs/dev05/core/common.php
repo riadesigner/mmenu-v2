@@ -201,7 +201,7 @@ function iiko_get_info($url,$headers,$params){
 }
 /* --------------------------------------------------
 
-	          CHATS_APP FUNCTIONS 
+	          CULR FUNCTIONS 
 
 ----------------------------------------------------- */
 function post_get_info($url,$headers,$params){

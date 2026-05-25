@@ -12,7 +12,7 @@ export var VIEW_CUSTOMIZING_STAFF_PUSH = {
 		this.sa_bnt_upd_push_keys =  this.$view.find('button[name="update_all_push_keys"]');
 		this.$section_pushusers = this.$view.find('.customizing-cart__all-tgusers');		
 
-		this.$link_push_section_attention = this.$view.find('.customizing-cart__push-links-section-attention').hide();
+		this.$link_push_section_attention = this.$view.find('.customizing-cart__push-links-section-attention p');
 		this.$link_push_section = this.$view.find('.customizing-cart__push-links-section');		
 
 		this.$link_reg_push_waiter = this.$view.find('.customizing-cart__all-keylinks a.link-waiter'); 
@@ -52,56 +52,50 @@ export var VIEW_CUSTOMIZING_STAFF_PUSH = {
 		
 		this.ID_CAFE = cafe.id;
 	
-		this.reset();		
-		this.rebuild();		
+		this.reset();	
+		this.$link_push_section_attention.html('').hide();
+		this.show_push_links_section(false);
+		// this.rebuild();		
 		
 		this.load_push_cafe_keys_async()
-		.then((keys)=>{ 
-			console.log('keys', keys);
-			this._end_loading();
-		})
-		.catch((vars)=>{
-			console.log('error', vars);
-		})
+		.then((result)=>{ 
+			console.log('result', result);
+			const keys = [
+				{role: 'waiter', push_key: result.waiterInviteToken || 'unknown', cafe_uniq_name: cafe.uniq_name},
+				{role: 'manager', push_key: result.managerInviteToken || 'unknown', cafe_uniq_name: cafe.uniq_name},
+				{role: 'supervisor', push_key: result.supervisorInviteToken || 'unknown', cafe_uniq_name: cafe.uniq_name}
+			];
+			this.$link_push_section_attention.html('<strong>Кафе готово для работы c Push чатом</strong>').show();
 
-		return;
-		this.load_push_keys_async()
-		.then((keys)=>{							
-
-			console.log('keys', keys);
-			this.show_push_links_section(true);
 			this.update_push_keys_buttons(keys);
+			this.show_push_links_section(true);
 
 			this.load_push_users_async()
-			.then((push_users)=>{								
+			.then((push_users)=>{				
 				this.update_push_users_list(push_users);
 				this.end_updating();
 			})
 			.catch((vars)=>{
-				// console.log(vars)
+				console.log(vars)
 				this.end_updating_with_error("Не удалось получить пользователей push для кафе");
 			})
+									
 		})
-		.catch((vars)=>{
-			console.log('error!');
-			console.log('vars',vars)
-			this.end_updating_with_error("Не удалось найти PUSH ключи.", ()=>{
-				this.show_push_links_section(false);
-				console.log('needs new keys');				
-				this.end_updating();
-			});
-		})
+		.catch((res)=>{
+			this.$link_push_section_attention.html(`<strong style="color:red;">${res['error']}</strong>`).show();
+			console.log('error', res);
+			this.end_updating_with_error("Не удалось найти PUSH ключи для кафе");
+		});
+	
 	},
 	show_push_links_section:function(mode){
 		if(mode){
 			this.$link_push_section.show();
-			this.$link_push_section_attention.hide();			
 		}else{
-			this.$link_push_section.hide();
-			this.$link_push_section_attention.show();						
+			this.$link_push_section.hide();			
 		}
 	},
-	update_push_users_list:function(tg_users){
+	update_push_users_list:function(push_users){
 
 		const $waiters = this.$section_pushusers.find('.tgusers-role-waiter span');
 		const $managers = this.$section_pushusers.find('.tgusers-role-manager span');
@@ -134,20 +128,20 @@ export var VIEW_CUSTOMIZING_STAFF_PUSH = {
 
 		foo.reset_names();
 
-		if(tg_users && tg_users.length){			
+		if(push_users && push_users.length){			
 
 			const users = {waiters:[],managers:[],supervisors:[]};
 
-			for(let i in tg_users){
-				switch(tg_users[i].role){
+			for(let i in push_users){
+				switch(push_users[i].role){
 					case 'waiter':
-					users.waiters.push(tg_users[i]);
+					users.waiters.push(push_users[i]);
 					break;
 					case 'manager':
-					users.managers.push(tg_users[i]);
+					users.managers.push(push_users[i]);
 					break;
 					case 'supervisor':
-					users.supervisors.push(tg_users[i]);										
+					users.supervisors.push(push_users[i]);										
 					break;
 				}				
 			};
@@ -182,15 +176,18 @@ export var VIEW_CUSTOMIZING_STAFF_PUSH = {
 			return acc;			
 		},{});		
 
+		// console.log('push_keys', push_keys);
 		// console.log('all_keys', all_keys);
 
 		this.PUSH_KEYS = all_keys;					
+		
+		const cafe_uniq_name = all_keys['waiter'] ? all_keys['waiter']['cafe_uniq_name'] : 'unknown_cafe';
+
 		this.PUSH_KEY_LINKS = {
-			waiter : this.push_reg_link + 'waiter/' +all_keys['waiter']['push_key'],
-			manager : this.push_reg_link + 'manager/' + all_keys['manager']['push_key'],
-			supervisor : this.push_reg_link + 'supervisor/' + all_keys['supervisor']['push_key']
+			waiter: `${this.push_reg_link}/reg-user/cafe/${cafe_uniq_name}/invite/${all_keys['waiter']['push_key']}`,			
+			manager: `${this.push_reg_link}/reg-user/cafe/${cafe_uniq_name}/invite/${all_keys['manager']['push_key']}`,
+			supervisor : `${this.push_reg_link}/reg-user/cafe/${cafe_uniq_name}/invite/${all_keys['supervisor']['push_key']}`
 		};
-		// console.log('this.PUSH_KEY_LINKS', this.PUSH_KEY_LINKS);
 
 		this.$link_reg_push_waiter.attr({href : this.PUSH_KEY_LINKS['waiter']});
 		this.$link_reg_push_manager.attr({href : this.PUSH_KEY_LINKS['manager']});

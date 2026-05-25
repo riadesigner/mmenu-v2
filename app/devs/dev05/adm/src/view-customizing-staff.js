@@ -58,6 +58,8 @@ export var VIEW_CUSTOMIZING_STAFF = {
 		this.load_tg_keys_async()
 		.then((keys)=>{							
 
+			console.log('keys', keys);
+
 			this.show_tg_links_section(true);
 			this.update_tg_keys_buttons(keys);
 
