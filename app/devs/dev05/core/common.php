@@ -129,19 +129,49 @@ function glogError($msg){
 
 ----------------------------------------------------- */
 
-function send_telegram($method, $data, $token, $headers = []){
-	$curl = curl_init();
-	curl_setopt_array($curl, [
-		CURLOPT_POST => 1,
-		CURLOPT_HEADER => 0,
-		CURLOPT_RETURNTRANSFER => 1,
-		CURLOPT_URL => 'https://api.telegram.org/bot' . $token . '/' . $method,
-		CURLOPT_POSTFIELDS => json_encode($data, JSON_UNESCAPED_UNICODE),
-		CURLOPT_HTTPHEADER => array_merge(["Content-Type: application/json"])
-	]);
-	$result = curl_exec($curl);
-	curl_close($curl);
-	return (json_decode($result, true) ?: $result);
+// function send_telegram_old($method, $data, $token, $headers = []){
+// 	$curl = curl_init();
+// 	curl_setopt_array($curl, [
+// 		CURLOPT_POST => 1,
+// 		CURLOPT_HEADER => 0,
+// 		CURLOPT_RETURNTRANSFER => 1,
+// 		CURLOPT_URL => 'https://api.telegram.org/bot' . $token . '/' . $method,
+// 		CURLOPT_POSTFIELDS => json_encode($data, JSON_UNESCAPED_UNICODE),
+// 		CURLOPT_HTTPHEADER => array_merge(["Content-Type: application/json"])
+// 	]);
+// 	$result = curl_exec($curl);
+// 	curl_close($curl);
+// 	return (json_decode($result, true) ?: $result);
+// }
+
+function send_telegram($method, $data, $token, $headers = [], $files = []){
+    $curl = curl_init();
+    
+    // Если есть файлы — используем multipart, иначе JSON
+    if (!empty($files)) {
+        $data = array_merge($data, $files);
+        curl_setopt_array($curl, [
+            CURLOPT_POST => 1,
+            CURLOPT_HEADER => 0,
+            CURLOPT_RETURNTRANSFER => 1,
+            CURLOPT_URL => 'https://api.telegram.org/bot' . $token . '/' . $method,
+            CURLOPT_POSTFIELDS => $data, // автоматически установит multipart
+            CURLOPT_HTTPHEADER => $headers
+        ]);
+    } else {
+        curl_setopt_array($curl, [
+            CURLOPT_POST => 1,
+            CURLOPT_HEADER => 0,
+            CURLOPT_RETURNTRANSFER => 1,
+            CURLOPT_URL => 'https://api.telegram.org/bot' . $token . '/' . $method,
+            CURLOPT_POSTFIELDS => json_encode($data, JSON_UNESCAPED_UNICODE),
+            CURLOPT_HTTPHEADER => array_merge(["Content-Type: application/json"], $headers)
+        ]);
+    }
+    
+    $result = curl_exec($curl);
+    curl_close($curl);
+    return json_decode($result, true) ?: $result;
 }
 
 /* --------------------------------------------------
