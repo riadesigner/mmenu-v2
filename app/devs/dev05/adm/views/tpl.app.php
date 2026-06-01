@@ -1154,11 +1154,9 @@ App&&App();
 
 					<div class="customizing-cart__all-tgusers">
 						<p>Сейчас в кафе зарегистрированы следующие сотрудники:</p>
-						<ul>
-							<li class="tgusers-role-waiter">Официанты: <span>нет</span></li>
-							<li class="tgusers-role-manager">Менеджеры: <span>нет</span></li>
-							<li class="tgusers-role-supervisor">Администраторы: <span>нет</span></li>
-						</ul>
+						<div class="tgusers-role-waiter"><h3 style="background: #fff040; padding: 5px;border-radius:10px;">Официанты:</h3> <span>нет</span></div>
+						<div class="tgusers-role-manager"><h3 style="background: #fff040; padding: 5px;border-radius:10px;">Менеджеры:</h3> <span>нет</span></div>
+						<div class="tgusers-role-supervisor"><h3 style="background: #fff040; padding: 5px;border-radius:10px;">Администраторы:</h3> <span>нет</span></div>
 					</div>
 
 					<h2>Справка:</h2>
@@ -1254,11 +1252,9 @@ App&&App();
 
 					<div class="customizing-cart__all-tgusers">
 						<p>Сейчас в кафе зарегистрированы следующие сотрудники:</p>
-						<ul>
-							<li class="tgusers-role-waiter">Официанты: <span>нет</span></li>
-							<li class="tgusers-role-manager">Менеджеры: <span>нет</span></li>
-							<li class="tgusers-role-supervisor">Администраторы: <span>нет</span></li>
-						</ul>
+						<div class="tgusers-role-waiter"><h3 style="background: #fff040; padding: 5px;border-radius:10px;">Официанты:</h3> <span>нет</span></div>
+						<div class="tgusers-role-manager"><h3 style="background: #fff040; padding: 5px;border-radius:10px;">Менеджеры:</h3> <span>нет</span></div>
+						<div class="tgusers-role-supervisor"><h3 style="background: #fff040; padding: 5px;border-radius:10px;">Администраторы:</h3> <span>нет</span></div>
 					</div>
 
 					<h2>Справка:</h2>

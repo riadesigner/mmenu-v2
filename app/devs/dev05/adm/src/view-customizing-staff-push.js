@@ -70,16 +70,7 @@ export var VIEW_CUSTOMIZING_STAFF_PUSH = {
 			this.update_push_keys_buttons(keys);
 			this.show_push_links_section(true);
 
-			this.load_push_users_async()
-			.then((push_users)=>{
-				console.log('push_users', push_users);				
-				this.update_push_users_list(push_users.users);
-				this.end_updating();
-			})
-			.catch((vars)=>{
-				console.log(vars)
-				this.end_updating_with_error("Не удалось получить пользователей push для кафе");
-			})
+			this.reload_and_update_push_users_list();
 									
 		})
 		.catch((res)=>{
@@ -89,6 +80,18 @@ export var VIEW_CUSTOMIZING_STAFF_PUSH = {
 		});
 	
 	},
+	reload_and_update_push_users_list:function(){
+		this.load_push_users_async()
+		.then((push_users)=>{
+			console.log('push_users', push_users);				
+			this.update_push_users_list(push_users.users);
+			this.end_updating();
+		})
+		.catch((vars)=>{
+			console.log(vars)
+			this.end_updating_with_error("Не удалось получить пользователей push для кафе");
+		})
+	},
 	show_push_links_section:function(mode){
 		if(mode){
 			this.$link_push_section.show();
@@ -96,7 +99,9 @@ export var VIEW_CUSTOMIZING_STAFF_PUSH = {
 			this.$link_push_section.hide();			
 		}
 	},
-	update_push_users_list:function(push_users){		
+	update_push_users_list:function(push_users){	
+		
+		const _this=this;
 
 		const $waiters = this.$section_pushusers.find('.tgusers-role-waiter span');
 		const $managers = this.$section_pushusers.find('.tgusers-role-manager span');
@@ -107,17 +112,49 @@ export var VIEW_CUSTOMIZING_STAFF_PUSH = {
 				let html = "";					
 				if(users.length>0){						
 					let count = 0;
-					for(let i in users){											
-						let name_string = users[i].active ? `${users[i].name} (active)` : users[i].name;							
-						html+=`<strong>${name_string}</strong>`;
+					for(let i in users){
+						let to_archive = `<a href="#" data-role="${users[i].role}" data-id="${users[i].publicId}">[ x ]</a>`;											
+						let name_string = users[i].active ? `${users[i].name} (active) ` : users[i].name;
+						html+=`<p style="margin:0;">${name_string} ${to_archive}</p>`;
 						count++;
 						if(count<users.length){
-							html+=", ";
+							html+="<br />";
 						}
 					};
-					console.log('html',html);
 					$el.html(html);
+					$el.find("a").each(function(){
+						$(this).on('touchend', (e)=>{
+							e.preventDefault();
+							e.stopPropagation();
+							let role = $(this).attr('data-role');
+							let id = $(this).attr('data-id');
+							foo.user_to_archive(id);
+						})
+					});		
 				}				
+			},
+			user_to_archive:function(id){ 
+				console.log("user_to_archive", id);
+				_this._now_loading();
+				_this.push_user_to_archive_async(id)
+				.then((response)=>{
+					GLB.VIEWS.modalMessage({
+						title:GLB.LNG.get("lng_attention"),
+						message:"Пользователь успешно перемещен в архив",
+						btn_title:GLB.LNG.get('lng_ok')
+					});					
+					_this.reload_and_update_push_users_list();
+					console.log("response ok", response);
+				})
+				.catch((response)=>{
+					GLB.VIEWS.modalMessage({
+						title:GLB.LNG.get("lng_attention"),
+						message:"Не удалось переместить пользователя в архив",
+						btn_title:GLB.LNG.get('lng_ok')
+					});
+					console.log("response err", response);
+					_this._end_loading();
+				});
 			},
 			reset_names:function(){
 				const $empty_string = "нет";
@@ -372,7 +409,42 @@ export var VIEW_CUSTOMIZING_STAFF_PUSH = {
 	check_need_to_save:function(){
 		this._need2save(false);
 	},
+	push_user_to_archive_async:function(userPublicId){ 
+		return new Promise((res,rej)=>{ 
+			var PATH = 'adm/lib/';
+			var url = PATH + 'lib.get_push_user_to_archive.php';	
+			
+			this._now_loading();
+	
+			var data = {
+				cafe_uniq_name:GLB.THE_CAFE.get().uniq_name,
+				user_public_id: userPublicId
+			};			
+	
+			this.AJAX = $.ajax({
+				url: url,
+				data:data,
+				method:"POST",
+				dataType: "json",
+				xhrFields: {
+					withCredentials: true  // Для отправки cookies при CORS
+				},			
+				success: function (response) {
+					
+					if(response && !response.error){
+						res(response)						
+					}else{
+						rej(response)						
+					}
+				},
+				error:function(response) {
+					console.log('==err response==',response)
+					rej(response)
+				}
+			});
 
+		});
+	},
 	load_push_cafe_keys_async:function(){ 
 		return new Promise((res,rej)=>{ 
 			var PATH = 'adm/lib/';
