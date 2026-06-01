@@ -31,8 +31,6 @@
 	$internalApiKey = $_ENV['CHATS_APP_INTERNAL_API_KEY']; 
 	$url = 'http://chats-app-backend:3001/api-internal/cafe/' . $cafe_uniq_name;
 
-	
-
 	$headers = ['x-internal-key' => $internalApiKey];
 	$params = []; // Для вашего случая параметры в URL не нужны
 

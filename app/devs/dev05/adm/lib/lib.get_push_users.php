@@ -15,6 +15,7 @@
 	require_once WORK_DIR.APP_DIR.'core/class.smart_object.php';
 	require_once WORK_DIR.APP_DIR.'core/class.smart_collect.php';
 	require_once WORK_DIR.APP_DIR.'core/class.user.php';
+	require_once WORK_DIR.APP_DIR.'core/lib.api.php'; // Подключаем хелпер	
 
 
 	session_start();
@@ -29,17 +30,29 @@
 	$cafe_uniq_name = trim((string) $_POST['cafe_uniq_name']);
 
 	
-	// $all_push_users = new Smart_collect("push_users","where cafe_uniq_name = '{$cafe_uniq_name}' ", "ORDER BY role");
-	
-	// $ARR_PUSH_USERS = [];
-	// if($all_push_users && $all_push_users->full()){
-	// 	glog("total push users for cafe {$cafe_uniq_name}: ".$all_push_users->found());
-	// 	foreach($all_push_users->get() as $PUSH_USER){
-	// 		array_push($ARR_PUSH_USERS, $PUSH_USER->export());
-	// 	}		
-	// }
+	$internalApiKey = $_ENV['CHATS_APP_INTERNAL_API_KEY']; 
+	$url = "http://chats-app-backend:3001/api-internal/cafe/{$cafe_uniq_name}/users";
 
-	// __answerjson($ARR_PUSH_USERS);
-	__answerjson([]);
+		
+
+	$headers = ['x-internal-key' => $internalApiKey];
+	$params = []; 
+
+	$curlResult = get_get_info($url, $headers, $params);
+	$parsed = parse_curl_response($curlResult);
+
+	glog("answer: ".print_r($curlResult, true)); // Логируем полный результат для отладки
+
+	if (!$parsed['ok']) {
+		glog("API error: {$parsed['errorCode']} - {$parsed['message']}");
+		__errorjson($parsed['errorCode'] ?? 'external_error', $parsed['httpCode'] ?? 500);			
+		return;
+	}
+
+	// Успех — работаем с данными
+	$pushUsers = $parsed['data'];
+	glog("get cafe push users: " . print_r($pushUsers, true));
+	__answerjson($pushUsers);	
+
 
 ?>

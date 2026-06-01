@@ -71,8 +71,9 @@ export var VIEW_CUSTOMIZING_STAFF_PUSH = {
 			this.show_push_links_section(true);
 
 			this.load_push_users_async()
-			.then((push_users)=>{				
-				this.update_push_users_list(push_users);
+			.then((push_users)=>{
+				console.log('push_users', push_users);				
+				this.update_push_users_list(push_users.users);
 				this.end_updating();
 			})
 			.catch((vars)=>{
@@ -95,7 +96,7 @@ export var VIEW_CUSTOMIZING_STAFF_PUSH = {
 			this.$link_push_section.hide();			
 		}
 	},
-	update_push_users_list:function(push_users){
+	update_push_users_list:function(push_users){		
 
 		const $waiters = this.$section_pushusers.find('.tgusers-role-waiter span');
 		const $managers = this.$section_pushusers.find('.tgusers-role-manager span');
@@ -107,7 +108,7 @@ export var VIEW_CUSTOMIZING_STAFF_PUSH = {
 				if(users.length>0){						
 					let count = 0;
 					for(let i in users){											
-						let name_string = users[i].nickname ? `${users[i].nickname} (${users[i].name})` : users[i].name;							
+						let name_string = users[i].active ? `${users[i].name} (active)` : users[i].name;							
 						html+=`<strong>${name_string}</strong>`;
 						count++;
 						if(count<users.length){
@@ -132,6 +133,9 @@ export var VIEW_CUSTOMIZING_STAFF_PUSH = {
 
 			const users = {waiters:[],managers:[],supervisors:[]};
 
+			
+			console.log('users init', users);
+
 			for(let i in push_users){
 				switch(push_users[i].role){
 					case 'waiter':
@@ -144,7 +148,8 @@ export var VIEW_CUSTOMIZING_STAFF_PUSH = {
 					users.supervisors.push(push_users[i]);										
 					break;
 				}				
-			};
+			};		
+
 			foo.make_string(users.waiters,$waiters);
 			foo.make_string(users.managers,$managers);
 			foo.make_string(users.supervisors,$supervisors);
@@ -485,26 +490,27 @@ export var VIEW_CUSTOMIZING_STAFF_PUSH = {
 		GLB.VIEWS.modalConfirm({
 			title:"Внимание",
 			ask:ask,
-			action:()=>{				
-				this.su_update_all_push_keys_asynq()
-				.then((keys)=>{		
-					console.log('keys=', keys);					
-					this.update_push_keys_buttons(keys);
-					this.update_push_users_list(false);
-					this.show_push_links_section(true);
-					this._end_loading();
-				})
-				.catch((vars)=>{					
-					console.log('vars = ', vars);
+			action:()=>{		
+
+				// this.su_update_all_push_keys_asynq()
+				// .then((keys)=>{		
+				// 	console.log('keys=', keys);					
+				// 	this.update_push_keys_buttons(keys);
+				// 	this.update_push_users_list(false);
+				// 	this.show_push_links_section(true);
+				// 	this._end_loading();
+				// })
+				// .catch((vars)=>{					
+				// 	console.log('vars = ', vars);
 
 					GLB.VIEWS.modalMessage({
 						title:GLB.LNG.get("lng_attention"),
-						message:"Не удалось обновить Push ключи для веб-приложения",
+						message:"Функция еще не реализована",
 						btn_title:GLB.LNG.get('lng_ok')
 					});					
-					this.show_push_links_section(false);
-					this._end_loading();				
-				});
+				// 	this.show_push_links_section(false);
+				// 	this._end_loading();				
+				// });
 			},
 			cancel:()=>{
 				console.log("CANCELED");
