@@ -106,11 +106,11 @@ export var LNG = {init:function(lang){
 			],						
 			lng_menu_is_in_demo_mode_msg:[
 				'The menu is in demo mode. The cafe administrator is not waiting a messages at the moment.',
-				'Меню находится в демонстрационном режиме. Администратор кафе не ожидает сообщений в данный момент.'
+				'Меню находится в тестовом режиме. Администратор кафе не ожидает сообщений в данный момент.'
 			],			
 			lng_menu_is_in_demo_mode_msg_2:[
-				'If you are an Administrator, set up Telegram to receive orders.',
-				'Если вы Администратор, настройте Телеграм, чтобы получать заказы.'
+				'If you are an Administrator, set up cart to receive orders.',
+				'Если вы Администратор, настройте корзину для получения заказов.'
 			],						
 			//VIEW_ORDER_CANCEL
 			lng_something_wrong:[

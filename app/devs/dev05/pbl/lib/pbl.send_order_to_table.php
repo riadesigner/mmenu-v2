@@ -107,6 +107,9 @@ if(PENDING_MODE !==3 ){
 
 function old_scenario_sending_order_to_table($cafe, $ORDER_TXT, $ARR_ORDER_FOR_IIKO, $table_number, $order_data){ 
 
+
+	
+
 	//  - SAVE ORDER IN DB
 	//	- GETTING ORDER_ID_UNIQ
 	$order_id_uniq = Order_sender::save_order_to_db(
@@ -130,6 +133,10 @@ function old_scenario_sending_order_to_table($cafe, $ORDER_TXT, $ARR_ORDER_FOR_I
 	// IF HAS NOT ACTIVE WAITERS
 	$notg_mode = !Order_sender::total_tg_users_for($cafe->uniq_name, ORDER_TARGET);	
 	$notg_mode && __answerjson(["short_number"=>$short_number,"demo_mode"=>DEMO_MODE, "notg_mode"=>true]);	
+
+
+	__answerjson(["short_number"=>$short_number,"demo_mode"=>true]);
+
 
 	// ---------------------------
 	//  SENDING THE ORDER TO TG

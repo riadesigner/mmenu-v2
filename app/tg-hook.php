@@ -8,8 +8,12 @@ require_once WORK_DIR.APP_DIR.'core/class.tg_hook.php';
 
 $data = json_decode(file_get_contents('php://input'), true);
 
-$Tgh = new Tg_hook($data);
-$Tgh->parse();
+if($data){
+    $Tgh = new Tg_hook($data);
+    $Tgh->parse();
+}else{
+    echo "get no data";
+}
 
 
 ?>

@@ -45,8 +45,6 @@ class Tg_hook {
         $this->tg_user_id = $tg_user_id;
         $this->tg_user_name = $tg_user_name;
 
-        glog('$tg_user_name = '.$tg_user_name);
-
         return $this;
 
     }
