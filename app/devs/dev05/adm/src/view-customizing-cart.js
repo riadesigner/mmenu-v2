@@ -104,7 +104,7 @@ export var VIEW_CUSTOMIZING_CART = {
 		};
 		
 		this.$buttonsOrderWayMode.html("");	
-		var arrBtns = ["1. Только в TG","2. В ТG, затем в IIKO"];
+		var arrBtns = ["1 = Только в TG","2 = В ТG, затем в IIKO", "3 = В PUSH + IIKO"];
 		for(let i=0;i<arrBtns.length;i++){
 			let checked = parseInt(cafe.order_way,10) == i?" checked":"";
 			let $btn = $("<div class='std-form__radio-button "+checked+"' mode='"+i+"'>"+arrBtns[i]+"</div>\n");

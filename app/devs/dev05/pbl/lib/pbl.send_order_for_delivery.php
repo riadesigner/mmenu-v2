@@ -1,6 +1,6 @@
 <?php
 
-define("BASEPATH",__file__);
+define("BASEPATH",__FILE__);
 
 header('content-type: application/json; charset=utf-8');
 

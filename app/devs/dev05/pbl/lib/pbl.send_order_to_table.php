@@ -1,6 +1,6 @@
 <?php
 
-define("BASEPATH",__file__);
+define("BASEPATH",__FILE__);
 
 header('content-type: application/json; charset=utf-8');
 
@@ -67,13 +67,11 @@ if(IIKO_MODE){
 	// в модификаторы размеров (если originalPrice > 0 || virtualSize == true )
 	$order_items = $Iiko_order->remake_for_nomenclature($order_data['order_items']);	
 
-
-	$ARR_ORDER_FOR_IIKO = "";
+	$ARR_ORDER_FOR_IIKO = [];
 
 	try{		
 		$ARR_ORDER_FOR_IIKO = $Iiko_order->prepare_order_for_table( $order_items, $table_number );
-		// glog("================================");
-		// glog("ARR_ORDER_FOR_IIKO dump: ".capture_var_dump($ARR_ORDER_FOR_IIKO));
+
 		glog("================================");
 		glog("ORDER TO TABLE / SEND TO IIKO");
 		glog("================================");
@@ -85,57 +83,74 @@ if(IIKO_MODE){
 	}
 
 } else {
-	$ARR_ORDER_FOR_IIKO = "";
+	$ARR_ORDER_FOR_IIKO = [];
 }
 
-// ----------------------------------------
-//  - SAVE ORDER IN DB
-//	- GETTING ORDER_ID_UNIQ
-// ----------------------------------------
- 
-// glog('========= ORDER_DATA ========= '.print_r($order_data,1));
+if(PENDING_MODE !==3 ){
+	// ----------------------------------------------
+	// старый сценарий, когда заказ сохраняется в БД, 
+	// а потом отправляется в TG (и IIKO, если нужно)
+	// ----------------------------------------------
+	old_scenario_sending_order_to_table($cafe, $ORDER_TXT, $ARR_ORDER_FOR_IIKO, $table_number, $order_data);
 
-$order_id_uniq = Order_sender::save_order_to_db(
-	ORDER_TARGET,
-	$cafe, 
-	[		
-		"ORDER_TEXT"=>addcslashes($ORDER_TXT,"\n"),
-		"ORDER_IIKO"=>$ARR_ORDER_FOR_IIKO,
-		"TOTAL_PRICE"=>$order_data["order_total_price"],		
-	], 
-	$table_number,
-	PENDING_MODE,
-	DEMO_MODE
-);
 
-if(!$order_id_uniq)__errorjson("--cant save order");
+}else{
+	// ---------------------------------------------------------------
+	// новый сценарий, когда заказ НЕ сохраняется в БД, 
+	// а отправляется во внешнее приложение CHATS_APP (и затем в IIKO)
+	// ---------------------------------------------------------------
+	
+	$short_number = date("H.i.s", time()); // DEMO short number
+	__answerjson(["short_number"=>$short_number,"demo_mode"=>DEMO_MODE]);
 
-$short_number = Order_sender::get_short_number($order_id_uniq);
-
-DEMO_MODE && __answerjson(["short_number"=>$short_number,"demo_mode"=>DEMO_MODE]);
-
-$ORDER_TXT = "Заказ №: {$short_number}\n".$ORDER_TXT;
-
-// IF HAS NOT ACTIVE WAITERS
-define('NOTG_MODE', !Order_sender::total_tg_users_for($cafe->uniq_name, ORDER_TARGET));
-NOTG_MODE && __answerjson(["short_number"=>$short_number,"demo_mode"=>DEMO_MODE, "notg_mode"=>true]);
-
-// ---------------------------
-//  SENDING THE ORDER TO TG
-// ---------------------------
-try{
-	Order_sender::send_tg_order($cafe->uniq_name, ORDER_TARGET, $order_id_uniq, $ORDER_TXT);	
-
-	__answerjson( [
-		"short_number"=>$short_number, 
-		"demo_mode"=>DEMO_MODE,  // if cafe on demo_mode
-		"notg_mode"=>NOTG_MODE  // if has not active waiters
-		] );	
-
-}catch(Exception $e){
-	glogError($e->getMessage().", ".__FILE__.", ".__LINE__);
-	__errorjson("--fail sending to table tg-order");	
 }
+
+function old_scenario_sending_order_to_table($cafe, $ORDER_TXT, $ARR_ORDER_FOR_IIKO, $table_number, $order_data){ 
+
+	//  - SAVE ORDER IN DB
+	//	- GETTING ORDER_ID_UNIQ
+	$order_id_uniq = Order_sender::save_order_to_db(
+		ORDER_TARGET,
+		$cafe, 
+		[		
+			"ORDER_TEXT"=>addcslashes($ORDER_TXT,"\n"),
+			"ORDER_IIKO"=>$ARR_ORDER_FOR_IIKO,
+			"TOTAL_PRICE"=>$order_data["order_total_price"],		
+		], 
+		$table_number,
+		PENDING_MODE,
+		DEMO_MODE
+	);
+	if(!$order_id_uniq)__errorjson("--cant save order");
+	$short_number = Order_sender::get_short_number($order_id_uniq);	
+
+	DEMO_MODE && __answerjson(["short_number"=>$short_number,"demo_mode"=>DEMO_MODE]);
+	$ORDER_TXT = "Заказ №: {$short_number}\n".$ORDER_TXT;
+
+	// IF HAS NOT ACTIVE WAITERS
+	$notg_mode = !Order_sender::total_tg_users_for($cafe->uniq_name, ORDER_TARGET);	
+	$notg_mode && __answerjson(["short_number"=>$short_number,"demo_mode"=>DEMO_MODE, "notg_mode"=>true]);	
+
+	// ---------------------------
+	//  SENDING THE ORDER TO TG
+	// ---------------------------
+	try{
+		Order_sender::send_tg_order($cafe->uniq_name, ORDER_TARGET, $order_id_uniq, $ORDER_TXT);	
+
+		__answerjson( [
+			"short_number"=>$short_number, 
+			"demo_mode"=>DEMO_MODE,  // if cafe on demo_mode
+			"notg_mode"=>$notg_mode  // if has not active waiters
+			] );	
+
+	}catch(Exception $e){
+		glogError($e->getMessage().", ".__FILE__.", ".__LINE__);
+		__errorjson("--fail sending to table tg-order");	
+	}
+}
+
+
+
 
 
 ?>

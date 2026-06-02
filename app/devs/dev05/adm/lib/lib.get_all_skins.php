@@ -9,7 +9,7 @@
 	$callback = $_REQUEST['callback'] ?? 'alert';
 	if (!preg_match('/^[a-z0-9_-]+$/i', (string) $callback)) {  $callback = 'alert'; }	
 
-	define("BASEPATH",__file__);
+	define("BASEPATH",__FILE__);
 		
 	require_once getenv('WORKDIR').'/config.php';	
 	

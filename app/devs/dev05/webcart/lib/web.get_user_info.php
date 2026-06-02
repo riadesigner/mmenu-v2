@@ -4,7 +4,7 @@
 	get webuser info by his public_id & cafe_unic_name
 
 */	
-define("BASEPATH",__file__);
+define("BASEPATH",__FILE__);
 
 header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Methods: GET, POST, OPTIONS");

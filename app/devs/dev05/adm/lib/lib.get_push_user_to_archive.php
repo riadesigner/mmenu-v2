@@ -6,7 +6,9 @@
 */	
 
 	header('content-type: application/json; charset=utf-8');
-	define("BASEPATH",__file__);
+	define("BASEPATH",__FILE__);
+
+	session_start();
 	
 	require_once getenv('WORKDIR').'/config.php';
 	require_once WORK_DIR.APP_DIR.'core/common.php';	
@@ -16,7 +18,7 @@
 	require_once WORK_DIR.APP_DIR.'core/class.user.php';
 	require_once WORK_DIR.APP_DIR.'core/lib.api.php'; // Подключаем хелпер	
 
-	session_start();
+
 	SQL::connect();
 
 	$user = User::from_cookie();

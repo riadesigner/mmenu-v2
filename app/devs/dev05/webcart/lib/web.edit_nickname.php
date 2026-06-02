@@ -5,7 +5,7 @@
 
 */	
 	
-define("BASEPATH",__file__);
+define("BASEPATH",__FILE__);
 require_once getenv('WORKDIR').'/config.php';
 require_once WORK_DIR.APP_DIR.'core/common.php';	
 require_once WORK_DIR.APP_DIR.'core/class.sql.php';
