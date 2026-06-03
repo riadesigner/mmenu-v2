@@ -4,6 +4,8 @@ define("BASEPATH",__file__);
 
 header('content-type: application/json; charset=utf-8');
 
+session_start();
+
 require_once getenv('WORKDIR').'/config.php';
 require_once WORK_DIR.APP_DIR.'core/common.php';	
 require_once WORK_DIR.APP_DIR.'core/class.sql.php';
@@ -15,8 +17,9 @@ require_once WORK_DIR.APP_DIR.'core/class.iiko_order.php';
 require_once WORK_DIR.APP_DIR.'core/class.iiko_params_reader.php';
 
 require_once WORK_DIR.APP_DIR.'pbl/lib/pbl.class.order_parser.php';
+require_once WORK_DIR.APP_DIR.'core/lib.api.php'; // Подключаем хелпер	
 
-session_start();
+
 SQL::connect();
 
 // --------------------------------
@@ -72,11 +75,9 @@ if(IIKO_MODE){
 
 	try{		
 		$ARR_ORDER_FOR_IIKO = $Iiko_order->prepare_order_for_table( $order_items, $table_number );
-		// glog("================================");
-		// glog("ARR_ORDER_FOR_IIKO dump: ".capture_var_dump($ARR_ORDER_FOR_IIKO));
-		glog("================================");
-		glog("ORDER TO TABLE / SEND TO IIKO");
-		glog("================================");
+		glog("=================================");
+		glog("ORDER TO TABLE / PREPARED TO IIKO");
+		glog("=================================");
 		glog(print_r($ARR_ORDER_FOR_IIKO,1));
 
 	}catch( Exception $e){
@@ -88,53 +89,112 @@ if(IIKO_MODE){
 	$ARR_ORDER_FOR_IIKO = "";
 }
 
-// ----------------------------------------
-//  - SAVE ORDER IN DB
-//	- GETTING ORDER_ID_UNIQ
-// ----------------------------------------
- 
-// glog('========= ORDER_DATA ========= '.print_r($order_data,1));
+$FULL_ORDER = 
+[
+	"ORDER_TEXT"=>$ORDER_TXT,
+	"ORDER_IIKO"=>$ARR_ORDER_FOR_IIKO,
+	"TOTAL_PRICE"=>$order_data["order_total_price"],		
+];
 
-$order_id_uniq = Order_sender::save_order_to_db(
-	ORDER_TARGET,
-	$cafe, 
-	[		
-		"ORDER_TEXT"=>addcslashes($ORDER_TXT,"\n"),
-		"ORDER_IIKO"=>$ARR_ORDER_FOR_IIKO,
-		"TOTAL_PRICE"=>$order_data["order_total_price"],		
-	], 
-	$table_number,
-	PENDING_MODE,
-	DEMO_MODE
-);
+if(PENDING_MODE !==2){
 
-if(!$order_id_uniq)__errorjson("--cant save order");
+	// ----------------------------------------
+	// Старый способ сохранения заказа, 
+	// Для отправки с TG и IIKO
+	// ----------------------------------------
+	
+	//  - SAVE ORDER IN DB
+	//	- GETTING ORDER_ID_UNIQ		
 
-$short_number = Order_sender::get_short_number($order_id_uniq);
+	$order_id_uniq = Order_sender::save_order_to_db(
+		ORDER_TARGET,
+		$cafe, 
+  		$FULL_ORDER, 
+		$table_number,
+		PENDING_MODE,
+		DEMO_MODE
+	);
 
-DEMO_MODE && __answerjson(["short_number"=>$short_number,"demo_mode"=>DEMO_MODE]);
+	if(!$order_id_uniq)__errorjson("--cant save order");
 
-$ORDER_TXT = "Заказ №: {$short_number}\n".$ORDER_TXT;
+	$short_number = Order_sender::get_short_number($order_id_uniq);
 
-// IF HAS NOT ACTIVE WAITERS
-define('NOTG_MODE', !Order_sender::total_tg_users_for($cafe->uniq_name, ORDER_TARGET));
-NOTG_MODE && __answerjson(["short_number"=>$short_number,"demo_mode"=>DEMO_MODE, "notg_mode"=>true]);
+	DEMO_MODE && __answerjson(["short_number"=>$short_number,"demo_mode"=>DEMO_MODE]);
 
-// ---------------------------
-//  SENDING THE ORDER TO TG
-// ---------------------------
-try{
-	Order_sender::send_tg_order($cafe->uniq_name, ORDER_TARGET, $order_id_uniq, $ORDER_TXT);	
+	$ORDER_TXT = "Заказ №: {$short_number}\n".$ORDER_TXT;
 
-	__answerjson( [
-		"short_number"=>$short_number, 
-		"demo_mode"=>DEMO_MODE,  // if cafe on demo_mode
-		"notg_mode"=>NOTG_MODE  // if has not active waiters
-		] );	
+	// IF HAS NOT ACTIVE WAITERS
+	define('NOTG_MODE', !Order_sender::total_tg_users_for($cafe->uniq_name, ORDER_TARGET));
+	NOTG_MODE && __answerjson(["short_number"=>$short_number,"demo_mode"=>DEMO_MODE, "notg_mode"=>true]);
 
-}catch(Exception $e){
-	glogError($e->getMessage().", ".__FILE__.", ".__LINE__);
-	__errorjson("--fail sending to table tg-order");	
+	// ---------------------------
+	//  SENDING THE ORDER TO TG
+	// ---------------------------
+	try{
+		Order_sender::send_tg_order($cafe->uniq_name, ORDER_TARGET, $order_id_uniq, $ORDER_TXT);	
+
+		__answerjson( [
+			"short_number"=>$short_number, 
+			"demo_mode"=>DEMO_MODE,  // if cafe on demo_mode
+			"notg_mode"=>NOTG_MODE  // if has not active waiters
+			] );	
+
+	}catch(Exception $e){
+		glogError($e->getMessage().", ".__FILE__.", ".__LINE__);
+		__errorjson("--fail sending to table tg-order");	
+	}
+
+}else{
+
+	// ----------------------------------------
+	// Новый способ сохранения заказа, 
+	// Для отправки с PUSH (CHATS_APP) и IIKO
+	// ----------------------------------------
+
+	$data = push__save_order_to_table($cafe->uniq_name, $FULL_ORDER, $table_number);
+	__answerjson(["short_number"=>$data['shortCode'],"demo_mode"=>true]);
+
+}
+
+function push__save_order_to_table($cafe_uniq_name, $order_data, $table_number){ 
+
+	$base = "http://chats-app-backend:3001";
+	
+
+	$internalApiKey = $_ENV['CHATS_APP_INTERNAL_API_KEY']; 
+
+	// Подготавливаем параметры для заказа
+	$params = [
+		'cafeUniqId' => $cafe_uniq_name,
+		'tableId' => 'a1b2c3d4e5f6-table-token-from-qr',
+		'description' => "Заказ для стола №{$table_number}\n",
+	];
+
+	// Подготавливаем заголовки
+	$headers = [
+		'x-internal-key' => $internalApiKey,
+		'Content-Type' => 'application/json'
+	];
+
+	// Формируем полный URL
+	$url = $base . "/api-internal/orders";
+
+	// Отправляем запрос
+	$curlResult = post_get_info($url, $headers, $params);
+	$parsed = parse_curl_response($curlResult);
+
+	glog("answer: ".print_r($curlResult, true)); // Логируем полный результат для отладки
+
+	if (!$parsed['ok']) {
+		glog("API error: {$parsed['errorCode']} - {$parsed['message']}");
+
+		if(!empty($parsed['errorCode'])) {
+			__errorjson($parsed['errorCode'] ?? 'external_error', $parsed['httpCode'] ?? 500);
+		}
+	}
+
+	return $parsed['data'];
+
 }
 
 
