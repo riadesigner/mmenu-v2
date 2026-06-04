@@ -94,7 +94,7 @@ if($cafe_order_way!==2){
     __answerjson( [
         "order_status"=>$data["status"], 
         "order_manager"=>$data["takenByUserId"],
-        "order_manager_name"=>'',
+        "order_manager_name"=>$data["takenByUserName"],
         "id_uniq"=>$data["publicId"],
         "short_number"=>$data["shortCode"],
         "date"=>$data["createdAt"],
