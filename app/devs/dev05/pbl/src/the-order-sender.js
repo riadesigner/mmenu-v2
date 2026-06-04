@@ -58,9 +58,7 @@ export const THE_ORDER_SENDER = {
 
     send_to_table_async: function(order, table_number ) {
          
-         return new Promise((res,rej)=>{      
-                                    
-            console.log('order, table_number  ==== ',order, table_number)
+         return new Promise((res,rej)=>{                                    
             
             const PATH = 'pbl/lib/';
             const url = GLB_APP_URL + PATH + 'pbl.send_order_to_table.php';

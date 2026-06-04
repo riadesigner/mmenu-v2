@@ -3,6 +3,10 @@ import $ from 'jquery';
 import {THE_ORDER_SENDER} from './the-order-sender.js';
 import {IIKO_STREET_LOADER} from './iiko/iiko-street-loader.js';
 
+// --------------------------------
+// только для EXTERNAL ORDERING WAY
+// --------------------------------
+
 export var VIEW_ORDERING = {
 	init:function(options){
 
@@ -315,6 +319,7 @@ export var VIEW_ORDERING = {
 
 		const id_cafe = GLB.CAFE.get('id');
 		const order_currency = GLB.CAFE.get('cafe_currency');
+		const cafe_uniq_name = GLB.CAFE.get('uniq_name');
 		const order_total_price = GLB.CART.get_total_price();
 		const [order_time_sent, order_time_need]  = this.get_user_time_info();
 		const order_user_comment = this.$userComments.val();
@@ -322,6 +327,7 @@ export var VIEW_ORDERING = {
 		// GENERAL PART
 		const order_params = {
 			id_cafe,
+			cafe_uniq_name,
 			order_currency,
 			order_total_price,
 			order_user_phone,
@@ -330,9 +336,6 @@ export var VIEW_ORDERING = {
 			order_user_full_address,
 			order_user_comment
 		};
-
-		console.log('order_params = ', order_params)
-		console.log('order_params cached = ', $.extend({},order_params));
 
 		this.do_order_send(order_params);
 
@@ -459,12 +462,17 @@ export var VIEW_ORDERING = {
 		const order_items = GLB.CART.get_all(convertSizesToModifiers);			
 		const order = $.extend(order_params,{order_items});		
 
+		// ---------------------------------
+		// ORDER TO DELIVERY (OR PICKUPSELF)
+		// ---------------------------------		
 		this.ORDER_SENDER = $.extend({},THE_ORDER_SENDER);	
 		this.ORDER_SENDER.send_async(order, this.PICKUPSELF_MODE)
 		.then((vars)=>{	
 			
+			console.log('--vars--',vars)
 			order.short_number = vars['short_number'];
-			order.demo_mode = vars['demo_mode'];
+			order.public_order_id = vars['public_order_id'];
+			order.demo_mode = vars['demo_mode']?true:false;
 			order.notg_mode = vars['notg_mode']?true:false;
 			
 			const pickupself_mode = this.PICKUPSELF_MODE;

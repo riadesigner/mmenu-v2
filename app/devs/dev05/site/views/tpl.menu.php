@@ -46,6 +46,7 @@ var SITE_CFG = {
 	lang:	'<?=SITE::get_lang();?>',
 	home_page: '<?=SITE::get_link("home");?>/',	
 	order_forgotten_delay: <?=$_ENV['ORDER_FORGOTTEN_AFTER_TIME'];?>, // minutes
+	cafe_order_way: '<?=$Cafe->order_way;?>'
 };
 
 console.log('SITE_CFG = ',SITE_CFG);

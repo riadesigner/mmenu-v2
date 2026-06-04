@@ -55,6 +55,9 @@ export var VIEW_ORDER_OK = {
 		this.IIKO_MODE = GLB.CAFE.is_iiko_mode();		
 		this.PICKUPSELF_MODE = opt&&opt.pickupself_mode?true:false;	
 		this.order = order;
+
+		console.log('SAVED ORDER = ', order);
+
 		this.update_template_part_common();
 		!this.TABLE_MODE && this.update_template_part_delivery();		
 		this.build_ordered_list(this.order.order_items);
@@ -63,7 +66,12 @@ export var VIEW_ORDER_OK = {
 		GLB.VIEW_ORDERING.update({clear:true});		
 
 		if(!this.order.demo_mode && !this.order.notg_mode){
-			this.check_the_order_status(this.order.short_number, GLB.CAFE.get('uniq_name'));
+			const opt = {
+				short_number: this.order.short_number,
+				public_order_id: this.order.public_order_id,
+				cafe_uniq_name: GLB.CAFE.get('uniq_name'),				
+			}
+			this.check_the_order_status(opt);
 		}
 		
 		this.chefsmenu.end_loading();
@@ -268,9 +276,12 @@ export var VIEW_ORDER_OK = {
 		this.$totalCost.html(TOTAL_PRICE);
 
 	},
-	check_the_order_status:function(short_number, cafe_uniq_name){
+	check_the_order_status:function(opt){
+		
+		
+		
 		this.ORDER_CHECKER = $.extend({},THE_ORDER_CHECKER);	
-		this.ORDER_CHECKER.check_if_order_taken_async(short_number, cafe_uniq_name)
+		this.ORDER_CHECKER.check_if_order_taken_async(opt)
 		.then((vars)=>{
 			if(vars.order_status==='taken'){
 				this.show_successful_message(vars.order_manager_name);

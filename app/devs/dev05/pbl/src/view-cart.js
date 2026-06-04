@@ -2,6 +2,11 @@ import {GLB} from './glb.js';
 import $ from 'jquery';
 import {THE_ORDER_SENDER} from './the-order-sender.js';
 
+
+// ---------------------------------------------
+// только для INTERNAL ORDERING WAY (FOR TABLES)
+// ---------------------------------------------
+
 export var VIEW_CART = {
 	init:function(options) {
 
@@ -97,6 +102,7 @@ export var VIEW_CART = {
 
 		const order_params = {
 			id_cafe: GLB.CAFE.get('id'),
+			cafe_uniq_name: GLB.CAFE.get('uniq_name'),
 			order_time_sent: this_time,
 			order_time_need: this_time,
 			order_total_price: order_total_price,
@@ -109,13 +115,17 @@ export var VIEW_CART = {
 		const order = $.extend(order_params,{order_items});		
 		const table_number = GLB.MENU_TABLE_MODE.get_table_number();		
 		
+		// --------------
+		// ORDER TO TABLE
+		// --------------
 		this.ORDER_SENDER = $.extend({},THE_ORDER_SENDER);	
 		this.ORDER_SENDER.send_to_table_async(order, table_number)
 		.then((vars)=>{
 			
 			console.log('--vars--',vars)	
 			order.short_number = vars['short_number'];
-			order.demo_mode = vars['demo_mode'];
+			order.public_order_id = vars['public_order_id'];
+			order.demo_mode = vars['demo_mode']?true:false;
 			order.notg_mode = vars['notg_mode']?true:false;
 			this.chefsmenu.end_loading();			
 

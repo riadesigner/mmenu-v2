@@ -135,6 +135,7 @@ if(PENDING_MODE !==2){
 
 		__answerjson( [
 			"short_number"=>$short_number, 
+			"public_order_id"=>$order_id_uniq,
 			"demo_mode"=>DEMO_MODE,  // if cafe on demo_mode
 			"notg_mode"=>NOTG_MODE  // if has not active waiters
 			] );	
@@ -152,9 +153,14 @@ if(PENDING_MODE !==2){
 	// ----------------------------------------
 
 	$data = push__save_order_to_table($cafe->uniq_name, $FULL_ORDER, $table_number);
-	__answerjson(["short_number"=>$data['shortCode'],"demo_mode"=>true]);
+	__answerjson([
+		"short_number"=>$data['shortCode'],
+		"public_order_id"=>$data['publicId'],
+		]);
 
 }
+
+// COMMON FUNCTIONS
 
 function push__save_order_to_table($cafe_uniq_name, $order_data, $table_number){ 
 

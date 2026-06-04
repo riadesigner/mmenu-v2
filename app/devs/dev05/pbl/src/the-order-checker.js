@@ -9,12 +9,17 @@ export const THE_ORDER_CHECKER = {
  * 
  * ------------------------------------------------
  */     
-check_if_order_taken_async: function(short_number, cafe_uniq_name) {
+check_if_order_taken_async: function(opt) {
     return new Promise((res,rej)=>{
+        
+        const {short_number, public_order_id, cafe_uniq_name} = opt;
+
         
         // after this time return 'timeout'; 
         // if order state will not get 'taken'
         const total_times = SITE_CFG.order_forgotten_delay * 60 * 1000;
+        const cafe_order_way = SITE_CFG.cafe_order_way;
+        
         console.log(`total_times = ${SITE_CFG.order_forgotten_delay} min = ${total_times/1000} sec`);
 
         // verify every 5 second
@@ -25,18 +30,19 @@ check_if_order_taken_async: function(short_number, cafe_uniq_name) {
             
             console.log('start checking the order status')
             counter++;
-            this.check_order_status_async(short_number, cafe_uniq_name)
+            this.check_order_status_async(short_number, public_order_id, cafe_uniq_name, cafe_order_way)
             .then((result)=>{
                 
                 console.log('result',result);
                 console.log('result.order_status',result.order_status);
-
-                if(result.order_status == 'taken' || result.order_status == 'sentout'){                    
+                // created|new (старое название | новое название) - заказ создан, но еще не виден официанту 
+                if(result.order_status == 'created' || result.order_status == 'new' ){
+                    console.log(`order is waiting now... ${counter * check_delay/1000} s из ${SITE_CFG.order_forgotten_delay * 60} s`);
+                }else{
                     clearInterval(interval);
                     res(result);
-                }else{
-                    console.log(`order is waiting now... ${counter * check_delay/1000} s из ${SITE_CFG.order_forgotten_delay * 60} s`);
                 }
+            
             })
             .catch((err)=>{
                 clearInterval(interval);
@@ -53,14 +59,16 @@ check_if_order_taken_async: function(short_number, cafe_uniq_name) {
     });
 },
 
-check_order_status_async:function(short_number, cafe_uniq_name) {
+check_order_status_async:function(short_number, public_order_id, cafe_uniq_name, cafe_order_way) {
     return new Promise((res,rej)=>{
         const PATH = 'pbl/lib/';
         const url = GLB_APP_URL + PATH + 'pbl.check_order_status.php';
 
         const data = {
             short_number,
-            cafe_uniq_name
+            public_order_id,
+            cafe_uniq_name,
+            cafe_order_way
         };        
 
         const AJAX = $.ajax({
