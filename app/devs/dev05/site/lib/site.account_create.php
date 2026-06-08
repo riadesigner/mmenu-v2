@@ -29,7 +29,7 @@
 
 	$email = post_clean($_POST['email'],200);	
 	if(!checkemail($email))
-	__errorjsonp($lang=='ru'?'Ошибка, возможно, ваш адрес электронной почты <b><'.$email.'></b>написан с ошибкой!':'Sorry, perhaps your email address <b><'.$email.'></b> is not correct!');
+	__errorjsonp($lang=='ru'?'Ошибка [3], возможно, ваш адрес электронной почты <b><'.$email.'></b>написан с ошибкой!':'Sorry, perhaps your email address <b><'.$email.'></b> is not correct!');
 
 	$defaultCafeTitle = $lang=='ru'?'Мое кафе':'My Sample Cafe';
 

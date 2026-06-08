@@ -38,8 +38,10 @@
 	$email = post_clean($_REQUEST['email'],200);
 	$pass = post_clean($_REQUEST['pass'],200);
 
+	glog('now checking email... '.$email);
+
 	if(!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-		__errorjsonp($lang=='ru'?'Ошибка, возможно, ваш адрес электронной почты <b><'.$email.'></b>написан с ошибкой!':'Sorry, perhaps your email address <b><'.$email.'></b> is not correct!');
+		__errorjsonp($lang=='ru'?'Ошибка [1], возможно, ваш адрес электронной почты <b><'.$email.'></b>написан с ошибкой!':'Sorry, perhaps your email address <b><'.$email.'></b> is not correct!');
 	}
 
 

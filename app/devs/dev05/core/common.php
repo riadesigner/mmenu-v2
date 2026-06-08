@@ -451,11 +451,9 @@ function sanitizeForDatabase($text) {
     
     return $text;
 }
-
 function checkemail($email){
-	return preg_match("|^[0-9a-z_\.]+@[0-9a-z_^\.]+\.[a-z]{2,6}$|i", (string) $email);
-}	
-
+    return filter_var($email, FILTER_VALIDATE_EMAIL) !== false;
+}
 function check_string($str){
 	return preg_match("/^[- '\p{L}\s]+$/u", (string) $str);
 }	
