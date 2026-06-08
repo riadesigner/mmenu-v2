@@ -38,8 +38,10 @@
 	$email = post_clean($_REQUEST['email'],200);
 	$pass = post_clean($_REQUEST['pass'],200);
 
-	if(!preg_match("|^[0-9a-z_\.]+@[0-9a-z_^\.]+\.[a-z]{2,6}$|i", (string) $email))
-	__errorjsonp($lang=='ru'?'Ошибка, возможно, ваш адрес электронной почты <b><'.$email.'></b>написан с ошибкой!':'Sorry, perhaps your email address <b><'.$email.'></b> is not correct!');
+	if(!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+		__errorjsonp($lang=='ru'?'Ошибка, возможно, ваш адрес электронной почты <b><'.$email.'></b>написан с ошибкой!':'Sorry, perhaps your email address <b><'.$email.'></b> is not correct!');
+	}
+
 
 	SQL::connect();
 
