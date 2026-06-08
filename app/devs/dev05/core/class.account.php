@@ -18,8 +18,8 @@ class Account{
 	static public function init($input_email,$input_key,$cafeTitle=""){		
 		self::$email = substr((string) $input_email, 0, 255);
 		self::$key = substr((string) $input_key, 0, 255);
-		self::$cafeTitle = substr((string) $cafeTitle, 0, 100);
-		self::$emailValid = preg_match("|^[0-9a-z_\.]+@[0-9a-z_^\.]+\.[a-z]{2,6}$|i", self::$email);
+		self::$cafeTitle = substr((string) $cafeTitle, 0, 100);		
+		self::$emailValid = filter_var(self::$email, FILTER_VALIDATE_EMAIL) !== false;
 		self::$keyValid = md5("new-email:".self::$email) === self::$key;
 		return (!self::$email || !self::$key || !self::$emailValid || !self::$keyValid)?false:true;
 	}

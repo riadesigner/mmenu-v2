@@ -10,7 +10,7 @@ class Password{
 		
 		$lang = SITE::get_lang();
 
-		if(!preg_match("|^[0-9a-z_\.]+@[0-9a-z_^\.]+\.[a-z]{2,6}$|i", (string) $email)){
+		if(!filter_var((string) $email, FILTER_VALIDATE_EMAIL)) {
 			if($lang=="ru"){
 				self::$ERR_MESSAGE = "Ошибка. Неправильная ссылка для активации пароля";
 			}else{
