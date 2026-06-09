@@ -44,10 +44,10 @@ export const IIKO_ITEM_SIZER = {
 	
 	// private
 	_calc_from_modifiers:function(){		
-		// console.log('this.ITEM_DATA', this.ITEM_DATA)
+		
 		const basePrice = parseInt(this.ITEM_DATA.iiko_sizes_parsed[0].price, 10);
 		const baseValue = parseInt(this.ITEM_DATA.iiko_sizes_parsed[0].portionWeightGrams, 10);
-
+	
 		const search_sizes = ()=>{
 			const s = this.ITEM_DATA.iiko_modifiers_parsed.filter((mGroup)=>mGroup.name?.toLowerCase().includes("размер"));			
 			const arrVirtualSizes = s.length ? (s[0].items).map((modif_size)=>{				
