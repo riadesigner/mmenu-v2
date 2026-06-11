@@ -173,8 +173,11 @@ function push__save_order_to_table($cafe_uniq_name, $order_data, $table_number){
 	$params = [
 		'cafeUniqId' => $cafe_uniq_name,
 		'tableId' => 'a1b2c3d4e5f6-table-token-from-qr',
-		'description' => "Заказ для стола №{$table_number}\n",
+		'title' => "Заказ на стол №{$table_number}",
+		'description' => $order_data,
 	];
+
+	glog('$params='.print_r($params, true)); // Логируем параметры для отладки
 
 	// Подготавливаем заголовки
 	$headers = [
