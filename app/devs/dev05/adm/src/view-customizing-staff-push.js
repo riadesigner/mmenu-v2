@@ -10,6 +10,8 @@ export var VIEW_CUSTOMIZING_STAFF_PUSH = {
 		this.$btnBack = this.$footer.find('.back, .close, .cancel');
 		
 		this.sa_bnt_upd_push_keys =  this.$view.find('button[name="update_all_push_keys"]');
+		this.sa_bnt_exp_iiko_params =  this.$view.find('button[name="export_iiko_to_chats_app"]');
+		
 		this.$section_pushusers = this.$view.find('.customizing-cart__all-tgusers');		
 
 		this.$link_push_section_attention = this.$view.find('.customizing-cart__push-links-section-attention p');
@@ -313,6 +315,12 @@ export var VIEW_CUSTOMIZING_STAFF_PUSH = {
 			e.originalEvent.cancelable && e.preventDefault();
 		});
 
+		this.sa_bnt_exp_iiko_params.on('touchend',(e)=>{
+			!_this.VIEW_SCROLLED && this.su_export_iiko_params();
+			e.originalEvent.cancelable && e.preventDefault();
+		});		
+		
+
 	},
 	
 	calc_link_to_qrcode:function(push_link, role){
@@ -412,7 +420,7 @@ export var VIEW_CUSTOMIZING_STAFF_PUSH = {
 	push_user_to_archive_async:function(userPublicId){ 
 		return new Promise((res,rej)=>{ 
 			var PATH = 'adm/lib/';
-			var url = PATH + 'lib.get_push_user_to_archive.php';	
+			var url = PATH + 'push.user_to_archive.php';	
 			
 			this._now_loading();
 	
@@ -448,7 +456,7 @@ export var VIEW_CUSTOMIZING_STAFF_PUSH = {
 	load_push_cafe_keys_async:function(){ 
 		return new Promise((res,rej)=>{ 
 			var PATH = 'adm/lib/';
-			var url = PATH + 'lib.get_push_cafe_keys.php';	
+			var url = PATH + 'push.get_cafe_keys.php';	
 			
 			this._now_loading();
 	
@@ -521,7 +529,7 @@ export var VIEW_CUSTOMIZING_STAFF_PUSH = {
 		return new Promise((res,rej)=>{
 			
 			var PATH = 'adm/lib/';
-			var url = PATH + 'lib.get_push_users.php';			
+			var url = PATH + 'push.get_users.php';
 			
 			this._now_loading();
 	
@@ -563,26 +571,11 @@ export var VIEW_CUSTOMIZING_STAFF_PUSH = {
 			title:"Внимание",
 			ask:ask,
 			action:()=>{		
-
-				// this.su_update_all_push_keys_asynq()
-				// .then((keys)=>{		
-				// 	console.log('keys=', keys);					
-				// 	this.update_push_keys_buttons(keys);
-				// 	this.update_push_users_list(false);
-				// 	this.show_push_links_section(true);
-				// 	this._end_loading();
-				// })
-				// .catch((vars)=>{					
-				// 	console.log('vars = ', vars);
-
-					GLB.VIEWS.modalMessage({
-						title:GLB.LNG.get("lng_attention"),
-						message:"Функция еще не реализована",
-						btn_title:GLB.LNG.get('lng_ok')
-					});					
-				// 	this.show_push_links_section(false);
-				// 	this._end_loading();				
-				// });
+				GLB.VIEWS.modalMessage({
+					title:GLB.LNG.get("lng_attention"),
+					message:"Функция еще не реализована",
+					btn_title:GLB.LNG.get('lng_ok')
+				});					
 			},
 			cancel:()=>{
 				console.log("CANCELED");
@@ -590,40 +583,107 @@ export var VIEW_CUSTOMIZING_STAFF_PUSH = {
 			buttons:[GLB.LNG.get("lng_ok"),GLB.LNG.get("lng_cancel")]
 		});	
 	},
-	su_update_all_push_keys_asynq:function(){
-		return new Promise((res,rej)=>{
-
+	su_export_iiko_params:function(){
+		var ask = `Вы уверены, что хотите экспортировать текущие настройки IIKO в сервис CHATS_APP?`;
+		GLB.VIEWS.modalConfirm({
+			title:"Внимание",
+			ask:ask,
+			action:()=>{		
+				this.su_export_iiko_params_async()
+				.then((vars)=>{
+					console.log("OK", vars);
+					GLB.VIEWS.modalMessage({
+							title:"Успешно",
+							message:"Данные успешно экспортированы",
+							btn_title:GLB.LNG.get('lng_ok')
+						});	
+					this._end_loading();
+						
+				})
+				.catch((err)=>{
+					console.log(err);
+					GLB.VIEWS.modalMessage({
+							title:"Ошибка",
+							message:"Не удалось экспортировать данные",
+							btn_title:GLB.LNG.get('lng_ok')
+						});
+					this._end_loading();
+				});
+			},
+			cancel:()=>{
+				console.log("CANCELED");
+			},
+			buttons:[GLB.LNG.get("lng_ok"),GLB.LNG.get("lng_cancel")]
+		});	
+	},	
+	 
+	su_export_iiko_params_async:function(){ 
+		return new Promise((res,rej)=>{ 
 			var PATH = 'adm/lib/';
-			var url = PATH + 'lib.update_all_push_keys.php';			
-
+			var url = PATH + 'push.export_iiko_params.php';		
+			
 			this._now_loading();
-
-			var data = {				
-				cafe_uniq_name:GLB.THE_CAFE.get().uniq_name
+	
+			var data = {
+				cafe_id:GLB.THE_CAFE.get().id
 			};
-
+	
 			this.AJAX = $.ajax({
-				url:url,				
+				url: url,
 				data:data,
 				method:"POST",
 				dataType: "json",
 				xhrFields: {
 					withCredentials: true  // Для отправки cookies при CORS
-				},							
+				},				
 				success: function (response) {					
 					if(response && !response.error){
-						var keys = response;
-						res(keys);
+						res(response)						
 					}else{
-						rej(response);
+						rej(response)						
 					}
 				},
-				error:function(response) {
-					rej(response);					
+				error:function(response) {					
+					rej(response)
 				}
-			});
+			});			
 
-		})
-	}
+		});
+	},
+	// su_update_all_push_keys_asynq:function(){
+	// 	return new Promise((res,rej)=>{
+
+	// 		var PATH = 'adm/lib/';
+	// 		var url = PATH + 'lib.update_all_push_keys.php';			
+
+	// 		this._now_loading();
+
+	// 		var data = {				
+	// 			cafe_uniq_name:GLB.THE_CAFE.get().uniq_name
+	// 		};
+
+	// 		this.AJAX = $.ajax({
+	// 			url:url,				
+	// 			data:data,
+	// 			method:"POST",
+	// 			dataType: "json",
+	// 			xhrFields: {
+	// 				withCredentials: true  // Для отправки cookies при CORS
+	// 			},							
+	// 			success: function (response) {					
+	// 				if(response && !response.error){
+	// 					var keys = response;
+	// 					res(keys);
+	// 				}else{
+	// 					rej(response);
+	// 				}
+	// 			},
+	// 			error:function(response) {
+	// 				rej(response);					
+	// 			}
+	// 		});
+
+	// 	})
+	// }
 
 };

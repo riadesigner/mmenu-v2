@@ -35,7 +35,10 @@
 
 		
 
-	$headers = ['x-internal-key' => $internalApiKey];
+	$headers = [
+		'x-internal-key' => $internalApiKey,
+		'Content-Type' => 'application/json'
+		];
 	$params = []; 
 
 	$curlResult = get_get_info($url, $headers, $params);
