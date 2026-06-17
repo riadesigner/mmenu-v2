@@ -44,7 +44,7 @@ $APP_CFG = [
 	'limits'=>$CFG->limits,
 	'site_links'=>$CFG->site_links,
 	'tgbot_link'=>"https://t.me/".$CFG->tg_cart_bot."?start=",
-	'push_reg_link'=>'http://localhost:3000',
+	'push_reg_link'=>$_ENV['CHATS_APP_URL'],
 	];
 ?>
 
