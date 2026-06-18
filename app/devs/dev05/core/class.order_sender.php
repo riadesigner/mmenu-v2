@@ -72,6 +72,8 @@ class Order_sender{
 			'order' => $order
 		];
 
+		glog("=== sending order with params ==== ".print_r($params,1));
+
 		$res = iiko_get_info($url, $headers, $params);		
 		glog("iiko answer: ".print_r($res,1));
 		return $res;
