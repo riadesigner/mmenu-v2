@@ -15,6 +15,7 @@ require_once WORK_DIR.APP_DIR.'core/class.iiko_order.php';
 require_once WORK_DIR.APP_DIR.'core/class.iiko_params_reader.php';
 
 require_once WORK_DIR.APP_DIR.'pbl/lib/pbl.class.order_parser.php';
+require_once WORK_DIR.APP_DIR.'core/lib.api.php'; // Подключаем хелпер	
 
 session_start();
 SQL::connect();
@@ -61,6 +62,8 @@ if(IIKO_MODE){
 
 	$Iiko_order = new Iiko_order($cafe);
 
+	// разворачиваем размерный ряд опять 
+	// в модификаторы размеров (если originalPrice > 0 || virtualSize == true )	
 	$order_items = $Iiko_order->remake_for_nomenclature($order_data['order_items']);
 
 	$ARR_ORDER_FOR_IIKO = "";
@@ -78,51 +81,133 @@ if(IIKO_MODE){
 	}	
 
 }else{
-
+	$ARR_ORDER_FOR_IIKO = "";	
 }
 
-// ----------------------------------------
-//  - SAVE ORDER IN DB
-//	- GETTING ORDER_SHORT_NUMBER
-// ----------------------------------------
+$FULL_ORDER = 
+[
+	"ORDER_TEXT"=>$ORDER_TXT,
+	"ORDER_IIKO"=>$ARR_ORDER_FOR_IIKO,
+	"TOTAL_PRICE"=>$order_data["order_total_price"],		
+];
 
-$order_id_uniq = Order_sender::save_order_to_db(
-	ORDER_TARGET,
-	$cafe, 
-	[
-		"ORDER_TEXT"=>$ORDER_TXT,
-		"TOTAL_PRICE"=>$order_data["order_total_price"],
-	], 
-	null,  
-	PENDING_MODE,
-	DEMO_MODE	
-);
-if(!$order_id_uniq)__errorjson("--cant save order");
 
-$short_number = Order_sender::get_short_number($order_id_uniq);
+if(PENDING_MODE !==2){
 
-DEMO_MODE && __answerjson(["short_number"=>$short_number,"demo_mode"=>DEMO_MODE, "success"=>true]);
+	// ----------------------------------------
+	// Старый способ сохранения заказа, 
+	// Для отправки с TG и IIKO
+	// ----------------------------------------
 
-$ORDER_TXT = "Заказ №: {$short_number}\n".$ORDER_TXT;
+	//  - SAVE ORDER IN DB
+	//	- GETTING ORDER_SHORT_NUMBER
 
-// IF HAS NOT ACTIVE MANAGERS
-define('NOTG_MODE', !Order_sender::total_tg_users_for($cafe->uniq_name, ORDER_TARGET));
-NOTG_MODE && __answerjson(["short_number"=>$short_number,"demo_mode"=>DEMO_MODE, "notg_mode"=>true, "success"=>true]);
+	$order_id_uniq = Order_sender::save_order_to_db(
+		ORDER_TARGET,
+		$cafe, 
+		[
+			"ORDER_TEXT"=>$ORDER_TXT,
+			"TOTAL_PRICE"=>$order_data["order_total_price"],
+		], 
+		null,  
+		PENDING_MODE,
+		DEMO_MODE	
+	);
+	if(!$order_id_uniq)__errorjson("--cant save order");
 
-// ---------------------------
-//  SENDING THE ORDER TO TG
-// ---------------------------
-try{
-	Order_sender::send_tg_order($cafe->uniq_name, ORDER_TARGET, $order_id_uniq, $ORDER_TXT);
+	$short_number = Order_sender::get_short_number($order_id_uniq);
+
+	DEMO_MODE && __answerjson(["short_number"=>$short_number,"demo_mode"=>DEMO_MODE, "success"=>true]);
+
+	$ORDER_TXT = "Заказ №: {$short_number}\n".$ORDER_TXT;
+
+	// IF HAS NOT ACTIVE MANAGERS
+	define('NOTG_MODE', !Order_sender::total_tg_users_for($cafe->uniq_name, ORDER_TARGET));
+	NOTG_MODE && __answerjson(["short_number"=>$short_number,"demo_mode"=>DEMO_MODE, "notg_mode"=>true, "success"=>true]);
+
+	// ---------------------------
+	//  SENDING THE ORDER TO TG
+	// ---------------------------
+	try{
+		Order_sender::send_tg_order($cafe->uniq_name, ORDER_TARGET, $order_id_uniq, $ORDER_TXT);
+		__answerjson([
+			"short_number"=>$short_number, 
+			"demo_mode"=>DEMO_MODE, 
+			"notg_mode"=>NOTG_MODE,
+			"success"=>true,
+			]);	
+	}catch(Exception $e){
+		glogError($e->getMessage().", ".__FILE__.", ".__LINE__);
+		__errorjson("--fail sending delivery tg-order");	
+	}	
+
+}else{
+
+	// ----------------------------------------
+	// Новый способ сохранения заказа, 
+	// Для отправки с PUSH (CHATS_APP) и IIKO
+	// ----------------------------------------
+
+	$data = push__save_order_to_delivery($cafe->uniq_name, $FULL_ORDER, PICKUPSELF_MODE);
 	__answerjson([
-		"short_number"=>$short_number, 
-		"demo_mode"=>DEMO_MODE, 
-		"notg_mode"=>NOTG_MODE,
-		"success"=>true,
-		]);	
-}catch(Exception $e){
-	glogError($e->getMessage().", ".__FILE__.", ".__LINE__);
-	__errorjson("--fail sending delivery tg-order");	
+		"short_number"=>$data['shortCode'],
+		"public_order_id"=>$data['publicId'],
+		]);
+
 }
+
+
+// COMMON FUNCTIONS
+
+function push__save_order_to_delivery($cafe_uniq_name, $order_data, $pickupself_mode){ 
+
+	$base = "http://chats-app-backend:3001";
+	
+
+	$internalApiKey = $_ENV['CHATS_APP_INTERNAL_API_KEY']; 
+
+	$order_type = $pickupself_mode ? "external-order" : "delivery-order";
+
+	// Подготавливаем параметры для заказа
+	$params = [
+		'cafeUniqId' => $cafe_uniq_name,
+		'description' => $order_data,
+		"type" => $order_type,
+		"clientPhone" => "89147065550",
+		// "clientUserId" => "client-uuid-123"		
+		// 'title' => "Заказ на самовывоз",		
+	];	
+
+	glog('$params='.print_r($params, true)); // Логируем параметры для отладки
+
+	// Подготавливаем заголовки
+	$headers = [
+		'x-internal-key' => $internalApiKey,
+		'Content-Type' => 'application/json'
+	];
+
+	// Формируем полный URL
+	$url = $base . "/api-internal/orders";
+
+	// Отправляем запрос
+	$curlResult = post_get_info($url, $headers, $params);
+	$parsed = parse_curl_response($curlResult);
+
+	glog("answer: ".print_r($curlResult, true)); // Логируем полный результат для отладки
+
+	if (!$parsed['ok']) {
+		glog("API error: {$parsed['errorCode']} - {$parsed['message']}");
+
+		if(!empty($parsed['errorCode'])) {
+			__errorjson($parsed['errorCode'] ?? 'external_error', $parsed['httpCode'] ?? 500);
+		}
+	}
+
+	return $parsed['data'];
+
+}
+
+
+
 
 ?>

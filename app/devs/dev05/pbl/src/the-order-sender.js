@@ -23,6 +23,8 @@ export const THE_ORDER_SENDER = {
                 pickupself
             };
 
+            console.log('start sending data async: ',data);
+
             const AJAX = $.ajax({
                 url: url,                
                 dataType: "json",

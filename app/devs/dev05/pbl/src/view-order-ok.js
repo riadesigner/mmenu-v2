@@ -113,8 +113,8 @@ export var VIEW_ORDER_OK = {
 	},
 	update_template_part_delivery:function(){
 
-		var need_time = this.order.order_time_need===this.order.order_time_sent;
-		var need_time_str = need_time ? GLB.LNG.get('lng_near_time') : this.formatLngTime(this.order.order_time_need);		
+		// var need_time = this.order.order_time_need===this.order.order_time_sent;
+		// var need_time_str = need_time ? GLB.LNG.get('lng_near_time') : this.formatLngTime(this.order.order_time_need);		
 
 		let order_str = "";
 		const addr = this.order.order_user_full_address;
@@ -135,8 +135,8 @@ export var VIEW_ORDER_OK = {
 
 		var msg2 = [
 			"<p>",
-				"<span>"+GLB.LNG.get("lng_time_from")+"</span> "+ this.formatLngTime(this.order.order_time_sent)+"<br>",
-				"<span>"+GLB.LNG.get("lng_time_to")+"</span> "+ need_time_str+"<br>",
+				// "<span>"+GLB.LNG.get("lng_time_from")+"</span> "+ this.formatLngTime(this.order.order_time_sent)+"<br>",
+				// "<span>"+GLB.LNG.get("lng_time_to")+"</span> "+ need_time_str+"<br>",
 				"<span>"+GLB.LNG.get("lng_amount")+"</span> "+this.order.order_total_price+" "+currency+"<br>",
 				"<span>"+GLB.LNG.get("lng_tel")+"</span> "+this.order.order_user_phone+"<br>",
 				delivery_str,
@@ -203,7 +203,7 @@ export var VIEW_ORDER_OK = {
 
 
 	},
-	formatLngTime:function(tm,full){
+	formatLngTime:function(tm="",full){
 		var t = tm.split(" ");
 		var d = t[0].split("-");
 		// var time = t[1];
