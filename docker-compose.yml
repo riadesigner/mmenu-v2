@@ -13,6 +13,7 @@ services:
     volumes:
       - ./:/var/www
     networks:
+      - internal
       - shared-app-network
 
   apache:
@@ -30,6 +31,7 @@ services:
     volumes:
       - ./app:/var/www/app  
     networks:
+      - internal
       - shared-app-network
 
   db:
@@ -46,7 +48,8 @@ services:
       - ./db:/var/lib/mysql 
       - ./docker/mysql/mariadb.cnf:/etc/mysql/conf.d/custom.cnf:ro
     networks:
-      - shared-app-network
+      - internal
+      # Убираем shared-app-network, если БД не нужна извне
 
   adminer:
     image: adminer:5.3.0
@@ -57,8 +60,16 @@ services:
     environment:
       - TZ=UTC        
     networks:
-      - shared-app-network
+      - internal
+      # Только внутренняя сеть
 
 networks:
+  # Внутренняя сеть для сервисов проекта (создаётся автоматически)
+  internal:
+    name: mmenu-v2_default  # Явно задаём имя для совместимости
+    driver: bridge
+  
+  # Внешняя сеть для взаимодействия с другими проектами
   shared-app-network:
     external: true
+    name: shared-app-network

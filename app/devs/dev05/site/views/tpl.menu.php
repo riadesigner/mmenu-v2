@@ -40,13 +40,15 @@ const GLB_APP_URL = '<?=Site::get_app_url();?>';
 $Cafe = Site::get_cafe();
 $CAFE_TITLE = $Cafe ? $Cafe->cafe_title : '';
 $CAFE_UNIQ_NAME = $Cafe ? $Cafe->uniq_name : '';
+
 ?>
 
 var SITE_CFG = {
 	lang:	'<?=SITE::get_lang();?>',
 	home_page: '<?=SITE::get_link("home");?>/',	
-	order_forgotten_delay: <?=$_ENV['ORDER_FORGOTTEN_AFTER_TIME'];?>, // minutes
-	cafe_order_way: '<?=$Cafe->order_way;?>'
+	order_forgotten_delay: <?=$_ENV["ORDER_FORGOTTEN_AFTER_TIME"];?>, // minutes
+	cafe_order_way: '<?=$Cafe->order_way;?>',
+	users_app_url: '<?=$_ENV["USERS_APP_URL"];?>',	
 };
 
 console.log('SITE_CFG = ',SITE_CFG);
