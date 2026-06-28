@@ -426,7 +426,8 @@ export var VIEW_CUSTOMIZING_STAFF_PUSH = {
 	
 			var data = {
 				cafe_uniq_name:GLB.THE_CAFE.get().uniq_name,
-				user_public_id: userPublicId
+				user_public_id: userPublicId,
+				cafe_display_name:GLB.THE_CAFE.get().cafe_title,
 			};			
 	
 			this.AJAX = $.ajax({
@@ -461,7 +462,8 @@ export var VIEW_CUSTOMIZING_STAFF_PUSH = {
 			this._now_loading();
 	
 			var data = {
-				cafe_uniq_name:GLB.THE_CAFE.get().uniq_name
+				cafe_uniq_name:GLB.THE_CAFE.get().uniq_name,
+				cafe_display_name:GLB.THE_CAFE.get().cafe_title,
 			};		
 	
 			this.AJAX = $.ajax({

@@ -26,6 +26,7 @@
 	
 	$cafe_uniq_name = $_POST['cafe_uniq_name'];
 	$user_public_id = $_POST['user_public_id'];
+	$cafe_display_name = $_POST['cafe_display_name'];
 
 	$internalApiKey = $_ENV['CHATS_APP_INTERNAL_API_KEY']; 
 	$base = 'http://chats-app-backend:3001';
@@ -35,7 +36,7 @@
 		'x-internal-key' => $internalApiKey,
 		'Content-Type' => 'application/json'
 		];
-	$params = []; // Для вашего случая параметры в URL не нужны
+	$params = []; 
 
 	$curlResult = post_get_info($url, $headers, $params);
 	$parsed = parse_curl_response($curlResult);
@@ -52,7 +53,10 @@
 				'x-internal-key' => $internalApiKey,
 				'Content-Type' => 'application/json'
 				];
-			$cafeKeys = register_cafe_for_push($url, $headers, []);
+			$params = [
+				"displayName" => $cafe_display_name,
+			];
+			$cafeKeys = register_cafe_for_push($url, $headers, $params);
 			glog("get keys for new cafe: " . print_r($cafeKeys, true));
 			__answerjson($cafeKeys);			
 			return;

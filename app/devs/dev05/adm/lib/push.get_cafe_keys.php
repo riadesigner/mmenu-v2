@@ -23,6 +23,7 @@
 	}
 	
 	$cafe_uniq_name = $_POST['cafe_uniq_name'];
+	$cafe_display_name = $_POST['cafe_display_name'];
 	
 	$internalApiKey = $_ENV['CHATS_APP_INTERNAL_API_KEY']; 
 	$url = 'http://chats-app-backend:3001/api-internal/cafe/' . $cafe_uniq_name;
@@ -45,7 +46,10 @@
 			// регистрируем новое кафе			
 			$url = 'http://chats-app-backend:3001/api-internal/add-cafe/' . $cafe_uniq_name;
 			$headers = ['x-internal-key' => $internalApiKey];
-			$cafeKeys = register_cafe_for_push($url, $headers, []);
+			$params = [
+				"displayName" => $cafe_display_name,
+			];			
+			$cafeKeys = register_cafe_for_push($url, $headers, $params);
 			glog("get keys for new cafe: " . print_r($cafeKeys, true));
 			__answerjson($cafeKeys);			
 			return;
