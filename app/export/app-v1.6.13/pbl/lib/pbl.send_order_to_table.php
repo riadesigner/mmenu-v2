@@ -70,7 +70,6 @@ if(IIKO_MODE){
 	// в модификаторы размеров (если originalPrice > 0 || virtualSize == true )
 	$order_items = $Iiko_order->remake_for_nomenclature($order_data['order_items']);	
 
-
 	$ARR_ORDER_FOR_IIKO = "";
 
 	try{		

@@ -1,5 +1,6 @@
 <?php
 
+
 	header('content-type: application/json; charset=utf-8');
 	define("BASEPATH",__file__);
 	
@@ -20,16 +21,12 @@
 	if (empty($_POST['cafe_uniq_name'])) {
     	__errorjsonp("Unknown cafe_uniq_name");
 	}
-	if (empty($_POST['user_public_id'])) {
-    	__errorjsonp("Unknown user_public_id");
-	}	
 	
 	$cafe_uniq_name = $_POST['cafe_uniq_name'];
-	$user_public_id = $_POST['user_public_id'];
-
+	$cafe_display_name = $_POST['cafe_display_name'];
+	
 	$internalApiKey = $_ENV['CHATS_APP_INTERNAL_API_KEY']; 
-	$base = 'http://chats-app-backend:3001';
-	$url = $base . '/api-internal/cafe/' . $cafe_uniq_name. '/users/' . $user_public_id . '/archive';	
+	$url = 'http://chats-app-backend:3001/api-internal/cafe/' . $cafe_uniq_name;
 
 	$headers = [
 		'x-internal-key' => $internalApiKey,
@@ -37,7 +34,7 @@
 		];
 	$params = []; // Для вашего случая параметры в URL не нужны
 
-	$curlResult = post_get_info($url, $headers, $params);
+	$curlResult = get_get_info($url, $headers, $params);
 	$parsed = parse_curl_response($curlResult);
 
 	glog("answer: ".print_r($curlResult, true)); // Логируем полный результат для отладки
@@ -48,11 +45,11 @@
 		if(!empty($parsed['errorCode']) && $parsed['errorCode'] === 'CAFE_NOT_FOUND') {
 			// регистрируем новое кафе			
 			$url = 'http://chats-app-backend:3001/api-internal/add-cafe/' . $cafe_uniq_name;
-			$headers = [
-				'x-internal-key' => $internalApiKey,
-				'Content-Type' => 'application/json'
-				];
-			$cafeKeys = register_cafe_for_push($url, $headers, []);
+			$headers = ['x-internal-key' => $internalApiKey];
+			$params = [
+				"displayName" => $cafe_display_name,
+			];			
+			$cafeKeys = register_cafe_for_push($url, $headers, $params);
 			glog("get keys for new cafe: " . print_r($cafeKeys, true));
 			__answerjson($cafeKeys);			
 			return;

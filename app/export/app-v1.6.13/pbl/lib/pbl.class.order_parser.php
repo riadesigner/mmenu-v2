@@ -7,8 +7,8 @@ class Order_parser{
     protected array $order_data;
     protected array $order_items;
     protected string $ORDER_TARGET;    
-    protected string $time_sent;    
-    protected string $time_need;  
+    // protected string $time_sent;    
+    // protected string $time_need;  
     protected string $user_phone; 
     protected string $deliv_address;
     protected string $user_comment;    
@@ -16,13 +16,13 @@ class Order_parser{
     protected string $str_currency;
     protected int $total_price;
     protected $table_number = null;
-    protected int $time_format;
-    protected bool $NEARTIME_MODE;   
+    // protected int $time_format;
+    // protected bool $NEARTIME_MODE;   
     protected bool $PICKUPSELF_MODE;    
     protected bool $READY_FOR_BUILD;
 
     public function __construct($params){
-        $this->time_format = 24;
+        // $this->time_format = 24;
         $this->str_currency = "₽";
         $this->READY_FOR_BUILD = $this->verify($params);
         return $this;
@@ -56,13 +56,15 @@ class Order_parser{
 
     private function build_for_delivery():string {
 
-        $str_time = glb_russian_datetime($this->time_need, $this->time_format);
+        $str_time = glb_russian_datetime(gmdate('Y-m-d\TH:i:s.v\Z'));
         
-        if($this->time_need==$this->time_sent){
-            $order_time_to = "Заказ на ближайшее время";
-        }else{
-            $order_time_to =  "Приготовить к: {$str_time}";	
-        }
+        // if($this->time_need==$this->time_sent){
+        //     $order_time_to = "Заказ на ближайшее время";
+        // }else{
+        //     $order_time_to =  "Приготовить к: {$str_time}";	
+        // }
+
+        // $order_time_to = "Заказ на ближайшее время";        
         $str_order_mode  = $this->PICKUPSELF_MODE?"Самовывоз":"Доставка";
         
         $str = "";
@@ -88,7 +90,7 @@ class Order_parser{
 
     private function build_for_table():string {
 
-        $str_time = glb_russian_datetime($this->time_need, $this->time_format);
+        $str_time =  glb_russian_datetime(gmdate('Y-m-d\TH:i:s.v\Z'));
                 
         $str = "";
         $str .= "   ------------\n";
@@ -159,9 +161,9 @@ class Order_parser{
         $this->order_data = $params["order_data"];
         if(!is_array($this->order_data)||!count($this->order_data)) {throw new Exception('order_data param is wrong');}
         
-        if(!isset($this->order_data["order_time_sent"])){ throw new Exception('order_time_sent param is wrong'); }
-        $this->time_sent = post_clean($this->order_data['order_time_sent'],100);
-        if(empty($this->time_sent)) { throw new Exception('--wrong order data'); }
+        // if(!isset($this->order_data["order_time_sent"])){ throw new Exception('order_time_sent param is wrong'); }
+        // $this->time_sent = post_clean($this->order_data['order_time_sent'],100);
+        // if(empty($this->time_sent)) { throw new Exception('--wrong order data'); }
 
         if(!isset($this->order_data['order_total_price'])){ throw new Exception('order_total_price param is wrong'); }
         $this->total_price = (int) $this->order_data['order_total_price'];
@@ -171,10 +173,10 @@ class Order_parser{
         $this->order_items = $this->order_data['order_items'];
 
         // time part
-        if(!isset($this->order_data["order_time_need"])){ throw new Exception('order_time_need param is wrong'); }
-        $this->time_need = post_clean($this->order_data['order_time_need'],100);        
-        if(empty($this->time_need)) $this->time_need = $this->time_sent;    
-        $this->NEARTIME_MODE = $this->time_need===$this->time_sent;  
+        // if(!isset($this->order_data["order_time_need"])){ throw new Exception('order_time_need param is wrong'); }
+        // $this->time_need = post_clean($this->order_data['order_time_need'],100);        
+        // if(empty($this->time_need)) $this->time_need = $this->time_sent;    
+        // $this->NEARTIME_MODE = $this->time_need===$this->time_sent;  
 
         // ORDER TO TABLE MODE
         if($this->ORDER_TARGET === Order_sender::ORDER_TABLE){
