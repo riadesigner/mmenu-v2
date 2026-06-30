@@ -11,7 +11,8 @@ export var VIEW_CUSTOMIZING_STAFF_PUSH = {
 		
 		this.sa_bnt_upd_push_keys =  this.$view.find('button[name="update_all_push_keys"]');
 		this.sa_bnt_exp_iiko_params =  this.$view.find('button[name="export_iiko_to_chats_app"]');
-		
+		this.sa_bnt_exp_cafe_data =  this.$view.find('button[name="export_cafe_data_to_chats_app"]');
+
 		this.$section_pushusers = this.$view.find('.customizing-cart__all-tgusers');		
 
 		this.$link_push_section_attention = this.$view.find('.customizing-cart__push-links-section-attention p');
@@ -126,14 +127,33 @@ export var VIEW_CUSTOMIZING_STAFF_PUSH = {
 					$el.html(html);
 					$el.find("a").each(function(){
 						$(this).on('touchend', (e)=>{
-							e.preventDefault();
-							e.stopPropagation();
-							let role = $(this).attr('data-role');
-							let id = $(this).attr('data-id');
-							foo.user_to_archive(id);
+							if(!_this.VIEW_SCROLLED){
+								e.preventDefault();
+								e.stopPropagation();
+								// let role = $(this).attr('data-role');
+								let id = $(this).attr('data-id');
+								foo.ask_before_delete_user(id);
+							}else{
+								console.log("SCROLLED, no action");								
+							}
 						})
-					});		
+					});					
+
 				}				
+			},
+			ask_before_delete_user:function(id){
+				var ask = `Вы уверены, что хотите переместить пользователя в архив?`;
+				GLB.VIEWS.modalConfirm({
+					title:"Внимание",
+					ask:ask,
+					action:()=>{		
+						foo.user_to_archive(id);
+					},
+					cancel:()=>{
+						console.log("CANCELED");
+					},
+					buttons:[GLB.LNG.get("lng_ok"),GLB.LNG.get("lng_cancel")]
+				});	
 			},
 			user_to_archive:function(id){ 
 				console.log("user_to_archive", id);
@@ -318,9 +338,13 @@ export var VIEW_CUSTOMIZING_STAFF_PUSH = {
 		this.sa_bnt_exp_iiko_params.on('touchend',(e)=>{
 			!_this.VIEW_SCROLLED && this.su_export_iiko_params();
 			e.originalEvent.cancelable && e.preventDefault();
-		});		
+		});	
 		
-
+		this.sa_bnt_exp_cafe_data.on('touchend',(e)=>{
+			!_this.VIEW_SCROLLED && this.su_export_cafe_data();
+			e.originalEvent.cancelable && e.preventDefault();
+		})
+		
 	},
 	
 	calc_link_to_qrcode:function(push_link, role){
@@ -618,7 +642,77 @@ export var VIEW_CUSTOMIZING_STAFF_PUSH = {
 			buttons:[GLB.LNG.get("lng_ok"),GLB.LNG.get("lng_cancel")]
 		});	
 	},	
+
+	su_export_cafe_data:function(){
+		var ask = `Вы уверены, что хотите экспортировать общие данные кафе в сервис CHATS_APP?`;
+		GLB.VIEWS.modalConfirm({
+			title:"Внимание",
+			ask:ask,
+			action:()=>{		
+				this.su_export_cafe_data_async()
+				.then((vars)=>{
+					console.log("OK", vars);
+					GLB.VIEWS.modalMessage({
+							title:"Успешно",
+							message:"Данные успешно экспортированы",
+							btn_title:GLB.LNG.get('lng_ok')
+						});	
+					this._end_loading();
+						
+				})
+				.catch((err)=>{
+					console.log(err);
+					GLB.VIEWS.modalMessage({
+							title:"Ошибка",
+							message:"Не удалось экспортировать данные",
+							btn_title:GLB.LNG.get('lng_ok')
+						});
+					this._end_loading();
+				});
+			},
+			cancel:()=>{
+				console.log("CANCELED");
+			},
+			buttons:[GLB.LNG.get("lng_ok"),GLB.LNG.get("lng_cancel")]
+		});	
+	},		
 	 
+	su_export_cafe_data_async:function(){
+		return new Promise((res,rej)=>{ 
+			var PATH = 'adm/lib/';
+			var url = PATH + 'push.export_cafe_data.php';		
+			
+			this._now_loading();
+	
+			var data = {
+				cafe_id:GLB.THE_CAFE.get().id
+			};
+	
+			this.AJAX = $.ajax({
+				url: url,
+				data:data,
+				method:"POST",
+				dataType: "json",
+				xhrFields: {
+					withCredentials: true  // Для отправки cookies при CORS
+				},				
+				success: function (response) {		
+					console.log('response ok', response)
+					if(response && !response.error){
+						res(response)						
+					}else{
+						rej(response)						
+					}
+				},
+				error:function(response) {
+					console.log('response err', response)
+					rej(response)
+				}
+			});			
+
+		});
+	},
+
 	su_export_iiko_params_async:function(){ 
 		return new Promise((res,rej)=>{ 
 			var PATH = 'adm/lib/';
@@ -651,41 +745,5 @@ export var VIEW_CUSTOMIZING_STAFF_PUSH = {
 			});			
 
 		});
-	},
-	// su_update_all_push_keys_asynq:function(){
-	// 	return new Promise((res,rej)=>{
-
-	// 		var PATH = 'adm/lib/';
-	// 		var url = PATH + 'lib.update_all_push_keys.php';			
-
-	// 		this._now_loading();
-
-	// 		var data = {				
-	// 			cafe_uniq_name:GLB.THE_CAFE.get().uniq_name
-	// 		};
-
-	// 		this.AJAX = $.ajax({
-	// 			url:url,				
-	// 			data:data,
-	// 			method:"POST",
-	// 			dataType: "json",
-	// 			xhrFields: {
-	// 				withCredentials: true  // Для отправки cookies при CORS
-	// 			},							
-	// 			success: function (response) {					
-	// 				if(response && !response.error){
-	// 					var keys = response;
-	// 					res(keys);
-	// 				}else{
-	// 					rej(response);
-	// 				}
-	// 			},
-	// 			error:function(response) {
-	// 				rej(response);					
-	// 			}
-	// 		});
-
-	// 	})
-	// }
-
+	}
 };
