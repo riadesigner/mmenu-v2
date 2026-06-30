@@ -1,0 +1,2 @@
+ErrorDocument 403 https://chefsmenu.ru
+Deny from all
