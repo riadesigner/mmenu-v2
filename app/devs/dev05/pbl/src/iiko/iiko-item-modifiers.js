@@ -92,7 +92,7 @@ export const IIKO_ITEM_MODIFIERS = {
 	//   arr_usr_chosen: array; 
 	//   total_modif_price: integer;
 	// }
-	recalc:function() {		
+	recalc:function() {
 		return this._do_recalc_with_groups();
 	},
 
@@ -210,9 +210,9 @@ export const IIKO_ITEM_MODIFIERS = {
 			}
 		}
 		
-		let [arr_usr_chosen, total_modif_price] = fn.calc_price();		
+		let [arr_usr_chosen, total_modif_price] = fn.calc_price();				
 
-		this.arr_usr_chosen = arr_usr_chosen;	
+		this.arr_usr_chosen = arr_usr_chosen;			
 		this.total_modif_price = parseInt(total_modif_price,10);	
 
 		return {

@@ -154,7 +154,7 @@ export const IIKO_ITEM = {
 		}
 	},
 	build_modifiers:function(){
-		this.MODIF_PANEL.add(this.IIKO_MODIFIERS);
+		this.MODIF_PANEL.add(this.IIKO_MODIFIERS);		
 	},
 	calc_order_uniq_name:function(prefix){		
 		// if item has sizes more than one
@@ -174,6 +174,7 @@ export const IIKO_ITEM = {
 	update_modif_panel_ui(){				
 		let price = this.get_price();
 		const {arr_usr_chosen, total_modif_price} = this.IIKO_MODIFIERS.recalc();
+		console.log('arr_usr_chosen == ', arr_usr_chosen);
 		const with_options = arr_usr_chosen.length > 0;		
 		if(with_options){ price += total_modif_price;}				
 		this.MODIF_PANEL.show_price(price, this.TOTAL_ADD_TO_CART);		

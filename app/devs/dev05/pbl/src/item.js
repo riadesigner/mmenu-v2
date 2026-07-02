@@ -83,7 +83,6 @@ export var ITEM = {
 		this.update_lng();
 
 		return this;
-
 	},	
 	render:function() {
 		if(!this.NOW_IN_VIEWPORT){
@@ -91,6 +90,7 @@ export var ITEM = {
 			this.$elParent.append(this.$item);	
 			this.update_layout();
 			console.log("render ",this.item_data.title);
+			this.MODEL_ITEM.update_modif_panel_ui(); // added 01-7-2026
 			this.load_image(this.get().image_url);
 		}
 	},

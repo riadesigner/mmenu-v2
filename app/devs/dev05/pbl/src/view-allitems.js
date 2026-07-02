@@ -46,7 +46,7 @@ export var VIEW_ALLITEMS = {
 				this.CURRENT = 0;
 				this.build_instances_async()
 				.then((ITEMS)=>{
-					this.ITEMS = ITEMS;					
+					this.ITEMS = ITEMS;
 					this.render_actual_range();
 					this.go_to(this.CURRENT,"fast");			
 					this.update_tpl_page_counter();										
