@@ -51,10 +51,30 @@ class Iiko_extmenu_loader{
 	// PRIVATE METHODS
 	// ---------------
 	private function reload_token(): string {
-		// GETTING TOKEN FROM IIKO 
-		$url     = 'api/1/access_token';
+		
+		$k  = $this->IIKO_API_KEY;
+
+		// ===============================================
+		// GETTING TOKEN FROM IIKO | NEW API V2
+		// ===============================================
+
+		$url     = 'api/v2/access_token';
 		$headers = ["Content-Type"=>"application/json"];
-		$params  = ["apiLogin" => $this->IIKO_API_KEY];
+
+		$appId = $_ENV['IIKO_APP_ID'];
+		$clientSecret = $_ENV['IIKO_CLIENT_SECRET'];
+
+		$params  = [
+			"apiKey" => $k,
+			"appId" => $appId,
+			"clientSecret" => $clientSecret,
+			];
+
+		$res = iiko_get_info($url,$headers,$params);
+		$token = $res["token"];
+
+		// ===============================================		
+
 		$res = iiko_get_info($url,$headers,$params);		
 		if(!isset($res['token'])){
 			$this->LOG && glogError(print_r($res,1));

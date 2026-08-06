@@ -179,9 +179,27 @@ class Iiko_params{
 			glogError("empty api key");	
 			return false;
 		}
-		$url     = 'api/1/access_token';
+
+		$k = $api_key;
+
+		// ===============================================
+		// GETTING TOKEN FROM IIKO | NEW API V2
+		// ===============================================
+
+		$url     = 'api/v2/access_token';
 		$headers = ["Content-Type"=>"application/json"];
-		$params  = ["apiLogin" => $api_key];
+
+		$appId = $_ENV['IIKO_APP_ID'];
+		$clientSecret = $_ENV['IIKO_CLIENT_SECRET'];
+
+		$params  = [
+			"apiKey" => $k,
+			"appId" => $appId,
+			"clientSecret" => $clientSecret,
+			];
+
+		// ===============================================
+
 		$res = iiko_get_info($url,$headers,$params);
 		
 		if( isset($res["errorDescription"]) ) {

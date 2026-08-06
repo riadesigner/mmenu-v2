@@ -35,14 +35,26 @@ if($cafe->id_user!==$user->id)__errorjsonp("Not allowed, ".__LINE__);
 $k = $cafe->iiko_api_key;
 if(empty($k)) __errorjsonp("Cant find iiko api for the cafe, ".__LINE__);
 
-// GETTING TOKEN FROM IIKO 
-$url     = 'api/1/access_token';
+// ===============================================
+// GETTING TOKEN FROM IIKO | NEW API V2
+// ===============================================
+
+$url     = 'api/v2/access_token';
 $headers = ["Content-Type"=>"application/json"];
-$params  = ["apiLogin" => $k];
+
+$appId = $_ENV['IIKO_APP_ID'];
+$clientSecret = $_ENV['IIKO_CLIENT_SECRET'];
+
+$params  = [
+    "apiKey" => $k,
+    "appId" => $appId,
+    "clientSecret" => $clientSecret,
+    ];
+
+// ===============================================
 
 $res = iiko_get_info($url,$headers,$params);
 
 __answerjsonp($res);
 
-// f531e0adab054a27a7e18bd62b068cac
 ?>

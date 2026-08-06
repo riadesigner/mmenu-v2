@@ -75,12 +75,32 @@ class Iiko_nomenclature_loader{
 	// PRIVATE METHODS
 	// ---------------
 	private function reload_token(): string {
-		// GETTING TOKEN FROM IIKO 
-		$url     = 'api/1/access_token';
+
+		$k = $this->IIKO_API_KEY;
+
+		// ===============================================
+		// GETTING TOKEN FROM IIKO | NEW API V2
+		// ===============================================
+
+		$url     = 'api/v2/access_token';
 		$headers = ["Content-Type"=>"application/json"];
-		$params  = ["apiLogin" => $this->IIKO_API_KEY];
-		$res = iiko_get_info($url,$headers,$params);		
-		return $res['token'];
+
+		$appId = $_ENV['IIKO_APP_ID'];
+		$clientSecret = $_ENV['IIKO_CLIENT_SECRET'];
+
+		$params  = [
+			"apiKey" => $k,
+			"appId" => $appId,
+			"clientSecret" => $clientSecret,
+			];
+
+		$res = iiko_get_info($url,$headers,$params);
+		$token = $res["token"];
+
+		// ===============================================
+		
+		return $token;
+
 	}
 
 	private function load_nomenclature(): array{

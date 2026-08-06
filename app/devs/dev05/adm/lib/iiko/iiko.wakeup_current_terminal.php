@@ -47,12 +47,26 @@ $orgId = $iiko_params->current_organization_id;
 if(empty($terminalId)) __errorjson("неизвестный терминал");	
 if(empty($orgId)) __errorjson("неизвестная организация");	
 
-// GETTING TOKEN FROM IIKO 
-$url     = 'api/1/access_token';
+// ===============================================
+// GETTING TOKEN FROM IIKO | NEW API V2
+// ===============================================
+
+$url     = 'api/v2/access_token';
 $headers = ["Content-Type"=>"application/json"];
-$params  = ["apiLogin" => $k];
+
+$appId = $_ENV['IIKO_APP_ID'];
+$clientSecret = $_ENV['IIKO_CLIENT_SECRET'];
+
+$params  = [
+    "apiKey" => $k,
+    "appId" => $appId,
+    "clientSecret" => $clientSecret,
+    ];
+
 $res = iiko_get_info($url,$headers,$params);
 $token = $res["token"];
+
+// ===============================================
 
 // Awake terminal groups from sleep mode
 $url     = 'api/1/terminal_groups/awake';
