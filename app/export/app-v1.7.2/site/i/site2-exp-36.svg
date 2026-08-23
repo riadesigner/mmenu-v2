@@ -1,0 +1,55 @@
+<svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" width="800" height="182" viewBox="0 0 800 182">
+  <defs>
+    <style>
+      .cls-1, .cls-2, .cls-3, .cls-4 {
+        fill: none;
+        stroke-miterlimit: 10;
+      }
+
+      .cls-1, .cls-2 {
+        stroke: #000;
+      }
+
+      .cls-1 {
+        stroke-width: 3.82px;
+      }
+
+      .cls-2 {
+        stroke-width: 4.84px;
+      }
+
+      .cls-3 {
+        stroke: #0f0f0f;
+        stroke-width: 6.45px;
+      }
+
+      .cls-4 {
+        stroke: #fff040;
+        stroke-width: 11.07px;
+      }
+
+      .cls-5 {
+        fill: #fff040;
+      }
+    </style>
+  </defs>
+  <title>site2-exp-36</title>
+  <g>
+    <g>
+      <circle class="cls-1" cx="612.04" cy="115.74" r="8.27"/>
+      <circle class="cls-1" cx="681.02" cy="115.74" r="8.27"/>
+      <circle class="cls-1" cx="750" cy="115.74" r="8.27"/>
+    </g>
+    <g>
+      <rect class="cls-2" x="514.84" y="5.35" width="24.67" height="78.46" rx="12.34" ry="12.34"/>
+      <rect class="cls-2" x="549.75" y="5.35" width="24.67" height="78.46" rx="12.34" ry="12.34"/>
+    </g>
+    <path class="cls-3" d="M0,120.09H403.26a29.8,29.8,0,0,0,29.8-29.8V61.19a29.8,29.8,0,0,1,29.8-29.8H800"/>
+    <g>
+      <circle cx="103.21" cy="115.57" r="60.22"/>
+      <circle cx="248.74" cy="115.57" r="35.13"/>
+      <circle class="cls-4" cx="103.21" cy="115.57" r="34.85"/>
+      <circle class="cls-5" cx="248.74" cy="115.57" r="15.05"/>
+    </g>
+  </g>
+</svg>
