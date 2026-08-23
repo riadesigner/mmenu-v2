@@ -47,7 +47,50 @@
 			http_response_code($http_code);
 		}
 
-		echo $response_body;
+		$payload = json_decode($response_body, true);
+		if (!is_array($payload)) {
+			echo $response_body;
+			exit;
+		}
+
+		if (isset($payload['error'])) {
+			echo $response_body;
+			exit;
+		}
+
+		require_once WORK_DIR.APP_DIR.'core/class.sql.php';
+		SQL::connect();
+
+		$cafe_uniq_name_clean = post_clean($cafe_uniq_name);
+		$res = SQL::first("SELECT id FROM cafe WHERE uniq_name='{$cafe_uniq_name_clean}'");
+		if (!$res) {
+			__errorjson('1. unknown cafe');
+		}
+
+		$id_cafe = (int) $res['id'];
+
+		if (!empty($payload['menu']) && is_array($payload['menu'])) {
+			foreach ($payload['menu'] as &$section) {
+				if (!is_array($section)) {
+					continue;
+				}
+				$id_external = isset($section['id_external']) ? trim((string) $section['id_external']) : '';
+				if ($id_external === '') {
+					continue;
+				}
+				$id_external_sql = post_clean($id_external);
+				$row = SQL::first(
+					"SELECT id FROM menu WHERE id_cafe={$id_cafe} AND id_external='{$id_external_sql}'"
+				);
+				if ($row) {
+					$section['id'] = (string) (int) $row['id'];
+					$section['id_cafe'] = (string) $id_cafe;
+				}
+			}
+			unset($section);
+		}
+
+		__answerjson($payload);
 		exit;
 	}
 	 
