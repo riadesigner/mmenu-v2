@@ -1,0 +1,21 @@
+<svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" width="81" height="75" viewBox="0 0 81 75">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #fff;
+      }
+
+      .cls-2 {
+        fill: none;
+        stroke: #000;
+        stroke-miterlimit: 10;
+        stroke-width: 3px;
+      }
+    </style>
+  </defs>
+  <title>site-succeed</title>
+  <g>
+    <circle class="cls-1" cx="40.5" cy="37.5" r="34.5"/>
+    <polyline class="cls-2" points="25 37 38 49 59 28"/>
+  </g>
+</svg>
