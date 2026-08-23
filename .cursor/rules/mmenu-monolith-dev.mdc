@@ -1,0 +1,24 @@
+---
+description: mmenu-v2 — правки только в dev05; app/export не трогать; export.py после PHP, rollup перед export при JS
+alwaysApply: true
+---
+
+# mmenu-v2 monolith — dev05 и export
+
+Подробный workflow: skill **mmenu-monolith-dev** (`.cursor/skills/mmenu-monolith-dev/SKILL.md`).
+
+## Правила
+
+1. **Редактировать только** `app/devs/dev05/` и всё внутри.
+2. **Не трогать** `app/export/**` — это замороженные версии для prod и отката.
+3. Новая prod-версия — только через `python3 export.py X.Y.Z` из `app/devs/dev05/` (новая папка `app/export/app-vX.Y.Z/`).
+
+## Export после задачи
+
+| Что меняли | Действие |
+|------------|----------|
+| Только PHP (и прочее без `*/src/`) | Можно сразу `export.py` с **новой** версией |
+| JS в `adm/src`, `pbl/src`, `site/src`, … | Сначала `rollup -c` (или `npm run dev`) в dev05, **потом** export |
+| Только JS без сборки | **Не** экспортировать — dist устареет |
+
+На сервере после export: `CURRENT_APP_DIR=export/app-vX.Y.Z`.
