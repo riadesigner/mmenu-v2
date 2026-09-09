@@ -250,7 +250,11 @@ export var VIEW_ALLITEMS = {
 		return new Promise((res, rej)=>{			
 		
 			var url = GLB_APP_URL+"pbl/lib/pbl.get_all_items.php";	
-			var data = {menu:this.MENU.id};			
+			var data = {
+				cafe: GLB.CAFE.get('uniq_name'),
+				menu: this.MENU.id,
+				menu_external: this.MENU.id_external || ''
+			};
 
 			this.AJX_ITEMS = $.ajax({
 				url: url,				
