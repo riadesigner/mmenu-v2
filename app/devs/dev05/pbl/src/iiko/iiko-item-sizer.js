@@ -46,7 +46,9 @@ export const IIKO_ITEM_SIZER = {
 	_calc_from_modifiers:function(){		
 		
 		const basePrice = parseInt(this.ITEM_DATA.iiko_sizes_parsed[0].price, 10);
-		const baseValue = parseInt(this.ITEM_DATA.iiko_sizes_parsed[0].portionWeightGrams, 10);
+		const rawBaseValue = parseInt(this.ITEM_DATA.iiko_sizes_parsed[0].portionWeightGrams, 10);
+		// 0 / 1000 — iiko placeholder on the product size; real volume is on size modifiers.
+		const baseValue = (!rawBaseValue || rawBaseValue === 1000) ? 0 : rawBaseValue;
 	
 		const search_sizes = ()=>{
 			const s = this.ITEM_DATA.iiko_modifiers_parsed.filter((mGroup)=>mGroup.name?.toLowerCase().includes("размер"));			

@@ -1,0 +1,12 @@
+<svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" width="120" height="60" viewBox="0 0 120 60">
+  <title>site2-exp-24</title>
+  <g>
+    <rect x="2" y="7.5" width="56" height="4"/>
+    <rect x="2" y="28.5" width="56" height="4"/>
+    <rect x="2" y="48.5" width="56" height="4"/>
+  </g>
+  <g>
+    <polygon points="109.83 53.65 67.08 9.13 70.17 6.35 112.92 50.87 109.83 53.65"/>
+    <polygon points="70.17 53.65 112.92 9.13 109.83 6.35 67.08 50.87 70.17 53.65"/>
+  </g>
+</svg>
