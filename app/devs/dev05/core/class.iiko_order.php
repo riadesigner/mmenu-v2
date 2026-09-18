@@ -97,9 +97,15 @@ class Iiko_order{
 	}	
 
 	// ---------------------------------------------------
-	// extract sizes to modifiers of size (like pizzaiolo)
+	// virtual sizes → modifiers (Pizzaiolo-style)
+	// В UI размерный ряд сложных товаров собирается из группы
+	// модификаторов. Перед кассой iiko их нужно вернуть в modifiers:
+	// иначе sizeId (id товара-модификатора) уйдёт как productSizeId
+	// и касса упадёт (Product vs IProductSize).
+	// Имя раньше было remake_for_nomenclature — номенклатуру больше
+	// не импортируем (externalMenu), логика размеров та же.
 	// ---------------------------------------------------
-	public function remake_for_nomenclature($order_items): array{		
+	public function virtual_sizes_to_modifiers($order_items): array{		
 		
 		$re_order_items = array_map(function($item){
 

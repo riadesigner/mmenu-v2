@@ -62,9 +62,9 @@ if(IIKO_MODE){
 
 	$Iiko_order = new Iiko_order($cafe);
 
-	// разворачиваем размерный ряд опять 
-	// в модификаторы размеров (если originalPrice > 0 || virtualSize == true )	
-	$order_items = $Iiko_order->remake_for_nomenclature($order_data['order_items']);
+	// виртуальный размерный ряд → модификаторы
+	// (если originalPrice > 0 || virtualSize == true )
+	$order_items = $Iiko_order->virtual_sizes_to_modifiers($order_data['order_items']);
 
 	$ARR_ORDER_FOR_IIKO = "";
 

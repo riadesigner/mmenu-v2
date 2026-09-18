@@ -103,7 +103,7 @@ try{
 }
 
 $Iiko_order = new Iiko_order($cafe);
-$order_items = $Iiko_order->remake_for_nomenclature($order_data['order_items']);	
+$order_items = $Iiko_order->virtual_sizes_to_modifiers($order_data['order_items']);	
 
 try{		
 	$ARR_ORDER_FOR_IIKO = $Iiko_order->prepare_order_for_table( $order_items, $table_number );
