@@ -376,7 +376,7 @@ export var CHEFSMENU = {
     load_all_menu:function(opt){        
         var _this=this;
     
-        var url = GLB_APP_URL+"pbl/lib/pbl.get_all_menu.php";        
+        var url = GLB.public_menu_api_url() + "/get-all-menu";        
         var cafe_uniq_name = this.get_uniq_name();        
         var allmenu =  window[_this.G_DATA].ALLMENU[cafe_uniq_name];            
 
@@ -400,9 +400,6 @@ export var CHEFSMENU = {
                 dataType: "json",
                 method:"POST",
                 data:data,
-                xhrFields: {
-                    withCredentials: true  // Для отправки cookies при CORS
-                },                
                 success: function (response) {
 
                     if(response.error){

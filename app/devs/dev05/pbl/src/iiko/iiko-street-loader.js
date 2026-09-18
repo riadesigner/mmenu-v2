@@ -2,11 +2,11 @@ import {GLB} from '../glb.js';
 import $ from 'jquery';
 
 export var IIKO_STREET_LOADER = {
-    load_async_for:function(id_cafe) {        
+    load_async_for:function() {        
         return new Promise((res,rej)=>{            
             this._get_token_async()
             .then((token)=>{
-                this._load_with_token_async(id_cafe,token)
+                this._load_with_token_async(token)
                 .then((result)=>{
                     res(result);
                 })
@@ -20,14 +20,17 @@ export var IIKO_STREET_LOADER = {
         });
     },
     // private
-    _load_with_token_async:function(id_cafe, token){
+    _load_with_token_async:function(token){
         // LOAD STREETS FOR DELIVERY
         return new Promise((res,rej)=>{
             
             const PATH = 'pbl/lib/iiko/';
             const url = GLB_APP_URL + PATH + 'iiko_get_streets_for_delivery.php';
 
-            const data = {id_cafe,token};
+            const data = {
+                cafe_uniq_name: GLB.CAFE.get('uniq_name'),
+                token
+            };
 
             const AJAX = $.ajax({
                 url: url,
@@ -64,7 +67,7 @@ export var IIKO_STREET_LOADER = {
             if(token){ res(token); return; };
 
             const data = {
-                id_cafe:GLB.CAFE.get().id
+                cafe_uniq_name: GLB.CAFE.get('uniq_name')
             };
 
             console.log('data----,url',data, url)

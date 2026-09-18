@@ -249,11 +249,10 @@ export var VIEW_ALLITEMS = {
 	load_items_async:function(){
 		return new Promise((res, rej)=>{			
 		
-			var url = GLB_APP_URL+"pbl/lib/pbl.get_all_items.php";	
+			var url = GLB.public_menu_api_url() + "/get-all-items";
 			var data = {
 				cafe: GLB.CAFE.get('uniq_name'),
-				menu: this.MENU.id,
-				menu_external: this.MENU.id_external || ''
+				menu: this.MENU.id_external || ''
 			};
 
 			this.AJX_ITEMS = $.ajax({
@@ -261,9 +260,6 @@ export var VIEW_ALLITEMS = {
 				dataType: "json",
 				method:"POST",
 				data:data,
-                xhrFields: {
-                    withCredentials: true  // Для отправки cookies при CORS
-                },
 				success: (arr_items)=> {        
 					res(arr_items);
 				},

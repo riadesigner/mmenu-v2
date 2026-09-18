@@ -238,15 +238,13 @@ export var VIEW_ORDERING = {
 		const order_user_full_address = this.get_user_address();		
 		if(!this.checkup_user_address_and_phone(order_user_phone, order_user_full_address)) return;		
 
-		const id_cafe = GLB.CAFE.get('id');
-		const order_currency = GLB.CAFE.get('cafe_currency');
 		const cafe_uniq_name = GLB.CAFE.get('uniq_name');
+		const order_currency = GLB.CAFE.get('cafe_currency');
 		const order_total_price = GLB.CART.get_total_price();
 		const order_user_comment = this.$userComments.val();
 			
 		// GENERAL PART
 		const order_params = {
-			id_cafe,
 			cafe_uniq_name,
 			order_currency,
 			order_total_price,
@@ -373,7 +371,7 @@ export var VIEW_ORDERING = {
 		return new Promise((res,rej)=>{
 			
 			const IIKO_STREETS = $.extend({},IIKO_STREET_LOADER); 			
-			IIKO_STREETS.load_async_for(GLB.CAFE.get().id)
+			IIKO_STREETS.load_async_for()
 			.then((vars)=>{
 				if(!vars.streets){
 					rej(vars);

@@ -101,7 +101,6 @@ export var VIEW_CART = {
 		const order_total_price = GLB.CART.get_total_price();
 
 		const order_params = {
-			id_cafe: GLB.CAFE.get('id'),
 			cafe_uniq_name: GLB.CAFE.get('uniq_name'),
 			order_time_sent: this_time,
 			order_time_need: this_time,

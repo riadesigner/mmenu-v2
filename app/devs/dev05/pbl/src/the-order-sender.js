@@ -17,9 +17,9 @@ export const THE_ORDER_SENDER = {
             const PATH = 'pbl/lib/';
             const url = GLB_APP_URL + PATH + 'pbl.send_order_for_delivery.php';
 
-            const id_cafe = order.id_cafe;
+            const cafe_uniq_name = order.cafe_uniq_name;
             const data = {
-                id_cafe,
+                cafe_uniq_name,
                 order,
                 pickupself
             };
@@ -65,12 +65,12 @@ export const THE_ORDER_SENDER = {
             
             const PATH = 'pbl/lib/';
             const url = GLB_APP_URL + PATH + 'pbl.send_order_to_table.php';
-            const id_cafe = GLB.CAFE.get().id;
+            const cafe_uniq_name = GLB.CAFE.get('uniq_name');
             // QR token from menu URL (/table/{token}) — chats tableId, not iiko UUID
             const table_id = $("body").data("table-uniq") || "";
             
             const data = {
-                id_cafe,
+                cafe_uniq_name,
                 order,
                 table_number,
                 table_id,
