@@ -5,6 +5,13 @@
 docker compose up --build
 ```  
 
+Локально apache зеркалит prod-шлюз:
+- `/x/` → `menu-app-frontend:3007` (новое меню)
+- `/api/v1/` → `super-admin-backend:3006` (публичный каталог)
+
+Пример: http://chefsmenu.localhost/x/cafe/323acg/table/1-p5jj  
+(нужны поднятые `m-menu-app` и `m-super-admin` в `shared-app-network`)
+
 установка зависимостей в php
 (если не установлены)
 ```bash
