@@ -16,7 +16,7 @@ export var MENU_ICONS = {
 	},
 	get:function(index){
 		if(index){
-			return this.arrIcons[index]?this.arrIcons[index]:"";	
+			return this.arrIcons[index] ? this.arrIcons[index] : "main_dishes";
 		}else{
 			return this.arrIcons;
 		}
