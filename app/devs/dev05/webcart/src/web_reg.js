@@ -140,7 +140,7 @@ export var WebReg  = {
 				const webuser = answer.webuser;		
 				// this.WEBUSER = webuser;		
 				this.go_to_webuser_panel(webuser);
-				// http://chefsmenu.localhost/webuser-panel/321yyn/03534d96-bd63-490b-b07b-74dc263e4426
+				// http://chefsmenu.localhost/webuser-panel/1hor/03534d96-bd63-490b-b07b-74dc263e4426
 				// if(webuser.nickname===''){
 				// 	this.$regSelectNickname.addClass('shown');
 				// }else{
